@@ -1,0 +1,33 @@
+
+:toc:
+:toclevels: 5
+
+= agile-architecture-documentation-archetype
+
+        
+include::01-context.adoc[[leveloffset=+0]]
+
+include::02-functional-overview.adoc[[leveloffset=+0]]
+
+include::03-quality-attributes.adoc[[leveloffset=+0]]
+
+include::04-constraints.adoc[[leveloffset=+0]]
+
+include::05-principles.adoc[[leveloffset=+0]]
+
+include::06-software-architecture.adoc[[leveloffset=+0]]
+
+include::07-code.adoc[[leveloffset=+0]]
+
+include::08-data.adoc[[leveloffset=+0]]
+
+include::09-infrastructure-architecture.adoc[[leveloffset=+0]]
+
+include::10-deployment.adoc[[leveloffset=+0]]
+
+include::11-development-environment.adoc[[leveloffset=+0]]
+
+include::12-operation-and-support.adoc[[leveloffset=+0]]
+
+include::13-decision-log.adoc[[leveloffset=+0]]
+
