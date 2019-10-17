@@ -1,4 +1,4 @@
-package com.mycompany.myproject.architecture;
+package ${groupId}.architecture;
 
 import java.io.File;
 import java.io.IOException;
