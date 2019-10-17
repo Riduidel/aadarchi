@@ -23,18 +23,19 @@
 		<asciidoc.source.slides.directory>src/slides/asciidoc</asciidoc.source.slides.directory>
 		<asciidoc.target.slides.directory>${project.build.directory}/asciidoc/slides</asciidoc.target.slides.directory>
 		<agile.architecture.main.class>com.mycompany.myproject.architecture.Architecture</agile.architecture.main.class>
+		<structurizr.version>1.3.0</structurizr.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.structurizr</groupId>
 			<artifactId>structurizr-client</artifactId>
-			<version>1.3.0</version>
+			<version>${structurizr.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.structurizr</groupId>
 			<artifactId>structurizr-plantuml</artifactId>
-			<version>1.3.0</version>
+			<version>${structurizr.version}</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.beust/jcommander -->
 		<dependency>
