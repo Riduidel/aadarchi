@@ -96,6 +96,28 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>${agile.architecture.main.class}</mainClass>
+							<arguments>
+								<argument>destination</argument>
+								<argument>${project.build.directory}/structurizr/architecture.plantuml</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 
 	<profiles>
@@ -128,26 +150,6 @@
 								<goal>package</goal>
 							</goals>
 						</configuration>
-					</plugin>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.6.0</version>
-						<executions>
-							<execution>
-								<phase>prepare-package</phase>
-								<goals>
-									<goal>java</goal>
-								</goals>
-								<configuration>
-									<mainClass>${agile.architecture.main.class}</mainClass>
-									<arguments>
-										<argument>destination</argument>
-										<argument>${asciidoc.target.docs.directory}/images/architecture.plantuml</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
 					</plugin>
 					<plugin>
 						<groupId>org.asciidoctor</groupId>
