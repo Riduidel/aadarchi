@@ -142,6 +142,9 @@
 							<touchFile>target/watcher.docs.touchfile</touchFile>
 							<watches>
 								<watch>
+									<directory>${project.basedir}/src/main/java</directory>
+								</watch>
+								<watch>
 									<directory>${asciidoc.source.docs.directory}</directory>
 								</watch>
 							</watches>
@@ -263,6 +266,9 @@
 						<configuration>
 							<touchFile>target/watcher.slides.touchfile</touchFile>
 							<watches>
+								<watch>
+									<directory>${project.basedir}/src/main/java</directory>
+								</watch>
 								<watch>
 									<directory>${asciidoc.source.slides.directory}</directory>
 								</watch>
