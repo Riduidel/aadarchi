@@ -22,7 +22,7 @@
 		<asciidoc.target.docs.directory>${project.build.directory}/asciidoc/docs</asciidoc.target.docs.directory>
 		<asciidoc.source.slides.directory>src/slides/asciidoc</asciidoc.source.slides.directory>
 		<asciidoc.target.slides.directory>${project.build.directory}/asciidoc/slides</asciidoc.target.slides.directory>
-		<agile.architecture.main.class>${groupId}.architecture.Architecture</agile.architecture.main.class>
+		<agile.architecture.main.class>${package}.Architecture</agile.architecture.main.class>
 		<structurizr.output.dir>${project.build.directory}/structurizr/architecture</structurizr.output.dir>
 		<structurizr.version>1.3.0</structurizr.version>
 	</properties>
