@@ -23,6 +23,7 @@
 		<asciidoc.source.slides.directory>src/slides/asciidoc</asciidoc.source.slides.directory>
 		<asciidoc.target.slides.directory>${project.build.directory}/asciidoc/slides</asciidoc.target.slides.directory>
 		<agile.architecture.main.class>${groupId}.architecture.Architecture</agile.architecture.main.class>
+		<structurizr.output.dir>${project.build.directory}/structurizr/architecture</structurizr.output.dir>
 		<structurizr.version>1.3.0</structurizr.version>
 	</properties>
 
@@ -111,7 +112,7 @@
 							<mainClass>${agile.architecture.main.class}</mainClass>
 							<arguments>
 								<argument>destination</argument>
-								<argument>${project.build.directory}/structurizr/architecture.plantuml</argument>
+								<argument>${structurizr.output.dir}</argument>
 							</arguments>
 						</configuration>
 					</execution>
@@ -216,6 +217,7 @@
 									<outputDirectory>${asciidoc.target.docs.directory}</outputDirectory>
 									<attributes>
 										<plantumldir></plantumldir>
+										<structurizrdir>${structurizr.output.dir}</structurizrdir>
 										<imagesdir>./images</imagesdir>
 										<toc>left</toc>
 										<icons>font</icons>
@@ -238,6 +240,7 @@
 									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
 									<attributes>
 										<plantumldir>${asciidoc.target.docs.directory}</plantumldir>
+										<structurizrdir>${structurizr.output.dir}</structurizrdir>
 										<icons>font</icons>
 										<pagenums />
 										<toc />
@@ -359,6 +362,7 @@
 									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
 									<attributes>
 										<plantumldir>images/</plantumldir>
+										<structurizrdir>${structurizr.output.dir}</structurizrdir>
 										<imagesdir>.</imagesdir>
 										<!-- As we are downloading reveal.js in runtime, it sits in a nonstandard 
 											folder `reveal.js-${revealjs.version}` -->
