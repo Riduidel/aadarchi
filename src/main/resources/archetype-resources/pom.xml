@@ -99,6 +99,13 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<release>11</release>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.6.0</version>
@@ -204,7 +211,8 @@
 								<project-name>${project.name}</project-name>
 								<project-version>${project.version}</project-version>
 								<project-build-timestamp>${maven.build.timestamp}</project-build-timestamp>
-								<!-- These properties generate a footer with revision number and date -->
+								<!-- These properties generate a footer with revision number and 
+									date -->
 								<revnumber>${project.version}</revnumber>
 								<revdate>${maven.build.timestamp}</revdate>
 								<organization>${project.organization.name}</organization>
@@ -381,7 +389,8 @@
 										<project-name>${project.name}</project-name>
 										<project-version>${project.version}</project-version>
 										<project-build-timestamp>${maven.build.timestamp}</project-build-timestamp>
-										<!-- These properties generate a footer with revision number and date -->
+										<!-- These properties generate a footer with revision number and 
+											date -->
 										<revnumber>${project.version}</revnumber>
 										<revdate>${maven.build.timestamp}</revdate>
 										<stylesheet></stylesheet>
