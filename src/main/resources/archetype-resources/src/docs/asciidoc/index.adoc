@@ -2,7 +2,7 @@
 :toc:
 :toclevels: 5
 
-= ${project.name}
+= {project-name}
 
 // This is an example diagram to show how to include a structurizr-generated diagram
 [plantuml, {plantumldir}context, png]     
