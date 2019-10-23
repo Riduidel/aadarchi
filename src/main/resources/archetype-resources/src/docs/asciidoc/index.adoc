@@ -2,7 +2,13 @@
 :toc:
 :toclevels: 5
 
-= agile-architecture-documentation-archetype
+= ${project.name}
+
+// This is an example diagram to show how to include a structurizr-generated diagram
+[plantuml, {plantumldir}context, png]     
+----
+include::{structurizrdir}/SystemContext.plantuml[]
+----
 
         
 include::01-context.adoc[[leveloffset=+0]]
