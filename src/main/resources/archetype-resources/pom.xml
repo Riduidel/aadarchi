@@ -199,6 +199,12 @@
 								<!-- Windows: <graphvizdot>C:\Program Files (x86)\Graphviz2.38\bin\dot.exe</graphvizdot> -->
 								<!-- *nix : <graphvizdot>/usr/local/bin/dot</graphvizdot> -->
 								<sectnums>true</sectnums>
+								<project-group-id>${project.groupId}</project-group-id>
+								<project-artifact-id>${project.artifactId}</project-artifact-id>
+								<project-name>${project.name}</project-name>
+								<project-version>${project.version}</project-version>
+								<project-build-timestamp>${maven.build.timestamp}</project-build-timestamp>
+								<!-- These properties generate a footer with revision number and date -->
 								<revnumber>${project.version}</revnumber>
 								<revdate>${maven.build.timestamp}</revdate>
 								<organization>${project.organization.name}</organization>
@@ -370,7 +376,14 @@
 										<!-- put here the reveal.js specific attributes -->
 										<sourcedir>${basedir}/src/main/java</sourcedir>
 										<revealjs_theme>solarized</revealjs_theme>
+										<project-group-id>${project.groupId}</project-group-id>
+										<project-artifact-id>${project.artifactId}</project-artifact-id>
+										<project-name>${project.name}</project-name>
 										<project-version>${project.version}</project-version>
+										<project-build-timestamp>${maven.build.timestamp}</project-build-timestamp>
+										<!-- These properties generate a footer with revision number and date -->
+										<revnumber>${project.version}</revnumber>
+										<revdate>${maven.build.timestamp}</revdate>
 										<stylesheet></stylesheet>
 									</attributes>
 								</configuration>
