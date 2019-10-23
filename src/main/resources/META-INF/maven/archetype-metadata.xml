@@ -4,7 +4,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="agile-architecture-documentation-archetype">
 	<fileSets>
 		<fileSet>
-			<directory>.</directory>
+			<directory></directory>
 			<includes>
 				<include>.gitignore</include>
 			</includes>
