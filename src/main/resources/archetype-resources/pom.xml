@@ -6,15 +6,14 @@
 	<artifactId>${artifactId}</artifactId>
 	<version>${version}</version>
 	<properties>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.release>11</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<asciidoctor.maven.plugin.version>1.5.5</asciidoctor.maven.plugin.version>
-		<asciidoctorj.pdf.version>1.5.0-alpha.15</asciidoctorj.pdf.version>
-		<asciidoctorj.version>1.5.5</asciidoctorj.version>
-		<asciidoctorj.diagram.version>1.5.4</asciidoctorj.diagram.version>
-		<jruby.version>1.7.26</jruby.version>
+		<asciidoctorj.pdf.version>1.5.0-beta.6</asciidoctorj.pdf.version>
+		<asciidoctorj.version>1.5.8.1</asciidoctorj.version>
+		<asciidoctorj.diagram.version>1.5.18</asciidoctorj.diagram.version>
+		<jruby.version>9.2.8.0</jruby.version>
 		<revealjs.version>3.8.0</revealjs.version>
 		<asciidoctor.highlighter>highlightjs</asciidoctor.highlighter>
 		<asciidoctor-revealjs.version>1.0.4</asciidoctor-revealjs.version>
@@ -59,8 +58,7 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.6.1</version>
 					<configuration>
-						<source>${maven.compiler.source}</source>
-						<target>${maven.compiler.target}</target>
+						<release>${maven.compiler.release}</release>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -255,6 +253,7 @@
 									<attributes>
 										<plantumldir>${asciidoc.target.docs.directory}</plantumldir>
 										<structurizrdir>${structurizr.output.dir}</structurizrdir>
+										<imagesdir>./images</imagesdir>
 										<icons>font</icons>
 										<pagenums />
 										<toc />
