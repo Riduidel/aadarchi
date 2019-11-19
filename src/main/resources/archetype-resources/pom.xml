@@ -331,7 +331,7 @@
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${asciidoc.target.slides.directory}/html</outputDirectory>
+									<outputDirectory>${asciidoc.target.slides.directory}</outputDirectory>
 									<backend>revealjs</backend>
 									<templateDir>${project.build.directory}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}/templates/slim</templateDir>
 									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
