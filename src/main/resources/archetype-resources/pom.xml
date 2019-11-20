@@ -173,7 +173,6 @@
 						</dependencies>
 						<configuration>
 							<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
-							<sourceDirectory>${asciidoc.source.docs.directory}</sourceDirectory>
 							<preserveDirectories>true</preserveDirectories>
 							<relativeBaseDir>true</relativeBaseDir>
 							<requires>
@@ -205,6 +204,7 @@
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
+									<sourceDirectory>${asciidoc.source.docs.directory}</sourceDirectory>
 									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
 									<backend>html5</backend>
 									<outputDirectory>${asciidoc.target.docs.directory}/html</outputDirectory>
@@ -228,6 +228,7 @@
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
+									<sourceDirectory>${asciidoc.source.docs.directory}</sourceDirectory>
 									<backend>pdf</backend>
 									<outputDirectory>${asciidoc.target.docs.directory}/pdf</outputDirectory>
 									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
@@ -316,7 +317,6 @@
 							</dependency>
 						</dependencies>
 						<configuration>
-							<sourceDirectory>${asciidoc.source.slides.directory}</sourceDirectory>
 							<preserveDirectories>true</preserveDirectories>
 							<relativeBaseDir>true</relativeBaseDir>
 							<requires>
@@ -331,6 +331,7 @@
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
+									<sourceDirectory>${asciidoc.source.slides.directory}</sourceDirectory>
 									<outputDirectory>${asciidoc.target.slides.directory}</outputDirectory>
 									<backend>revealjs</backend>
 									<templateDir>${project.build.directory}/asciidoctor-reveal.js-${asciidoctor-revealjs.version}/templates/slim</templateDir>
