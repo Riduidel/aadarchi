@@ -54,9 +54,9 @@ A faster developer feedback loop can be achieved using the [fizzed-watcher-maven
 Don't worry, you don't have to configure it by yourself!
 You can run
 
-* `mvn fizzed-watcher:run -P watch-docs` when working on documents.
+* `mvn fizzed-watcher:run@watch-docs` when working on documents.
 This will watch both the `src/docs` and the `src/main/java` folder and run a `mvn package` when any of these folders have changes in.
-* `mvn fizzed-watcher:run -P watch-slides` when working on slides.
+* `mvn fizzed-watcher:run@watch-slides` when working on slides.
 This will watch both the `src/slides` and the `src/main/java` folder and run a `mvn package` when any of these folders have changes in.
 
 ## Author
