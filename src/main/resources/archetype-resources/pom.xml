@@ -16,7 +16,7 @@
 		<jruby.version>9.2.8.0</jruby.version>
 		<revealjs.version>3.8.0</revealjs.version>
 		<asciidoctor.highlighter>highlightjs</asciidoctor.highlighter>
-		<asciidoctor-revealjs.version>1.0.4</asciidoctor-revealjs.version>
+		<asciidoctor-revealjs.version>2.0.0</asciidoctor-revealjs.version>
 		<asciidoc.source.docs.directory>src/docs/asciidoc</asciidoc.source.docs.directory>
 		<asciidoc.target.docs.directory>${project.build.directory}/asciidoc/docs</asciidoc.target.docs.directory>
 		<asciidoc.source.slides.directory>src/slides/asciidoc</asciidoc.source.slides.directory>
@@ -280,6 +280,35 @@
 					<exists>${asciidoc.source.slides.directory}</exists>
 				</file>
 			</activation>
+			<repositories>
+				<repository>
+					<id>rubygems-releases</id>
+					<url>http://rubygems-proxy.torquebox.org/releases</url>
+				</repository>
+			</repositories>
+			<dependencies>
+				<dependency>
+					<groupId>rubygems</groupId>
+					<artifactId>asciidoctor-revealjs</artifactId>
+					<version>${asciidoctor-revealjs.version}</version>
+					<type>gem</type>
+					<!-- Avoid downloading gems included in AsciidoctorJ -->
+					<exclusions>
+						<exclusion>
+							<groupId>rubygems</groupId>
+							<artifactId>asciidoctor</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>rubygems</groupId>
+							<artifactId>thread_safe</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>rubygems</groupId>
+							<artifactId>concurrent-ruby</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
 			<build>
 				<plugins>
 					<plugin>
@@ -287,19 +316,6 @@
 						<artifactId>download-maven-plugin</artifactId>
 						<version>1.2.1</version>
 						<executions>
-							<execution>
-								<id>install-asciidoctor-revealjs</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>wget</goal>
-								</goals>
-								<configuration>
-									<url>https://github.com/asciidoctor/asciidoctor-reveal.js/archive/v${asciidoctor-revealjs.version}.zip</url>
-									<unpack>true</unpack>
-									<outputFileName>asciidoctor-reveal.js-${asciidoctor-revealjs.version}.zip</outputFileName>
-									<outputDirectory>${project.build.directory}</outputDirectory>
-								</configuration>
-							</execution>
 							<execution>
 								<id>install-revealjs</id>
 								<phase>generate-resources</phase>
@@ -312,6 +328,26 @@
 									<outputFileName>reveal.js-${revealjs.version}.zip</outputFileName>
 									<outputDirectory>${asciidoc.target.slides.directory}</outputDirectory>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>de.saumya.mojo</groupId>
+						<artifactId>gem-maven-plugin</artifactId>
+						<version>1.1.5</version>
+						<configuration>
+							<jrubyVersion>${jruby.version}</jrubyVersion>
+							<gemHome>${project.build.directory}/gems</gemHome>
+							<gemPath>${project.build.directory}/gems</gemPath>
+						</configuration>
+						<executions>
+							<!-- Install required gems in target directory -->
+							<execution>
+								<id>install-gems</id>
+								<goals>
+									<goal>initialize</goal>
+								</goals>
+								<phase>initialize</phase>
 							</execution>
 						</executions>
 					</plugin>
@@ -343,9 +379,6 @@
 						<configuration>
 							<preserveDirectories>true</preserveDirectories>
 							<relativeBaseDir>true</relativeBaseDir>
-							<requires>
-								<require>asciidoctor-diagram</require>
-							</requires>
 						</configuration>
 						<executions>
 							<execution>
@@ -355,6 +388,11 @@
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
+									<gemPath>${project.build.directory}/gems</gemPath>
+									<requires>
+										<require>asciidoctor-diagram</require>
+										<require>asciidoctor-revealjs</require>
+									</requires>
 									<sourceDirectory>${asciidoc.source.slides.directory}</sourceDirectory>
 									<outputDirectory>${asciidoc.target.slides.directory}</outputDirectory>
 									<backend>revealjs</backend>
