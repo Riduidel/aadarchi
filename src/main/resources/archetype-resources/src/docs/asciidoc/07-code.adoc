@@ -1,12 +1,14 @@
-== Code
+= Code
 
+**TODO**
+/////
 Although other sections of the documentation describe the overall
 architecture of the software, often you'll want to present lower level
 details to explain how things work. This is what the code section is
 for. Some software architecture documentation templates call this the
 "implementation view" or the "development view".
 
-=== Intent
+== Intent
 
 The purpose of the code section is to describe the implementation
 details for parts of the software system that are important, complex,
@@ -35,7 +37,7 @@ handling and logging across the various architectural layers.
 link:/help/documentation/principles[principles] are implemented.
 * ...
 
-=== Structure
+== Structure
 
 Keep it simple, with a short section for each element that you want to
 describe and include diagrams if they help the reader. For example, a
@@ -50,7 +52,7 @@ plugins. Keeping any diagrams at a high-level of detail means that
 they're less volatile and remain up to date for longer because they can
 tolerate small changes to the code and yet remain valid.
 
-=== Motivation
+== Motivation
 
 The motivation for writing this section is to ensure that everybody
 understands how the important/significant/complex parts of the software
@@ -58,12 +60,13 @@ system work so that they can maintain, enhance and extend them in a
 consistent and coherent manner. This section also helps new members of
 the team get up to speed quickly.
 
-=== Audience
+== Audience
 
 The audience for this section is predominantly the technical people in
 the software development team.
 
-=== Required
+===Required
 
 No, but there are usually parts of a large, non-trivial software system
 that can benefit from some explanation.
+////

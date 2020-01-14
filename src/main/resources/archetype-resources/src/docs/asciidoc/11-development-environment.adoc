@@ -1,16 +1,18 @@
-== Development Environment
+= Development Environment
 
+**TODO**
+////
 The development environment section allows you to summarise how people
 new to your team install tools and setup a development environment in
 order to work on the software.
 
-=== Intent
+== Intent
 
 The purpose of this section is to provide instructions that take
 somebody from a blank operating system installation to a fully-fledged
 development environment.
 
-=== Structure
+== Structure
 
 The type of things you might want to include are:
 
@@ -33,18 +35,19 @@ Chef, Rundeck, etc), it's still worth including some brief information
 about how these solutions work, where to find the scripts and how to run
 them.
 
-=== Motivation
+== Motivation
 
 The motivation for this section is to ensure that new developers can be
 productive as quickly as possible.
 
-=== Audience
+== Audience
 
 The audience for this section is the technical people in the software
 development team, especially those who are new to the team.
 
-=== Required
+== Required
 
 Yes, because this information is usually lost and it's essential if the
 software will be maintained by a different set of people from the
 original developers.
+////

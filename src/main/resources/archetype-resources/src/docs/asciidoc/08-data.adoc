@@ -1,10 +1,12 @@
-== Data
+= Data
 
+**TODO**
+////
 The data associated with a software system is usually not the primary
 point of focus yet it's arguably more important than the software
 itself, so often it's useful to document something about it.
 
-=== Intent
+== Intent
 
 The purpose of the data section is to record anything that is important
 from a data perspective, answering the following types of questions:
@@ -21,7 +23,7 @@ business data?
 * Are flat files being used for storage? If so, what format is being
 used?
 
-=== Structure
+== Structure
 
 Keep it simple, with a short section for each element that you want to
 describe and include domain models or entity relationship diagrams if
@@ -31,7 +33,7 @@ high level of abstraction rather than including every field and
 property. If people need this type of information, they can find it in
 the code or database (for example).
 
-=== Motivation
+== Motivation
 
 The motivation for writing this section is that the data in most
 software systems tends to outlive the software. This section can help
@@ -41,13 +43,14 @@ intelligence activities on the data. This section can also serve as a
 starting point for when the software system is inevitably rewritten in
 the future.
 
-=== Audience
+== Audience
 
 The audience for this section is predominantly the technical people in
 the software development team along with others that may help deploy,
 support and operate the software system.
 
-=== Required
+== Required
 
 No, but most software systems are not small or trivial, and the data
 will likely outlive the code that created it.
+////

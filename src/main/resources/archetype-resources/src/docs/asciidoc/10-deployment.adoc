@@ -1,12 +1,14 @@
-== Deployment
+= Deployment
 
+**TODO**
+////
 The deployment section is simply the mapping between the
 link:/help/documentation/software-architecture[software architecture]
 and the
 link:/help/documentation/infrastructure-architecture[infrastructure
 architecture].
 
-=== Intent
+== Intent
 
 This section is used to describe the mapping between the software (e.g.
 containers) and the infrastructure. Sometimes this will be a simple
@@ -31,7 +33,7 @@ active-passive, hot-standby, cold-standby, etc formation?
 * What happens in the event of a software or infrastructure failure?
 * Is it clear how data is replicated across sites?
 
-=== Structure
+== Structure
 
 There are a few ways to structure this section:
 
@@ -47,7 +49,7 @@ You can additionally use notation, colour coding, etc to the designate
 the runtime status of software and infrastructure (e.g. active, passive,
 hot-standby, warm-standby, cold-standby, etc).
 
-=== Motivation
+== Motivation
 
 The motivation for writing this section is to ensure that everybody
 understands how the software is going to work once it gets out of the
@@ -59,14 +61,15 @@ have adopted https://continuousdelivery.com[continuous delivery] and
 have all of their deployment scripted using tools such as Puppet, Chef,
 Vagrant, Docker, etc.
 
-=== Audience
+== Audience
 
 The audience for this section is predominantly the technical people in
 the software development team along with others that may help deploy,
 support and operate the software system.
 
-=== Required
+== Required
 
 Yes, a deployment section should be included in all technical software
 documentation because it can help to solve the often mysterious question
 of where the software will be, or has been, deployed.
+////

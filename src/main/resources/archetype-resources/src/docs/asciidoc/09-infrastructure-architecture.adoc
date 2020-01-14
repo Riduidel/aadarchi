@@ -1,10 +1,12 @@
-== Infrastructure Architecture
+= Infrastructure Architecture
 
+**TODO**
+////
 While most of the documentation is focused on the software itself, we do
 also need to consider the infrastructure because software architecture
 is about software _and_ infrastructure.
 
-=== Intent
+== Intent
 
 This section is used to describe the physical/virtual hardware and
 networks on which the software will be deployed. Although, as a software
@@ -30,26 +32,27 @@ switches, load balancers, reverse proxies, internet connections, etc)?
 * Are there sufficient environments for development, testing,
 acceptance, pre-production, production, etc?
 
-=== Structure
+== Structure
 
 The main focus for this section is usually an infrastructure/network
 diagram showing the various hardware/network components (servers,
 routers, firewalls, load balancers, etc) and how they fit together, with
 a short narrative to accompany the diagram.
 
-=== Motivation
+== Motivation
 
 The motivation for writing this section is to document the
 infrastructure and confirm that it supports the software architecture.
 
-=== Audience
+== Audience
 
 The audience for this section is predominantly the technical people in
 the software development team along with others that may help deploy,
 support and operate the software system.
 
-=== Required
+== Required
 
 Yes, an infrastructure architecture section should be included in
 technical software documentation because it illustrates that the
 infrastructure is understood and has been considered.
+////

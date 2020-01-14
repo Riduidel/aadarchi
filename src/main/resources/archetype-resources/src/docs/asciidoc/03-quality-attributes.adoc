@@ -1,11 +1,13 @@
-== Quality Attributes
+= Quality Attributes
 
+**TODO**
+////
 With the link:/help/documentation/functional-overview[functional
 overview section] summarising the functionality, it's also worth
 including a separate section to summarise the quality attributes (also
 referred to as "non-functional requirements").
 
-=== Intent
+== Intent
 
 This section is about summarising the key quality attributes and should
 answer the following types of questions:
@@ -27,7 +29,7 @@ In addition, if any of the quality attributes are deemed as
 why not make a note of them so that you can refer back to them later in
 the documentation.
 
-=== Structure
+== Structure
 
 Simply listing out each of the quality attributes is a good starting
 point. Examples include:
@@ -64,7 +66,7 @@ the reader. Examples where this isn't the case include:
 * "as many customers as possible"
 * ...
 
-=== Motivation
+== Motivation
 
 If you've proactively considered the quality attributes and let them
 influence the software architecture, why not write them down too?
@@ -74,13 +76,14 @@ list of them. Put simply, writing down the quality attributes removes
 any ambiguity both now and during maintenance/enhancement work in the
 future.
 
-=== Audience
+== Audience
 
 Since quality attributes are mostly technical in nature, this section is
 really targeted at technical people in the software development team.
 
-=== Required
+== Required
 
 Yes, all technical software documentation should include a summary of
 the quality attributes/non-functional requirements as they usually shape
 the resulting software architecture in some way.
+////
