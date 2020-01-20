@@ -1,6 +1,7 @@
 package ${package};
 
 import java.io.File;
+import java.util.Optional;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
@@ -27,9 +28,15 @@ import com.structurizr.view.ViewSet;
 public class Architecture {
 	Logger logger = Logger.getLogger(Architecture.class.getName());
 
-	@Parameter(names = "destination", converter = FileConverter.class)
+	@Parameter(names = "--destination", converter = FileConverter.class)
 	File destination;
 
+	@Parameter(names="--force", description="When set, this option forces files to be overwritten")
+	private boolean force;
+
+	@Parameter(names = "--maven-source-dir", converter = FileConverter.class, required = true, description = "Path where maven stores the source files")
+	public File mavenSourceDir;
+	
 	@Parameter(names = "--help", help = true)
 	private boolean help;
 
@@ -44,11 +51,35 @@ public class Architecture {
 	}
 
 	public void run() throws IOException {
+		// Unless force is set we will only generate architecture info if the current class source file
+		// is more recent than generated class
+		File source = new File(mavenSourceDir, getClass().getName().replace('.', '/')+".java");
+		if(destination.exists()) {
+			// Compare with the first generated diagram
+			Optional<Long> oldestDiagramDate = Arrays.asList(destination.listFiles()).stream()
+				.map(file -> file.lastModified())
+				.sorted()
+				.findFirst();
+			if(oldestDiagramDate.isPresent()) {
+				// Let's consider things can be slow some times, no ?
+				// In other words, if I run a slow maven build
+				if(oldestDiagramDate.get()>source.lastModified()) {
+					if(!force) {
+						logger.warning(String.format("Oldest diagram is more recent than architecture source file. Using cached architecture diagrams"));
+						return;
+					}
+				}
+			}
+		}
 		logger.info(String.format("We should write output to %s", destination.getAbsolutePath()));
 		Workspace workspace = describeArchitecture();
 
 		StringWriter stringWriter = new StringWriter();
 		PlantUMLWriter plantUMLWriter = new PlantUMLWriter();
+		// Hints to have arrows more easily visible
+		plantUMLWriter.addSkinParam("pathHoverColor", "GreenYellow");
+		plantUMLWriter.addSkinParam("ArrowThickness", "3");
+		plantUMLWriter.addSkinParam("svgLinkTarget", "_parent");
 
 		destination.mkdirs();
 		

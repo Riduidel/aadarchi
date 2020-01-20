@@ -116,8 +116,10 @@
 						<configuration>
 							<mainClass>${agile.architecture.main.class}</mainClass>
 							<arguments>
-								<argument>destination</argument>
+								<argument>--destination</argument>
 								<argument>${structurizr.output.dir}</argument>
+								<argument>--maven-source-dir</argument>
+								<argument>${project.build.sourceDirectory}</argument>
 							</arguments>
 						</configuration>
 					</execution>
