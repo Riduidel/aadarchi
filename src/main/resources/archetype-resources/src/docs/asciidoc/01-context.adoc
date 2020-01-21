@@ -1,5 +1,12 @@
 = Context
 
+
+== Context diagram
+[plantuml, {plantumldir}SystemContext, svg, opts="interactive"]     
+----
+include::{structurizrdir}/SystemContext.plantuml[]
+----
+
 **TODO**
 ////
 A context section should be the first section of the software
