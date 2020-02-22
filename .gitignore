@@ -94,3 +94,7 @@ local.properties
 */.vscode/settings.json
 .vscode/settings.json
 /target/
+
+# Intellij
+.idea
+/*.iml
