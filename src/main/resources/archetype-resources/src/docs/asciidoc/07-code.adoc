@@ -1,7 +1,7 @@
 = Code
 
 **TODO**
-/////
+////
 Although other sections of the documentation describe the overall
 architecture of the software, often you'll want to present lower level
 details to explain how things work. This is what the code section is
@@ -65,7 +65,7 @@ the team get up to speed quickly.
 The audience for this section is predominantly the technical people in
 the software development team.
 
-===Required
+=== Required
 
 No, but there are usually parts of a large, non-trivial software system
 that can benefit from some explanation.
