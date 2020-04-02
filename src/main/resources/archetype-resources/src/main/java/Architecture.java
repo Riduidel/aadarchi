@@ -13,6 +13,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.FileConverter;
 import com.structurizr.Workspace;
+import com.structurizr.io.plantuml.C4PlantUMLWriter;
 import com.structurizr.io.plantuml.PlantUMLDiagram;
 import com.structurizr.io.plantuml.PlantUMLWriter;
 import com.structurizr.model.Model;
@@ -71,7 +72,7 @@ public class Architecture {
 		Workspace workspace = describeArchitecture();
 
 		StringWriter stringWriter = new StringWriter();
-		PlantUMLWriter plantUMLWriter = new PlantUMLWriter();
+		PlantUMLWriter plantUMLWriter = new C4PlantUMLWriter();
 		// Hints to have arrows more easily visible
 		plantUMLWriter.addSkinParam("pathHoverColor", "GreenYellow");
 		plantUMLWriter.addSkinParam("ArrowThickness", "3");
