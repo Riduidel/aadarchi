@@ -1,7 +1,7 @@
 = Code
 
 **TODO**
-/////
+////
 Although other sections of the documentation describe the overall
 architecture of the software, often you'll want to present lower level
 details to explain how things work. This is what the code section is
