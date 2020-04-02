@@ -59,6 +59,12 @@ This will watch both the `src/docs` and the `src/main/java` folder and run a `mv
 * `mvn fizzed-watcher:run@watch-slides` when working on slides.
 This will watch both the `src/slides` and the `src/main/java` folder and run a `mvn package` when any of these folders have changes in.
 
+## Developing
+There are not many things to do (except improving the archetype source).
+However, if you want to improve things, 
+please run `mvn verify` which will create a project from the archetype and 
+run `mvn package` which will trigger Java class compilation and run and Asciidoc documentation generation.
+
 ## Author
 
 👤 **Nicolas Delsaux**
