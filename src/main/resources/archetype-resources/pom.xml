@@ -322,6 +322,56 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-artifacts</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+								<configuration>
+									<artifacts>
+										<artifact>
+											<file>${asciidoc.target.docs.directory}/pdf/${project.artifactId}.pdf</file>
+											<type>pdf</type>
+											<classifier>documentation</classifier>
+										</artifact>
+									</artifacts>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- TODO: Uncomment that if you want architecture documents to be pushed to GitHub releases -->
+					<plugin>
+						<groupId>de.jutzig</groupId>
+						<artifactId>github-release-plugin</artifactId>
+						<version>1.4.0</version>
+						<executions>
+							<execution>
+								<id>deploy-pdf</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>release</goal>
+								</goals>
+								<configuration>
+									<description>New version of ${project.artifactId}</description>
+									<releaseName>${project.version}</releaseName>
+									<tag>${project.artifactId}-${project.version}</tag>
+									<fileSets>
+										<fileSet>
+											<directory>${asciidoc.target.docs.directory}</directory>
+											<includes>
+												<include>pdf/${project.artifactId}.pdf</include>
+											</includes>
+										</fileSet>
+									</fileSets>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
