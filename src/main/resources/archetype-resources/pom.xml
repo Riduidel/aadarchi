@@ -103,6 +103,16 @@
 						</dependency>
 					</dependencies>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>3.0.0-M1</version>
+					<configuration>
+						<autoVersionSubmodules>true</autoVersionSubmodules>
+						<localCheckout>true</localCheckout>
+						<arguments>-Dasciidoc.documents.hide.bug.report=true</arguments>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -167,6 +177,7 @@
 			</activation>
 			<properties>
 				<asciidoc.target.docs.directory>${project.build.directory}/asciidoc/docs</asciidoc.target.docs.directory>
+				<asciidoc.documents.hide.bug.report>false</asciidoc.documents.hide.bug.report>
 			</properties>
 
 			<build>
@@ -248,6 +259,7 @@
 										<sectanchors>true</sectanchors>
 										<idprefix />
 										<idseparator>-</idseparator>
+										<hideBugReport>${asciidoc.documents.hide.bug.report}</hideBugReport>
 									</attributes>
 								</configuration>
 							</execution>
@@ -272,6 +284,7 @@
 										<toc />
 										<idprefix />
 										<idseparator>-</idseparator>
+										<hideBugReport>${asciidoc.documents.hide.bug.report}</hideBugReport>
 									</attributes>
 								</configuration>
 							</execution>
@@ -311,6 +324,9 @@
 					<exists>${asciidoc.source.slides.directory}</exists>
 				</file>
 			</activation>
+			<properties>
+				<asciidoc.documents.hide.bug.report>false</asciidoc.documents.hide.bug.report>
+			</properties>
 			<repositories>
 				<repository>
 					<id>rubygems-releases</id>
@@ -449,6 +465,7 @@
 										<revnumber>${project.version}</revnumber>
 										<revdate>${maven.build.timestamp}</revdate>
 										<stylesheet></stylesheet>
+										<hideBugReport>${asciidoc.documents.hide.bug.report}</hideBugReport>
 									</attributes>
 								</configuration>
 							</execution>

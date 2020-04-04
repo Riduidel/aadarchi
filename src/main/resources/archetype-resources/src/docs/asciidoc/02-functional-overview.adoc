@@ -1,4 +1,6 @@
 = Functional Overview
+:chapter: Functional%20Overview
+include::_notify-bug-admonition.adoc[]
 
 **TODO**
 ////

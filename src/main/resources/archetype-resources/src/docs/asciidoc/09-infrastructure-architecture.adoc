@@ -1,4 +1,6 @@
 = Infrastructure Architecture
+:chapter: Infrastructure%20Architecture
+include::_notify-bug-admonition.adoc[]
 
 **TODO**
 ////

@@ -1,4 +1,6 @@
 = Context
+:chapter: Context
+include::_notify-bug-admonition.adoc[]
 
 
 == Context diagram

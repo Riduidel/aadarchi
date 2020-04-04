@@ -1,4 +1,6 @@
 = Decision Log
+:chapter: Decision%20Log
+include::_notify-bug-admonition.adoc[]
 
 include::decisions/001_use_adr.adoc[leveloffset=+1]
 

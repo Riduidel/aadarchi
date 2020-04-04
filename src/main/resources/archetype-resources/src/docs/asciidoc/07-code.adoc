@@ -1,4 +1,6 @@
 = Code
+:chapter: Code
+include::_notify-bug-admonition.adoc[]
 
 **TODO**
 ////

@@ -1,4 +1,6 @@
 = Data
+:chapter: Data
+include::_notify-bug-admonition.adoc[]
 
 **TODO**
 ////

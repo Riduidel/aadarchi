@@ -1,4 +1,6 @@
 = Constraints
+:chapter: Constraints
+include::_notify-bug-admonition.adoc[]
 
 **TODO**
 ////

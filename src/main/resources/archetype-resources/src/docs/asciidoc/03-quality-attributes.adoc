@@ -1,4 +1,6 @@
 = Quality Attributes
+:chapter: Quality%20Attributes
+include::_notify-bug-admonition.adoc[]
 
 **TODO**
 ////

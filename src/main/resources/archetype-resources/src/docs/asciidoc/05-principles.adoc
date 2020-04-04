@@ -1,4 +1,6 @@
 = Principles
+:chapter: Principles
+include::_notify-bug-admonition.adoc[]
 
 **TODO**
 ////
