@@ -4,6 +4,7 @@ include::_notify-bug-admonition.adoc[]
 
 
 == Context diagram
+// This is an example diagram to show how to include a structurizr-generated diagram
 [plantuml, {plantumldir}SystemContext, svg, opts="interactive"]     
 ----
 include::{structurizrdir}/SystemContext.plantuml[]

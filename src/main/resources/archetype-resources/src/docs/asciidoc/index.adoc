@@ -3,14 +3,7 @@
 :toclevels: 5
 
 = {project-name}
-
-// This is an example diagram to show how to include a structurizr-generated diagram
-[plantuml, {plantumldir}context, png]     
-----
-include::{structurizrdir}/SystemContext.plantuml[]
-----
-
-        
+      
 include::01-context.adoc[leveloffset=+1]
 
 include::02-functional-overview.adoc[leveloffset=+1]
