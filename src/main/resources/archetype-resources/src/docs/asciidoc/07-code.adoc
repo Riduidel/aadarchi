@@ -67,7 +67,7 @@ the team get up to speed quickly.
 The audience for this section is predominantly the technical people in
 the software development team.
 
-===Required
+=== Required
 
 No, but there are usually parts of a large, non-trivial software system
 that can benefit from some explanation.
