@@ -1,0 +1,20 @@
+stages:
+  - build
+
+cache:
+  paths:
+    - .m2/repository
+
+Build:
+  stage: build
+  image: maven:3.6-jdk-11
+  before_script:
+    - apt-get update
+  script:
+    # We force the value of the branch name, as it can't be obtained in Gitlab environment "for reasons"
+    - mvn $MAVEN_CLI_OPTS clean verify
+  artifacts:
+    paths:
+      - "target/**"
+      - "target/*.jar"
+      - "settings.xml"
