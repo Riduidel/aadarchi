@@ -35,7 +35,7 @@ Since I use Jitpack for easy deployment of that archetype, and [maven requires a
 Then, you can use the archetype by running this maven-friendly 😅command.
 
 ```sh
-mvn archetype:generate -DarchetypeVersion=master-SNAPSHOT -DarchetypeRepository=https://jitpack.io -DarchetypeGroupId=com.github.Riduidel -DarchetypeArtifactId=agile-architecture-documentation-archetype -Pjitpack
+mvn archetype:generate -DarchetypeVersion=master-SNAPSHOT -DarchetypeRepository=https://jitpack.io -DarchetypeGroupId=com.github.Riduidel.agile-architecture-documentation-archetype -DarchetypeArtifactId=archetype -Pjitpack
 ```
 
 This will ask you a few questions and generate the project.

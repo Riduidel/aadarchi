@@ -1,85 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.ndx</groupId>
+	<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 	<artifactId>agile-architecture-documentation-archetype</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<packaging>maven-archetype</packaging>
+	<packaging>pom</packaging>
+
+	<properties>
+		<maven.compiler.release>11</maven.compiler.release>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+	<scm>
+		<connection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-archetype.git</connection>
+		<developerConnection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-archetype.git</developerConnection>
+		<url>https://github.com/Riduidel/agile-architecture-documentation-archetype.git</url>
+		<tag>HEAD</tag>
+	</scm>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/Riduidel/agile-architecture-documentation-archetype/issues</url>
+	</issueManagement>
+
+	<developers>
+		<developer>
+			<id>ndx</id>
+			<name>Nicolas Delsaux</name>
+			<email>nicolas.delsaux@gmx.fr</email>
+			<roles>
+				<role>Tech Lead</role>
+			</roles>
+		</developer>
+	</developers>
 
 	<build>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.archetype</groupId>
-				<artifactId>archetype-packaging</artifactId>
-				<version>3.1.1</version>
-			</extension>
-		</extensions>
 		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>3.1.1</version>
 					<configuration>
-						<addDefaultExcludes>false</addDefaultExcludes>
+						<skip>true</skip>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+					<configuration>
+						<release>${maven.compiler.release}</release>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>3.0.0-M3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-changes-plugin</artifactId>
+					<version>2.12.1</version>
+					<configuration>
+						<githubAPIScheme>https</githubAPIScheme>
+						<githubAPIPort>443</githubAPIPort>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.gmavenplus</groupId>
+					<artifactId>gmavenplus-plugin</artifactId>
+					<version>1.8.1</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.codehaus.groovy</groupId>
+							<artifactId>groovy-all</artifactId>
+							<!-- any version of Groovy \>= 1.5.0 should work here -->
+							<version>3.0.2</version>
+							<scope>runtime</scope>
+							<type>pom</type>
+							<exclusions>
+								<exclusion>
+									<groupId>org.codehaus.groovy</groupId>
+									<artifactId>groovy-swing</artifactId>
+								</exclusion>
+							</exclusions>
+						</dependency>
+					</dependencies>
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-versions</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.6</version>
+								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>11</version>
+								</requireJavaVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
-	<profiles>
-		<profile>
-			<id>generate-asciidoc-templates</id>
-			<properties>
-				<pageUrl>http://www.codingthearchitecture.com/2016/05/31/agile_software_architecture_documentation.html</pageUrl>
-				<templatesDir>${asciidoc.source.docs.directory}</templatesDir>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.gmavenplus</groupId>
-						<artifactId>gmavenplus-plugin</artifactId>
-						<version>1.8.0</version>
-						<executions>
-							<execution>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>execute</goal>
-								</goals>
-								<configuration>
-									<scripts>
-										<script>${pom.basedir}/src/build/groovy/download_templates.groovy</script>
-									</scripts>
-								</configuration>
-							</execution>
-						</executions>
-						<dependencies>
-							<dependency>
-								<groupId>org.codehaus.groovy</groupId>
-								<artifactId>groovy-all</artifactId>
-								<!-- any version of Groovy \>= 1.5.0 should work here -->
-								<version>2.5.8</version>
-								<scope>runtime</scope>
-								<type>pom</type>
-							</dependency>
-							<!-- I do prefer maven dependencies, as they're downloaded only once 
-								in a place I understand (bad reason, of course) -->
-							<dependency>
-								<groupId>org.jsoup</groupId>
-								<artifactId>jsoup</artifactId>
-								<version>1.12.1</version>
-							</dependency>
-							<dependency>
-								<!-- this is here for both the script and the project to use -->
-								<groupId>ch.qos.logback</groupId>
-								<artifactId>logback-classic</artifactId>
-								<version>1.2.3</version>
-							</dependency>
-						</dependencies>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+
+	<modules>
+		<module>archetype</module>
+		<module>base</module>
+	</modules>
 </project>
