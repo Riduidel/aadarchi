@@ -1,0 +1,8 @@
+////
+TODO: if your project don't use GitHub, change the base URL to fit your needs
+////
+
+ifeval::["{hideBugReport}"!="true"]
+[TIP]
+If you encounter any error, feel free to https://github.com/adeo/rfi-price-archi/issues/new?title=Error%20in%20{project-name}%20v.{project-version}%20chapter%20{chapter}[icon:github[set=fab] enter an issue on GitHub,window=feedback].
+endif::[]
