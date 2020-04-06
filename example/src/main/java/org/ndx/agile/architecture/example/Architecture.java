@@ -77,8 +77,6 @@ public class Architecture {
 		plantUMLWriter.addSkinParam("pathHoverColor", "GreenYellow");
 		plantUMLWriter.addSkinParam("ArrowThickness", "3");
 		plantUMLWriter.addSkinParam("svgLinkTarget", "_parent");
-
-		destination.mkdirs();
 		
 		destination.mkdirs();
 		for(PlantUMLDiagram diagram : plantUMLWriter.toPlantUMLDiagrams(workspace)) {

@@ -79,8 +79,6 @@ public class Architecture {
 		plantUMLWriter.addSkinParam("svgLinkTarget", "_parent");
 
 		destination.mkdirs();
-		
-		destination.mkdirs();
 		for(PlantUMLDiagram diagram : plantUMLWriter.toPlantUMLDiagrams(workspace)) {
 			Files.write(new File(destination, diagram.getKey()+".plantuml").toPath(), diagram.getDefinition().getBytes(Charset.forName("UTF-8")));
 		}
