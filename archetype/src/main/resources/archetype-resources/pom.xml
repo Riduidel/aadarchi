@@ -38,6 +38,21 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<version>2.0.SP1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se-core</artifactId>
+			<version>3.1.4.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
+			<artifactId>cdi-config-extension</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>com.structurizr</groupId>
 			<artifactId>structurizr-client</artifactId>
 			<version>${version.structurizr.client}</version>
@@ -46,12 +61,6 @@
 			<groupId>com.structurizr</groupId>
 			<artifactId>structurizr-plantuml</artifactId>
 			<version>${version.structurizr.extensions}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.beust/jcommander -->
-		<dependency>
-			<groupId>com.beust</groupId>
-			<artifactId>jcommander</artifactId>
-			<version>1.78</version>
 		</dependency>
 	</dependencies>
 
@@ -165,12 +174,16 @@
 						</goals>
 						<configuration>
 							<mainClass>${agile.architecture.main.class}</mainClass>
-							<arguments>
-								<argument>--destination</argument>
-								<argument>${structurizr.output.dir}</argument>
-								<argument>--maven-source-dir</argument>
-								<argument>${project.build.sourceDirectory}</argument>
-							</arguments>
+							<systemProperties>
+								<systemProperty>
+									<key>maven.source.dir</key>
+									<value>${project.build.sourceDirectory}</value>
+								</systemProperty>
+								<systemProperty>
+									<key>architecture.destination</key>
+									<value>${structurizr.output.dir}</value>
+								</systemProperty>
+							</systemProperties>
 						</configuration>
 					</execution>
 				</executions>
@@ -348,6 +361,7 @@
 						</executions>
 					</plugin>
 					<!-- TODO: Uncomment that if you want architecture documents to be pushed to GitHub releases -->
+					<!--
 					<plugin>
 						<groupId>de.jutzig</groupId>
 						<artifactId>github-release-plugin</artifactId>
@@ -375,6 +389,7 @@
 							</execution>
 						</executions>
 					</plugin>
+					-->
 				</plugins>
 			</build>
 		</profile>
