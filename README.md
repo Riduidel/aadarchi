@@ -63,7 +63,8 @@ This will watch both the `src/slides` and the `src/main/java` folder and run a `
 
 ### Best practices
 * Define systems, containers and components options **only** through structurizr properties. 
-The useful method for that is `ModelItem#addProperty(String, String)`. Don't try to load properties from other means, cause it'll introduce incoherence. 
+The useful method for that is `ModelItem#addProperty(String, String)`. Don't try to load properties from other means, cause it'll introduce incoherence.
+* Try to stay close to describe=>extend=>generate. In other words, first describe architecture in `Architecture` class. THen use available extension points (provided by CDI) to add additionnal infos.
 
 ## Developing
 There are not many things to do (except improving the archetype source).
