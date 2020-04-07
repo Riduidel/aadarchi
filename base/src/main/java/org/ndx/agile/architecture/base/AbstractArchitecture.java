@@ -20,6 +20,7 @@ import com.structurizr.Workspace;
 public abstract class AbstractArchitecture {
 
 	public static void main(Class<? extends AbstractArchitecture> toRun, String[] args) throws Throwable {
+		// TODO Disable weld INFO logging, cause it outputs too much things of no interest
 		// Disable the Weld thread pool (unless it is defined on command-line)
 		System.setProperty(ConfigurationKey.EXECUTOR_THREAD_POOL_TYPE.get(), "NONE");
         SeContainerInitializer containerInit = SeContainerInitializer.newInstance();
