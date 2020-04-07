@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 			<artifactId>base</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.Version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -137,6 +137,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M3</version>
 				<executions>
 					<execution>
 						<id>enforce-maven</id>
@@ -354,6 +355,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>3.1.0</version>
 						<executions>
 							<execution>
 								<id>attach-artifacts</id>

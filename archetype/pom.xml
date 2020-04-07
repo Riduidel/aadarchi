@@ -11,7 +11,7 @@
 		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 			<artifactId>base</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
