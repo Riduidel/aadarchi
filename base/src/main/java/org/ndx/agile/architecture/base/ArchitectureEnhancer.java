@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
@@ -20,6 +21,7 @@ import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
 
+@ApplicationScoped
 public final class ArchitectureEnhancer implements OutputBuilder {
 	@Inject Instance<Enhancer> enhancers;
 	@Inject Logger logger;

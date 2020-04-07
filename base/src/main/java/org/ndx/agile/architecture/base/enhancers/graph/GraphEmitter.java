@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.ConfigProperty;
@@ -20,6 +21,7 @@ import com.structurizr.io.plantuml.PlantUMLWriter;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
 
+@ApplicationScoped
 public class GraphEmitter implements ViewEnhancer {
 	@Inject Logger logger;
 	@Inject 

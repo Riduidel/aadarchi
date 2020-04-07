@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import com.structurizr.io.plantuml.C4PlantUMLWriter;
 import com.structurizr.io.plantuml.PlantUMLDiagram;
 import com.structurizr.io.plantuml.PlantUMLWriter;
 
+@ApplicationScoped
 public abstract class AbstractArchitecture {
 
 	public static void main(Class<? extends AbstractArchitecture> toRun, String[] args) throws Throwable {

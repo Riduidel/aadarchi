@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
@@ -27,6 +28,7 @@ import com.structurizr.model.SoftwareSystem;
 
 import nl.jworks.markdown_to_asciidoc.Converter;
 
+@ApplicationScoped
 public class Reader implements ModelEnhancer {
 	/**
 	 * Should contain the full GitHub url of project, including the github.com domain!
