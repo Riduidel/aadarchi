@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.ndx.agile.architecture.base.AbstractArchitecture;
 
 import com.structurizr.Workspace;
+import com.structurizr.model.Location;
 import com.structurizr.model.Model;
 import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
@@ -32,13 +33,19 @@ public class Architecture extends AbstractArchitecture {
 		Workspace workspace = new Workspace("Getting Started", "This is a model of my software system.");
 		Model model = workspace.getModel();
 
-		Person user = model.addPerson("User", "A user of my software system.");
-		SoftwareSystem softwareSystem = model.addSoftwareSystem("Software System", "My software system.");
-		user.uses(softwareSystem, "Uses");
+		Person waiting = model.addPerson("Waiting person", "Someone waiting for his train.");
+		Person inTrain = model.addPerson("Person in train", "Someone already in the train.");
+		SoftwareSystem softwareSystem = model.addSoftwareSystem("kafkatrain", "Crowd-sourced train timetable prediction system");
+		waiting.uses(softwareSystem, "See train delay");
+		inTrain.uses(softwareSystem, "Informs application that train is running");
+		SoftwareSystem navitia = model.addSoftwareSystem(Location.External, "navitia", "Official train time-table");
+		SoftwareSystem sncfLocation = model.addSoftwareSystem(Location.External, "SNCF geolocation", "SNCF train real-time location");
+		softwareSystem.uses(navitia, "Get official time table");
+		softwareSystem.uses(sncfLocation, "Get real-time train position");
 
 		ViewSet views = workspace.getViews();
 		SystemContextView contextView = views.createSystemContextView(softwareSystem, "SystemContext",
-				"An example of a System Context diagram.");
+				"Systems involved in train prediction");
 		contextView.addAllSoftwareSystems();
 		contextView.addAllPeople();
 

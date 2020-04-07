@@ -10,43 +10,32 @@ include::_notify-bug-admonition.adoc[]
 include::{structurizrdir}/SystemContext.plantuml[]
 ----
 
-**TODO**
-////
-A context section should be the first section of the software
-documentation and simply used to set the scene for the remainder of the
-document.
+== What is this softare system about ?
+Getting "true" public transport delay is often impossible.
+Because the organism responsible for displaying delays is also the organism that allow transports to run.
+As a consequence, it is not always their best move to display effective transport delay.
+This system exists to overcome that. 
 
-== Intent
+== What is it that's being built?
+We will build a system that allow us to easily compare official time table with effective transport delay by
 
-A context section should answer the following types of questions:
+. Asking users in transports to tell us if transport is late or not
+. Comparing effective transport location with the one provided by real-time location, when it exists
 
-* What is this software project/product/system all about?
-* What is it that's being built?
-* How does it fit into the existing environment? (e.g. systems, business
+== How does it fit into the existing environment? (e.g. systems, business
 processes, etc)
-* Who is using it? (users, roles, actors, personas, etc)
 
-== Structure
+As we're doing this as a startup, we have no internal context.
+However, there is an external context.
 
-The context section doesn't need to be long; a page or two is sufficient
-and a link:/help/static-diagrams[context diagram] is a great way to tell
-most of the story.
+We will use services of https://www.navitia.io/[navitia], which provides time tables for all France cities public transport systems, but also intercity train.
 
-== Motivation
+We will also use geolocation services provided by SNCF (for intercity trains) and other providers wher possible.
 
-It's surprisingly common to see software documentation that doesn't
-start by setting the scene and, 30 pages in, you're still none the wiser
-as to why the software exists and where it fits into the existing IT
-environment. A context section doesn't take long to create but can be
-immensely useful, especially for those outside of the team.
+== Who is using it? (users, roles, actors, personas, etc)
+We currently envision two types of useers (who can in fact be the same person at different times)
 
-== Audience
+. The waiting user, to which we will send accurate crossing schedule information.
+. The user already in transport, which can inform waiting user if the train was on time or not
 
-Technical and non-technical people, inside and outside of the immediate
-software development team.
 
-== Required
-
-Yes, all software documentation should include an initial context
-section to set the scene.
-////
