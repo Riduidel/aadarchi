@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>agile-architecture-documentation-archetype</artifactId>
 		<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
-		<version>1.0-SNAPSHOT</version>
+		<version>0.0.1</version>
 	</parent>
 	<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 	<artifactId>example</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<properties>
 		<version.java>11</version.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,7 +46,7 @@
 		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 			<artifactId>base</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -294,7 +292,7 @@
 									<backend>html5</backend>
 									<outputDirectory>${asciidoc.target.docs.directory}/html</outputDirectory>
 									<attributes>
-										<plantumldir></plantumldir>
+										<plantumldir />
 										<structurizrdir>${agile.architecture.output.diagrams}</structurizrdir>
 										<imagesdir>./images</imagesdir>
 										<toc>left</toc>
@@ -539,7 +537,7 @@
 											date -->
 										<revnumber>${project.version}</revnumber>
 										<revdate>${maven.build.timestamp}</revdate>
-										<stylesheet></stylesheet>
+										<stylesheet />
 										<hideBugReport>${asciidoc.documents.hide.bug.report}</hideBugReport>
 									</attributes>
 								</configuration>
