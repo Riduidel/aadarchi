@@ -198,7 +198,7 @@
 					<releaseProfiles>settings-agile-architecture</releaseProfiles>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<localCheckout>true</localCheckout>
-					<arguments>-Dasciidoc.documents.hide.bug.report=true</arguments>
+					<goals>verify</goals>
 				</configuration>
 			</plugin>
 		</plugins>
