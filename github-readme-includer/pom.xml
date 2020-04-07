@@ -60,7 +60,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<systemPropertyVariables>
-						<GITHUB_TOKEN>${GITHUB_TOKEN}</GITHUB_TOKEN>
+						<GITHUB_TOKEN>${GITHUB_ACCESS_TOKEN}</GITHUB_TOKEN>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
