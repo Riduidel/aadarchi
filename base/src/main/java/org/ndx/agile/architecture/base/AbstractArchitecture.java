@@ -2,8 +2,6 @@ package org.ndx.agile.architecture.base;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -17,9 +15,6 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.jboss.weld.config.ConfigurationKey;
 
 import com.structurizr.Workspace;
-import com.structurizr.io.plantuml.C4PlantUMLWriter;
-import com.structurizr.io.plantuml.PlantUMLDiagram;
-import com.structurizr.io.plantuml.PlantUMLWriter;
 
 @ApplicationScoped
 public abstract class AbstractArchitecture {
