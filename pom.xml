@@ -189,6 +189,18 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>3.0.0-M1</version>
+				<configuration>
+					<!-- This profile MUST be defined in settings.xml and contains the various tokens (GitHub, GitLab and so on) -->
+					<releaseProfiles>settings-agile-architecture</releaseProfiles>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<localCheckout>true</localCheckout>
+					<arguments>-Dasciidoc.documents.hide.bug.report=true</arguments>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
