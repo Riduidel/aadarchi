@@ -21,7 +21,9 @@
 		<asciidoc.source.slides.directory>src/slides/asciidoc</asciidoc.source.slides.directory>
 		<asciidoc.target.slides.directory>${project.build.directory}/asciidoc/slides</asciidoc.target.slides.directory>
 		<agile.architecture.main.class>org.ndx.agile.architecture.example.Architecture</agile.architecture.main.class>
-		<structurizr.output.dir>${project.build.directory}/structurizr/architecture</structurizr.output.dir>
+		<agile.architecture.output.dir>${project.build.directory}/structurizr</agile.architecture.output.dir>
+		<agile.architecture.output.diagrams>${agile.architecture.output.dir}/diagrams</agile.architecture.output.diagrams>
+		<agile.architecture.output.enhancements>${agile.architecture.output.dir}/enhancements</agile.architecture.output.enhancements>
 
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctor-maven-plugin -->
 		<version.asciidoctor.maven.plugin>2.0.0-RC.1</version.asciidoctor.maven.plugin>
@@ -44,29 +46,28 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
-			<version>2.0.SP1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.weld.se</groupId>
-			<artifactId>weld-se-core</artifactId>
-			<version>3.1.4.Final</version>
-		</dependency>
-		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
-			<artifactId>cdi-config-extension</artifactId>
+			<artifactId>base</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.structurizr</groupId>
-			<artifactId>structurizr-client</artifactId>
-			<version>${version.structurizr.client}</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.6.1</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.structurizr</groupId>
-			<artifactId>structurizr-plantuml</artifactId>
-			<version>${version.structurizr.extensions}</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.6.1</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent -->
+		<dependency>
+			<groupId>org.jboss.weld</groupId>
+			<artifactId>weld-junit-parent</artifactId>
+			<version>2.0.1.Final</version>
+			<type>pom</type>
 		</dependency>
 	</dependencies>
 
@@ -169,6 +170,14 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.6.0</version>
@@ -186,8 +195,12 @@
 									<value>${project.build.sourceDirectory}</value>
 								</systemProperty>
 								<systemProperty>
-									<key>architecture.destination</key>
-									<value>${structurizr.output.dir}</value>
+									<key>agile.architecture.diagrams</key>
+									<value>${agile.architecture.output.diagrams}</value>
+								</systemProperty>
+								<systemProperty>
+									<key>agile.architecture.enhancements</key>
+									<value>${agile.architecture.output.enhancements}</value>
 								</systemProperty>
 							</systemProperties>
 						</configuration>
@@ -282,7 +295,7 @@
 									<outputDirectory>${asciidoc.target.docs.directory}/html</outputDirectory>
 									<attributes>
 										<plantumldir></plantumldir>
-										<structurizrdir>${structurizr.output.dir}</structurizrdir>
+										<structurizrdir>${agile.architecture.output.diagrams}</structurizrdir>
 										<imagesdir>./images</imagesdir>
 										<toc>left</toc>
 										<icons>font</icons>
@@ -307,7 +320,7 @@
 									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
 									<attributes>
 										<plantumldir>${asciidoc.target.docs.directory}</plantumldir>
-										<structurizrdir>${structurizr.output.dir}</structurizrdir>
+										<structurizrdir>${agile.architecture.output.diagrams}</structurizrdir>
 										<imagesdir>./images</imagesdir>
 										<icons>font</icons>
 										<pagenums />
@@ -366,36 +379,16 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- TODO: Uncomment that if you want architecture documents to be pushed to GitHub releases -->
-					<!--
-					<plugin>
-						<groupId>de.jutzig</groupId>
-						<artifactId>github-release-plugin</artifactId>
-						<version>1.4.0</version>
-						<executions>
-							<execution>
-								<id>deploy-pdf</id>
-								<phase>deploy</phase>
-								<goals>
-									<goal>release</goal>
-								</goals>
-								<configuration>
-									<description>New version of ${project.artifactId}</description>
-									<releaseName>${project.version}</releaseName>
-									<tag>${project.artifactId}-${project.version}</tag>
-									<fileSets>
-										<fileSet>
-											<directory>${asciidoc.target.docs.directory}</directory>
-											<includes>
-												<include>pdf/${project.artifactId}.pdf</include>
-											</includes>
-										</fileSet>
-									</fileSets>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					-->
+					<!-- TODO: Uncomment that if you want architecture documents to be pushed 
+						to GitHub releases -->
+					<!-- <plugin> <groupId>de.jutzig</groupId> <artifactId>github-release-plugin</artifactId> 
+						<version>1.4.0</version> <executions> <execution> <id>deploy-pdf</id> <phase>deploy</phase> 
+						<goals> <goal>release</goal> </goals> <configuration> <description>New version 
+						of ${project.artifactId}</description> <releaseName>${project.version}</releaseName> 
+						<tag>${project.artifactId}-${project.version}</tag> <fileSets> <fileSet> 
+						<directory>${asciidoc.target.docs.directory}</directory> <includes> <include>pdf/${project.artifactId}.pdf</include> 
+						</includes> </fileSet> </fileSets> </configuration> </execution> </executions> 
+						</plugin> -->
 				</plugins>
 			</build>
 		</profile>
@@ -529,7 +522,7 @@
 									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
 									<attributes>
 										<plantumldir>images/</plantumldir>
-										<structurizrdir>${structurizr.output.dir}</structurizrdir>
+										<structurizrdir>${agile.architecture.output.diagrams}</structurizrdir>
 										<imagesdir>.</imagesdir>
 										<!-- As we are downloading reveal.js in runtime, it sits in a nonstandard 
 											folder `reveal.js-${version.revealjs}` -->

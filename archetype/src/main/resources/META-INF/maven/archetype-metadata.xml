@@ -1,7 +1,17 @@
-<archetype-descriptor xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0
-            http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" 
-	xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="agile-architecture-documentation-archetype">
+<archetype-descriptor
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0
+            http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+	xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	name="agile-architecture-documentation-archetype">
+	<requiredProperties>
+		<requiredProperty key="groupId" />
+		<requiredProperty key="artifactId" />
+		<requiredProperty key="version">
+			<defaultValue>0.0.1-SNAPSHOT</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="package"/>
+	</requiredProperties>
 	<fileSets>
 		<fileSet>
 			<directory></directory>
@@ -26,6 +36,15 @@
 			<directory>src/docs/asciidoc</directory>
 			<includes>
 				<include>**/*.adoc</include>
+			</includes>
+			<excludes>
+				<exclude>**/__artifactId__.adoc</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet filtered="true">
+			<directory>src/docs/asciidoc</directory>
+			<includes>
+				<include>**/__artifactId__.adoc</include>
 			</includes>
 		</fileSet>
 	</fileSets>
