@@ -1,8 +1,6 @@
 package org.ndx.agile.architecture.base;
 
-import java.io.File;
-
-import com.structurizr.model.Container;
+import com.structurizr.Workspace;
 
 public interface Enhancer {
 	/**
@@ -17,5 +15,9 @@ public interface Enhancer {
 	 * @return Any int. Lower values will run first, higher values will run last.
 	 */
 	int priority();
+
+	boolean startVisit(Workspace workspace, OutputBuilder builder);
+
+	void endVisit(Workspace workspace, OutputBuilder builder);
 
 }

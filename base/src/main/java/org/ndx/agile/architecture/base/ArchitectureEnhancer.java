@@ -38,11 +38,14 @@ public final class ArchitectureEnhancer implements OutputBuilder {
 
 	
 	private void enhancerVisitWorkspace(Enhancer enhancer, Workspace workspace) {
-		if(enhancer instanceof ModelEnhancer) {
-			enhancerVisitModel((ModelEnhancer) enhancer, workspace.getModel());
-		}
-		if(enhancer instanceof ViewEnhancer) {
-			enhancerVisitViews((ViewEnhancer) enhancer, workspace.getViews());
+		if(enhancer.startVisit(workspace, this)) {
+			if(enhancer instanceof ModelEnhancer) {
+				enhancerVisitModel((ModelEnhancer) enhancer, workspace.getModel());
+			}
+			if(enhancer instanceof ViewEnhancer) {
+				enhancerVisitViews((ViewEnhancer) enhancer, workspace.getViews());
+			}
+			enhancer.endVisit(workspace, this);
 		}
 	}
 

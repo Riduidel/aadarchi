@@ -72,18 +72,6 @@ public abstract class AbstractArchitecture {
 		Workspace workspace = describeArchitecture();
 		
 		enhancer.enhance(workspace);
-	
-		PlantUMLWriter plantUMLWriter = new C4PlantUMLWriter();
-		// Hints to have arrows more easily visible
-		plantUMLWriter.addSkinParam("pathHoverColor", "GreenYellow");
-		plantUMLWriter.addSkinParam("ArrowThickness", "3");
-		plantUMLWriter.addSkinParam("svgLinkTarget", "_parent");
-		
-		destination.mkdirs();
-		for(PlantUMLDiagram diagram : plantUMLWriter.toPlantUMLDiagrams(workspace)) {
-			Files.write(new File(destination, diagram.getKey()+".plantuml").toPath(), diagram.getDefinition().getBytes(Charset.forName("UTF-8")));
-		}
-		logger.info(String.format("All views should have been output to %s", destination.getAbsolutePath()));
 	}
 
 	/**

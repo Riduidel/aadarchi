@@ -19,6 +19,7 @@ import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 
+import com.structurizr.Workspace;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Model;
@@ -132,5 +133,13 @@ public class Reader implements ModelEnhancer {
 	@Override public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {}
 
 	@Override public void endVisit(Model model, OutputBuilder builder) {}
+
+	@Override
+	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
+		return true;
+	}
+
+	@Override
+	public void endVisit(Workspace workspace, OutputBuilder builder) {}
 
 }
