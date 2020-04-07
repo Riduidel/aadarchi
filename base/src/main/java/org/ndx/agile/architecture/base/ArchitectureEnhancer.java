@@ -22,7 +22,7 @@ import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
 
 @ApplicationScoped
-public final class ArchitectureEnhancer implements OutputBuilder {
+public class ArchitectureEnhancer implements OutputBuilder {
 	@Inject Instance<Enhancer> enhancers;
 	@Inject Logger logger;
 	@Inject @ConfigProperty(name="agile.architecture.enhancements") File enhancementsBase;

@@ -49,7 +49,7 @@ public abstract class AbstractArchitecture {
 	 * prior to have elements written. You should not have to overwrite this method.
 	 * @throws IOException
 	 */
-	public final void run() throws IOException {
+	public void run() throws IOException {
 		// Unless force is set we will only generate architecture info if the current class source file
 		// is more recent than generated class
 		File source = new File(mavenSourceDir, getClass().getName().replace('.', '/')+".java");
