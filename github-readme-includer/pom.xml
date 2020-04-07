@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 		<artifactId>agile-architecture-documentation-archetype</artifactId>
-		<version>0.0.1</version>
+		<version>0.0.2-SNAPSHOT</version>
 	</parent>
 	<description>Allow github readme to be included in project documentation</description>
 	<artifactId>github-readme-includer</artifactId>

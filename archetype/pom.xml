@@ -3,7 +3,7 @@
 
 	<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 	<artifactId>archetype</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>maven-archetype</packaging>
 	
 	<dependencies>
@@ -11,7 +11,7 @@
 		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 			<artifactId>base</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.2-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
