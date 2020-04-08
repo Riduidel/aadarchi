@@ -33,9 +33,9 @@ public class Architecture extends AbstractArchitecture {
 		Workspace workspace = new Workspace("Getting Started", "This is a model of my software system.");
 		Model model = workspace.getModel();
 
-		Person waiting = model.addPerson("Waiting person", "Someone waiting for his train.");
-		Person inTrain = model.addPerson("Person in train", "Someone already in the train.");
-		SoftwareSystem softwareSystem = model.addSoftwareSystem("kafkatrain", "Crowd-sourced train timetable prediction system");
+		Person waiting = model.addPerson("Waiting person", "Someone waiting for his transport.");
+		Person inTrain = model.addPerson("Person in transport", "Someone already in the transport.");
+		SoftwareSystem softwareSystem = model.addSoftwareSystem("kafkatrain", "Crowd-sourced transport timetable prediction system");
 		waiting.uses(softwareSystem, "See train delay");
 		inTrain.uses(softwareSystem, "Informs application that train is running");
 		SoftwareSystem navitia = model.addSoftwareSystem(Location.External, "navitia", "Official train time-table");

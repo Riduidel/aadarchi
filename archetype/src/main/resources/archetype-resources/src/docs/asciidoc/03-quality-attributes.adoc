@@ -36,27 +36,57 @@ the documentation.
 Simply listing out each of the quality attributes is a good starting
 point. Examples include:
 
-* Performance (e.g. latency and throughput)
-* Scalability (e.g. data and traffic volumes)
-* Availability (e.g. uptime, downtime, scheduled maintenance, 24x7,
+== Performance (e.g. latency and throughput)
+N/A
+
+== Scalability (e.g. data and traffic volumes)
+N/A
+
+== Availability (e.g. uptime, downtime, scheduled maintenance, 24x7,
 99.9%, etc)
-* Security (e.g. authentication, authorisation, data confidentiality,
+N/A
+
+== Security (e.g. authentication, authorisation, data confidentiality,
 etc)
-* Extensibility
-* Flexibility
-* Auditing
-* Monitoring and management
-* Reliability
-* Failover/disaster recovery targets (e.g. manual vs automatic, how long
-will this take?)
-* Business continuity
-* Interoperability
-* Legal, compliance and regulatory requirements (e.g. data protection
-act)
-* Internationalisation (i18n) and localisation (L10n)
-* Accessibility
-* Usability
-* ...
+N/A
+
+== Extensibility
+N/A
+
+== Flexibility
+N/A
+
+== Auditing
+N/A
+
+== Monitoring and management
+N/A
+
+== Reliability
+N/A
+
+== Failover/disaster recovery targets (e.g. manual vs automatic, how long will this take?)
+N/A
+
+== Business continuity
+N/A
+
+== Interoperability
+N/A
+
+== Legal, compliance and regulatory requirements (e.g. data protection act)
+N/A
+
+== Internationalisation (i18n) and localisation (L10n)
+N/A
+
+== Accessibility
+N/A
+
+== Usability
+N/A
+
+== ...
 
 Each quality attribute should be precise, leaving no interpretation to
 the reader. Examples where this isn't the case include:

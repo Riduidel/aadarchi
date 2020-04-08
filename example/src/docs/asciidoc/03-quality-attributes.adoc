@@ -2,90 +2,79 @@
 :chapter: Quality%20Attributes
 include::_notify-bug-admonition.adoc[]
 
-**TODO**
-////
-With the link:/help/documentation/functional-overview[functional
-overview section] summarising the functionality, it's also worth
-including a separate section to summarise the quality attributes (also
-referred to as "non-functional requirements").
+== Common constraints
+=== Performance (e.g. latency and throughput)
+All users should have application available in 5 seconds.
 
-== Intent
+=== Scalability (e.g. data and traffic volumes)
+We expect a first deployment with 1.000 users (and 100 simultaneous connections of users)
 
-This section is about summarising the key quality attributes and should
-answer the following types of questions:
+=== Availability (e.g. uptime, downtime, scheduled maintenance, 24x7,99.9%, etc)
+Application will initially be available on a https://uptime.is/99.9[99.9% basis]
 
-* Is there a clear understanding of the quality attributes that the
-architecture must satisfy?
-* Are the quality attributes SMART (specific, measurable, achievable,
-relevant and timely)?
-* Have quality attributes that are usually taken for granted been
-explicitly marked as out of scope if they are not needed? (e.g. "user
-interface elements will only be presented in English" to indicate that
-multi-language support is not explicitly catered for)
-* Are any of the quality attributes unrealistic? (e.g. true 24x7
-availability is typically very costly to implement inside many
-organisations)
-
-In addition, if any of the quality attributes are deemed as
-"architecturally significant" and therefore influence the architecture,
-why not make a note of them so that you can refer back to them later in
-the documentation.
-
-== Structure
-
-Simply listing out each of the quality attributes is a good starting
-point. Examples include:
-
-* Performance (e.g. latency and throughput)
-* Scalability (e.g. data and traffic volumes)
-* Availability (e.g. uptime, downtime, scheduled maintenance, 24x7,
-99.9%, etc)
-* Security (e.g. authentication, authorisation, data confidentiality,
+=== Security (e.g. authentication, authorisation, data confidentiality,
 etc)
-* Extensibility
-* Flexibility
-* Auditing
-* Monitoring and management
-* Reliability
-* Failover/disaster recovery targets (e.g. manual vs automatic, how long
-will this take?)
-* Business continuity
-* Interoperability
-* Legal, compliance and regulatory requirements (e.g. data protection
-act)
-* Internationalisation (i18n) and localisation (L10n)
-* Accessibility
-* Usability
-* ...
+No user data should be stored by system.
+Authentication and authorization will be managed using OpenID Connect with the usual id providers (Google, Facebook, ...)
 
-Each quality attribute should be precise, leaving no interpretation to
-the reader. Examples where this isn't the case include:
+=== Extensibility
+Application will be extended to various geographic areas and types of public transport systems (buses, trains, boats), but there will be no feature extensibility
 
-* "the request must be serviced quickly"
-* "there should be no overhead"
-* "as fast as possible"
-* "as small as possible"
-* "as many customers as possible"
-* ...
+=== Flexibility
+Application is not supposed to be flexible
 
-== Motivation
+=== Auditing
+We must be able to audit the timetables provided by Navitia as well as the real-time positions.
+We must also be able to audit what informations users in transit send 
+to blacklist the ones that will (because shit happens) try to abuse the system.
 
-If you've proactively considered the quality attributes and let them
-influence the software architecture, why not write them down too?
-Typically, quality attributes are not given to you on a plate and an
-amount of exploration and refinement is usually needed to come up with a
-list of them. Put simply, writing down the quality attributes removes
-any ambiguity both now and during maintenance/enhancement work in the
-future.
+=== Monitoring and management
+Usual system monitoring will be used.
 
-== Audience
+=== Reliability
+Besides, we will monitor the number of users in transit and waiting and the delay between the time when one user starts his transit and another, on the same line, receive the delay information.
 
-Since quality attributes are mostly technical in nature, this section is
-really targeted at technical people in the software development team.
+=== Failover/disaster recovery targets (e.g. manual vs automatic, how long will this take?)
+We should be able to recover data center loss in less than one day.
 
-== Required
+=== Business continuity
+N/A
 
-Yes, all technical software documentation should include a summary of
-the quality attributes/non-functional requirements as they usually shape
-the resulting software architecture in some way.
-////
+=== Interoperability
+N/A
+
+=== Legal, compliance and regulatory requirements (e.g. data protection act)
+N/A
+
+=== Internationalisation (i18n) and localisation (L10n)
+Application will be deployed in all countries where public transport systems provide APIs (and have potential delays).
+For the sake of easiness, application will be first deployed in France.
+
+=== Accessibility
+Don't know how to validate that.
+
+=== Usability
+Don't know how to validate that.
+
+
+== Specifc constraints
+
+These constraints maps to the relationships expressed in <<Context>>
+
+=== Ingesting time tables
+Ingesting time tables from Navitia should be done each day.
+The process should be monitored since there should be no day where this data is not ingested.
+THis ingestion should be done prior the first release (application has no interest without that).
+
+=== Ingestion real-time positions
+This should be done in a continuous stream.
+Ingestion should not have delay greater than one minute.
+Application should be able to work without this information.
+
+=== Seeing train delays
+Delays should be communicated to user in less than 1 s.
+If user connection to system dont allow that, delays will be sent to user with a notification indicating that network is not performant enough to have accurate timetables.
+
+=== Informing application that transport is running
+A transport is considered as moving after 5 seconds of continuous move.
+After this delay, signal should be sent in less than 1 s.
