@@ -6,9 +6,7 @@
 		<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 		<version>0.0.2-SNAPSHOT</version>
 	</parent>
-	<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 	<artifactId>example</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
 	<properties>
 		<version.java>11</version.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,7 +39,11 @@
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-plantuml -->
 		<version.structurizr.extensions>1.3.4</version.structurizr.extensions>
 	</properties>
-
+	
+	<issueManagement>
+		<url>${issues.url}</url>
+	</issueManagement>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
@@ -272,6 +274,12 @@
 								<project-name>${project.name}</project-name>
 								<project-version>${project.version}</project-version>
 								<project-build-timestamp>${maven.build.timestamp}</project-build-timestamp>
+								<!-- This path is relative to src/docs/asciidoc -->
+								<project-pom-path>../../../pom.xml</project-pom-path>
+								<!-- tag::bug-tracking-define[] -->
+								<!-- TODO Uncomment this line if you use GitHub issues -->
+								<project-issues-on-github>${issues.url}</project-issues-on-github>
+								<!-- end::bug-tracking-define[] -->
 								<!-- These properties generate a footer with revision number and 
 									date -->
 								<revnumber>${project.version}</revnumber>

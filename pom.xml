@@ -11,6 +11,7 @@
 		<maven.compiler.release>11</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<issues.url>https://github.com/Riduidel/agile-architecture-documentation-archetype/issues</issues.url>
 	</properties>
 	<scm>
 		<connection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-archetype.git</connection>
@@ -20,7 +21,7 @@
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/Riduidel/agile-architecture-documentation-archetype/issues</url>
+		<url>${issues.url}</url>
 	</issueManagement>
 
 	<developers>
