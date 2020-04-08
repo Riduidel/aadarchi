@@ -5,10 +5,7 @@ include::_notify-bug-admonition.adoc[]
 **TODO**
 ////
 The deployment section is simply the mapping between the
-link:/help/documentation/software-architecture[software architecture]
-and the
-link:/help/documentation/infrastructure-architecture[infrastructure
-architecture].
+<<software architecture>> and the <<infrastructure architecture>>.
 
 == Intent
 
@@ -20,17 +17,10 @@ application across a number of servers in a server farm). This section
 answers the following types of questions:
 
 * How and where is the software installed and configured?
-* Is it clear how the software will be deployed across the
-infrastructure elements described in the
-link:/help/documentation/infrastructure-architecture[infrastructure
-architecture section]? (e.g. one-to-one mapping, multiple containers per
-server, etc)
-* If this is still to be decided, what are the options and have they
-been documented?
-* Is it understood how memory and CPU will be partitioned between the
-processes running on a single piece of infrastructure?
-* Are any containers and/or components running in an active-active,
-active-passive, hot-standby, cold-standby, etc formation?
+* Is it clear how the software will be deployed across the infrastructure elements described in the link:/help/documentation/<<infrastructure architecture>>? (e.g. one-to-one mapping, multiple containers per server, etc)
+* If this is still to be decided, what are the options and have they been documented?
+* Is it understood how memory and CPU will be partitioned between the processes running on a single piece of infrastructure?
+* Are any containers and/or components running in an active-active, active-passive, hot-standby, cold-standby, etc formation?
 * Has the deployment and rollback strategy been defined?
 * What happens in the event of a software or infrastructure failure?
 * Is it clear how data is replicated across sites?
@@ -44,8 +34,7 @@ containers and/or components with the infrastructure they will be
 deployed on.
 . Diagrams: UML deployment diagrams or modified versions of the diagrams
 from the
-link:/help/documentation/infrastructure-architecture[infrastructure
-architecture section] showing where software will be running.
+link:/help/documentation/<<infrastructure architecture>> showing where software will be running.
 
 You can additionally use notation, colour coding, etc to the designate
 the runtime status of software and infrastructure (e.g. active, passive,

@@ -23,20 +23,48 @@ As with the link:/help/documentation/quality-attributes[quality
 attributes section], simply listing the known constraints and briefly
 summarising them will work. Example constraints include:
 
-* Time, budget and resources.
-* Approved technology lists and technology constraints.
-* Target deployment platform.
-* Existing systems and integration standards.
-* Local standards (e.g. development, coding, etc).
-* Public standards (e.g. HTTP, SOAP, XML, XML Schema, WSDL, etc).
-* Standard protocols.
-* Standard message formats.
-* Size of the software development team.
-* Skill profile of the software development team.
-* Nature of the software being built (e.g. tactical or strategic).
-* Political constraints.
-* Use of internal intellectual property.
-* ...
+Time, budget and resources::
+TODO
+
+Approved technology lists and technology constraints::
+TODO
+
+Target deployment platform::
+TODO
+
+Existing systems and integration standards::
+TODO
+
+Local standards (e.g. development, coding, etc)::
+TODO
+
+Public standards (e.g. HTTP, SOAP, XML, XML Schema, WSDL, etc)::
+TODO
+
+Standard protocols::
+TODO
+
+Standard message formats::
+TODO
+
+Size of the software development team::
+TODO
+
+Skill profile of the software development team::
+TODO
+
+Nature of the software being built (e.g. tactical or strategic)::
+TODO
+
+Political constraints::
+TODO
+
+Use of internal intellectual property::
+TODO
+
+...::
+TODO
+
 
 If constraints do have an impact, it's worth summarising them (e.g. what
 they are, why they are being imposed and who is imposing them) and

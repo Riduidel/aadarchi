@@ -36,55 +36,53 @@ the documentation.
 Simply listing out each of the quality attributes is a good starting
 point. Examples include:
 
-== Performance (e.g. latency and throughput)
-N/A
+Performance (e.g. latency and throughput)::
+TODO
 
-== Scalability (e.g. data and traffic volumes)
-N/A
+Scalability (e.g. data and traffic volumes)::
+TODO
 
-== Availability (e.g. uptime, downtime, scheduled maintenance, 24x7,
-99.9%, etc)
-N/A
+Availability (e.g. uptime, downtime, scheduled maintenance, 24x7, 99.9%, etc)::
+TODO
 
-== Security (e.g. authentication, authorisation, data confidentiality,
-etc)
-N/A
+Security (e.g. authentication, authorisation, data confidentiality, etc)::
+TODO
 
-== Extensibility
-N/A
+Extensibility::
+TODO
 
-== Flexibility
-N/A
+Flexibility::
+TODO
 
-== Auditing
-N/A
+Auditing::
+TODO
 
-== Monitoring and management
-N/A
+Monitoring and management::
+TODO
 
-== Reliability
-N/A
+Reliability::
+TODO
 
-== Failover/disaster recovery targets (e.g. manual vs automatic, how long will this take?)
-N/A
+Failover/disaster recovery targets (e.g. manual vs automatic, how long will this take?)::
+TODO
 
-== Business continuity
-N/A
+Business continuity::
+TODO
 
-== Interoperability
-N/A
+Interoperability::
+TODO
 
-== Legal, compliance and regulatory requirements (e.g. data protection act)
-N/A
+Legal, compliance and regulatory requirements (e.g. data protection act)::
+TODO
 
-== Internationalisation (i18n) and localisation (L10n)
-N/A
+Internationalisation (i18n) and localisation (L10n)::
+TODO
 
-== Accessibility
-N/A
+Accessibility::
+TODO
 
-== Usability
-N/A
+Usability::
+TODO
 
 == ...
 
