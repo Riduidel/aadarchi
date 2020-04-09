@@ -3,6 +3,7 @@ package org.ndx.agile.architecture.example;
 import java.io.IOException;
 
 import org.ndx.agile.architecture.base.AbstractArchitecture;
+import org.ndx.agile.architecture.base.enhancers.Keys;
 
 import com.structurizr.Workspace;
 import com.structurizr.io.plantuml.C4PlantUMLWriter;
@@ -45,6 +46,7 @@ public class Architecture extends AbstractArchitecture {
 		Person waiting = model.addPerson("Waiting person", "Someone waiting for his transport.");
 		Person inTrain = model.addPerson("Person in transport", "Someone already in the transport.");
 		SoftwareSystem kafkatrain = model.addSoftwareSystem("kafkatrain", "Crowd-sourced transport timetable prediction system");
+		kafkatrain.addProperty(Keys.GITHUB_PROJECT, "https://github.com/Riduidel/snowcamp-2019");
 		waiting.uses(kafkatrain, "See train delay");
 		inTrain.uses(kafkatrain, "Informs application that train is running");
 		SoftwareSystem navitia = model.addSoftwareSystem(Location.External, "navitia", "Official train time-table");
@@ -54,6 +56,8 @@ public class Architecture extends AbstractArchitecture {
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		Container sncfReader = kafkatrain.addContainer("sncf-reader", "Read timetables from navitia, despite its name", "Java/Vert.x");
+		sncfReader.addProperty(Keys.GITHUB_PROJECT, "https://github.com/Riduidel/snowcamp-2019");
+		sncfReader.addProperty(Keys.GITHUB_README, "src/build/reference/sncf-reader/readme.md");
 		Container kafka = kafkatrain.addContainer("Kafka cluster", null, "Kafka");
 		kafka.addProperty(C4PlantUMLWriter.C4_ELEMENT_TYPE, C4PlantUMLWriter.Type.Db.toString());
 		sncfReader.uses(kafka, "Send timetables in our format");
@@ -65,6 +69,8 @@ public class Architecture extends AbstractArchitecture {
 		kafkaConnect.uses(kafka, "Receives timetables");
 		kafkaConnect.uses(elastic, "Sends timetables");
 		Container webUI = kafkatrain.addContainer("web-ui", "Web UI allowing interaction with application", "Javascript/Node");
+		webUI.addProperty(Keys.GITHUB_PROJECT, "https://github.com/Riduidel/snowcamp-2019");
+		webUI.addProperty(Keys.GITHUB_README, "src/build/reference/web-ui/README.md");
 		webUI.uses(elastic, "Read timetables");
 		inTrain.uses(webUI, "Enter transport delay");
 		webUI.delivers(waiting, "Get transport delay");

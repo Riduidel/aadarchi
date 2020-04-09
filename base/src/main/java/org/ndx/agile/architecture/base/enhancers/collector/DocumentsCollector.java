@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.ModelEnhancer;
@@ -44,7 +45,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	 * Second level keys are the components, sorted by their canonical name
 	 * And value is a sorted set of file names.
 	 */
-	Map<AgileArchitectureSection, Map<String, Set<File>>> hierarchy = new EnumMap<>(AgileArchitectureSection.class);
+	Map<AgileArchitectureSection, Map<Element, Set<File>>> hierarchy = new EnumMap<>(AgileArchitectureSection.class);
 	@Override
 	public boolean isParallel() {
 		return false;
@@ -60,8 +61,8 @@ public class DocumentsCollector implements ModelEnhancer {
 		// Initialize map with all sections
 		for(AgileArchitectureSection section : AgileArchitectureSection.values()) {
 			hierarchy.put(section, 
-					new TreeMap<String, 
-						Set<File>>());
+					new TreeMap<Element, 
+						Set<File>>(Comparator.comparing(element -> element.getCanonicalName())));
 		}
 		return true;
 	}
@@ -83,9 +84,9 @@ public class DocumentsCollector implements ModelEnhancer {
 	 * @param key
 	 * @param value
 	 */
-	void writeIncludeFor(AgileArchitectureSection section, Map<String, Set<File>> enhancements) {
+	void writeIncludeFor(AgileArchitectureSection section, Map<Element, Set<File>> enhancements) {
 		File target = new File(enhancementsBase, String.format("_%02d-%s.adoc", section.index(), section.name()));
-		String content = generateContent(enhancements, target);
+		String content = generateContent(enhancements, target.getParentFile());
 		try {
 			FileUtils.write(target, content, "UTF-8");
 		} catch (IOException e) {
@@ -101,19 +102,38 @@ public class DocumentsCollector implements ModelEnhancer {
 	 * @param target
 	 * @return
 	 */
-	String generateContent(Map<String, Set<File>> enhancements, File target) {
+	String generateContent(Map<Element, Set<File>> enhancements, File target) {
 		String content = enhancements.entrySet().stream()
 				// TODO potentially test for header generation based upon name deepness
-			.map(entry -> String.format("%s\n%s",
-					String.format("// %s", entry.getKey()),
-					entry.getValue().stream()
-						.map(file -> target.toPath().relativize(file.toPath()).toString())
-						.map(path -> String.format("include::%s[[leveloffset=+1]]", path))
-						.collect(Collectors.joining("\n"))
-					))
+			.map(entry -> generateElementContent(target, entry.getKey(), entry.getValue()))
 			.collect(Collectors.joining("\n"))
 			;
 		return content;
+	}
+
+	String generateElementContent(File target, Element element, Set<File> generated) {
+		int deepness = StringUtils.countMatches(element.getCanonicalName(), '/');
+		return String.format("%s\n%s\n",
+			elementAsTitle(deepness, element),
+			generated.stream()
+				.map(file -> target.toPath().relativize(file.toPath()).toString())
+				.map(path -> String.format("include::%s[leveloffset=+%d]",
+						path,
+						deepness
+						))
+				.collect(Collectors.joining("\n"))
+			);
+	}
+
+	/**
+	 * Generate a title from an element
+	 * @param key element for which we want a title
+	 * @return an Asciidoc title
+	 */
+	private String elementAsTitle(int deeepness, Element key) {
+		return String.format("%s %s",
+				StringUtils.repeat('=', deeepness),
+				key.getName());
 	}
 
 	@Override
@@ -149,7 +169,7 @@ public class DocumentsCollector implements ModelEnhancer {
 				Set<File> files = new TreeSet<>( 
 						Arrays.asList(
 								filesArray));
-				hierarchy.get(section).put(element.getCanonicalName(), files);
+				hierarchy.get(section).put(element, files);
 			}
 		}
 	}

@@ -8,6 +8,7 @@
 	</parent>
 	<artifactId>example</artifactId>
 	<properties>
+		<force>false</force>
 		<version.java>11</version.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -48,6 +49,11 @@
 		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
 			<artifactId>base</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
+			<artifactId>github-infos-includer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -201,6 +207,14 @@
 								<systemProperty>
 									<key>agile.architecture.enhancements</key>
 									<value>${agile.architecture.output.enhancements}</value>
+								</systemProperty>
+								<systemProperty>
+									<key>agile.architecture.github.token</key>
+									<value>${GITHUB_ACCESS_TOKEN}</value>
+								</systemProperty>
+								<systemProperty>
+									<key>force</key>
+									<value>${force}</value>
 								</systemProperty>
 							</systemProperties>
 						</configuration>
