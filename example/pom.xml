@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>agile-architecture-documentation-archetype</artifactId>
 		<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
-		<version>0.0.2-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>example</artifactId>
 	<properties>
