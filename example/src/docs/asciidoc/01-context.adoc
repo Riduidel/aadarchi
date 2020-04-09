@@ -38,4 +38,5 @@ We currently envision two types of useers (who can in fact be the same person at
 . The waiting user, to which we will send accurate crossing schedule information.
 . The user already in transport, which can inform waiting user if the train was on time or not
 
-
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_01-context.adoc[leveloffset=+1]

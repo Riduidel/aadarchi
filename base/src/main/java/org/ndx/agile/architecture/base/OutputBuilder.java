@@ -15,4 +15,5 @@ public interface OutputBuilder {
 	 * @return a path, relative to base
 	 */
 	File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format);
+	File outputFor(AgileArchitectureSection section, Element element);
 }

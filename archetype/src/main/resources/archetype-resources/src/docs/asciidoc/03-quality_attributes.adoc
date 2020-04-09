@@ -117,3 +117,6 @@ Yes, all technical software documentation should include a summary of
 the quality attributes/non-functional requirements as they usually shape
 the resulting software architecture in some way.
 ////
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_03-quality_attributes.adoc[leveloffset=+1]

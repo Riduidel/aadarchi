@@ -35,3 +35,6 @@ of minutes writing it down, especially if you work for a consulting
 organisation who is building a software system under an outsourcing
 agreement for a customer.
 ////
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_13-decision_log.adoc[leveloffset=+1]

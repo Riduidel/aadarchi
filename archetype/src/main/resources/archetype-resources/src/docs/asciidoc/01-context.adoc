@@ -50,3 +50,6 @@ software development team.
 Yes, all software documentation should include an initial context
 section to set the scene.
 ////
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_01-context.adoc[leveloffset=+1]

@@ -10,3 +10,6 @@ Team will adhere to the following set of principles.
 ** Application should be self-healing
 * Application should use messaging and async systems as much as possible
 * Interfaces between components should be documented
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_05-principles.adoc[leveloffset=+1]

@@ -43,3 +43,6 @@ TODO
 
 Use of internal intellectual property::
 TODO
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_04-constraints.adoc[leveloffset=+1]

@@ -75,3 +75,7 @@ Yes, a deployment section should be included in all technical software
 documentation because it can help to solve the often mysterious question
 of where the software will be, or has been, deployed.
 ////
+
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_10-deployment.adoc[leveloffset=+1]

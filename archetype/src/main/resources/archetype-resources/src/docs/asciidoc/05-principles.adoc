@@ -64,3 +64,6 @@ the software development team.
 Yes, all technical software documentation should include a summary of
 the principles that have been or are being used to develop the software.
 ////
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_05-principles.adoc[leveloffset=+1]

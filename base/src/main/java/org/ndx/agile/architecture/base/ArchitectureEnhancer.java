@@ -98,10 +98,22 @@ public class ArchitectureEnhancer implements OutputBuilder {
 	@Override
 	public File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format) {
 		return new File(enhancementsBase,
-				String.format("%s/%d-%s/%d-%s", 
+				// Yup, we use hex values for priority, to have less characters
+				String.format("%s/%02d-%s/_%08x-%s.%s", 
 					element.getCanonicalName(),
-					section.ordinal(), section.name(),
-					enhancer.priority(), enhancer.getClass().getSimpleName()
+					section.index(), section.name(),
+					enhancer.priority(), enhancer.getClass().getSimpleName(), format
+					)
+				);
+	}
+
+	@Override
+	public File outputFor(AgileArchitectureSection section, Element element) {
+		return new File(enhancementsBase,
+				// Yup, we use hex values for priority, to have less characters
+				String.format("%s/%02d-%s", 
+					element.getCanonicalName(),
+					section.index(), section.name()
 					)
 				);
 	}

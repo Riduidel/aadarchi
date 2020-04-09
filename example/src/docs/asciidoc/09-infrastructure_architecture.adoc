@@ -58,3 +58,7 @@ Yes, an infrastructure architecture section should be included in
 technical software documentation because it illustrates that the
 infrastructure is understood and has been considered.
 ////
+
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_09-infrastructure_architecture.adoc[leveloffset=+1]

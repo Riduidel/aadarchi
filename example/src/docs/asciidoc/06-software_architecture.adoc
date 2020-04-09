@@ -53,3 +53,7 @@ Yes, all technical software documentation should include a software
 architecture section because it's essential that the overall software
 structure is well understood by everybody on the development team.
 ////
+
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_06-software_architecture.adoc[leveloffset=+1]

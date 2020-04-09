@@ -18,5 +18,13 @@ public enum AgileArchitectureSection {
 	deployment,
 	development_environment,
 	operation_and_support,
-	decision_log,
+	decision_log,;
+
+	/**
+	 * I want 1-based section indexing (to be consistent with what I have in the src/docs/asciidoc).
+	 * @return {@link #ordinal()}+1
+	 */
+	public int index() {
+		return ordinal()+1;
+	}
 }

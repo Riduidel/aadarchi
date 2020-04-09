@@ -291,6 +291,7 @@
 								<revnumber>${project.version}</revnumber>
 								<revdate>${maven.build.timestamp}</revdate>
 								<organization>${project.organization.name}</organization>
+								<enhancements-dir>${agile.architecture.output.enhancements}</enhancements-dir>
 							</attributes>
 						</configuration>
 						<executions>

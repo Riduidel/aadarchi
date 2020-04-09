@@ -53,3 +53,7 @@ support and operate the software system.
 No, but most software systems are not small or trivial, and the data
 will likely outlive the code that created it.
 ////
+
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_08-data.adoc[leveloffset=+1]

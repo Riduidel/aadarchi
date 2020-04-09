@@ -21,3 +21,6 @@ NOTE: As of today, we don't envision the UI of application
 == For someone in a transport
 
 Once the user is in the public transport, and the transport is moving, application simply sends a message notifying the system that transport is on way.
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_02-functional_overview.adoc[leveloffset=+1]

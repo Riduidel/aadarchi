@@ -72,3 +72,7 @@ the software development team.
 No, but there are usually parts of a large, non-trivial software system
 that can benefit from some explanation.
 ////
+
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_07-code.adoc[leveloffset=+1]

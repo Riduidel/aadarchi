@@ -63,3 +63,6 @@ software development team.
 Yes, all software documentation should include a summary of the
 functionality provided by the software.
 ////
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_02-functional_overview.adoc[leveloffset=+1]

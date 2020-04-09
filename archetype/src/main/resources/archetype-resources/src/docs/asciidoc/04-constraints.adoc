@@ -92,3 +92,6 @@ at all times, even in environments that have a very well known set of
 constraints (e.g. "all of our software is ASP.NET against a SQL Server
 database") because constraints have a habit of changing over time.
 ////
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_04-constraints.adoc[leveloffset=+1]
