@@ -5,10 +5,18 @@ import java.io.IOException;
 import org.ndx.agile.architecture.base.AbstractArchitecture;
 
 import com.structurizr.Workspace;
+import com.structurizr.io.plantuml.C4PlantUMLWriter;
+import com.structurizr.model.Component;
+import com.structurizr.model.Container;
 import com.structurizr.model.Location;
 import com.structurizr.model.Model;
 import com.structurizr.model.Person;
 import com.structurizr.model.SoftwareSystem;
+import com.structurizr.model.Tags;
+import com.structurizr.view.ComponentView;
+import com.structurizr.view.ContainerView;
+import com.structurizr.view.Shape;
+import com.structurizr.view.Styles;
 import com.structurizr.view.SystemContextView;
 import com.structurizr.view.ViewSet;
 
@@ -33,25 +41,65 @@ public class Architecture extends AbstractArchitecture {
 		Workspace workspace = new Workspace("Getting Started", "This is a model of my software system.");
 		Model model = workspace.getModel();
 
+		/////////////////////////////////////////////////////////////////////////////////////////
 		Person waiting = model.addPerson("Waiting person", "Someone waiting for his transport.");
 		Person inTrain = model.addPerson("Person in transport", "Someone already in the transport.");
-		SoftwareSystem softwareSystem = model.addSoftwareSystem("kafkatrain", "Crowd-sourced transport timetable prediction system");
-		waiting.uses(softwareSystem, "See train delay");
-		inTrain.uses(softwareSystem, "Informs application that train is running");
+		SoftwareSystem kafkatrain = model.addSoftwareSystem("kafkatrain", "Crowd-sourced transport timetable prediction system");
+		waiting.uses(kafkatrain, "See train delay");
+		inTrain.uses(kafkatrain, "Informs application that train is running");
 		SoftwareSystem navitia = model.addSoftwareSystem(Location.External, "navitia", "Official train time-table");
 		SoftwareSystem sncfLocation = model.addSoftwareSystem(Location.External, "SNCF geolocation", "SNCF train real-time location");
-		softwareSystem.uses(navitia, "Get official time table");
-		softwareSystem.uses(sncfLocation, "Get real-time train position");
+		kafkatrain.uses(navitia, "Get official time table");
+		kafkatrain.uses(sncfLocation, "Get real-time train position");
 
+		/////////////////////////////////////////////////////////////////////////////////////////
+		Container sncfReader = kafkatrain.addContainer("sncf-reader", "Read timetables from navitia, despite its name", "Java/Vert.x");
+		Container kafka = kafkatrain.addContainer("Kafka cluster", null, "Kafka");
+		kafka.addProperty(C4PlantUMLWriter.C4_ELEMENT_TYPE, C4PlantUMLWriter.Type.Db.toString());
+		sncfReader.uses(kafka, "Send timetables in our format");
+		sncfReader.uses(navitia, "Read timetables")
+			.addProperty(C4PlantUMLWriter.C4_LAYOUT_DIRECTION, C4PlantUMLWriter.Directions.Left.toString());
+		Container elastic = kafkatrain.addContainer("Elastic cluster", null, "ElasticSearch");
+		elastic.addProperty(C4PlantUMLWriter.C4_ELEMENT_TYPE, C4PlantUMLWriter.Type.Db.toString());
+		Container kafkaConnect = kafkatrain.addContainer("Kafka Connect", null, "Kafka Connect");
+		kafkaConnect.uses(kafka, "Receives timetables");
+		kafkaConnect.uses(elastic, "Sends timetables");
+		Container webUI = kafkatrain.addContainer("web-ui", "Web UI allowing interaction with application", "Javascript/Node");
+		webUI.uses(elastic, "Read timetables");
+		inTrain.uses(webUI, "Enter transport delay");
+		webUI.delivers(waiting, "Get transport delay");
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		Component sncfReaderVertice = sncfReader.addComponent("SncfReader", "Verticle connecting to Navitia");
+		Component kafkaWriterVerticle = sncfReader.addComponent("KafkaWriter", "Verticle connecting to Kafka");
+		Component eventBus = sncfReader.addComponent("Vertex event bus", "Core of async mechanisms in Vert.x");
+		sncfReaderVertice.uses(navitia, "Read time tables")
+			.addProperty(C4PlantUMLWriter.C4_LAYOUT_DIRECTION, C4PlantUMLWriter.Directions.Left.toString());
+		sncfReaderVertice.uses(eventBus, "Propagates splitted time tables to event bus")
+			.addProperty(C4PlantUMLWriter.C4_LAYOUT_DIRECTION, C4PlantUMLWriter.Directions.Right.toString());
+		eventBus.uses(kafkaWriterVerticle, "Notifies writer")
+			.addProperty(C4PlantUMLWriter.C4_LAYOUT_DIRECTION, C4PlantUMLWriter.Directions.Right.toString());
+		kafkaWriterVerticle.uses(kafka, "Sends message")
+			.addProperty(C4PlantUMLWriter.C4_LAYOUT_DIRECTION, C4PlantUMLWriter.Directions.Right.toString());
+
+		/////////////////////////////////////////////////////////////////////////////////////////
 		ViewSet views = workspace.getViews();
-		SystemContextView contextView = views.createSystemContextView(softwareSystem, "SystemContext",
+		SystemContextView contextView = views.createSystemContextView(kafkatrain, "SystemContext",
 				"Systems involved in train prediction");
 		contextView.addAllSoftwareSystems();
 		contextView.addAllPeople();
+		
+		ContainerView kafkaTrainContainers = views.createContainerView(kafkatrain, "kafkatrain.containers", "Kafkatrain containers");
+		kafkaTrainContainers.addAllContainersAndInfluencers();
+		
+		ComponentView sncfReaderComponentsView = views.createComponentView(sncfReader, "sncfReader.components", "Components of SNCF Reader");
+		sncfReaderComponentsView.addAllComponents();
+		sncfReaderComponentsView.add(kafka);
+		sncfReaderComponentsView.add(navitia);
 
-//		Styles styles = views.getConfiguration().getStyles();
+		Styles styles = views.getConfiguration().getStyles();
 //		styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
-//		styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
+		styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
 		return workspace;
 	}
 

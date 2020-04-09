@@ -2,58 +2,21 @@
 :chapter: Software%20Architecture
 include::_notify-bug-admonition.adoc[]
 
-**TODO**
-////
-The software architecture section is your "big picture" view and allows
-you to present the structure of the software. Traditional software
-architecture documents typically refer to this as a "conceptual view" or
-"logical view", and there is often confusion about whether such views
-should refer to implementation details such as technology choices.
+[plantuml, {plantumldir}kafkatrain.containers, svg, opts="interactive"]     
+----
+include::{structurizrdir}/kafkatrain.containers.plantuml[]
+----
 
-== Intent
+We use Kafka to fully isolate load between sncfReader and storage.
+We use ElasticSearch to provide various search directions, as we will request search based on geographic criterais as well as proximity. 
 
-The purpose of this section is to summarise the software architecture of
-your software system so that the following questions can be answered:
 
-* What does the "big picture" look like?
-* Is there are clear structure?
-* Is it clear how the system works from the "30,000 foot view"?
-* Does it show the major containers and technology choices?
-* Does it show the major components and their interactions?
-* What are the key internal interfaces? (e.g. a web service between your
-web and business tiers)
-
-== Structure
-
-The link:/help/static-diagrams[container and component diagrams]
-diagrams are the main focus for this section, accompanied by a short
-narrative explaining what the diagram is showing plus a summary of each
-container/component.
-
-Sometimes UML sequence or collaboration diagrams showing component
-interactions can be a useful way to illustrate how the software
-satisfies the major use cases/user stories/etc. Only do this if it adds
-value though and resist the temptation to describe how every use
-case/user story works.
-
-== Motivation
-
-The motivation for writing this section is that it provides the "maps"
-that people can use to get an overview of the software and help
-developers navigate the codebase.
-
-== Audience
-
-The audience for this section is predominantly the technical people in
-the software development team.
-
-== Required
-
-Yes, all technical software documentation should include a software
-architecture section because it's essential that the overall software
-structure is well understood by everybody on the development team.
-////
-
+== Software architecture of sncfReader component
+[plantuml, {plantumldir}sncfReader.components, svg, opts="interactive"]     
+----
+include::{structurizrdir}/sncfReader.components.plantuml[]
+----
+This one is quite simple : one verticle reads data from Navitia HTTP endpoint, send the obtained data through Vert.x event bus to another which outpus data to a Kafka stream.
 
 // This include allows enhancers to have their content include "automagically". Don't remove it!
 include::{enhancements-dir}/_06-software_architecture.adoc[leveloffset=+1]
