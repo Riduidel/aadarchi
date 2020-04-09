@@ -193,6 +193,10 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>3.0.0-M1</version>
 				<configuration>
+					<!-- We install each artifact at end of prepare, for archetype to have a working base dependency -->
+					<preparationGoals>install</preparationGoals>
+					<!-- For jitpack to use correct version names, I do prefer to ahve only version in release tag -->
+					<tagNameFormat>@{version}</tagNameFormat>
 					<!-- This profile MUST be defined in settings.xml and contains the various tokens (GitHub, GitLab and so on) -->
 					<releaseProfiles>settings-agile-architecture</releaseProfiles>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
