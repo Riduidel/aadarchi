@@ -212,6 +212,6 @@
 		<module>base</module>
 		<module>example</module>
 		<module>cdi-config-extension</module>
-		<module>github-readme-includer</module>
+		<module>github-infos-includer</module>
 	</modules>
 </project>

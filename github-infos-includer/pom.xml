@@ -5,8 +5,8 @@
 		<artifactId>agile-architecture-documentation-archetype</artifactId>
 		<version>0.0.3-SNAPSHOT</version>
 	</parent>
-	<description>Allow github readme to be included in project documentation</description>
-	<artifactId>github-readme-includer</artifactId>
+	<description>Allow github infos to be included in project documentation</description>
+	<artifactId>github-infos-includer</artifactId>
 	<repositories>
 		<repository>
 			<id>spring-plugins</id>

@@ -46,4 +46,12 @@ class ReaderTest {
 		});
 	}
 
+
+	@Test() void can_read_my_old_snowcamp_project() throws IOException {
+		Reader reader = new Reader();
+		String readme = reader.getReadmeContent(System.getProperty("GITHUB_TOKEN"), 
+				"https://github.com/Riduidel/snowcamp-2019", 
+				null);
+		Assertions.assertThat(readme).isNotEmpty();
+	}
 }

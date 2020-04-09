@@ -3,6 +3,7 @@ package org.ndx.agile.architecture.github.readme;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,10 +20,12 @@ import org.kohsuke.github.GitHubBuilder;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
+import org.ndx.agile.architecture.base.enhancers.Keys;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
+import com.structurizr.model.Element;
 import com.structurizr.model.Model;
 import com.structurizr.model.SoftwareSystem;
 
@@ -30,21 +33,13 @@ import nl.jworks.markdown_to_asciidoc.Converter;
 
 @ApplicationScoped
 public class Reader implements ModelEnhancer {
-	/**
-	 * Should contain the full GitHub url of project, including the github.com domain!
-	 * This property has no default. When not set, this enhancer won't be invoked. 
-	 */
-	public static final String GITHUB_PROJECT = "agile.architecture.github.project";
-	/**
-	 * Readme path in project. Defaults to "readme.md"
-	 */
-	public static final String GITHUB_README = "agile.architecture.github.readme.path";
-	
+	private static final String GITHUB_TOKEN = "agile.architecture.github.token";
 	/**
 	 * Github access token.
 	 */
-	@Inject @ConfigProperty(name="agile.architecture.github.token")
-	public String token;
+	@Inject @ConfigProperty(name=GITHUB_TOKEN) String token;
+	
+	@Inject Logger logger;
 
 	@Override
 	public boolean isParallel() {
@@ -54,6 +49,16 @@ public class Reader implements ModelEnhancer {
 	@Override
 	public int priority() {
 		return 1000;
+	}
+
+	@Override
+	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
+		if(token==null) {
+			throw new CantExtractReadme(
+					String.format("No token has been provided. Have you set the %s system property?",
+							GITHUB_TOKEN));
+		}
+		return true;
 	}
 
 	@Override
@@ -68,7 +73,7 @@ public class Reader implements ModelEnhancer {
 
 	@Override
 	public boolean startVisit(Container container) {
-		return container.getProperties().containsKey(GITHUB_PROJECT);
+		return container.getProperties().containsKey(Keys.GITHUB_PROJECT);
 	}
 
 	@Override
@@ -76,27 +81,44 @@ public class Reader implements ModelEnhancer {
 		return false;
 	}
 
-	@Override public void endVisit(Component component, OutputBuilder builder) {}
+	@Override public void endVisit(Component component, OutputBuilder builder) {
+		writeReadmeFor(component, builder);
+	}
 
 	/**
 	 * On end visit, we will read the project infos and readme and write all that
 	 * in the code subfolder of this container.
 	 */
 	@Override public void endVisit(Container container, OutputBuilder builder) {
-		String githubProject = container.getProperties().get(GITHUB_PROJECT);
-		try {
-			String readmePath = container.getProperties().get(GITHUB_README);
-			String content = getReadmeContent(token, 
-					githubProject, 
-					readmePath);
-			// Now we have content as asciidoc, so let's write it to the conventional location
-			FileUtils.write(builder.outputFor(AgileArchitectureSection.code, container, this, "adoc"), content, "UTF-8");
-		} catch (IOException e) {
-			throw new CantExtractReadme(String.format("Can't extract readme of container %s which is linked to GitHub project %s", 
-					container.getCanonicalName(), githubProject), 
-					e);
-		}
+		writeReadmeFor(container, builder);
+	}
 
+	@Override public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {
+		writeReadmeFor(softwareSystem, builder);
+	}
+
+	@Override public void endVisit(Model model, OutputBuilder builder) {}
+
+	@Override
+	public void endVisit(Workspace workspace, OutputBuilder builder) {}
+
+	void writeReadmeFor(Element element, OutputBuilder builder) {
+		if(element.getProperties().containsKey(Keys.GITHUB_PROJECT)) {
+			String githubProject = element.getProperties().get(Keys.GITHUB_PROJECT);
+			try {
+				String readmePath = element.getProperties().get(Keys.GITHUB_README);
+				logger.info(String.format("Reading readme for %s from %s/%s", element.getCanonicalName(), githubProject, readmePath));
+				String content = getReadmeContent(token, 
+						githubProject, 
+						readmePath);
+				// Now we have content as asciidoc, so let's write it to the conventional location
+				FileUtils.write(builder.outputFor(AgileArchitectureSection.code, element, this, "adoc"), content, "UTF-8");
+			} catch (IOException e) {
+				throw new CantExtractReadme(String.format("Can't extract readme of container %s which is linked to GitHub project %s", 
+						element.getCanonicalName(), githubProject), 
+						e);
+			}
+		}
 	}
 
 	String getReadmeContent(@Nonnull String oauthToken, @Nonnull String githubProject, @Nullable String readmePath) throws IOException {
@@ -112,7 +134,7 @@ public class Reader implements ModelEnhancer {
 		// TODO use the version extracted from the dependency pom to get the good branch/tag
 		GHContent readme = readReadmeByPath(repository, readmePath);
 		// Now we have a readme, improve it to have asciidoc!
-		String content = IOUtils.toString(readme.read());
+		String content = IOUtils.toString(readme.read(), "UTF-8");
 		if(readme.getName().endsWith(".md")) {
 			content = Converter.convertMarkdownToAsciiDoc(content);
 		}
@@ -132,16 +154,5 @@ public class Reader implements ModelEnhancer {
 		}
 	}
 
-	@Override public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {}
-
-	@Override public void endVisit(Model model, OutputBuilder builder) {}
-
-	@Override
-	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
-		return true;
-	}
-
-	@Override
-	public void endVisit(Workspace workspace, OutputBuilder builder) {}
 
 }
