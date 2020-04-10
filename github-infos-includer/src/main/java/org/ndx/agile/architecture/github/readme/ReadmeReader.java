@@ -75,7 +75,7 @@ public class ReadmeReader implements ModelEnhancer {
 
 	@Override
 	public boolean startVisit(Container container) {
-		return container.getProperties().containsKey(Keys.GITHUB_PROJECT);
+		return container.getProperties().containsKey(Keys.ELEMENT_PROJECT);
 	}
 
 	@Override
@@ -105,32 +105,35 @@ public class ReadmeReader implements ModelEnhancer {
 	public void endVisit(Workspace workspace, OutputBuilder builder) {}
 
 	void writeReadmeFor(Element element, OutputBuilder builder) {
-		if(element.getProperties().containsKey(Keys.GITHUB_PROJECT)) {
-			String githubProject = element.getProperties().get(Keys.GITHUB_PROJECT);
-			File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, "adoc");
-			if(force && outputFor.exists()) {
-				return;
-			}
-			try {
-				String readmePath = element.getProperties().get(Keys.GITHUB_README);
-				logger.info(String.format("Reading readme for %s from %s/%s", element.getCanonicalName(), githubProject, readmePath));
-				String content = getReadmeContent(token, 
-						githubProject, 
-						readmePath);
-				// Now we have content as asciidoc, so let's write it to the conventional location
-				FileUtils.write(outputFor, content, "UTF-8");
-			} catch (IOException e) {
-				throw new CantExtractReadme(String.format("Can't extract readme of container %s which is linked to GitHub project %s", 
-						element.getCanonicalName(), githubProject), 
-						e);
+		if(element.getProperties().containsKey(Keys.ELEMENT_PROJECT)) {
+			String elementProject = element.getProperties().get(Keys.ELEMENT_PROJECT);
+			if(elementProject.contains(Constants.GITHUB_DOMAIN)) {
+				String githubProject = elementProject;
+				File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, "adoc");
+				if(force && outputFor.exists()) {
+					return;
+				}
+				try {
+					String readmePath = element.getProperties().get(Keys.ELEMENT_README);
+					logger.info(String.format("Reading readme for %s from %s/%s", element.getCanonicalName(), githubProject, readmePath));
+					String content = getReadmeContent(token, 
+							githubProject, 
+							readmePath);
+					// Now we have content as asciidoc, so let's write it to the conventional location
+					FileUtils.write(outputFor, content, "UTF-8");
+				} catch (IOException e) {
+					throw new CantExtractReadme(String.format("Can't extract readme of container %s which is linked to GitHub project %s", 
+							element.getCanonicalName(), githubProject), 
+							e);
+				}
 			}
 		}
 	}
 
 	String getReadmeContent(@Nonnull String oauthToken, @Nonnull String githubProject, @Nullable String readmePath) throws IOException {
 		GitHub github = new GitHubBuilder().withOAuthToken(oauthToken).build();
-		if(githubProject.contains("github.com")) {
-			githubProject = githubProject.substring(githubProject.indexOf("github.com")+"github.com".length());
+		if(githubProject.contains(Constants.GITHUB_DOMAIN)) {
+			githubProject = githubProject.substring(githubProject.indexOf(Constants.GITHUB_DOMAIN)+Constants.GITHUB_DOMAIN.length());
 		}
 		if(githubProject.startsWith("/")) {
 			githubProject = githubProject.substring(1);

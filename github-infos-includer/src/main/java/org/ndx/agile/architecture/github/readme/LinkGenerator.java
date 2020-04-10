@@ -97,25 +97,27 @@ public class LinkGenerator implements ModelEnhancer {
 	public void endVisit(Workspace workspace, OutputBuilder builder) {}
 
 	void writeLinkFor(Element element, OutputBuilder builder) {
-		if(element.getProperties().containsKey(Keys.GITHUB_PROJECT)) {
-			String project = element.getProperties().get(Keys.GITHUB_PROJECT);
-			String readme = element.getProperties().get(Keys.GITHUB_README);
-			if(readme!=null) {
-				if(readme.indexOf('/')>0) {
-					project = String.format("%s/blob/master/%s",
-							project,
-							readme.substring(0, readme.lastIndexOf('/')));
+		if(element.getProperties().containsKey(Keys.ELEMENT_PROJECT)) {
+			String project = element.getProperties().get(Keys.ELEMENT_PROJECT);
+			if(project.contains(Constants.GITHUB_DOMAIN)) {
+				String readme = element.getProperties().get(Keys.ELEMENT_README);
+				if(readme!=null) {
+					if(readme.indexOf('/')>0) {
+						project = String.format("%s/blob/master/%s",
+								project,
+								readme.substring(0, readme.lastIndexOf('/')));
+					}
 				}
-			}
-			String content = String.format("%s[See on icon:github[set=fab] GitHub]", project);
-			// Now we have content as asciidoc, so let's write it to the conventional location
-			try {
-				FileUtils.write(builder.outputFor(AgileArchitectureSection.code, element, this, "adoc"), 
-						content, "UTF-8");
-			} catch (IOException e) {
-				throw new CantWriteLink(String.format("Can't write link for element %s which is linked to %s", 
-						element.getCanonicalName(), project), 
-						e);
+				String content = String.format("%s[See on icon:github[set=fab] GitHub]", project);
+				// Now we have content as asciidoc, so let's write it to the conventional location
+				try {
+					FileUtils.write(builder.outputFor(AgileArchitectureSection.code, element, this, "adoc"), 
+							content, "UTF-8");
+				} catch (IOException e) {
+					throw new CantWriteLink(String.format("Can't write link for element %s which is linked to %s", 
+							element.getCanonicalName(), project), 
+							e);
+				}
 			}
 		}
 	}

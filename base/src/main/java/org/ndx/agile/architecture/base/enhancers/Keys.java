@@ -8,14 +8,14 @@ package org.ndx.agile.architecture.base.enhancers;
 public interface Keys {
 
 	/**
-	 * Should contain the full GitHub url of project, including the github.com domain!
+	 * Should contain the full SCM url of project, including the domain!
 	 * This property has no default. 
-	 * Not setting this property implies that the associated element has no associated GitHub project. 
+	 * Not setting this property implies that the associated element has no associated SCM project. 
 	 */
-	String GITHUB_PROJECT = "agile.architecture.github.project";
+	String ELEMENT_PROJECT = "agile.architecture.github.project";
 	/**
 	 * Readme path in project. Defaults to "readme.md"
 	 */
-	String GITHUB_README = "agile.architecture.github.readme.path";
+	String ELEMENT_README = "agile.architecture.github.readme.path";
 
 }
