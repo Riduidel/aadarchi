@@ -24,8 +24,8 @@ jobs:
       run: mvn -B install --file pom.xml -DGITHUB_ACCESS_TOKEN=$TOKEN_FOR_GITHUB
       env:
         TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
-#    - name: Deploy
-#      uses: peaceiris/actions-gh-pages@v3
-#      with:
-#        github_token: ${{ secrets.GITHUB_TOKEN }}
-#        publish_dir: ./example/target/asciidoc/docs/html
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./example/target/asciidoc/docs/html

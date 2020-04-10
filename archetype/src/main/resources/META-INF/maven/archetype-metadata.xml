@@ -34,19 +34,10 @@
 				<include>**/*</include>
 			</includes>
 		</fileSet>
-		<fileSet>
-			<directory>src/docs/asciidoc</directory>
-			<includes>
-				<include>**/*.adoc</include>
-			</includes>
-			<excludes>
-				<exclude>**/__artifactId__.adoc</exclude>
-			</excludes>
-		</fileSet>
 		<fileSet filtered="true">
 			<directory>src/docs/asciidoc</directory>
 			<includes>
-				<include>**/__artifactId__.adoc</include>
+				<include>**/*.adoc</include>
 			</includes>
 		</fileSet>
 	</fileSets>

@@ -384,7 +384,7 @@
 								<configuration>
 									<artifacts>
 										<artifact>
-											<file>${asciidoc.target.docs.directory}/pdf/${project.artifactId}.pdf</file>
+											<file>${asciidoc.target.docs.directory}/pdf/index.pdf</file>
 											<type>pdf</type>
 											<classifier>documentation</classifier>
 										</artifact>
@@ -400,7 +400,7 @@
 						<goals> <goal>release</goal> </goals> <configuration> <description>New version 
 						of ${project.artifactId}</description> <releaseName>${project.version}</releaseName> 
 						<tag>${project.artifactId}-${project.version}</tag> <fileSets> <fileSet> 
-						<directory>${asciidoc.target.docs.directory}</directory> <includes> <include>pdf/${project.artifactId}.pdf</include> 
+						<directory>${asciidoc.target.docs.directory}</directory> <includes> <include>pdf/index.pdf</include> 
 						</includes> </fileSet> </fileSets> </configuration> </execution> </executions> 
 						</plugin> -->
 				</plugins>
