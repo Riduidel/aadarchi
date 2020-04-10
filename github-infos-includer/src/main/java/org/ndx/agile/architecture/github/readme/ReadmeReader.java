@@ -32,12 +32,14 @@ import com.structurizr.model.SoftwareSystem;
 import nl.jworks.markdown_to_asciidoc.Converter;
 
 @ApplicationScoped
-public class Reader implements ModelEnhancer {
+public class ReadmeReader implements ModelEnhancer {
 	private static final String GITHUB_TOKEN = "agile.architecture.github.token";
 	/**
 	 * Github access token.
 	 */
 	@Inject @ConfigProperty(name=GITHUB_TOKEN) String token;
+	
+	@Inject @ConfigProperty(name="force") boolean force;
 	
 	@Inject Logger logger;
 
@@ -48,7 +50,7 @@ public class Reader implements ModelEnhancer {
 
 	@Override
 	public int priority() {
-		return 1000;
+		return Constants.COMMON_PRIORITY;
 	}
 
 	@Override
@@ -105,6 +107,10 @@ public class Reader implements ModelEnhancer {
 	void writeReadmeFor(Element element, OutputBuilder builder) {
 		if(element.getProperties().containsKey(Keys.GITHUB_PROJECT)) {
 			String githubProject = element.getProperties().get(Keys.GITHUB_PROJECT);
+			File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, "adoc");
+			if(force && outputFor.exists()) {
+				return;
+			}
 			try {
 				String readmePath = element.getProperties().get(Keys.GITHUB_README);
 				logger.info(String.format("Reading readme for %s from %s/%s", element.getCanonicalName(), githubProject, readmePath));
@@ -112,7 +118,7 @@ public class Reader implements ModelEnhancer {
 						githubProject, 
 						readmePath);
 				// Now we have content as asciidoc, so let's write it to the conventional location
-				FileUtils.write(builder.outputFor(AgileArchitectureSection.code, element, this, "adoc"), content, "UTF-8");
+				FileUtils.write(outputFor, content, "UTF-8");
 			} catch (IOException e) {
 				throw new CantExtractReadme(String.format("Can't extract readme of container %s which is linked to GitHub project %s", 
 						element.getCanonicalName(), githubProject), 

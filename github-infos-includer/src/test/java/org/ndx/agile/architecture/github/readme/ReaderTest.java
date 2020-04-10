@@ -14,7 +14,7 @@ class ReaderTest {
 	}
 
 	@Test void can_read_an_accessible_project() throws IOException {
-		Reader reader = new Reader();
+		ReadmeReader reader = new ReadmeReader();
 		String readme = reader.getReadmeContent(System.getProperty("GITHUB_TOKEN"), 
 				"Riduidel/agile-architecture-documentation-archetype", 
 				"README.md");
@@ -22,7 +22,7 @@ class ReaderTest {
 	}
 
 	@Test void can_read_an_accessible_project_with_full_project_name() throws IOException {
-		Reader reader = new Reader();
+		ReadmeReader reader = new ReadmeReader();
 		String readme = reader.getReadmeContent(System.getProperty("GITHUB_TOKEN"), 
 				"https://github.com/Riduidel/agile-architecture-documentation-archetype", 
 				"README.md");
@@ -30,7 +30,7 @@ class ReaderTest {
 	}
 
 	@Test void can_read_an_accessible_project_with_no_readme_given() throws IOException {
-		Reader reader = new Reader();
+		ReadmeReader reader = new ReadmeReader();
 		String readme = reader.getReadmeContent(System.getProperty("GITHUB_TOKEN"), 
 				"https://github.com/Riduidel/agile-architecture-documentation-archetype", 
 				null);
@@ -38,7 +38,7 @@ class ReaderTest {
 	}
 
 	@Test() void can_not_read_an_inaccessible_project() throws IOException {
-		Reader reader = new Reader();
+		ReadmeReader reader = new ReadmeReader();
 		org.junit.jupiter.api.Assertions.assertThrows(IOException.class, () -> {
 		String readme = reader.getReadmeContent(System.getProperty("GITHUB_TOKEN"), 
 				"https://github.com/notauser/notaproject", 
@@ -48,7 +48,7 @@ class ReaderTest {
 
 
 	@Test() void can_read_my_old_snowcamp_project() throws IOException {
-		Reader reader = new Reader();
+		ReadmeReader reader = new ReadmeReader();
 		String readme = reader.getReadmeContent(System.getProperty("GITHUB_TOKEN"), 
 				"https://github.com/Riduidel/snowcamp-2019", 
 				null);
