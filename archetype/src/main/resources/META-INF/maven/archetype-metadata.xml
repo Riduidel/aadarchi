@@ -17,7 +17,9 @@
 			<directory></directory>
 			<includes>
 				<include>.gitignore</include>
+				<include>.gitlab-ci.yml</include>
 				<include>README.md</include>
+				<include>.github/**/*</include>
 			</includes>
 		</fileSet>
 		<fileSet filtered="true" packaged="true">
