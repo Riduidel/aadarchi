@@ -21,6 +21,7 @@ import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.Keys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;
@@ -37,64 +38,13 @@ import nl.jworks.markdown_to_asciidoc.Converter;
  *
  */
 @ApplicationScoped
-public class LinkGenerator implements ModelEnhancer {
+public class LinkGenerator extends ModelElementAdapter {
 	@Inject Logger logger;
-
-	@Override
-	public boolean isParallel() {
-		return true;
-	}
 
 	@Override
 	public int priority() {
 		return Constants.COMMON_PRIORITY-1;
 	}
-
-	@Override
-	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
-		return true;
-	}
-
-	@Override
-	public boolean startVisit(Model model) {
-		return true;
-	}
-
-	@Override
-	public boolean startVisit(SoftwareSystem softwareSystem) {
-		return true;
-	}
-
-	@Override
-	public boolean startVisit(Container container) {
-		return true;
-	}
-
-	@Override
-	public boolean startVisit(Component component) {
-		return false;
-	}
-
-	@Override public void endVisit(Component component, OutputBuilder builder) {
-		writeLinkFor(component, builder);
-	}
-
-	/**
-	 * On end visit, we will read the project infos and readme and write all that
-	 * in the code subfolder of this container.
-	 */
-	@Override public void endVisit(Container container, OutputBuilder builder) {
-		writeLinkFor(container, builder);
-	}
-
-	@Override public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {
-		writeLinkFor(softwareSystem, builder);
-	}
-
-	@Override public void endVisit(Model model, OutputBuilder builder) {}
-
-	@Override
-	public void endVisit(Workspace workspace, OutputBuilder builder) {}
 
 	void writeLinkFor(Element element, OutputBuilder builder) {
 		if(element.getProperties().containsKey(Keys.ELEMENT_PROJECT)) {
@@ -120,5 +70,10 @@ public class LinkGenerator implements ModelEnhancer {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected void processElement(Element element, OutputBuilder builder) {
+		writeLinkFor(element, builder);
 	}
 }

@@ -21,6 +21,7 @@ import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.Keys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;
@@ -32,7 +33,7 @@ import com.structurizr.model.SoftwareSystem;
 import nl.jworks.markdown_to_asciidoc.Converter;
 
 @ApplicationScoped
-public class ReadmeReader implements ModelEnhancer {
+public class ReadmeReader extends ModelElementAdapter {
 	private static final String GITHUB_TOKEN = "agile.architecture.github.token";
 	/**
 	 * Github access token.
@@ -42,11 +43,6 @@ public class ReadmeReader implements ModelEnhancer {
 	@Inject @ConfigProperty(name="force") boolean force;
 	
 	@Inject Logger logger;
-
-	@Override
-	public boolean isParallel() {
-		return true;
-	}
 
 	@Override
 	public int priority() {
@@ -60,49 +56,8 @@ public class ReadmeReader implements ModelEnhancer {
 					String.format("No token has been provided. Have you set the %s system property?",
 							GITHUB_TOKEN));
 		}
-		return true;
+		return super.startVisit(workspace, builder);
 	}
-
-	@Override
-	public boolean startVisit(Model model) {
-		return true;
-	}
-
-	@Override
-	public boolean startVisit(SoftwareSystem softwareSystem) {
-		return true;
-	}
-
-	@Override
-	public boolean startVisit(Container container) {
-		return container.getProperties().containsKey(Keys.ELEMENT_PROJECT);
-	}
-
-	@Override
-	public boolean startVisit(Component component) {
-		return false;
-	}
-
-	@Override public void endVisit(Component component, OutputBuilder builder) {
-		writeReadmeFor(component, builder);
-	}
-
-	/**
-	 * On end visit, we will read the project infos and readme and write all that
-	 * in the code subfolder of this container.
-	 */
-	@Override public void endVisit(Container container, OutputBuilder builder) {
-		writeReadmeFor(container, builder);
-	}
-
-	@Override public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {
-		writeReadmeFor(softwareSystem, builder);
-	}
-
-	@Override public void endVisit(Model model, OutputBuilder builder) {}
-
-	@Override
-	public void endVisit(Workspace workspace, OutputBuilder builder) {}
 
 	void writeReadmeFor(Element element, OutputBuilder builder) {
 		if(element.getProperties().containsKey(Keys.ELEMENT_PROJECT)) {
@@ -161,6 +116,11 @@ public class ReadmeReader implements ModelEnhancer {
 		} else {
 			return repository.getFileContent(readmePath);
 		}
+	}
+
+	@Override
+	protected void processElement(Element element, OutputBuilder builder) {
+		writeReadmeFor(element, builder);
 	}
 
 
