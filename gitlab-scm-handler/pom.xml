@@ -7,7 +7,7 @@
 		<artifactId>agile-architecture-documentation-archetype</artifactId>
 		<version>0.0.3-SNAPSHOT</version>
 	</parent>
-	<artifactId>gitlab-infos-extractor</artifactId>
+	<artifactId>gitlab-scm-handler</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>

@@ -8,7 +8,7 @@
 		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 	<description>Allow github infos to be included in project documentation</description>
-	<artifactId>github-infos-includer</artifactId>
+	<artifactId>github-scm-handler</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>

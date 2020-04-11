@@ -241,7 +241,7 @@
 		<module>base</module>
 		<module>example</module>
 		<module>cdi-config-extension</module>
-		<module>github-infos-includer</module>
-		<module>gitlab-infos-extractor</module>
+		<module>github-scm-handler</module>
+		<module>gitlab-scm-handler</module>
 	</modules>
 </project>

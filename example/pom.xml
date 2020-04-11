@@ -53,7 +53,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
-			<artifactId>github-infos-includer</artifactId>
+			<artifactId>github-scm-handler</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
