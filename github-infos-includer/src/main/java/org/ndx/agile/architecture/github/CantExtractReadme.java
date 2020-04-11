@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.github.readme;
+package org.ndx.agile.architecture.github;
 
 import org.ndx.agile.architecture.base.AgileArchitectureException;
 

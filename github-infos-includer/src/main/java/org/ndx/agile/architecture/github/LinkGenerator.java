@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.github.readme;
+package org.ndx.agile.architecture.github;
 
 import java.io.File;
 import java.io.IOException;

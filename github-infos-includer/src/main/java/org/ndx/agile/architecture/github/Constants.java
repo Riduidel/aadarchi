@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.github.readme;
+package org.ndx.agile.architecture.github;
 
 public interface Constants {
 

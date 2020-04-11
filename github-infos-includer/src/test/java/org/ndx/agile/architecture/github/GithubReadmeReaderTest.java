@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.github.readme;
+package org.ndx.agile.architecture.github;
 
 
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.ndx.agile.architecture.github.CantExtractReadme;
+import org.ndx.agile.architecture.github.GitHubReadmeReader;
 
 class GithubReadmeReaderTest {
 	@Test void a_token_is_defined() {
