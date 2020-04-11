@@ -4,7 +4,6 @@ import static org.ndx.agile.architecture.github.Constants.CONFIG_GITHUB_TOKEN;
 import static org.ndx.agile.architecture.github.Constants.GITHUB_DOMAIN;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -14,7 +13,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
@@ -24,48 +22,6 @@ import org.ndx.agile.architecture.base.enhancers.scm.SCMHandler;
 
 @ApplicationScoped
 public class GithubHandler implements SCMHandler {
-	public class GitHubFile implements SCMFile {
-
-		private GHContent source;
-		private GHRepository repository;
-
-		public GitHubFile(GHRepository repository, GHContent content) {
-			this.repository = repository;
-			this.source = content;
-		}
-
-		@Override
-		public InputStream content() {
-			try {
-				return source.read();
-			} catch (IOException e) {
-				throw new GitHubHandlerException(String.format("Can't get content of %s", source.getPath()), e);
-			}
-		}
-
-		@Override
-		public String name() {
-			return source.getName();
-		}
-
-		@Override
-		public long lastModified() {
-			GHCommit commit;
-			try {
-				commit = repository.getCommit(source.getSha());
-				return commit.getCommitDate().getTime();
-			} catch (IOException e) {
-				throw new GitHubHandlerException(
-						String.format("Unable to get last commit info for %s (sha1 is %s)",
-								source.getPath(),
-								source.getSha()
-						),
-						e);
-			}
-		}
-
-	}
-	
 	private GitHub github;
 	@Inject public void initialize(@ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token) {
 		if(token==null) {
