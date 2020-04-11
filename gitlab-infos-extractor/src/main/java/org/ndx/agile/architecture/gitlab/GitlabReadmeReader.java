@@ -56,8 +56,8 @@ public class GitlabReadmeReader extends ModelElementAdapter {
 	}
 
 	void writeReadmeFor(Element element, OutputBuilder builder) {
-		if(element.getProperties().containsKey(Keys.ELEMENT_PROJECT)) {
-			String elementProject = element.getProperties().get(Keys.ELEMENT_PROJECT);
+		if(element.getProperties().containsKey(Keys.SCM_PROJECT)) {
+			String elementProject = element.getProperties().get(Keys.SCM_PROJECT);
 			if(elementProject.contains(Constants.GITLAB_DOMAIN)) {
 				String githubProject = elementProject;
 				File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, "adoc");
@@ -65,7 +65,9 @@ public class GitlabReadmeReader extends ModelElementAdapter {
 					return;
 				}
 				try {
-					String readmePath = element.getProperties().get(Keys.ELEMENT_README);
+					String readmePath = 
+							element.getProperties().getOrDefault(Keys.SCM_PATH, "")+
+							element.getProperties().get(Keys.SCM_README);
 					logger.info(String.format("Reading readme for %s from %s/%s", element.getCanonicalName(), githubProject, readmePath));
 					String content = getReadmeContent(githubProject, readmePath);
 					// Now we have content as asciidoc, so let's write it to the conventional location

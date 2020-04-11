@@ -29,10 +29,10 @@ public class GitlabLinkGenerator extends ModelElementAdapter {
 	}
 
 	void writeLinkFor(Element element, OutputBuilder builder) {
-		if(element.getProperties().containsKey(Keys.ELEMENT_PROJECT)) {
-			String project = element.getProperties().get(Keys.ELEMENT_PROJECT);
+		if(element.getProperties().containsKey(Keys.SCM_PROJECT)) {
+			String project = element.getProperties().get(Keys.SCM_PROJECT);
 			if(project.contains(Constants.GITLAB_DOMAIN)) {
-				String readme = element.getProperties().get(Keys.ELEMENT_README);
+				String readme = element.getProperties().get(Keys.SCM_PATH);
 				if(readme!=null) {
 					if(readme.indexOf('/')>0) {
 						project = String.format("%s/-/blob/master/%s",
