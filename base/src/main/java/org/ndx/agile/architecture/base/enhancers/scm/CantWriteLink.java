@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.github;
+package org.ndx.agile.architecture.base.enhancers.scm;
 
 import org.ndx.agile.architecture.base.AgileArchitectureException;
 

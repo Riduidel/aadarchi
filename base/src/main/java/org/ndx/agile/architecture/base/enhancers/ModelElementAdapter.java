@@ -33,7 +33,7 @@ public abstract class ModelElementAdapter implements ModelEnhancer {
 	@Override public void endVisit(Workspace workspace, OutputBuilder builder) {}
 
 	@Override public boolean startVisit(Model model) {
-		return false;
+		return true;
 	}
 
 	@Override

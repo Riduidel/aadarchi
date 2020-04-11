@@ -60,5 +60,9 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.9</version>
 		</dependency>
+		<dependency>
+			<groupId>nl.jworks.markdown_to_asciidoc</groupId>
+			<artifactId>markdown_to_asciidoc</artifactId>
+		</dependency>
 	</dependencies>
 </project>

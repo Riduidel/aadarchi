@@ -15,13 +15,13 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>nl.jworks.markdown_to_asciidoc</groupId>
-			<artifactId>markdown_to_asciidoc</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.gitlab4j</groupId>
 			<artifactId>gitlab4j-api</artifactId>
 			<version>4.14.22</version>
+		</dependency>
+		<dependency>
+			<groupId>com.pivovarit</groupId>
+			<artifactId>throwing-function</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
