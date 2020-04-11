@@ -7,7 +7,11 @@ import java.util.logging.Logger;
 import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.PagedIterable;
 import org.ndx.agile.architecture.base.enhancers.scm.SCMFile;
+
+import com.pivovarit.function.ThrowingFunction;
+import com.pivovarit.function.exception.WrappedException;
 
 public class GitHubFile implements SCMFile {
 
@@ -37,12 +41,13 @@ public class GitHubFile implements SCMFile {
 
 	@Override
 	public long lastModified() {
-		GHCommit commit;
 		try {
-			logger.info(() -> String.format("Getting last commit info for path %s", source.getPath())); 
-			commit = repository.getCommit(source.getSha());
-			return commit.getCommitDate().getTime();
-		} catch (IOException e) {
+			PagedIterable<GHCommit> commits = repository.queryCommits().path(source.getPath()).list();
+			return commits.toList().stream()
+				.findFirst()
+				.map(ThrowingFunction.unchecked(commit -> commit.getCommitDate().getTime()))
+				.orElse(0l);
+		} catch (WrappedException | IOException e) {
 			throw new GitHubHandlerException(
 					String.format("Unable to get last commit info for %s (sha1 is %s)",
 							source.getPath(),
