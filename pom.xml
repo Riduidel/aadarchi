@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.ndx.agile-architecture-documentation-archetype</groupId>
@@ -35,8 +37,27 @@
 		</developer>
 	</developers>
 
+	<repositories>
+		<repository>
+			<id>spring-plugins</id>
+			<name>Spring plugins</name>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<url>https://repo.spring.io/plugins-release/</url>
+		</repository>
+	</repositories>
+
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>nl.jworks.markdown_to_asciidoc</groupId>
+				<artifactId>markdown_to_asciidoc</artifactId>
+				<version>1.1</version>
+			</dependency>
 			<dependency>
 				<groupId>javax.enterprise</groupId>
 				<artifactId>cdi-api</artifactId>
@@ -193,11 +214,14 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>3.0.0-M1</version>
 				<configuration>
-					<!-- We install each artifact at end of prepare, for archetype to have a working base dependency -->
+					<!-- We install each artifact at end of prepare, for archetype to have 
+						a working base dependency -->
 					<preparationGoals>install</preparationGoals>
-					<!-- For jitpack to use correct version names, I do prefer to ahve only version in release tag -->
+					<!-- For jitpack to use correct version names, I do prefer to ahve only 
+						version in release tag -->
 					<tagNameFormat>@{version}</tagNameFormat>
-					<!-- This profile MUST be defined in settings.xml and contains the various tokens (GitHub, GitLab and so on) -->
+					<!-- This profile MUST be defined in settings.xml and contains the various 
+						tokens (GitHub, GitLab and so on) -->
 					<releaseProfiles>settings-agile-architecture</releaseProfiles>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<localCheckout>true</localCheckout>
@@ -213,5 +237,6 @@
 		<module>example</module>
 		<module>cdi-config-extension</module>
 		<module>github-infos-includer</module>
+		<module>gitlab-infos-extractor</module>
 	</modules>
 </project>
