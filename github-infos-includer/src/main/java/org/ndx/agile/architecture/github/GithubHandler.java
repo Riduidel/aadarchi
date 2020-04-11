@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -22,6 +23,7 @@ import org.ndx.agile.architecture.base.enhancers.scm.SCMHandler;
 
 @ApplicationScoped
 public class GithubHandler implements SCMHandler {
+	@Inject Logger logger;
 	private GitHub github;
 	@Inject public void initialize(@ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token) {
 		if(token==null) {
@@ -51,7 +53,7 @@ public class GithubHandler implements SCMHandler {
 			GHRepository repository = github.getRepository(project);
 			List<GHContent> dir = repository.getDirectoryContent(path);
 			return dir.stream()
-				.map(content -> new GitHubFile(repository, content))
+				.map(content -> new GitHubFile(logger, repository, content))
 				.filter(content -> filter.test(content))
 				.collect(Collectors.toList());
 		} catch (IOException e) {
