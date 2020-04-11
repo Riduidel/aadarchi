@@ -2,7 +2,7 @@ package org.ndx.agile.architecture.gitlab;
 
 public interface Constants {
 
-	int COMMON_PRIORITY = 2000;
+	String CONFIG_GITHUB_TOKEN = "agile.architecture.gitlab.token";
 	String GITLAB_DOMAIN = "gitlab.com";
 
 }
