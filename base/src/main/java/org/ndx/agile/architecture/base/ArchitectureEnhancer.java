@@ -23,6 +23,7 @@ import com.structurizr.view.ViewSet;
 
 @ApplicationScoped
 public class ArchitectureEnhancer implements OutputBuilder {
+	public static final String SECTION_PATTERN = "%02d-%s";
 	@Inject Instance<Enhancer> enhancers;
 	@Inject Logger logger;
 	@Inject @ConfigProperty(name="agile.architecture.enhancements") File enhancementsBase;
@@ -99,7 +100,7 @@ public class ArchitectureEnhancer implements OutputBuilder {
 	public File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format) {
 		return new File(enhancementsBase,
 				// Yup, we use hex values for priority, to have less characters
-				String.format("%s/%02d-%s/_%08x-%s.%s", 
+				String.format("%s/"+SECTION_PATTERN+"/_%08x-%s.%s", 
 					element.getCanonicalName(),
 					section.index(), section.name(),
 					enhancer.priority(), enhancer.getClass().getSimpleName(), format
@@ -111,7 +112,7 @@ public class ArchitectureEnhancer implements OutputBuilder {
 	public File outputFor(AgileArchitectureSection section, Element element) {
 		return new File(enhancementsBase,
 				// Yup, we use hex values for priority, to have less characters
-				String.format("%s/%02d-%s", 
+				String.format("%s/"+SECTION_PATTERN, 
 					element.getCanonicalName(),
 					section.index(), section.name()
 					)
