@@ -35,7 +35,7 @@ Since I use Jitpack for easy deployment of that archetype, and [maven requires a
 Then, you can use the archetype by running this maven-friendly 😅command.
 
 ```sh
-mvn archetype:generate -DarchetypeVersion=master-SNAPSHOT -DarchetypeRepository=https://jitpack.io -DarchetypeGroupId=com.github.Riduidel.agile-architecture-documentation-archetype -DarchetypeArtifactId=archetype -Pjitpack
+mvn archetype:generate -DarchetypeVersion=0.0.2 -DarchetypeRepository=https://jitpack.io -DarchetypeGroupId=com.github.Riduidel.agile-architecture-documentation-system -DarchetypeArtifactId=archetype -Pjitpack
 ```
 
 This will ask you a few questions and generate the project.
@@ -81,7 +81,7 @@ run `mvn package` which will trigger Java class compilation and run and Asciidoc
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Riduidel/agile-architecture-documentation-archetype/issues).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Riduidel/agile-architecture-documentation-system/issues).
 
 ## Show your support
 

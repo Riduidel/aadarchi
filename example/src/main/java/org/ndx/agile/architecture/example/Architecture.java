@@ -58,14 +58,14 @@ public class Architecture extends AbstractArchitecture {
 		Container sncfReader = kafkatrain.addContainer("sncf-reader", "Read timetables from navitia, despite its name", "Java/Vert.x");
 		sncfReader.addProperty(Keys.SCM_PROJECT, "https://github.com/Riduidel/snowcamp-2019");
 		sncfReader.addProperty(Keys.SCM_PATH, "src/build/reference/sncf-reader");
-		Container kafka = kafkatrain.addContainer("Kafka cluster", null, "Kafka");
+		Container kafka = kafkatrain.addContainer("Streaming platform", "A platform to ingest timetables at the right speed", "Kafka");
 		kafka.addProperty(C4PlantUMLWriter.C4_ELEMENT_TYPE, C4PlantUMLWriter.Type.Db.toString());
 		sncfReader.uses(kafka, "Send timetables in our format");
 		sncfReader.uses(navitia, "Read timetables")
 			.addProperty(C4PlantUMLWriter.C4_LAYOUT_DIRECTION, C4PlantUMLWriter.Directions.Left.toString());
-		Container elastic = kafkatrain.addContainer("Elastic cluster", null, "ElasticSearch");
+		Container elastic = kafkatrain.addContainer("Search engine", "A search engine allowing geographic queries", "Elastic");
 		elastic.addProperty(C4PlantUMLWriter.C4_ELEMENT_TYPE, C4PlantUMLWriter.Type.Db.toString());
-		Container kafkaConnect = kafkatrain.addContainer("Kafka Connect", null, "Kafka Connect");
+		Container kafkaConnect = kafkatrain.addContainer("Data sink", "A tool to push events in search engine", "Kafka Connect");
 		kafkaConnect.uses(kafka, "Receives timetables");
 		kafkaConnect.uses(elastic, "Sends timetables");
 		Container webUI = kafkatrain.addContainer("web-ui", "Web UI allowing interaction with application", "Javascript/Node");
