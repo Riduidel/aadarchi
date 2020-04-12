@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>system</artifactId>
-		<groupId>org.ndx.agile-architecture-documentation-system</groupId>
+		<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>base</artifactId>
@@ -45,7 +45,7 @@
 			<artifactId>structurizr-plantuml</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.ndx.agile-architecture-documentation-system</groupId>
+			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>cdi-config-extension</artifactId>
 			<version>${project.version}</version>
 		</dependency>

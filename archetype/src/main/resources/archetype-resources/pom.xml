@@ -49,7 +49,7 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>org.ndx.agile-architecture-documentation-system</groupId>
+			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>base</artifactId>
 			<version>${agile-architecture-version}</version>
 		</dependency>
