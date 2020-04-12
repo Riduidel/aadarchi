@@ -239,7 +239,6 @@
 	<modules>
 		<module>archetype</module>
 		<module>base</module>
-		<module>example</module>
 		<module>cdi-config-extension</module>
 		<module>github-scm-handler</module>
 		<module>gitlab-scm-handler</module>
