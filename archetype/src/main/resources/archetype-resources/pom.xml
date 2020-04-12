@@ -198,6 +198,10 @@
 									<key>maven.source.dir</key>
 									<value>${project.build.sourceDirectory}</value>
 								</systemProperty>
+								<ystemProperty>
+									<key>asciidoc.source.dir</key>
+									<value>${asciidoc.source.docs.directory}</value>
+								</ystemProperty>
 								<systemProperty>
 									<key>agile.architecture.diagrams</key>
 									<value>${agile.architecture.output.diagrams}</value>
