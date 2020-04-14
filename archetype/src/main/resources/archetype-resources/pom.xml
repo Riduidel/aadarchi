@@ -19,6 +19,9 @@
 		<agile.architecture.output.diagrams>${agile.architecture.output.dir}/diagrams</agile.architecture.output.diagrams>
 		<agile.architecture.output.enhancements>${agile.architecture.output.dir}/enhancements</agile.architecture.output.enhancements>
 		
+		<!-- Defining a version that doesn't suck -->
+		<agile-architecture-version>master-SNAPSHOT</agile-architecture-version>
+		
 		<!-- tag::issues-url[] -->
 		<!-- TODO set a valid value to have doc improvement enabled -->
  		<issues.url>TODO: define a url</issues.url>
