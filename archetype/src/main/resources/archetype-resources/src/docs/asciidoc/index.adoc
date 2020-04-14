@@ -1,6 +1,7 @@
 
 :toc:
 :toclevels: 5
+:doctype: book
 
 = {project-name}
       
