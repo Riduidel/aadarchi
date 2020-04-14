@@ -2,7 +2,9 @@ package ${package};
 
 import java.io.IOException;
 
-import org.ndx.agile.architecture.base.AbstractArchitecture;
+import javax.enterprise.context.ApplicationScoped;
+
+import org.ndx.agile.architecture.base.ArchitectureModelProvider;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Model;
@@ -11,16 +13,8 @@ import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.SystemContextView;
 import com.structurizr.view.ViewSet;
 
-public class Architecture extends AbstractArchitecture {
-
-	/**
-	 * Main method simply starts the {@link Architecture#run()} method after having injected all parameters
-	 * @param args
-	 * @throws IOException
-	 */
-	public static void main(String[] args) throws Throwable {
-		AbstractArchitecture.main(Architecture.class, args);
-	}
+@ApplicationScoped
+public class Architecture implements ArchitectureModelProvider {
 
 	/**
 	 * Creates the workspace object and add in it both the architecture components
@@ -28,7 +22,7 @@ public class Architecture extends AbstractArchitecture {
 	 * 
 	 * @return
 	 */
-	protected Workspace describeArchitecture() {
+	public Workspace describeArchitecture() {
 		Workspace workspace = new Workspace("Getting Started", "This is a model of my software system.");
 		Model model = workspace.getModel();
 
