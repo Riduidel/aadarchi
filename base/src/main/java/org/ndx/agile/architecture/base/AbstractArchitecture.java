@@ -32,12 +32,8 @@ public abstract class AbstractArchitecture {
 
 	@Inject Logger logger;
 	@Inject 
-	@ConfigProperty(name = "maven.source.dir", defaultValue = "src/main/java") 
-	File mavenSourceDir;
-	@Inject 
 	@ConfigProperty(name = "agile.architecture.diagrams", defaultValue = "target/structurizr/architecture")
 	File destination;
-	@Inject @ConfigProperty(name = "force", defaultValue = "false") boolean force;
 	@Inject ArchitectureEnhancer enhancer;
 
 	/**
@@ -46,29 +42,8 @@ public abstract class AbstractArchitecture {
 	 * @throws IOException
 	 */
 	public void run() throws IOException {
-		// Unless force is set we will only generate architecture info if the current class source file
-		// is more recent than generated class
-		File source = new File(mavenSourceDir, getClass().getName().replace('.', '/')+".java");
-		if(destination.exists()) {
-			// Compare with the first generated diagram
-			Optional<Long> oldestDiagramDate = Arrays.asList(destination.listFiles()).stream()
-				.map(file -> file.lastModified())
-				.sorted()
-				.findFirst();
-			if(oldestDiagramDate.isPresent()) {
-				// Let's consider things can be slow some times, no ?
-				// In other words, if I run a slow maven build
-				if(oldestDiagramDate.get()>source.lastModified()) {
-					if(!force) {
-						logger.warning(String.format("Oldest diagram is more recent than architecture source file. Using cached architecture diagrams"));
-						return;
-					}
-				}
-			}
-		}
-		logger.info(String.format("We should write output to %s", destination.getAbsolutePath()));
 		Workspace workspace = describeArchitecture();
-		
+		logger.info("Architecture has been described. Now enhancing it (including writing the diagrams)!");
 		enhancer.enhance(workspace);
 	}
 

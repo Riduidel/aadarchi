@@ -10,6 +10,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 
 import com.structurizr.Workspace;
@@ -34,22 +35,42 @@ public class ArchitectureEnhancer implements OutputBuilder {
 				.sorted(Comparator.comparingInt(e -> e.priority()))
 				.map(e -> String.format("%s => %d", e.getClass().getName(), e.priority()))
 				.collect(Collectors.joining("\n"))));
-		enhancers.stream()
+		withStopWatch("Running all enhancements took %s", () -> enhancers.stream()
 			.sorted(Comparator.comparingInt(e -> e.priority()))
-			.forEach(enhancer -> enhancerVisitWorkspace(enhancer, workspace));
+			.forEach(enhancer -> enhancerVisitWorkspace(enhancer, workspace)));
 	}
 
+	/**
+	 * Here we abuse the Runnable interface, cause it won't be called in a separate thred !
+	 * It's just the most convenient no-in no-out functionnal interface that exists
+	 * @param format log message that willa ccept only one parameter: the stop watch duration
+	 * @param called called runnable
+	 */
+	private void withStopWatch(String format, Runnable called) {
+		StopWatch stopwatch = new StopWatch();
+		stopwatch.start();
+		try {
+			called.run();
+		} finally {
+			stopwatch.stop();
+			logger.info(String.format(format, stopwatch.toString()));
+		}
+	}
 	
 	private void enhancerVisitWorkspace(Enhancer enhancer, Workspace workspace) {
-		if(enhancer.startVisit(workspace, this)) {
-			if(enhancer instanceof ModelEnhancer) {
-				enhancerVisitModel((ModelEnhancer) enhancer, workspace.getModel());
-			}
-			if(enhancer instanceof ViewEnhancer) {
-				enhancerVisitViews((ViewEnhancer) enhancer, workspace.getViews());
-			}
-			enhancer.endVisit(workspace, this);
-		}
+		withStopWatch(String.format("Running enhancement %s took %%s", enhancer.getClass().getName()),
+				() -> {
+					if(enhancer.startVisit(workspace, this)) {
+						if(enhancer instanceof ModelEnhancer) {
+							enhancerVisitModel((ModelEnhancer) enhancer, workspace.getModel());
+						}
+						if(enhancer instanceof ViewEnhancer) {
+							enhancerVisitViews((ViewEnhancer) enhancer, workspace.getViews());
+						}
+						enhancer.endVisit(workspace, this);
+					}
+				}
+			);
 	}
 
 
