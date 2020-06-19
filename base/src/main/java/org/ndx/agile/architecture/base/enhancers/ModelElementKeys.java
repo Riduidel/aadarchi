@@ -1,11 +1,13 @@
 package org.ndx.agile.architecture.base.enhancers;
 
 /**
- * This interface only contains a list of strings, each one providing some additionnal content for elements
+ * This interface only contains a list of strings, each one providing some additionnal content 
+ * for elements. Defining one of them could trigger additionnal enhancements, provided the 
+ * associated Java component is in CLASSPATH
  * @author nicolas-delsaux
  *
  */
-public interface Keys {
+public interface ModelElementKeys {
 
 	/**
 	 * Should contain the full SCM url of project, including the domain!
@@ -18,8 +20,8 @@ public interface Keys {
 	 */
 	String SCM_PATH = "agile.architecture.scm.path";
 	/**
-	 * Readme path in project. Defaults to "readme.md". THis should be a subpath of scm path.
+	 * Readme path in project. Defaults to "readme.md". This should be a subpath of scm path.
 	 */
-	String SCM_README = "agile.architecture.github.readme.path";
+	String SCM_README = "agile.architecture.scm.readme.path";
 
 }

@@ -8,7 +8,7 @@ public interface OutputBuilder {
 
 	/**
 	 * Provide an output file for the given section and the given model element. 
-	 * @param section the section in whcih we want to add some content
+	 * @param section the section in which we want to add some content
 	 * @param element the element to which we want to add some content
 	 * @param format file format (without the dot!). Typically it will be "adoc"
 	 * @param the enhancer producing that content

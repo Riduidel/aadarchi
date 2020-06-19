@@ -15,13 +15,13 @@ import org.apache.commons.io.IOUtils;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
-import org.ndx.agile.architecture.base.enhancers.Keys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 
 import com.structurizr.model.Element;
 
 public class SCMReadmeReader extends ModelElementAdapter {
-	@Inject @ConfigProperty(name="force") boolean force;
+	@Inject @ConfigProperty(name="force", defaultValue="false") boolean force;
 	
 	@Inject Logger logger;
 	
@@ -44,8 +44,8 @@ public class SCMReadmeReader extends ModelElementAdapter {
 	 * @param builder
 	 */
 	void writeReadmeFor(Element element, OutputBuilder builder) {
-		if(element.getProperties().containsKey(Keys.SCM_PROJECT)) {
-			String elementProject = element.getProperties().get(Keys.SCM_PROJECT);
+		if(element.getProperties().containsKey(ModelElementKeys.SCM_PROJECT)) {
+			String elementProject = element.getProperties().get(ModelElementKeys.SCM_PROJECT);
 			Optional<SCMHandler> usableHandler = scmHandlers.stream()
 				.filter(handler -> handler.canHandle(elementProject))
 				.findFirst()
@@ -64,8 +64,8 @@ public class SCMReadmeReader extends ModelElementAdapter {
 	}
 
 	void writeReadmeFor(SCMHandler handler, Element element, String elementProject, OutputBuilder builder) {
-		String elementPath = element.getProperties().getOrDefault(Keys.SCM_PATH, "");
-		String elementReadme = element.getProperties().get(Keys.SCM_README);
+		String elementPath = element.getProperties().getOrDefault(ModelElementKeys.SCM_PATH, "");
+		String elementReadme = element.getProperties().get(ModelElementKeys.SCM_README);
 		File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, "adoc");
 		Predicate<SCMFile> filter;
 		if(elementReadme==null) {

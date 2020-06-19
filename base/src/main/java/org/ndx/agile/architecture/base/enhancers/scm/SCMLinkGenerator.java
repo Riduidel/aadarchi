@@ -13,7 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
-import org.ndx.agile.architecture.base.enhancers.Keys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 
 import com.structurizr.model.Element;
@@ -25,7 +25,7 @@ import com.structurizr.model.Element;
  */
 @ApplicationScoped
 public class SCMLinkGenerator extends ModelElementAdapter {
-	@Inject @ConfigProperty(name="force") boolean force;
+	@Inject @ConfigProperty(name="force", defaultValue="false") boolean force;
 	
 	@Inject Logger logger;
 	
@@ -48,9 +48,9 @@ public class SCMLinkGenerator extends ModelElementAdapter {
 	 * @param builder
 	 */
 	void writeLinkFor(Element element, OutputBuilder builder) {
-		if(element.getProperties().containsKey(Keys.SCM_PROJECT)) {
-			String elementProject = element.getProperties().get(Keys.SCM_PROJECT);
-			String elementPath = element.getProperties().getOrDefault(Keys.SCM_PATH, "");
+		if(element.getProperties().containsKey(ModelElementKeys.SCM_PROJECT)) {
+			String elementProject = element.getProperties().get(ModelElementKeys.SCM_PROJECT);
+			String elementPath = element.getProperties().getOrDefault(ModelElementKeys.SCM_PATH, "");
 			Optional<SCMHandler> usableHandler = scmHandlers.stream()
 				.filter(handler -> handler.canHandle(elementProject))
 				.findFirst()
