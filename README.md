@@ -1,5 +1,9 @@
 <h1 align="center">Welcome to Agile architecture documentation archetype 👋</h1>
 <p>
+  <a href="https://github.com/Riduidel/agile-architecture-documentation-system/releases" target="_blank">
+		<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/Riduidel/agile-architecture-documentation-system">
+	</a>
+
   <a href="https://twitter.com/Riduidel" target="_blank">
     <img alt="Twitter: Riduidel" src="https://img.shields.io/twitter/follow/Riduidel.svg?style=social" />
   </a>
