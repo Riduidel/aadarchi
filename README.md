@@ -3,6 +3,7 @@
 	<a href="https://github.com/Riduidel/agile-architecture-documentation-system/actions?query=workflow%3A%22Java+CI+with+Maven%22">
 <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/Riduidel/agile-architecture-documentation-system/Java CI with Maven">
 	</a>
+	<img alt="GitHub tag (latest by date)" src="https://img.shields.io/github/v/tag/Riduidel/agile-architecture-documentation-system">
   <a href="https://github.com/Riduidel/agile-architecture-documentation-system/releases" target="_blank">
 		<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/Riduidel/agile-architecture-documentation-system">
 	</a>
