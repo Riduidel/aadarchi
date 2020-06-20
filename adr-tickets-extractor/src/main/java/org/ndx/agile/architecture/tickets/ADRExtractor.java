@@ -4,9 +4,12 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -113,13 +116,11 @@ public class ADRExtractor extends ModelElementAdapter implements Enhancer {
 	 */
 	private String writeArchitectureDecisionTicket(OutputBuilder builder, Element element, Ticket toWrite) {
 		Date date = toWrite.getLastDate();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd@HH-mm-ss");
 		File output = builder.outputFor(AgileArchitectureSection.decision_log, element, this,
-				String.format("decision.%s.%4d-%02d-%02d---%02d-%02d.adoc", toWrite.getStatus(), 
-						date.getYear()+1900,
-						date.getMonth(),
-						date.getDate(),
-						date.getHours(),
-						date.getMinutes()));
+				String.format("decision.%s.%s.adoc", toWrite.getStatus(), 
+						format.format(date)
+					));
 		output.getParentFile().mkdirs();
 		try {
 			try(FileWriter writer = new FileWriter(output)) {
