@@ -41,9 +41,10 @@ Since I use Jitpack for easy deployment of that archetype, and [maven requires a
 ```
 
 Then, you can use the archetype by running this maven-friendly 😅command.
+Don't forget to replace `${VERSION}` by ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/Riduidel/agile-architecture-documentation-system)!
 
 ```sh
-mvn archetype:generate -DarchetypeVersion=0.0.2 -DarchetypeRepository=https://jitpack.io -DarchetypeGroupId=com.github.Riduidel.agile-architecture-documentation-system -DarchetypeArtifactId=archetype -Pjitpack
+mvn archetype:generate -DarchetypeVersion=${VERSION} -DarchetypeRepository=https://jitpack.io -DarchetypeGroupId=com.github.Riduidel.agile-architecture-documentation-system -DarchetypeArtifactId=archetype -Pjitpack
 ```
 
 This will ask you a few questions and generate the project.
