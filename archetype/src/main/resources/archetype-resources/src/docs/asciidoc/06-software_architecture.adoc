@@ -2,6 +2,11 @@
 :chapter: Software%20Architecture
 include::_notify-bug-admonition.adoc[]
 
+[plantuml, {plantumldir}software.system.containers, svg, opts="interactive"]     
+----
+include::{structurizrdir}/software.system.containers.plantuml[]
+----
+
 **TODO**
 ////
 The software architecture section is your "big picture" view and allows
