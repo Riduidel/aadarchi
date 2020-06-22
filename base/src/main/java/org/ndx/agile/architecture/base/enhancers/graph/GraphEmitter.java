@@ -21,6 +21,11 @@ import com.structurizr.io.plantuml.PlantUMLWriter;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
 
+/**
+ * Generates all graph and output them in the {@link #destination} folder
+ * @author nicolas-delsaux
+ *
+ */
 @ApplicationScoped
 public class GraphEmitter implements ViewEnhancer {
 	@Inject Logger logger;

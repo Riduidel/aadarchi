@@ -20,6 +20,12 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 
 import com.structurizr.model.Element;
 
+/**
+ * Collect each model element readme (well, when the {@link ModelElementKeys#SCM_PROJECT} key is set)
+ * and output them in generated elements folder
+ * @author nicolas-delsaux
+ *
+ */
 public class SCMReadmeReader extends ModelElementAdapter {
 	@Inject @ConfigProperty(name="force", defaultValue="false") boolean force;
 	
@@ -29,7 +35,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 
 	@Override
 	public int priority() {
-		return 1000;
+		return 1001;
 	}
 
 	@Override

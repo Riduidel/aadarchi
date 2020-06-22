@@ -15,6 +15,17 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 
 import com.structurizr.model.Element;
 
+/**
+ * Enhancer allowing incldues to be auto-generated for each element having interesting content.
+ * 
+ * Let's take an example.
+ * Suppose you want to add some documentation for a component code.
+ * Then you just have to write the documentation in the file ${asciidoc.source.dir}/07-code/${component name}.adoc
+ * and it will be automagically included in documentation.
+ * 
+ * @author nicolas-delsaux
+ *
+ */
 public class ImplicitIncludeManager extends ModelElementAdapter {
 	
 	private static final String ASCIIDOC_SOURCE_DIR = "asciidoc.source.dir";
@@ -30,7 +41,7 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 		this.sourceDir = sourceDir;
 	}
 	/**
-	 * We set it at first element to ahve those text before all enhancers
+	 * We set it at first element to have those text before all enhancers
 	 */
 	@Override
 	public int priority() {
