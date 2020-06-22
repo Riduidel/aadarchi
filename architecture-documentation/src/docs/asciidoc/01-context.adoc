@@ -1,0 +1,21 @@
+= Context
+:chapter: Context
+include::_notify-bug-admonition.adoc[]
+
+agile-architecture-documentation-system tries to provide a solution to a rather usual, but not so well solved, problem: 
+how to document architecture of a software system with the minimal effort and the maximal result.
+As a consequence, this product tries to help the architect in all possible ways.
+== Context diagram
+// This is an example diagram to show how to include a structurizr-generated diagram
+[plantuml, {plantumldir}SystemContext, svg, opts="interactive"]     
+----
+include::{structurizrdir}/SystemContext.plantuml[]
+----
+
+We identify different user profiles:
+
+* the architect as a scribe role, which is responsible for maintaining a correct documentation of the architecture
+* the various stakeholders, be them developers, product owners, ops teams, and so on, which will refer to the produced documentation as an entrypoint.
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_01-context.adoc[leveloffset=+1]

@@ -1,0 +1,68 @@
+= Development Environment
+:chapter: Development%20Environment
+include::_notify-bug-admonition.adoc[]
+
+**TODO**
+////
+The development environment section allows you to summarise how people
+new to your team install tools and setup a development environment in
+order to work on the software.
+
+== Intent
+
+The purpose of this section is to provide instructions that take
+somebody from a blank operating system installation to a fully-fledged
+development environment.
+
+== Structure
+
+The type of things you might want to include are:
+
+Pre-requisite versions of software needed::
+TODO
+Links to software downloads (either on the Internet or locally stored)::
+TODO
+Links to virtual machine images::
+TODO
+Environment variables, Windows registry settings, etc::
+TODO
+Host name entries::
+TODO
+IDE configuration::
+TODO
+Build and test instructions::
+TODO
+Database population scripts::
+TODO
+Usernames, passwords and certificates for connecting to development and test services::
+TODO
+Links to build servers::
+TODO
+Thinking about anything else?::
+TODO
+
+If you're using automated solutions (such as Vagrant, Docker, Puppet,
+Chef, Rundeck, etc), it's still worth including some brief information
+about how these solutions work, where to find the scripts and how to run
+them.
+
+== Motivation
+
+The motivation for this section is to ensure that new developers can be
+productive as quickly as possible.
+
+== Audience
+
+The audience for this section is the technical people in the software
+development team, especially those who are new to the team.
+
+== Required
+
+Yes, because this information is usually lost and it's essential if the
+software will be maintained by a different set of people from the
+original developers.
+////
+
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_11-development_environment.adoc[leveloffset=+1]

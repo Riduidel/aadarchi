@@ -1,0 +1,40 @@
+= Decision Log
+:chapter: Decision%20Log
+include::_notify-bug-admonition.adoc[]
+
+include::decisions/001_use_adr.adoc[leveloffset=+1]
+
+////
+
+== Motivation
+
+The motivation for recording the significant decisions is that this
+section can act as a point of reference in the future. All decisions are
+made given a specific context and usually have trade-offs. There is
+usually never a perfect solution to a given problem. Articulating the
+decision making process after the event is often complex, particularly
+if you're explaining the decision to people who are joining the team or
+you're in an environment where the context changes on a regular basis.
+
+Although "nobody ever gets fired for buying IBM", perhaps writing down
+the fact that corporate policy forced you into using IBM WebSphere over
+Apache Tomcat will save you some tricky conversations in the future.
+
+== Audience
+
+The audience for this section is predominantly the technical people in
+the software development team along with others that may help deploy,
+support and operate the software system.
+
+== Required
+
+No, but it can be useful to include this section if the team spend more
+than a few minutes thinking about something significant such as a
+technology choice or an architectural style. If in doubt, spend a couple
+of minutes writing it down, especially if you work for a consulting
+organisation who is building a software system under an outsourcing
+agreement for a customer.
+////
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_13-decision_log.adoc[leveloffset=+1]

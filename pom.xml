@@ -253,5 +253,8 @@
 		<module>github-scm-handler</module>
 		<module>gitlab-scm-handler</module>
 		<module>adr-tickets-extractor</module>
+		
+		<!-- This module is the typical usage of this project, as it contains this project architecture documentation -->
+		<module>architecture-documentation</module>
 	</modules>
 </project>

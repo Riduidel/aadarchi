@@ -1,0 +1,35 @@
+:project-pom-path: ../../../pom.xml
+////
+TODO: if your project don't use GitHub, change the base URL to fit your needs
+////
+
+ifeval::["{hideBugReport}"!="true"]
+ifeval::["{project-issues-on-github}"!=""]
+[TIP]
+If you encounter any error, feel free to
+https://github.com/Riduidel/agile-architecture-documentation-system/issues/new?title=Error%20in%20{project-name}%20v.{project-version}%20chapter%20{chapter}[icon:github[set=fab] enter an issue on GitHub,window=feedback].
+endif::[]
+ifeval::["{project-issues-not-defined}"!=""]
+[WARNING]
+====
+If you want to have a nice bug report page on each chapter, you can do the following
+
+First, change the value in `<issues.url>` to be your issues server one. Currently, it is defined there:
+
+[source, xml]
+----
+include::{project-pom-path}[tag=issues-url, indent=0]
+----
+
+Then, define the type of bug tracking software you use here
+
+[source, xml]
+----
+include::{project-pom-path}[tag=bug-tracking-define, indent=0]
+----
+
+If you don't want that feature, just set <hideBugReport>` or `asciidoc.documents.hide.bug.report` property to `true`.
+
+====
+endif::[]
+endif::[]
