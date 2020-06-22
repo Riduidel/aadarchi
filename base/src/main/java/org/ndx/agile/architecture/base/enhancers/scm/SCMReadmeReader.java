@@ -20,6 +20,8 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 
 import com.structurizr.model.Element;
 
+import nl.jworks.markdown_to_asciidoc.Converter;
+
 /**
  * Collect each model element readme (well, when the {@link ModelElementKeys#SCM_PROJECT} key is set)
  * and output them in generated elements folder
@@ -98,7 +100,11 @@ public class SCMReadmeReader extends ModelElementAdapter {
 			}
 			try {
 				// Now we have content as asciidoc, so let's write it to the conventional location
-				FileUtils.write(outputFor, IOUtils.toString(readme.content(), "UTF-8"), "UTF-8");
+				String readmeText = IOUtils.toString(readme.content(), "UTF-8");
+				if(readme.name().toLowerCase().endsWith(".md")) {
+					readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
+				}
+				FileUtils.write(outputFor, readmeText, "UTF-8");
 			} catch (Throwable e) {
 				throw new CantExtractReadme(String.format(
 						"Can't extract readme of container %s using SCM project %s, path %s, readme %s", 
