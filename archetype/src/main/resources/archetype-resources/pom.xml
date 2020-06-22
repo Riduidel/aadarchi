@@ -11,9 +11,10 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<asciidoctor.highlighter>highlightjs</asciidoctor.highlighter>
 		<asciidoc.source.docs.directory>src/docs/asciidoc</asciidoc.source.docs.directory>
-		<asciidoc.target.docs.directory>${project.build.directory}/asciidoc/docs</asciidoc.target.docs.directory>
 		<asciidoc.source.slides.directory>src/slides/asciidoc</asciidoc.source.slides.directory>
-		<asciidoc.target.slides.directory>${project.build.directory}/asciidoc/slides</asciidoc.target.slides.directory>
+		<asciidoc.target.base.directory>${project.build.directory}/asciidoc</asciidoc.target.base.directory>
+		<asciidoc.target.docs.directory>${asciidoc.target.base.directory}/docs</asciidoc.target.docs.directory>
+		<asciidoc.target.slides.directory>${asciidoc.target.base.directory}/slides</asciidoc.target.slides.directory>
 		<agile.architecture.main.class>org.ndx.agile.architecture.base.ArchitectureDocumentationBuilder</agile.architecture.main.class>
 		<agile.architecture.output.dir>${project.build.directory}/structurizr</agile.architecture.output.dir>
 		<agile.architecture.output.diagrams>${agile.architecture.output.dir}/diagrams</agile.architecture.output.diagrams>
