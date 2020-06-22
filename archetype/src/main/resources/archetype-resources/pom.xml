@@ -214,6 +214,11 @@
 									<key>agile.architecture.enhancements</key>
 									<value>${agile.architecture.output.enhancements}</value>
 								</systemProperty>
+								<!-- Force rebuild architecture by removing all cached files -->
+								<systemProperty>
+									<key>force</key>
+									<value>${force}</value>
+								</systemProperty>
 							</systemProperties>
 						</configuration>
 					</execution>
