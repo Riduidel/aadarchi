@@ -1,6 +1,7 @@
 package com.github.riduidel.agile.architecture.documentation.system;
 
-import java.io.IOException;
+import java.io.File;
+import java.net.URLClassLoader;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -8,6 +9,9 @@ import org.ndx.agile.architecture.base.ArchitectureModelProvider;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
 import com.structurizr.Workspace;
+import com.structurizr.analysis.ComponentFinder;
+import com.structurizr.analysis.SourceCodeComponentFinderStrategy;
+import com.structurizr.analysis.StructurizrAnnotationsComponentFinderStrategy;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Model;
@@ -48,48 +52,54 @@ public class Architecture implements ArchitectureModelProvider {
 		base.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
 		base.addProperty(ModelElementKeys.SCM_PATH, base.getName());
 		
-		Component architectureDocumentationBuilder = base.addComponent("ArchitectureDocumentationBuilder", "Architecture documentation builder bootstraps the process", "java/CDI");
-		Component architectureModelProvider = base.addComponent("ArchitectureModelProvider", "ArchitectureModelProvider is the interface implemented by the user Architecture class");
-		Component architectureEnhancer = base.addComponent("ArchitectureEnhancer", "Starts all enhancers loaded by CDI");
-		
-		architectureEnhancer.uses(
-				base.addComponent("ImplicitIncludeManager", "Includes documentation of components in generated documentation without having to write anything superfluous", "java"), 
-				"Generates incldues for the documented components");
-		architectureEnhancer.uses(
-				base.addComponent("SCMReadmeReader", "Read model element readme and include it in code section", "java"), 
-				"Fetches README and include them");
-		architectureEnhancer.uses(
-				base.addComponent("SCMLinkGenerator", "Add link to SCM source for model elements", "java"), 
-				"Generates lins to SCM sources");
-		architectureEnhancer.uses(
-				base.addComponent("DocumentCollector", "Collects all generated documents", "java"), 
-				"Collects documents in generated final asciidoc");
-		architectureEnhancer.uses(
-				base.addComponent("GraphEmitter", "Generates all diagrams", "java"), 
-				"Generates diagrams of model elements");
+        ComponentFinder componentFinder = new ComponentFinder(
+                base,
+                ArchitectureModelProvider.class.getPackageName(),
+                new StructurizrAnnotationsComponentFinderStrategy(),
+                new SourceCodeComponentFinderStrategy(new File("../base/src/main/java"))
+                
+        );
+        if(getClass().getClassLoader()instanceof URLClassLoader) {
+        	componentFinder.setUrlClassLoader((URLClassLoader) getClass().getClassLoader());
+        }
+        try {
+			componentFinder.findComponents();
+		} catch (Exception e) {
+			throw new RuntimeException("Unable to locate components in ", e);
+		}
+        model.addImplicitRelationships();
+        // Damn, structurizr-annotations doesn't understand CDI. Let's supplement it!
+        base.getComponentWithName("ArchitectureEnhancer").uses(base.getComponentWithName("DocumentsCollector"), "Collects documents in source folder");
+        base.getComponentWithName("ArchitectureEnhancer").uses(base.getComponentWithName("SCMLinkGenerator"), "Generates links to SCM sources");
+        base.getComponentWithName("ArchitectureEnhancer").uses(base.getComponentWithName("SCMReadmeReader"), "Includes elements readme when they exist");
+        base.getComponentWithName("ArchitectureEnhancer").uses(base.getComponentWithName("ImplicitIncludeManager"), "Generates includes for all enhancers");
+        base.getComponentWithName("ArchitectureEnhancer").uses(base.getComponentWithName("GraphEmitter"), "Generates diagrams in PlantUML format");
 
-		maven.uses(architectureDocumentationBuilder, "Invokes that Java executable during maven build");
-		architectureDocumentationBuilder.uses(architectureModelProvider, "Get initial architecture desription model");
-		architectureDocumentationBuilder.uses(architectureEnhancer, "Enhances produced reports");
+		maven.uses(base.getComponentWithName("ArchitectureDocumentationBuilder"), "Invokes that Java executable during maven build");
 		
 		Component gitHub = base.addComponent("github-scm-handler", "GitHub SCM Handler", "java");
 		gitHub.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
 		gitHub.addProperty(ModelElementKeys.SCM_PATH, gitHub.getName());
+		base.getComponentWithName("SCMLinkGenerator").uses(gitHub, "Get project source link");
+		base.getComponentWithName("SCMReadmeReader").uses(gitHub, "Get project readme");
 
 		Component gitLab = base.addComponent("gitlab-scm-handler", "GitLab SCM Handler", "java");
 		gitLab.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
 		gitLab.addProperty(ModelElementKeys.SCM_PATH, gitLab.getName());
+		base.getComponentWithName("SCMLinkGenerator").uses(gitLab, "Get project source link");
+		base.getComponentWithName("SCMReadmeReader").uses(gitLab, "Get project readme");
 
 		Component adrTicketsExtractor = base.addComponent("adr-tickets-extractor", "ADR Tickets Extractor", "java");
 		adrTicketsExtractor.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
 		adrTicketsExtractor.addProperty(ModelElementKeys.SCM_PATH, adrTicketsExtractor.getName());
 		adrTicketsExtractor.uses(gitLab, "Read tickets from Gitlab if configured so");
 		adrTicketsExtractor.uses(gitHub, "Read tickets from GitHub if configured so");
-		architectureEnhancer.uses(adrTicketsExtractor, "Produces ADR reporting");
+		base.getComponentWithName("ArchitectureEnhancer").uses(adrTicketsExtractor, "Produces ADR reporting");
 
 		Component cdiConfigExtension = base.addComponent("cdi-config-extension", "CDI Config extensions", "java");
 		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
 		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, cdiConfigExtension.getName());
+		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(cdiConfigExtension, "Eases out some CDI code");
 
 		Container asciidoc = agileArchitecture.addContainer("asciidoc", "Asciidoc tooling", "Maven plugin");
 
