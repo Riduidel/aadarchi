@@ -2,7 +2,7 @@
 :chapter: Data
 include::_notify-bug-admonition.adoc[]
 
-**TODO**
+Application hosts no data other, since verything is in the Maven folder.
 ////
 The data associated with a software system is usually not the primary
 point of focus yet it's arguably more important than the software

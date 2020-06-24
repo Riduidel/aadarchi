@@ -2,7 +2,17 @@
 :chapter: Development%20Environment
 include::_notify-bug-admonition.adoc[]
 
-**TODO**
+Development of this documentation solution requires a Java environnment.
+In other words, you need
+
+* A recent JDK (at least Java 11)
+* Maven (at least version 3.6)
+* A Java IDE
+
+Optionally, things will be better if you have
+* an Asciidoc editor
+* a http://livereload.com/extensions/[livereload compatible browser]
+
 ////
 The development environment section allows you to summarise how people
 new to your team install tools and setup a development environment in
