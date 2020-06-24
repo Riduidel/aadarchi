@@ -83,7 +83,7 @@ please run `mvn verify` which will create a project from the archetype and
 run `mvn package` which will trigger Java class compilation and run and Asciidoc documentation generation.
 
 ## Architecture
-Way more details are available in the architecture documentation.
+Way more details are available in the [architecture documentation (which uses this system, obviously)](https://riduidel.github.io/agile-architecture-documentation-system/).
 
 ## Author
 
