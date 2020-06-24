@@ -13,10 +13,11 @@ import org.ndx.agile.architecture.base.ArchitectureEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 
+import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
 
 /**
- * Enhancer allowing incldues to be auto-generated for each element having interesting content.
+ * Enhancer allowing includes to be auto-generated for each element having interesting content.
  * 
  * Let's take an example.
  * Suppose you want to add some documentation for a component code.
@@ -26,6 +27,7 @@ import com.structurizr.model.Element;
  * @author nicolas-delsaux
  *
  */
+@Component(technology = "Java/CDI")
 public class ImplicitIncludeManager extends ModelElementAdapter {
 	
 	private static final String ASCIIDOC_SOURCE_DIR = "asciidoc.source.dir";

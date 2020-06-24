@@ -15,6 +15,7 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 
 import com.structurizr.Workspace;
+import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Element;
@@ -23,10 +24,18 @@ import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
 
+import jdk.jfr.Description;
+
+/**
+ * Invokes all {@link ModelEnhancer} and {@link ViewEnhancer} on the produced architecture description.
+ * @author nicolas-delsaux
+ *
+ */
+@com.structurizr.annotation.Component(technology = "Java/CDI")
 @ApplicationScoped
 public class ArchitectureEnhancer implements OutputBuilder {
 	public static final String SECTION_PATTERN = "%02d-%s";
-	@Inject Instance<Enhancer> enhancers;
+	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;
 	@Inject Logger logger;
 	@Inject @ConfigProperty(name="agile.architecture.enhancements") File enhancementsBase;
 

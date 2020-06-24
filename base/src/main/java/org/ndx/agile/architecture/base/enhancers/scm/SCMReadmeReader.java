@@ -18,6 +18,8 @@ import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 
+import com.structurizr.annotation.Component;
+import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.Element;
 
 import nl.jworks.markdown_to_asciidoc.Converter;
@@ -28,12 +30,13 @@ import nl.jworks.markdown_to_asciidoc.Converter;
  * @author nicolas-delsaux
  *
  */
+@Component(technology = "Java/CDI")
 public class SCMReadmeReader extends ModelElementAdapter {
 	@Inject @ConfigProperty(name="force", defaultValue="false") boolean force;
 	
 	@Inject Logger logger;
 	
-	@Inject Instance<SCMHandler> scmHandlers;
+	@Inject @UsesComponent(description = "Get SCM infos") Instance<SCMHandler> scmHandlers;
 
 	@Override
 	public int priority() {

@@ -15,7 +15,17 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.jboss.weld.config.ConfigurationKey;
 
 import com.structurizr.Workspace;
+import com.structurizr.annotation.Component;
+import com.structurizr.annotation.UsesComponent;
 
+/**
+ * Main class of agile architecture documentation system.
+ * This will start a CDI container and, in this CDI container, instanciate this object.
+ * THis instanciation will load {@link #provider} and {@link #enhancer} to generate all asciidoc required content.
+ * @author nicolas-delsaux
+ *
+ */
+@Component(technology = "Java/CDI")
 @ApplicationScoped
 public class ArchitectureDocumentationBuilder {
 
@@ -31,11 +41,8 @@ public class ArchitectureDocumentationBuilder {
 	}
 
 	@Inject Logger logger;
-	@Inject 
-	@ConfigProperty(name = "agile.architecture.diagrams", defaultValue = "target/structurizr/architecture")
-	File destination;
-	@Inject ArchitectureEnhancer enhancer;
-	@Inject ArchitectureModelProvider provider;
+	@Inject @UsesComponent(description = "Adds information to initial architecture description") ArchitectureEnhancer enhancer;
+	@Inject @UsesComponent(description = "Generates initial architecture description") ArchitectureModelProvider provider;
 
 	/**
 	 * Run method that will allow the description to be invoked and augmentations to be performed

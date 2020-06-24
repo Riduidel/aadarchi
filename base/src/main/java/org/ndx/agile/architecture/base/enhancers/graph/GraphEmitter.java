@@ -16,6 +16,7 @@ import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.ViewEnhancer;
 
 import com.structurizr.Workspace;
+import com.structurizr.annotation.Component;
 import com.structurizr.io.plantuml.C4PlantUMLWriter;
 import com.structurizr.io.plantuml.PlantUMLWriter;
 import com.structurizr.view.View;
@@ -26,17 +27,14 @@ import com.structurizr.view.ViewSet;
  * @author nicolas-delsaux
  *
  */
+@Component(technology = "Java/CDI")
 @ApplicationScoped
 public class GraphEmitter implements ViewEnhancer {
 	@Inject Logger logger;
 	@Inject 
-	@ConfigProperty(name = "maven.source.dir", defaultValue = "src/main/java") 
-	File mavenSourceDir;
-	@Inject 
 	@ConfigProperty(name = "agile.architecture.diagrams", defaultValue = "target/structurizr/architecture")
 	File destination;
 	@Inject @ConfigProperty(name = "force", defaultValue = "false") boolean force;
-	@Inject ArchitectureEnhancer enhancer;
 
 	@Override
 	public boolean isParallel() {

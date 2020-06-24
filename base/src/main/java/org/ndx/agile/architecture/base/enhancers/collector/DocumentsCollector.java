@@ -34,6 +34,7 @@ import com.structurizr.model.SoftwareSystem;
  * @author nicolas-delsaux
  *
  */
+@com.structurizr.annotation.Component(technology = "Java/CDI")
 public class DocumentsCollector implements ModelEnhancer {
 	/**
 	 * Injecting enhancements base to have a folder where to put our documents.

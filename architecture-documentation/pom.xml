@@ -56,6 +56,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.structurizr</groupId>
+			<artifactId>structurizr-analysis</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>base</artifactId>
 			<version>${agile-architecture-version}</version>
