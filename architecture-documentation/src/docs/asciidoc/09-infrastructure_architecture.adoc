@@ -2,7 +2,7 @@
 :chapter: Infrastructure%20Architecture
 include::_notify-bug-admonition.adoc[]
 
-THe main goal of this application is to produce content that can be browsed as HTML or PDF. 
+The main goal of this application is to produce content that can be browsed as HTML or PDF. 
 As a consequence, there is no requirement for any production infrastructure.
 ////
 While most of the documentation is focused on the software itself, we do
