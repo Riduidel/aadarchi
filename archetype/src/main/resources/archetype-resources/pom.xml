@@ -29,7 +29,7 @@
 		<!-- end::issues-url[] -->
 
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctor-maven-plugin -->
-		<version.asciidoctor.maven.plugin>2.0.0-RC.1</version.asciidoctor.maven.plugin>
+		<version.asciidoctor.maven.plugin>2.0.0</version.asciidoctor.maven.plugin>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-pdf -->
 		<version.asciidoctorj.pdf>1.5.3</version.asciidoctorj.pdf>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj -->
