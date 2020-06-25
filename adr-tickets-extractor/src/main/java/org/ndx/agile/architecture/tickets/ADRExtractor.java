@@ -46,8 +46,8 @@ public class ADRExtractor extends ModelElementAdapter implements Enhancer {
 	public static class ByStatusThenDate implements Comparator<Ticket> {
 		private static Comparator<Ticket> delegate =
 				Comparator.comparing(Ticket::getStatus).reversed()
-					.thenComparing(Comparator.comparing(ticket -> ticket.getDateOf(TicketStatus.CLOSED)))
-					.thenComparing(Comparator.comparing(ticket -> ticket.getDateOf(TicketStatus.OPEN)))
+					.thenComparing(Comparator.comparing(ticket -> ticket.getDateOf(TicketStatus.CLOSED).orElseGet(() -> new Date(0))))
+					.thenComparing(Comparator.comparing(ticket -> ticket.getDateOf(TicketStatus.OPEN).orElseGet(() -> new Date(0))))
 					; 
 
 		@Override

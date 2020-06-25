@@ -2,6 +2,7 @@ package org.ndx.agile.architecture.base.enhancers.tickets;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 
 public interface Ticket {
 	String getUrl();
@@ -19,7 +20,7 @@ public interface Ticket {
 	
 	Date getLastDate();
 	
-	Date getDateOf(TicketStatus changeTo);
+	Optional<Date> getDateOf(TicketStatus changeTo);
 	
 	Collection<Comment> getComments();
 }

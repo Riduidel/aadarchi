@@ -51,6 +51,7 @@ public class GitHubTicketsHandler implements TicketsHandler {
 		try {
 			return issue.getLabels().stream()
 					.map(l -> l.getName())
+					.filter(l -> label.equals(l))
 					.findAny()
 					.isPresent();
 		} catch (IOException e) {

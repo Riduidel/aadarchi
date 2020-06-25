@@ -3,6 +3,7 @@ package org.ndx.agile.architecture.github;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.kohsuke.github.GHIssue;
@@ -51,13 +52,13 @@ public class GitHubTicket implements Ticket {
 	}
 
 	@Override
-	public Date getDateOf(TicketStatus changeTo) {
+	public Optional<Date> getDateOf(TicketStatus changeTo) {
 		switch(changeTo) {
 		case CLOSED:
-			return source.getClosedAt();
+			return Optional.ofNullable(source.getClosedAt());
 		case OPEN:
 			try {
-				return source.getCreatedAt();
+				return Optional.ofNullable(source.getCreatedAt());
 			} catch (IOException e) {
 				throw new GitHubHandlerException(String.format("Can't get open date of %s",
 						source.getHtmlUrl()
@@ -73,15 +74,21 @@ public class GitHubTicket implements Ticket {
 
 	@Override
 	public Date getLastDate() {
-		switch(getStatus()) {
-		case OPEN:
-			return getDateOf(TicketStatus.OPEN);
-		case CLOSED:
-			return getDateOf(TicketStatus.CLOSED);
-		default:
-			throw new GitHubHandlerException(String.format("How can an issue %s be in state %s?",
-					source.getHtmlUrl()
-					));
+		try {
+			switch(getStatus()) {
+			case OPEN:
+				return source.getCreatedAt();
+			case CLOSED:
+				return source.getClosedAt();
+			default:
+				throw new GitHubHandlerException(String.format("How can an issue %s be in state %s?",
+						source.getHtmlUrl()
+						));
+			}
+		} catch(IOException ioe) {
+			throw new GitHubHandlerException(
+					String.format("Unable to read date of issue %s", source.getHtmlUrl()),
+							ioe);
 		}
 	}
 
