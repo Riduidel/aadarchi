@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.ndx.agile.architecture.base.ArchitectureModelProvider;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.tickets.ADRExtractor;
 
 import com.structurizr.Workspace;
 import com.structurizr.analysis.ComponentFinder;
@@ -38,6 +39,8 @@ public class Architecture implements ArchitectureModelProvider {
 		Person architect = model.addPerson("Architect", "The architect as team scribe is the writer of this kind of documentation.");
 		Person stakeholder = model.addPerson("Stakeholder", "All project stakeholders are readers of this kind of documentation.");
 		SoftwareSystem agileArchitecture = model.addSoftwareSystem("Agile architecture documentation", "This software system generates the documentation.");
+		agileArchitecture.addProperty(ADRExtractor.AGILE_ARCHITECTURE_TICKETS_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system");
+		agileArchitecture.addProperty(ADRExtractor.AGILE_ARCHITECTURE_TICKETS_ADR_LABEL, "decision");
 		architect.uses(agileArchitecture, "Writes");
 		stakeholder.uses(agileArchitecture, "Read");
 		/////////////////////////////////////////////////////////////////////////////////////////
