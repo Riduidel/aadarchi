@@ -18,19 +18,12 @@ import org.ndx.agile.architecture.base.enhancers.scm.SCMHandler;
 import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.exception.WrappedException;
 
-public class GitlabHandler implements SCMHandler {
-	private GitLabApi gitlab;
-	@Inject public void initialize(@ConfigProperty(name=Constants.CONFIG_GITLAB_TOKEN) String token) {
-		if(token==null) {
-			throw new GitLabHandlerException(String.format("Can't connect to Gitlab if token %s isn't defined as system property", 
-					Constants.CONFIG_GITLAB_TOKEN));
-		}
-		gitlab = new GitLabApi(String.format("https://%s", Constants.GITLAB_DOMAIN), token);
-	}
+public class GitlabSCMHandler implements SCMHandler {
+	private @Inject GitLabApi gitlab;
 
 	@Override
 	public boolean canHandle(String project) {
-		return project.contains(Constants.GITLAB_DOMAIN);
+		return Constants.isGitLabProject(project);
 	}
 
 	@Override
