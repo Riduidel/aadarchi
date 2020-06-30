@@ -4,6 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -147,53 +155,44 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	 */
 	public MavenProject findMavenProjectOf(Class<?> loadedClass) {
 		String className = loadedClass.getName();
-		String basePackageName = loadedClass.getPackageName().substring(0,
-				loadedClass.getPackageName().indexOf('.'));
 		String path = loadedClass.getProtectionDomain().getCodeSource().getLocation().getPath();
 		File file = new File(path);
 		if(file.isDirectory()) {
-			return findMavenProjectOfClassFromDirectory(loadedClass, className, basePackageName, file);
+			return findMavenProjectOfClassFromDirectory(loadedClass, className, file);
 		} else {
-			return findMavenProjectOfClassFromJar(loadedClass, className, basePackageName, path);
+			return findMavenProjectOfClassFromJar(loadedClass, className, file);
 		}
 	}
 
 	private MavenProject findMavenProjectOfClassFromDirectory(Class<?> loadedClass, String className,
-			String basePackageName, File directory) {
+			File directory) {
 		File pom = new File(directory, "pom.xml");
 		if(pom.exists()) {
 			return readMavenProject(pom.toURI().toString());
 		} else if(!directory.getParentFile().equals(directory)){
-			return findMavenProjectOfClassFromDirectory(loadedClass, className, basePackageName, directory.getParentFile());
+			return findMavenProjectOfClassFromDirectory(loadedClass, className, directory.getParentFile());
 		} else {
 			throw new MavenDetailsInfererException(
 					String.format("Seems like class %s is not loaded from a Maven project, as we can't find any pom.xml file", className));
 		}
 	}
 
-	private MavenProject findMavenProjectOfClassFromJar(Class<?> loadedClass, String className, String basePackageName,
-			String path) {
-		String artifactFullName = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
-		if (artifactFullName.contains("SNAPSHOT")) {
-			logger.warning(
-					String.format("Class %s is loaded from a SNAPSHOT dependency: %s",
-							className, path));
-			artifactFullName = artifactFullName.substring(0, artifactFullName.indexOf("-SNAPSHOT"));
+	private MavenProject findMavenProjectOfClassFromJar(Class<?> loadedClass, String className, File jarFile) {
+		// OK, we assume path to be a JAR file, so let's explore that jar ...
+		try {
+			try(FileSystem fs = FileSystems.newFileSystem(jarFile.toPath(), loadedClass.getClassLoader())) {
+				Path mavenPomDir = fs.getPath("META-INF", "maven");
+				return Files.find(mavenPomDir, Integer.MAX_VALUE, 
+						(path, attributes) -> path.getFileName().toString().equals("pom.xml")
+						)
+					.map(path -> path.toUri().toString())
+					.map(this::readMavenProject)
+					.findFirst()
+					.orElseThrow(() -> new MavenDetailsInfererException(
+							String.format("There doesn't seems to be a maven pom in JAR %s", jarFile.getAbsolutePath())));
+			}
+		} catch(IOException e) {
+			throw new MavenDetailsInfererException(String.format("Unable to open %s as JAR", jarFile.getAbsolutePath()), e);
 		}
-		String artifactName = artifactFullName.substring(0, artifactFullName.lastIndexOf('-'));
-		String version = artifactFullName.substring(artifactFullName.lastIndexOf('-') + 1);
-
-		if(path.indexOf(basePackageName)<0) {
-			throw new MavenDetailsInfererException(
-					String.format("Seems like class package %s can't be found in artifact path %s."
-							+ "\nThis component assumes you use the same package name hierarchy and maven artifact group name."
-							+ "\nCan you fix that by either chaning package name or group name?", loadedClass.getPackageName(), path));
-		}
-		String groupName = path.substring(path.indexOf(basePackageName), path.indexOf(version) - 1);
-		groupName = groupName.substring(0, groupName.lastIndexOf(artifactName) - 1);
-		groupName = groupName.replace('/', '.');
-		String pomPath = String.format("META-INF/maven/%s/%s/pom.xml", groupName, artifactName);
-		URL pomUrl = loadedClass.getClassLoader().getResource(pomPath);
-		return readMavenProject(pomUrl.toExternalForm());
 	}
 }

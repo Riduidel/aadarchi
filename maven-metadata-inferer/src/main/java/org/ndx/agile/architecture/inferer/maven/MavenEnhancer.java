@@ -1,7 +1,9 @@
 package org.ndx.agile.architecture.inferer.maven;
 
-public interface MavenEnhancer {
+import java.io.File;
+import java.util.Arrays;
 
+public interface MavenEnhancer {
 	/**
 	 * URL of the maven pom the model element represents.
 	 * This URL can be

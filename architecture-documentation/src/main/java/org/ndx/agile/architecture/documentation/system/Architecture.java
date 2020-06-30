@@ -1,7 +1,8 @@
-package com.github.riduidel.agile.architecture.documentation.system;
+package org.ndx.agile.architecture.documentation.system;
 
 import java.io.File;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -47,7 +48,7 @@ public class Architecture implements ArchitectureModelProvider {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		
 		Container archetype = agileArchitecture.addContainer("archetype", "Archetype generating a valid build", "maven archetype");
-		archetype.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../archetype/pom.xml").toURI().toString());
+		archetype.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("archetype/pom.xml"));
 		architect.uses(archetype, "Bootstrap a valid project");
 
 		Container maven = agileArchitecture.addContainer("maven", "Maven build tool", "Maven build tool");
@@ -83,31 +84,31 @@ public class Architecture implements ArchitectureModelProvider {
 		maven.uses(base.getComponentWithName("ArchitectureDocumentationBuilder"), "Invokes that Java executable during maven build");
 		
 		Component gitHub = base.addComponent("github-scm-handler", "GitHub SCM Handler", "java");
-		gitHub.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../github-scm-handler/pom.xml").toURI().toString());
+		gitHub.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("github-scm-handler/pom.xml"));
 		gitHub.addProperty(ModelElementKeys.SCM_PATH, gitHub.getName());
 		base.getComponentWithName("SCMLinkGenerator").uses(gitHub, "Get project source link");
 		base.getComponentWithName("SCMReadmeReader").uses(gitHub, "Get project readme");
 
 		Component gitLab = base.addComponent("gitlab-scm-handler", "GitLab SCM Handler", "java");
-		gitLab.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../gitlab-scm-handler/pom.xml").toURI().toString());
+		gitLab.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("gitlab-scm-handler/pom.xml"));
 		gitLab.addProperty(ModelElementKeys.SCM_PATH, gitLab.getName());
 		base.getComponentWithName("SCMLinkGenerator").uses(gitLab, "Get project source link");
 		base.getComponentWithName("SCMReadmeReader").uses(gitLab, "Get project readme");
 
 		Component adrTicketsExtractor = base.addComponent("adr-tickets-extractor", "enhanced by maven");
-		adrTicketsExtractor.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, ADRExtractor.class.getName());;
+		adrTicketsExtractor.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, ADRExtractor.class.getName());
 		adrTicketsExtractor.addProperty(ModelElementKeys.SCM_PATH, adrTicketsExtractor.getName());
 		adrTicketsExtractor.uses(gitLab, "Read tickets from Gitlab if configured so");
 		adrTicketsExtractor.uses(gitHub, "Read tickets from GitHub if configured so");
 		base.getComponentWithName("ArchitectureEnhancer").uses(adrTicketsExtractor, "Produces ADR reporting");
 
 		Component cdiConfigExtension = base.addComponent("cdi-config-extension", "CDI Config extensions", "java");
-		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../cdi-config-extension/pom.xml").toURI().toString());
+		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("cdi-config-extension/pom.xml"));
 		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, cdiConfigExtension.getName());
 		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(cdiConfigExtension, "Eases out some CDI code");
 
 		Component mavenEnhancer = base.addComponent("maven-metadata-inferer", "Enhanced by Maven");
-		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../maven-metadata-inferer/pom.xml").toURI().toString());
+		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, MavenEnhancer.class.getName());
 		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, mavenEnhancer.getName());
 		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(mavenEnhancer, "Infer most of element details from Maven infos");
 
@@ -133,6 +134,26 @@ public class Architecture implements ArchitectureModelProvider {
 //		styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
 //		styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
 		return workspace;
+	}
+
+	private String locate(String string) {
+		return locateFileBelowPath(string).toURI().toString();
+	}
+
+	private File locateFileBelowPath(String path) {
+		String[] fragments = path.split("/");
+		for(File potential : Arrays.asList(new File("."), new File(".."))) {
+			File tested = potential;
+			for(String fragment : fragments) {
+				tested = new File(tested, fragment);
+				if(!tested.exists())
+					break;
+			}
+			if(tested.exists()) {
+				return tested;
+			}
+		}
+		throw new UnsupportedOperationException(String.format("We were unable to locate path %s", path));
 	}
 
 }

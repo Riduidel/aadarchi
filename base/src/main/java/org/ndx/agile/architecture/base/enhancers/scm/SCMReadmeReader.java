@@ -15,8 +15,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
-import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
 import com.structurizr.annotation.Component;
 import com.structurizr.annotation.UsesComponent;
