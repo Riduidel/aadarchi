@@ -23,5 +23,9 @@ public interface ModelElementKeys {
 	 * Readme path in project. Defaults to "readme.md". This should be a subpath of scm path.
 	 */
 	String SCM_README = "agile.architecture.scm.readme.path";
+	/**
+	 * Issue manager key should contain the url of the, well, issue manager system used by an element
+	 */
+	String ISSUE_MANAGER = "agile.architecture.issue.manager";
 
 }

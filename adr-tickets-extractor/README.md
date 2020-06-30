@@ -26,7 +26,7 @@ This obviously requires a valid SCM handler.
 
 ```
 		SoftwareSystem kafkatrain = model.addSoftwareSystem("kafkatrain", "Crowd-sourced transport timetable prediction system");
-		kafkatrain.addProperty(ADRExtractor.AGILE_ARCHITECTURE_TICKETS_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-example/");
+		kafkatrain.addProperty(ModelElementKeys.ISSUE_MANAGER, "https://github.com/Riduidel/agile-architecture-documentation-example/");
 ```
 
 And that's all! The `ImplicitIncludeManager` of agile-architecture-documentation-system will make sure the tickets are included, so the only thing you have to do is to go into the decision-log section to add a decision indicating your desire to switch to decisions stored in an issue tracker.
