@@ -264,5 +264,6 @@
 		
 		<!-- This module is the typical usage of this project, as it contains this project architecture documentation -->
 		<module>architecture-documentation</module>
+		<module>maven-metadata-inferer</module>
 	</modules>
 </project>

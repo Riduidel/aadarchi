@@ -7,6 +7,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.ndx.agile.architecture.base.ArchitectureModelProvider;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.inferer.maven.MavenEnhancer;
 import org.ndx.agile.architecture.tickets.ADRExtractor;
 
 import com.structurizr.Workspace;
@@ -39,20 +40,21 @@ public class Architecture implements ArchitectureModelProvider {
 		Person architect = model.addPerson("Architect", "The architect as team scribe is the writer of this kind of documentation.");
 		Person stakeholder = model.addPerson("Stakeholder", "All project stakeholders are readers of this kind of documentation.");
 		SoftwareSystem agileArchitecture = model.addSoftwareSystem("Agile architecture documentation", "This software system generates the documentation.");
-		agileArchitecture.addProperty(ADRExtractor.AGILE_ARCHITECTURE_TICKETS_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system");
+		agileArchitecture.addProperty(ModelElementKeys.ISSUE_MANAGER, "https://github.com/Riduidel/agile-architecture-documentation-system");
 		agileArchitecture.addProperty(ADRExtractor.AGILE_ARCHITECTURE_TICKETS_ADR_LABEL, "decision");
 		architect.uses(agileArchitecture, "Writes");
 		stakeholder.uses(agileArchitecture, "Read");
 		/////////////////////////////////////////////////////////////////////////////////////////
 		
 		Container archetype = agileArchitecture.addContainer("archetype", "Archetype generating a valid build", "maven archetype");
+		archetype.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../archetype/pom.xml").toURI().toString());
 		architect.uses(archetype, "Bootstrap a valid project");
 
 		Container maven = agileArchitecture.addContainer("maven", "Maven build tool", "Maven build tool");
 		architect.uses(maven, "Generates documentation");
 
 		Container base = agileArchitecture.addContainer("base", "Architecture base", "Java executable");
-		base.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
+		base.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, ArchitectureModelProvider.class.getName());
 		base.addProperty(ModelElementKeys.SCM_PATH, base.getName());
 		
         ComponentFinder componentFinder = new ComponentFinder(
@@ -81,28 +83,33 @@ public class Architecture implements ArchitectureModelProvider {
 		maven.uses(base.getComponentWithName("ArchitectureDocumentationBuilder"), "Invokes that Java executable during maven build");
 		
 		Component gitHub = base.addComponent("github-scm-handler", "GitHub SCM Handler", "java");
-		gitHub.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
+		gitHub.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../github-scm-handler/pom.xml").toURI().toString());
 		gitHub.addProperty(ModelElementKeys.SCM_PATH, gitHub.getName());
 		base.getComponentWithName("SCMLinkGenerator").uses(gitHub, "Get project source link");
 		base.getComponentWithName("SCMReadmeReader").uses(gitHub, "Get project readme");
 
 		Component gitLab = base.addComponent("gitlab-scm-handler", "GitLab SCM Handler", "java");
-		gitLab.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
+		gitLab.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../gitlab-scm-handler/pom.xml").toURI().toString());
 		gitLab.addProperty(ModelElementKeys.SCM_PATH, gitLab.getName());
 		base.getComponentWithName("SCMLinkGenerator").uses(gitLab, "Get project source link");
 		base.getComponentWithName("SCMReadmeReader").uses(gitLab, "Get project readme");
 
-		Component adrTicketsExtractor = base.addComponent("adr-tickets-extractor", "ADR Tickets Extractor", "java");
-		adrTicketsExtractor.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
+		Component adrTicketsExtractor = base.addComponent("adr-tickets-extractor", "enhanced by maven");
+		adrTicketsExtractor.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, ADRExtractor.class.getName());;
 		adrTicketsExtractor.addProperty(ModelElementKeys.SCM_PATH, adrTicketsExtractor.getName());
 		adrTicketsExtractor.uses(gitLab, "Read tickets from Gitlab if configured so");
 		adrTicketsExtractor.uses(gitHub, "Read tickets from GitHub if configured so");
 		base.getComponentWithName("ArchitectureEnhancer").uses(adrTicketsExtractor, "Produces ADR reporting");
 
 		Component cdiConfigExtension = base.addComponent("cdi-config-extension", "CDI Config extensions", "java");
-		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PROJECT, "https://github.com/Riduidel/agile-architecture-documentation-system/");
+		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../cdi-config-extension/pom.xml").toURI().toString());
 		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, cdiConfigExtension.getName());
 		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(cdiConfigExtension, "Eases out some CDI code");
+
+		Component mavenEnhancer = base.addComponent("maven-metadata-inferer", "Enhanced by Maven");
+		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, new File("../maven-metadata-inferer/pom.xml").toURI().toString());
+		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, mavenEnhancer.getName());
+		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(mavenEnhancer, "Infer most of element details from Maven infos");
 
 		Container asciidoc = agileArchitecture.addContainer("asciidoc", "Asciidoc tooling", "Maven plugin");
 
