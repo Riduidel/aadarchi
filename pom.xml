@@ -12,6 +12,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<issues.url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</issues.url>
+		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-client -->
+		<version.structurizr.client>1.5.0</version.structurizr.client>
+		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-plantuml -->
+		<version.structurizr.plantuml>1.4.0</version.structurizr.plantuml>
+		<version.structurizr.analysis>1.3.5</version.structurizr.analysis>
+		<version.structurizr.annotations>1.3.5</version.structurizr.annotations>
 	</properties>
 	<scm>
 		<connection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-system.git</connection>
@@ -74,22 +80,22 @@
 			<dependency>
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-client</artifactId>
-				<version>1.3.5</version>
+				<version>${version.structurizr.client}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-annotations</artifactId>
-				<version>1.3.5</version>
+				<version>${version.structurizr.annotations}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-plantuml</artifactId>
-				<version>1.3.7</version>
+				<version>${version.structurizr.plantuml}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-analysis</artifactId>
-				<version>1.3.5</version>
+				<version>${version.structurizr.analysis}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.kohsuke</groupId>
