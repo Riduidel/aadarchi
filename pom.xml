@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
@@ -81,6 +83,20 @@
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-client</artifactId>
 				<version>${version.structurizr.client}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>com.fasterxml.jackson.core</groupId>
+						<artifactId>jackson-databind</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.apache.httpcomponents.client5</groupId>
+						<artifactId>httpclient5</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>javax.xml.bind</groupId>
+						<artifactId>jaxb-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>com.structurizr</groupId>
@@ -91,11 +107,23 @@
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-plantuml</artifactId>
 				<version>${version.structurizr.plantuml}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>com.structurizr</groupId>
+						<artifactId>structurizr-core</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-analysis</artifactId>
 				<version>${version.structurizr.analysis}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>com.structurizr</groupId>
+						<artifactId>structurizr-core</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.kohsuke</groupId>
@@ -267,8 +295,9 @@
 		<module>github-scm-handler</module>
 		<module>gitlab-scm-handler</module>
 		<module>adr-tickets-extractor</module>
-		
-		<!-- This module is the typical usage of this project, as it contains this project architecture documentation -->
+
+		<!-- This module is the typical usage of this project, as it contains this 
+			project architecture documentation -->
 		<module>architecture-documentation</module>
 		<module>maven-metadata-inferer</module>
 	</modules>

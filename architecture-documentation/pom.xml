@@ -40,9 +40,7 @@
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-revealjs -->
 		<version.asciidoctor.revealjs>4.0.1</version.asciidoctor.revealjs>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-client -->
-		<version.structurizr.client>1.3.5</version.structurizr.client>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-plantuml -->
-		<version.structurizr.extensions>1.3.4</version.structurizr.extensions>
 	</properties>
 
 	<issueManagement>
