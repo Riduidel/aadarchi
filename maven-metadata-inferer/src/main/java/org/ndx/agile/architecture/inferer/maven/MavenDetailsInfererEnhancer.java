@@ -6,17 +6,21 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
-import java.nio.file.FileVisitOption;
-import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -28,6 +32,8 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Element;
+import com.structurizr.model.SoftwareSystem;
+import com.structurizr.model.StaticStructureElement;
 
 /**
  * An enhancer trying to read as much informations as possible from maven pom.
@@ -35,6 +41,197 @@ import com.structurizr.model.Element;
  *
  */
 public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements ModelEnhancer {
+	private abstract class ModelElementMavenEnhancer<Enhanced extends StaticStructureElement> {
+		
+		protected final Enhanced enhanced;
+
+		public ModelElementMavenEnhancer(Enhanced enhanced) {
+			this.enhanced = enhanced;
+		}
+
+		public void startEnhance() {
+			processModelElement(enhanced).ifPresent(this::startEnhanceWithMavenProject);
+		}
+
+		public void endEnhance() {
+			processModelElement(enhanced).ifPresent(this::endEnhanceWithMavenProject);
+		}
+		
+		protected abstract void startEnhanceWithMavenProject(MavenProject mavenProject);
+		
+		protected abstract void endEnhanceWithMavenProject(MavenProject mavenProject);
+
+	}
+	abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement, Contained extends StaticStructureElement> extends ModelElementMavenEnhancer<Enhanced> {
+
+		public AbstractContainerEnhancer(Enhanced enhanced) {
+			super(enhanced);
+		}
+
+		@Override
+		protected void startEnhanceWithMavenProject(MavenProject mavenProject) {
+			loadAllSubElements(mavenProject)
+				.forEach(module -> findSubComponentFor(mavenProject, module));
+		}
+		
+		@Override
+		protected void endEnhanceWithMavenProject(MavenProject mavenProject) {
+			loadAllSubElements(mavenProject)
+				.forEach(module -> linkToDependenciesOf(module));
+		}
+
+		/**
+		 * When needed, add all dependency links between maven modules
+		 * @param module
+		 */
+		private void linkToDependenciesOf(MavenProject module) {
+			Contained contained = getContainedElementWithName(module);
+			// Now, for each dependency of the maven project, if there is an associated artifact, link both of them
+			((List<Dependency>) module.getDependencies()).stream()
+				.map(this::getDependencyKey)
+				.flatMap(artifactKey -> findContainedWithArtifactKey(artifactKey))
+				.forEach(found -> containedDependsUpon(contained, found, "maven:dependency"));
+		}
+		
+		protected abstract void containedDependsUpon(Contained contained, Contained found, String string);
+
+		protected Stream<Contained> findContainedWithArtifactKey(String artifactKey) {
+			return getEnhancedChildren().stream()
+					.filter(container -> container.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES))
+					.filter(container -> container.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES).equals(artifactKey))
+					.findFirst().stream()
+					;
+		}
+		
+		protected abstract Collection<Contained> getEnhancedChildren();
+
+		private String getDependencyKey(Dependency artifact) {
+			return artifact.getGroupId()+":"+artifact.getArtifactId();
+		}
+
+		private String getArtifactKey(Artifact artifact) {
+			return artifact.getGroupId()+":"+artifact.getArtifactId();
+		}
+
+		void findSubComponentFor(MavenProject mavenProject, MavenProject module) {
+			String key = getContainedElementKey(module);
+			Contained linked = getContainedElementWithName(key);
+			if(linked==null) {
+				linked = addContainedElementWithKey(module, key);
+			}
+			// Now we know container is loaded. Can we do anything more ?
+			if(!linked.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM)) {
+				linked.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, module.getProperties().getProperty(MAVEN_POM_URL));
+			}
+		}
+
+		private Contained getContainedElementWithName(MavenProject module) {
+			return getContainedElementWithName(getContainedElementKey(module));
+		}
+
+		private String getContainedElementKey(MavenProject module) {
+			return module.getName()==null ? module.getArtifactId() : module.getName();
+		}
+
+		protected abstract Contained addContainedElementWithKey(MavenProject module, String key);
+
+		protected abstract Contained getContainedElementWithName(String key);
+
+		/**
+		 * Recursively load all submodules of a project.
+		 * That is, all intermediary pom modules are automagically flatMapped 
+		 * @param mavenProject
+		 * @return a stream of all contained maven projects
+		 */
+		@SuppressWarnings("unchecked")
+		private Stream<MavenProject> loadAllSubElements(MavenProject mavenProject) {
+			String pomPath = mavenProject.getProperties().getProperty(MAVEN_POM_URL);
+			final String pomDir = pomPath.substring(0, pomPath.lastIndexOf("/pom.xml"));
+			return ((List<String>) mavenProject.getModules()).stream()
+				.map(module -> readMavenProject(String.format("%s/%s/pom.xml", pomDir, module)))
+				.flatMap(module -> module.getPackaging().equals("pom") ?
+						loadAllSubElements(module) : 
+							Optional.of(module).stream())
+				;
+		}
+		
+	}
+	
+	class SoftwareSystemEnhancer extends AbstractContainerEnhancer<SoftwareSystem, Container> {
+		
+		public SoftwareSystemEnhancer(SoftwareSystem softwareSystem) {
+			super(softwareSystem);
+		}
+		
+		@Override
+		protected Container addContainedElementWithKey(MavenProject module, String key) {
+			return enhanced.addContainer(key, module.getDescription(), decorateTechnology(module));
+		}
+
+		@Override
+		protected Container getContainedElementWithName(String key) {
+			return enhanced.getContainerWithName(key);
+		}
+
+		@Override
+		protected void containedDependsUpon(Container contained, Container found, String string) {
+			contained.uses(found, string);
+		}
+
+		@Override
+		protected Collection<Container> getEnhancedChildren() {
+			return enhanced.getContainers();
+		}
+
+	}
+	
+	class ContainerEnhancer extends AbstractContainerEnhancer<Container, Component> {
+		
+		public ContainerEnhancer(Container container) {
+			super(container);
+		}
+
+		@Override
+		protected Component addContainedElementWithKey(MavenProject module, String key) {
+			return enhanced.addComponent(key, module.getDescription(), decorateTechnology(module));
+		}
+
+		@Override
+		protected Component getContainedElementWithName(String key) {
+			return enhanced.getComponentWithName(key);
+		}
+
+		@Override
+		protected void containedDependsUpon(Component contained, Component found, String string) {
+			contained.uses(found, string);
+		}
+
+		@Override
+		protected Collection<Component> getEnhancedChildren() {
+			return enhanced.getComponents();
+		}
+		
+	}
+	
+	class ComponentEnhancer extends ModelElementMavenEnhancer<Component> {
+
+		public ComponentEnhancer(Component enhanced) {
+			super(enhanced);
+		}
+
+		@Override
+		protected void startEnhanceWithMavenProject(MavenProject mavenProject) {
+			enhanced.setTechnology(decorateTechnology(mavenProject));
+		}
+		
+		@Override
+		protected void endEnhanceWithMavenProject(MavenProject mavenProject) {
+			
+		}
+	}
+
+	private static final String MAVEN_POM_URL = MavenDetailsInfererEnhancer.class.getName()+"#MAVEN_POM_URL";
+
 	@Inject Logger logger;
 	/**
 	 * The maven reader used to read all poms
@@ -55,12 +252,36 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	}
 	
 	@Override
-	public void endVisit(Container container, OutputBuilder builder) {
-		processModelElement(container, builder).ifPresent(project -> container.setTechnology(decorateTechnology(project)));
+	public boolean startVisit(SoftwareSystem softwareSystem) {
+		new SoftwareSystemEnhancer(softwareSystem).startEnhance();
+		return super.startVisit(softwareSystem);
 	}
+	
+	@Override
+	public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {
+		new SoftwareSystemEnhancer(softwareSystem).endEnhance();
+	}
+	
+	@Override
+	public boolean startVisit(Container container) {
+		new ContainerEnhancer(container).startEnhance();
+		return super.startVisit(container);
+	}
+	
+	@Override
+	public void endVisit(Container container, OutputBuilder builder) {
+		new ContainerEnhancer(container).endEnhance();
+	}
+	
+	@Override
+	public boolean startVisit(Component component) {
+		new ComponentEnhancer(component).startEnhance();
+		return super.startVisit(component);
+	}
+	
 	@Override
 	public void endVisit(Component component, OutputBuilder builder) {
-		processModelElement(component, builder).ifPresent(project -> component.setTechnology(decorateTechnology(project)));
+		new ComponentEnhancer(component).endEnhance();
 	}
 
 	/**
@@ -70,10 +291,77 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	 * @return a string giving details about important project infos
 	 */
 	private String decorateTechnology(MavenProject project) {
-		return "maven";
+		Set<String> technologies = new LinkedHashSet<String>();
+		technologies.add("maven");
+		switch(project.getPackaging()) {
+		case "ear":
+			technologies.add("ear");
+			break;
+		case "jar":
+			for(Dependency dependency : (List<Dependency>) project.getDependencies()) {
+				switch(dependency.getGroupId()) {
+				case "org.springframework":
+					technologies.add("Spring");
+					break;
+				case "com.google.gwt":
+					technologies.add("GWT");
+					break;
+				}
+			}
+			break;
+		case "pom":
+			break;
+		default:
+			logger.warning(String.format("Maven component %s uses packaging %s which we don't know. Please submit a bug to agile-architecture-documentation-system to have this particular packaging correctly handled",
+					project, project.getPackaging()));
+		}
+		return technologies.stream().collect(Collectors.joining(","));
 	}
 
-	protected Optional<MavenProject> processModelElement(Element element, OutputBuilder builder) {
+
+	/**
+	 * Decorate the given model element with the possible properties fetched from maven project
+	 * @param element
+	 * @param mavenProject
+	 */
+	private void decorate(Element element, MavenProject mavenProject) {
+		// I use optional to avoid writing endless if(...!=null) lines.
+		// It may be ugly, but I'm trying a /style/ here
+		decorateCoordinates(element, mavenProject);
+		decorateScmUrl(element, mavenProject);
+		decorateIssueManager(element, mavenProject);
+		Optional.ofNullable(mavenProject.getDescription())
+		.stream()
+		.forEach(description -> element.setDescription(description));
+	}
+
+	private void decorateCoordinates(Element element, MavenProject mavenProject) {
+		if(!element.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES)) {
+			element.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES, 
+					String.format("%s:%s", mavenProject.getGroupId(), mavenProject.getArtifactId()));
+		}
+	}
+
+	void decorateIssueManager(Element element, MavenProject mavenProject) {
+		Optional.ofNullable(mavenProject.getIssueManagement())
+		.stream()
+		.flatMap(issueManagement -> Optional.ofNullable(issueManagement.getUrl()).stream())
+		.forEach(scmUrl -> element.addProperty(ModelElementKeys.ISSUE_MANAGER, scmUrl));
+	}
+
+	void decorateScmUrl(Element element, MavenProject mavenProject) {
+		Optional.ofNullable(mavenProject.getScm())
+			.stream()
+			.flatMap(scm -> Optional.ofNullable(scm.getUrl()).stream())
+			.forEach(scmUrl -> element.addProperty(ModelElementKeys.SCM_PROJECT, scmUrl));
+	}
+
+	/**
+	 * Provides a maven project object for the given model element, if meaningfull to do so
+	 * @param element
+	 * @return an optional containing the possible model element
+	 */
+	protected Optional<MavenProject> processModelElement(Element element) {
 		if(element.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS)) {
 			String className = element.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS);
 			return processPomOfClass(element, className);
@@ -107,45 +395,12 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		try {
 			try(InputStream input = new URL(pomPath).openStream()) {
 				mavenProject = new MavenProject(reader.read(input));
+				mavenProject.getProperties().put(MAVEN_POM_URL, pomPath);
 			}
 		} catch(XmlPullParserException | IOException e) {
 			throw new MavenDetailsInfererException(String.format("Unable to read stream from URL %s", pomPath), e);
 		}
 		return mavenProject;
-	}
-
-	/**
-	 * Decorate the given model element with the possible properties fetched from maven project
-	 * @param element
-	 * @param mavenProject
-	 */
-	private void decorate(Element element, MavenProject mavenProject) {
-		// I use optional to avoid writing endless if(...!=null) lines.
-		// It may be ugly, but I'm trying a /style/ here
-		decorateScmUrl(element, mavenProject);
-		decorateIssueManager(element, mavenProject);
-		Optional.ofNullable(mavenProject.getDescription())
-		.stream()
-		.forEach(description -> element.setDescription(description));
-	}
-
-	void decorateIssueManager(Element element, MavenProject mavenProject) {
-		Optional.ofNullable(mavenProject.getIssueManagement())
-		.stream()
-		.flatMap(issueManagement -> Optional.ofNullable(issueManagement.getUrl()).stream())
-		.forEach(scmUrl -> element.addProperty(ModelElementKeys.ISSUE_MANAGER, scmUrl));
-	}
-
-	void decorateScmUrl(Element element, MavenProject mavenProject) {
-		Optional.ofNullable(mavenProject.getScm())
-			.stream()
-			.flatMap(scm -> Optional.ofNullable(scm.getUrl()).stream())
-			.forEach(scmUrl -> element.addProperty(ModelElementKeys.SCM_PROJECT, scmUrl));
-	}
-
-	@Override
-	protected void processElement(Element element, OutputBuilder builder) {
-		processModelElement(element, builder);
 	}
 
 	/**
@@ -194,5 +449,11 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		} catch(IOException e) {
 			throw new MavenDetailsInfererException(String.format("Unable to open %s as JAR", jarFile.getAbsolutePath()), e);
 		}
+	}
+
+	@Override
+	protected void processElement(Element element, OutputBuilder builder) {
+		// TODO Auto-generated method stub
+		
 	}
 }

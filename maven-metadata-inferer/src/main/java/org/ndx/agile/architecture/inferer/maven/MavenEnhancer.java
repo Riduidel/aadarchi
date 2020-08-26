@@ -19,4 +19,9 @@ public interface MavenEnhancer {
 	 */
 	String AGILE_ARCHITECTURE_MAVEN_CLASS = "agile.architecture.maven.class";
 
+	/**
+	 * Maven coordinates for an element linked to a maven module.
+	 * This allows dependency inference
+	 */
+	String AGILE_ARCHITECTURE_MAVEN_COORDINATES = "agile.architecture.maven.coordinates";
 }
