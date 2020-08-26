@@ -297,6 +297,8 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		case "ear":
 			technologies.add("ear");
 			break;
+		case "war":
+			technologies.add("war");
 		case "jar":
 			for(Dependency dependency : (List<Dependency>) project.getDependencies()) {
 				switch(dependency.getGroupId()) {
