@@ -291,6 +291,10 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	 * @return a string giving details about important project infos
 	 */
 	private String decorateTechnology(MavenProject project) {
+		return decorateTechnologyRecursively(project).stream().collect(Collectors.joining(","));
+	}
+	
+	private Set<String> decorateTechnologyRecursively(MavenProject project) {
 		Set<String> technologies = new LinkedHashSet<String>();
 		technologies.add("maven");
 		switch(project.getPackaging()) {
@@ -317,7 +321,10 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			logger.warning(String.format("Maven component %s uses packaging %s which we don't know. Please submit a bug to agile-architecture-documentation-system to have this particular packaging correctly handled",
 					project, project.getPackaging()));
 		}
-		return technologies.stream().collect(Collectors.joining(","));
+		if(project.getParent()!=null) {
+			technologies.addAll(decorateTechnologyRecursively(project.getParent()));
+		}
+		return technologies;
 	}
 
 
