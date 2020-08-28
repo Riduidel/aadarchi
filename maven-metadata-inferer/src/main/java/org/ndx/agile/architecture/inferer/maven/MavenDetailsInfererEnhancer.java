@@ -341,7 +341,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		decorateIssueManager(element, mavenProject);
 		Optional.ofNullable(mavenProject.getDescription())
 		.stream()
-		.forEach(description -> element.setDescription(description));
+		.forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
 	}
 
 	private void decorateCoordinates(Element element, MavenProject mavenProject) {
