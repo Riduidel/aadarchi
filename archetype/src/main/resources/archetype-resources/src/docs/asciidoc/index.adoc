@@ -1,7 +1,7 @@
-
 :toc:
 :toclevels: 5
 :doctype: book
+:icons: font
 
 = {project-name}
       
