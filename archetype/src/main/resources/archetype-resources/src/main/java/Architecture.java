@@ -18,6 +18,10 @@ import com.structurizr.view.ViewSet;
 @ApplicationScoped
 public class Architecture implements ArchitectureModelProvider {
 
+	public static final String SOFTWARE_SYSTEM_TARGET = "Software System";
+	public static final String CONTAINER_EXAMPLE = "TODO";
+	public static final String PERSON_USER = "User";
+
 	/**
 	 * Creates the workspace object and add in it both the architecture components
 	 * AND the views used to display it
@@ -28,25 +32,12 @@ public class Architecture implements ArchitectureModelProvider {
 		Workspace workspace = new Workspace("Getting Started", "This is a model of my software system.");
 		Model model = workspace.getModel();
 
-		Person user = model.addPerson("User", "A user of my software system.");
-		SoftwareSystem softwareSystem = model.addSoftwareSystem("Software System", "My software system.");
+		Person user = model.addPerson(PERSON_USER, "A user of my software system.");
+		SoftwareSystem softwareSystem = model.addSoftwareSystem(SOFTWARE_SYSTEM_TARGET, "My software system.");
 		user.uses(softwareSystem, "Uses");
 
-		Container aContainer = softwareSystem.addContainer("TODO", "An example container", "What technology do you use?");
+		Container aContainer = softwareSystem.addContainer(CONTAINER_EXAMPLE, "An example container", "What technology do you use?");
 		user.uses(aContainer, "Do something");
-		/////////////////////////////////////////////////////////////////////////////////////////
-		ViewSet views = workspace.getViews();
-		SystemContextView contextView = views.createSystemContextView(softwareSystem, "SystemContext",
-				"An example of a System Context diagram.");
-		contextView.addAllSoftwareSystems();
-		contextView.addAllPeople();
-
-		ContainerView softwareSystemContainers = views.createContainerView(softwareSystem, "software.system.containers", "Software system containers");
-		softwareSystemContainers.addAllContainersAndInfluencers();
-
-//		Styles styles = views.getConfiguration().getStyles();
-//		styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
-//		styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
 		return workspace;
 	}
 

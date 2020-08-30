@@ -11,7 +11,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.ndx.agile.architecture.base.ArchitectureEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.ViewEnhancer;
 
@@ -77,9 +76,10 @@ public class GraphEmitter implements ViewEnhancer {
 			.forEach(diagram -> {
 				Path path = new File(destination, diagram.getKey()+".plantuml").toPath();
 				try {
-				Files.write(
-						path, 
-						diagram.getDefinition().getBytes(Charset.forName("UTF-8")));
+					Files.write(
+							path, 
+							diagram.getDefinition().getBytes(Charset.forName("UTF-8")));
+					logger.info(String.format("Generated diagram %s in file %s", diagram.getKey(), path));
 				} catch(IOException e) {
 					throw new CantWriteDiagram(
 							String.format("Can't write diagram %s in file %s",

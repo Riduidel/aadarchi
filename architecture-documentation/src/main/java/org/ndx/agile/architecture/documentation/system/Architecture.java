@@ -28,6 +28,11 @@ import com.structurizr.view.ViewSet;
 @ApplicationScoped
 public class Architecture implements ArchitectureModelProvider {
 
+	public static final String CONTAINERS_ARCHETYPE = "archetype";
+	public static final String CONTAINERS_MAVEN = "maven";
+	public static final String CONTAINERS_BASE = "base";
+	public static final String AGILE_ARCHITECTURE_DOCUMENTATION = "Agile architecture documentation";
+
 	/**
 	 * Creates the workspace object and add in it both the architecture components
 	 * AND the views used to display it
@@ -40,21 +45,21 @@ public class Architecture implements ArchitectureModelProvider {
 
 		Person architect = model.addPerson("Architect", "The architect as team scribe is the writer of this kind of documentation.");
 		Person stakeholder = model.addPerson("Stakeholder", "All project stakeholders are readers of this kind of documentation.");
-		SoftwareSystem agileArchitecture = model.addSoftwareSystem("Agile architecture documentation", "This software system generates the documentation.");
+		SoftwareSystem agileArchitecture = model.addSoftwareSystem(AGILE_ARCHITECTURE_DOCUMENTATION, "This software system generates the documentation.");
 		agileArchitecture.addProperty(ModelElementKeys.ISSUE_MANAGER, "https://github.com/Riduidel/agile-architecture-documentation-system");
 		agileArchitecture.addProperty(ADRExtractor.AGILE_ARCHITECTURE_TICKETS_ADR_LABEL, "decision");
 		architect.uses(agileArchitecture, "Writes");
 		stakeholder.uses(agileArchitecture, "Read");
 		/////////////////////////////////////////////////////////////////////////////////////////
 		
-		Container archetype = agileArchitecture.addContainer("archetype", "Archetype generating a valid build", "maven archetype");
+		Container archetype = agileArchitecture.addContainer(CONTAINERS_ARCHETYPE, "Archetype generating a valid build", "maven archetype");
 		archetype.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("archetype/pom.xml"));
 		architect.uses(archetype, "Bootstrap a valid project");
 
-		Container maven = agileArchitecture.addContainer("maven", "Maven build tool", "Maven build tool");
+		Container maven = agileArchitecture.addContainer(CONTAINERS_MAVEN, "Maven build tool", "Maven build tool");
 		architect.uses(maven, "Generates documentation");
 
-		Container base = agileArchitecture.addContainer("base", "Architecture base", "Java executable");
+		Container base = agileArchitecture.addContainer(CONTAINERS_BASE, "Architecture base", "Java executable");
 		base.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, ArchitectureModelProvider.class.getName());
 		base.addProperty(ModelElementKeys.SCM_PATH, base.getName());
 		
