@@ -27,5 +27,12 @@ public interface ModelElementKeys {
 	 * Issue manager key should contain the url of the, well, issue manager system used by an element
 	 */
 	String ISSUE_MANAGER = "agile.architecture.issue.manager";
+	/**
+	 * String-stored List (separated by ;) of java packages contained by a given model element.
+	 * Why a List ? Because some Spring applications tend to have very bad separations due to
+	 * the MVC thingie : the controllers may be in one container, and the services/repositories
+	 * may be in another.
+	 */
+	String JAVA_PACKAGES = "agile.architecture.java.packages";
 
 }
