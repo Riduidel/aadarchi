@@ -459,10 +459,4 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			throw new MavenDetailsInfererException(String.format("Unable to open %s as JAR", jarFile.getAbsolutePath()), e);
 		}
 	}
-
-	@Override
-	protected void processElement(Element element, OutputBuilder builder) {
-		// TODO Auto-generated method stub
-		
-	}
 }

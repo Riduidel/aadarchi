@@ -14,11 +14,11 @@ import com.structurizr.model.SoftwareSystem;
 public abstract class ModelElementAdapter implements ModelEnhancer {
 
 	/**
-	 * Override this method to do anything on the given element
+	 * Override this method to do anything on all elements
 	 * @param element element we want to enhance
 	 * @param builder output builder to write data
 	 */
-	protected abstract void processElement(Element element, OutputBuilder builder);
+	protected void processElement(Element element, OutputBuilder builder) {	}
 
 	@Override
 	public boolean isParallel() {
