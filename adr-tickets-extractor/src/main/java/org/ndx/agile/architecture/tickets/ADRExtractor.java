@@ -76,7 +76,7 @@ public class ADRExtractor extends ModelElementAdapter implements Enhancer {
 
 	@Override
 	public int priority() {
-		return 0;
+		return TOP_PRIORITY_FOR_INTERNAL_ENHANCERS;
 	}
 
 	private void writeArchitectureDecisionsUsing(Element element, String project, String label, TicketsHandler handler, OutputBuilder builder) {

@@ -36,7 +36,7 @@ public class SCMLinkGenerator extends ModelElementAdapter {
 
 	@Override
 	public int priority() {
-		return 1000;
+		return TOP_PRIORITY_FOR_INTERNAL_ENHANCERS+2;
 	}
 
 	@Override

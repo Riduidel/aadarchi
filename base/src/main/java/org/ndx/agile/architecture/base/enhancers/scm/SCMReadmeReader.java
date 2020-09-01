@@ -40,7 +40,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 
 	@Override
 	public int priority() {
-		return 1001;
+		return TOP_PRIORITY_FOR_INTERNAL_ENHANCERS+2;
 	}
 
 	@Override

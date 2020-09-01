@@ -47,7 +47,7 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 	 */
 	@Override
 	public int priority() {
-		return 0;
+		return TOP_PRIORITY_FOR_INTERNAL_ENHANCERS+1;
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public class ViewsGenerator implements Enhancer {
 
 	@Override
 	public int priority() {
-		return 100_000;
+		return TOP_PRIORITY_FOR_INTERNAL_ENHANCERS-1;
 	}
 
 	@Override
