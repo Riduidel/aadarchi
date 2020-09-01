@@ -17,6 +17,7 @@ import org.ndx.agile.architecture.base.ViewEnhancer;
 import com.structurizr.Workspace;
 import com.structurizr.annotation.Component;
 import com.structurizr.io.plantuml.C4PlantUMLWriter;
+import com.structurizr.io.plantuml.C4PlantUMLWriter.Layout;
 import com.structurizr.io.plantuml.PlantUMLWriter;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
@@ -35,6 +36,14 @@ public class GraphEmitter implements ViewEnhancer {
 	File destination;
 	@Inject @ConfigProperty(name = "force", defaultValue = "false") boolean force;
 
+	@Inject 
+	@ConfigProperty(name = "agile.architecture.diagrams.layout", defaultValue = "LAYOUT_WITH_LEGEND")
+	String layoutMode;
+
+	@Inject 
+	@ConfigProperty(name = "agile.architecture.diagrams.plantuml.pencils", defaultValue = "https://github.com/RicardoNiepel/C4-PlantUML")
+	String plantumlPencils;
+	
 	@Override
 	public boolean isParallel() {
 		return true;
@@ -65,7 +74,8 @@ public class GraphEmitter implements ViewEnhancer {
 
 	@Override
 	public void endVisit(Workspace workspace, OutputBuilder builder) {
-		PlantUMLWriter plantUMLWriter = new C4PlantUMLWriter();
+		Layout layout = C4PlantUMLWriter.Layout.valueOf(layoutMode);
+		PlantUMLWriter plantUMLWriter = new C4PlantUMLWriter(layout, plantumlPencils);
 		// Hints to have arrows more easily visible
 		plantUMLWriter.addSkinParam("pathHoverColor", "GreenYellow");
 		plantUMLWriter.addSkinParam("ArrowThickness", "3");
