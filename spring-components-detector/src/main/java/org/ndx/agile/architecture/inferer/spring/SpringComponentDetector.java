@@ -11,6 +11,9 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
 import com.structurizr.analysis.ComponentFinder;
+import com.structurizr.analysis.FirstImplementationOfInterfaceSupportingTypesStrategy;
+import com.structurizr.analysis.ReferencedTypesInSamePackageSupportingTypesStrategy;
+import com.structurizr.analysis.ReferencedTypesSupportingTypesStrategy;
 import com.structurizr.analysis.SpringComponentFinderStrategy;
 import com.structurizr.model.Container;
 
@@ -31,7 +34,11 @@ public class SpringComponentDetector extends ModelElementAdapter {
 				String packageNames = container.getProperties().get(ModelElementKeys.JAVA_PACKAGES);
 				String[] allPackagesNames = packageNames.split(";");
 				ComponentFinder componentFinder = new ComponentFinder(container, allPackagesNames[0], 
-						new AdaptableSpringComponentFinderStrategy());
+						new AdaptableSpringComponentFinderStrategy(
+								new FirstImplementationOfInterfaceSupportingTypesStrategy(),
+								new ImplementedInterfacesSupportingTypesStrategy()
+//								new ReferencedTypesSupportingTypesStrategy()
+								));
 				for (int i = 1; i < allPackagesNames.length; i++) {
 					componentFinder.addPackageName(allPackagesNames[i]);
 				}

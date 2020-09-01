@@ -15,12 +15,19 @@ import java.util.logging.Logger;
 import com.structurizr.analysis.AbstractComponentFinderStrategy;
 import com.structurizr.analysis.AbstractSpringComponentFinderStrategy;
 import com.structurizr.analysis.DuplicateComponentStrategy;
+import com.structurizr.analysis.FirstImplementationOfInterfaceSupportingTypesStrategy;
+import com.structurizr.analysis.ReferencedTypesSupportingTypesStrategy;
 import com.structurizr.analysis.SpringRepositoryComponentFinderStrategy;
 import com.structurizr.analysis.SupportingTypesStrategy;
+import com.structurizr.model.CodeElement;
+import com.structurizr.model.CodeElementHack;
+import com.structurizr.model.CodeElementRole;
 import com.structurizr.model.Component;
 
 public class AdaptableSpringComponentFinderStrategy extends AbstractSpringComponentFinderStrategy {
 	private static final Logger logger = Logger.getLogger(AdaptableSpringComponentFinderStrategy.class.getName());
+
+	public static final String SPRING_COMPONENTS_OPTIONS_FAVOR_INTERFACE = "agile.architecture.spring.options.favor.interface";
 
 	/**
 	 * A map linkin an annotation full class name to the strategy used to detect it.
@@ -75,8 +82,9 @@ public class AdaptableSpringComponentFinderStrategy extends AbstractSpringCompon
         super.beforeFindComponents();
         
         Class<SupportingTypesStrategy[]> parameters = SupportingTypesStrategy[].class;
-        Object[] supportingStrategiesValues = new Object[] {new SupportingTypesStrategy[] {
-        }};
+        Object[] supportingStrategiesValues = new Object[] {
+        		supportingTypesStrategies.toArray(new SupportingTypesStrategy[supportingTypesStrategies.size()])
+        };
 
         for(Class<? extends AbstractSpringComponentFinderStrategy> strategyClass : getStrategies()) {
         	try {
@@ -108,5 +116,36 @@ public class AdaptableSpringComponentFinderStrategy extends AbstractSpringCompon
         }
 
         return components;
+    }
+    
+    /**
+     * In some Spring projects, recognized components are the implementations.
+     * In such a case, to ease dependency detection, it's a good thing to replace implementation by interfaces.
+     * As it has to be done after supporting type detection, but before dependency resolution,
+     * we have to rewrite the whole {@link AbstractSpringComponentFinderStrategy#afterFindComponents()} method
+     */
+    @Override
+    public void afterFindComponents() {
+    	findSupportingTypes(componentsFound);
+    	if(componentFinder.getContainer().getProperties().containsKey(SPRING_COMPONENTS_OPTIONS_FAVOR_INTERFACE)) {
+    		logger.warning(String.format("Container %s requires its components to favor interfaces. So we're replacing all impls by interfaces", componentFinder.getContainer().getName()));
+    		for(Component component : componentsFound) {
+    			String componentBaseName = component.getName();
+    			componentBaseName = componentBaseName.replace("Impl", "");
+    			for(CodeElement element : component.getCode()) {
+    				if(element.getName().contains(componentBaseName)) {
+    					switch(element.getCategory()) {
+    					case "interface":
+    						CodeElementHack.setRole(element, CodeElementRole.Primary);
+    						break;
+    					case "class":
+    						CodeElementHack.setRole(element, CodeElementRole.Supporting);
+    						break;
+    					}
+    				}
+    			}
+    		}
+    	}
+        findDependencies();
     }
 }
