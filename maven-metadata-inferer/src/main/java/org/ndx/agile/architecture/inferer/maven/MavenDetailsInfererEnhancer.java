@@ -3,11 +3,15 @@ package org.ndx.agile.architecture.inferer.maven;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -231,6 +235,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	}
 
 	private static final String MAVEN_POM_URL = MavenDetailsInfererEnhancer.class.getName()+"#MAVEN_POM_URL";
+	private static final String MAVEN_MODULE_DIR = MavenDetailsInfererEnhancer.class.getName()+"#MAVEN_MODULE_DIR";
 
 	@Inject Logger logger;
 	/**
@@ -339,9 +344,49 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		decorateCoordinates(element, mavenProject);
 		decorateScmUrl(element, mavenProject);
 		decorateIssueManager(element, mavenProject);
+		decorateJavaSource(element, mavenProject);
 		Optional.ofNullable(mavenProject.getDescription())
 		.stream()
 		.forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
+	}
+
+	private void decorateJavaSource(Element element, MavenProject mavenProject) {
+		String mavenPomUrl = mavenProject.getProperties().get(MAVEN_MODULE_DIR).toString();
+		List<String> mavenSourceRoots = Optional.ofNullable((List<String>) mavenProject.getCompileSourceRoots())
+				.stream()
+				.filter(list -> !list.isEmpty())
+				.findAny()
+				.orElse(Arrays.asList("src/main/java"));
+		String sourcePaths = mavenSourceRoots.stream()
+			.map(relativeFolder -> mavenPomUrl+"/"+relativeFolder)
+			.map(relativeFolder -> {
+				if(relativeFolder.startsWith("file")) {
+					try {
+						Path file = Paths.get(new URL(relativeFolder).toURI()).normalize();
+						return file.toFile().toURI().toString();
+					} catch(Exception e) {
+						return relativeFolder;
+					}
+				} else {
+					return relativeFolder;
+				}
+			})
+			.filter(sourceFolder -> {
+				if(sourceFolder.startsWith("file")) {
+					try {
+						Path file = Paths.get(new URL(sourceFolder).toURI()).normalize();
+						return file.toFile().exists();
+					} catch(Exception e) {
+						return false;
+					}
+				} else {
+					return true;
+				}
+			})
+			.collect(Collectors.joining(";"))
+			;
+		if(!sourcePaths.isEmpty())
+			element.addProperty(ModelElementKeys.JAVA_SOURCES, sourcePaths);
 	}
 
 	private void decorateCoordinates(Element element, MavenProject mavenProject) {
@@ -405,6 +450,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			try(InputStream input = new URL(pomPath).openStream()) {
 				mavenProject = new MavenProject(reader.read(input));
 				mavenProject.getProperties().put(MAVEN_POM_URL, pomPath);
+				mavenProject.getProperties().put(MAVEN_MODULE_DIR, pomPath.substring(0, pomPath.lastIndexOf('/')+1));
 			}
 		} catch(XmlPullParserException | IOException e) {
 			throw new MavenDetailsInfererException(String.format("Unable to read stream from URL %s", pomPath), e);

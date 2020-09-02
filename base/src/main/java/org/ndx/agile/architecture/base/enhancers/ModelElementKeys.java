@@ -35,4 +35,9 @@ public interface ModelElementKeys {
 	 */
 	String JAVA_PACKAGES = "agile.architecture.java.packages";
 
+	/**
+	 * Path to source folders (separated by ";", which doesn't seems to be valid in an url). This does not include test sources.
+	 * It must be an url, but can be a file url.
+	 */
+	String JAVA_SOURCES = "agile.architecture.java.source";
 }
