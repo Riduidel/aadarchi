@@ -28,7 +28,7 @@ public class GitLabTicketsHandler implements TicketsHandler {
 
 	@Override
 	public boolean canHandle(String ticketsProject) {
-		return Constants.isGitLabProject(ticketsProject);
+		return Constants.isGitLabProject(gitlab, ticketsProject);
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class GitlabSCMHandler implements SCMHandler {
 
 	@Override
 	public boolean canHandle(String project) {
-		return Constants.isGitLabProject(project);
+		return Constants.isGitLabProject(gitlab, project);
 	}
 
 	@Override
