@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
@@ -19,6 +20,8 @@ import com.structurizr.annotation.Component;
 import com.structurizr.io.plantuml.C4PlantUMLWriter;
 import com.structurizr.io.plantuml.C4PlantUMLWriter.Layout;
 import com.structurizr.io.plantuml.PlantUMLWriter;
+import com.structurizr.view.ComponentView;
+import com.structurizr.view.ContainerView;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
 
@@ -57,10 +60,26 @@ public class GraphEmitter implements ViewEnhancer {
 	@Override public boolean startVisit(ViewSet viewset) { return true; }
 
 	@Override
-	public boolean startVisit(View s) { return false; }
+	public boolean startVisit(View s) { return true; }
 
+	/**
+	 * At view end visit, we selectively remove the layout information if it is layout with legend
+	 */
 	@Override
-	public void endVisit(View s, OutputBuilder builder) {}
+	public void endVisit(View diagram, OutputBuilder builder) {
+		if(diagram instanceof ComponentView || diagram instanceof ContainerView) {
+			Path path = new File(destination, diagram.getKey()+".plantuml").toPath();
+			try {
+				String diagramText = Files.readString(path);
+				if(diagramText.contains(C4PlantUMLWriter.Layout.LAYOUT_WITH_LEGEND.name())) {
+					diagramText = diagramText.replace(C4PlantUMLWriter.Layout.LAYOUT_WITH_LEGEND.name()+"()", "");
+					Files.writeString(path, diagramText);
+				}
+			} catch(IOException e) {
+				// Nothing to do
+			}
+		}
+	}
 
 	@Override
 	public void endVisit(ViewSet viewset, OutputBuilder builder) {
@@ -69,11 +88,15 @@ public class GraphEmitter implements ViewEnhancer {
 
 	@Override
 	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
+		writeAllViews(workspace);
 		return true;
 	}
 
 	@Override
 	public void endVisit(Workspace workspace, OutputBuilder builder) {
+	}
+
+	private void writeAllViews(Workspace workspace) {
 		Layout layout = C4PlantUMLWriter.Layout.valueOf(layoutMode);
 		PlantUMLWriter plantUMLWriter = new C4PlantUMLWriter(layout, plantumlPencils);
 		// Hints to have arrows more easily visible
@@ -84,6 +107,7 @@ public class GraphEmitter implements ViewEnhancer {
 		destination.mkdirs();
 		plantUMLWriter.toPlantUMLDiagrams(workspace).stream().parallel()
 			.forEach(diagram -> {
+				// Incredibly enough, that's not a view!
 				Path path = new File(destination, diagram.getKey()+".plantuml").toPath();
 				try {
 					Files.write(
