@@ -31,12 +31,12 @@
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-pdf -->
 		<version.asciidoctorj.pdf>1.5.3</version.asciidoctorj.pdf>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj -->
-		<version.asciidoctorj>2.2.0</version.asciidoctorj>
+		<version.asciidoctorj>2.4.0</version.asciidoctorj>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
-		<version.asciidoctorj.diagram>2.0.1</version.asciidoctorj.diagram>
-		<version.jruby>9.2.9.0</version.jruby>
+		<version.asciidoctorj.diagram>2.0.2</version.asciidoctorj.diagram>
+		<version.jruby>9.2.13.0</version.jruby>
 		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
-		<version.revealjs>3.9.2</version.revealjs>
+		<version.revealjs>4.0.2</version.revealjs>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-revealjs -->
 		<version.asciidoctor.revealjs>4.0.1</version.asciidoctor.revealjs>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-client -->
