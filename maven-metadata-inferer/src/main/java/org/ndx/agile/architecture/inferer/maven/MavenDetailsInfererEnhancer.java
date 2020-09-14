@@ -3,14 +3,13 @@ package org.ndx.agile.architecture.inferer.maven;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -25,6 +24,7 @@ import javax.inject.Inject;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Profile;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -48,7 +48,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	private abstract class ModelElementMavenEnhancer<Enhanced extends StaticStructureElement> {
 		
 		protected final Enhanced enhanced;
-
+		
 		public ModelElementMavenEnhancer(Enhanced enhanced) {
 			this.enhanced = enhanced;
 		}
@@ -68,8 +68,11 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	}
 	abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement, Contained extends StaticStructureElement> extends ModelElementMavenEnhancer<Enhanced> {
 
+		protected Optional<String> additionalProfiles = Optional.empty();
+
 		public AbstractContainerEnhancer(Enhanced enhanced) {
 			super(enhanced);
+			this.additionalProfiles = Optional.ofNullable(enhanced.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES));
 		}
 
 		@Override
@@ -151,11 +154,25 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		private Stream<MavenProject> loadAllSubElements(MavenProject mavenProject) {
 			String pomPath = mavenProject.getProperties().getProperty(MAVEN_POM_URL);
 			final String pomDir = pomPath.substring(0, pomPath.lastIndexOf("/pom.xml"));
-			return ((List<String>) mavenProject.getModules()).stream()
+			List<String> modules = new ArrayList<>();
+			modules.addAll(((List<String>) mavenProject.getModules()));
+			additionalProfiles.stream()
+				.flatMap(text -> Stream.of(text.split(";")))
+				.flatMap(profileName -> getProfileNamed(mavenProject, profileName).stream())
+				.flatMap(profile -> profile.getModules().stream())
+				.forEach(modules::add);
+			return modules.stream()
 				.map(module -> readMavenProject(String.format("%s/%s/pom.xml", pomDir, module)))
 				.flatMap(module -> module.getPackaging().equals("pom") ?
 						loadAllSubElements(module) : 
 							Optional.of(module).stream())
+				;
+		}
+		
+		private Optional<Profile> getProfileNamed(MavenProject project, String profileName) {
+			return project.getModel().getProfiles().stream()
+				.filter(profile -> profileName.equals(profile.getId()))
+				.findFirst()
 				;
 		}
 		

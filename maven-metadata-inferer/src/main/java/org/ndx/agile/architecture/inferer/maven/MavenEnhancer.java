@@ -24,4 +24,8 @@ public interface MavenEnhancer {
 	 * This allows dependency inference
 	 */
 	String AGILE_ARCHITECTURE_MAVEN_COORDINATES = "agile.architecture.maven.coordinates";
+	/**
+	 * When set, this allows users to enter a list of profiles names separated by ";"
+	 */
+	String AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES = "agile.architecture.maven.profiles";
 }
