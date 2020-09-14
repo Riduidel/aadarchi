@@ -16,6 +16,7 @@ import com.structurizr.analysis.AbstractComponentFinderStrategy;
 import com.structurizr.analysis.AbstractSpringComponentFinderStrategy;
 import com.structurizr.analysis.DuplicateComponentStrategy;
 import com.structurizr.analysis.FirstImplementationOfInterfaceSupportingTypesStrategy;
+import com.structurizr.analysis.IgnoreDuplicateComponentStrategy;
 import com.structurizr.analysis.ReferencedTypesSupportingTypesStrategy;
 import com.structurizr.analysis.SpringRepositoryComponentFinderStrategy;
 import com.structurizr.analysis.SupportingTypesStrategy;
@@ -73,6 +74,7 @@ public class AdaptableSpringComponentFinderStrategy extends AbstractSpringCompon
 
     public AdaptableSpringComponentFinderStrategy(SupportingTypesStrategy... strategies) {
         super(strategies);
+        setDuplicateComponentStrategy(new IgnoreDuplicateComponentStrategy());
     }
     
     @Override
