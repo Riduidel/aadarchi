@@ -20,7 +20,7 @@ import org.kohsuke.github.GitHubBuilder;
 public class GitHubProducer {
 
 	public @Produces @ApplicationScoped GitHub initialize(@ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token) {
-		if(token==null) {
+		if(token==null || token.isBlank()) {
 			throw new GitHubHandlerException(String.format("Can't connect to GitHub if token %s isn't defined as system property", Constants.CONFIG_GITHUB_TOKEN));
 		}
 		try {
