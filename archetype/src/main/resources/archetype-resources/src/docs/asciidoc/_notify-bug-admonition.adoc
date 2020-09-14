@@ -7,7 +7,7 @@ ifeval::["{hideBugReport}"!="true"]
 ifeval::["{project-issues-on-github}"!=""]
 [TIP]
 If you encounter any error, feel free to
-https://github.com/Riduidel/agile-architecture-documentation-system/issues/new?title=Error%20in%20{project-name}%20v.{project-version}%20chapter%20{chapter}[icon:github[set=fab] enter an issue on GitHub,window=feedback].
+{project-issues-on-github}/new?title=Error%20in%20{project-name}%20v.{project-version}%20chapter%20{chapter}[icon:github[set=fab] enter an issue on GitHub,window=feedback].
 endif::[]
 ifeval::["{project-issues-not-defined}"!=""]
 [WARNING]
