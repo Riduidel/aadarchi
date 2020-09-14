@@ -34,14 +34,12 @@ public class AdaptableSpringComponentFinderStrategy extends AbstractSpringCompon
 	 * This exists since all annotations don't exist on Spring 3/4
 	 */
 	private static Map<String, String> annotationsToStrategies = Map.of(
-    		/* This doesn't work when using Spring 3 */
-//    		"org.springframework.web.bind.annotation.RestController","com.structurizr.analysis.SpringRestControllerComponentFinderStrategy",
+    		"org.springframework.web.bind.annotation.RestController","com.structurizr.analysis.SpringRestControllerComponentFinderStrategy",
     		"org.springframework.stereotype.Controller", "com.structurizr.analysis.SpringMvcControllerComponentFinderStrategy",
     		"org.springframework.stereotype.Service", "com.structurizr.analysis.SpringServiceComponentFinderStrategy",
     		"org.springframework.stereotype.Component", "com.structurizr.analysis.SpringComponentComponentFinderStrategy",
-    		"org.springframework.stereotype.Repository", "org.ndx.agile.architecture.inferer.spring.SpringRepositoryComponentFinderStrategy"
-    		/* This doesn't work when using Spring 3 */
-//    		"com.sun.jmx.mbeanserver.Repository", "com.structurizr.analysis.SpringRepositoryComponentFinderStrategy"
+    		"org.springframework.stereotype.Repository", "org.ndx.agile.architecture.inferer.spring.SpringRepositoryComponentFinderStrategy",
+    		"com.sun.jmx.mbeanserver.Repository", "com.structurizr.analysis.SpringRepositoryComponentFinderStrategy"
 			);
 	
 	private static Collection<Class<? extends AbstractSpringComponentFinderStrategy>> strategies = null;
