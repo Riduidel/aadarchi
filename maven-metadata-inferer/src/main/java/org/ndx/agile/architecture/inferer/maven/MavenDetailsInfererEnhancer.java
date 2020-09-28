@@ -321,11 +321,14 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		technologies.add("maven");
 		switch(project.getPackaging()) {
 		case "ear":
+			technologies.add("java");
 			technologies.add("ear");
 			break;
 		case "war":
+			technologies.add("java");
 			technologies.add("war");
 		case "jar":
+			technologies.add("java");
 			for(Dependency dependency : (List<Dependency>) project.getDependencies()) {
 				switch(dependency.getGroupId()) {
 				case "org.springframework":
