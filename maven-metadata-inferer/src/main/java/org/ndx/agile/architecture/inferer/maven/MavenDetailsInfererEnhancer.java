@@ -137,7 +137,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		}
 
 		private String getContainedElementKey(MavenProject module) {
-			return module.getName()==null ? module.getArtifactId() : module.getName();
+			return module.getModel().getName()==null ? module.getArtifactId() : module.getName();
 		}
 
 		protected abstract Contained addContainedElementWithKey(MavenProject module, String key);
