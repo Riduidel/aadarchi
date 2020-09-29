@@ -301,5 +301,6 @@
 		<module>architecture-documentation</module>
 		<module>maven-metadata-inferer</module>
 		<module>spring-components-detector</module>
+		<module>sequence-diagram-generator</module>
 	</modules>
 </project>
