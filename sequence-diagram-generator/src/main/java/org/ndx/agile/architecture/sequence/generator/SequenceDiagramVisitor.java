@@ -1,5 +1,6 @@
 package org.ndx.agile.architecture.sequence.generator;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -19,6 +20,8 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
@@ -41,6 +44,10 @@ import com.structurizr.model.Model;
 
 public class SequenceDiagramVisitor extends ModelElementAdapter {
 	@Inject Logger logger;
+
+	@Inject 
+	@ConfigProperty(name = "agile.architecture.diagrams", defaultValue = "target/structurizr/architecture")
+	File destination;
 
 	/**
 	 * Map container canonical name to the container object.
@@ -144,11 +151,15 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		if(allowSequenceGeneration(container)) {
 			if(container.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES)) {
 				ProjectRoot projectRoot = createProjectRootFor(container);
-				navigator = new SequenceNavigator();
-				navigator.setAllSources(parseAllSources(projectRoot));
-				navigator.setCodeToComponents(codeToComponents);
+				navigator = new SequenceNavigator(parseAllSources(projectRoot), codeToComponents);
 				// Now we have all compilation units parsed, let's try to analyze that a little by, say,
 				// mapping class names to their associated compilation units
+				navigator.analyzeCalls(
+						container.getComponents().stream()
+							.flatMap(component -> component.getCode().stream())
+							.map(code -> code.getType())
+							.collect(Collectors.toList())
+						);
 				return true;
 			} else {
 				logger.log(Level.SEVERE, String.format("Unable to generate sequence diagrams since container %s has no associated sources", container.getCanonicalName()));
@@ -258,10 +269,9 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		// which case we can expose only its methods
 		Class<?> analyzed = detectPublicCodeElementOf(component);
 		Collection<Method> toAnalyze = getMethodsToAnalyzeIn(analyzed);
-		for(CodeElement element : component.getCode()) {
-			for(Method method : toAnalyze) {
-				navigator.generatePlantUMLSequenceDiagramFor(component, builder, element.getType(), method);
-			}
+		// We should have read all source code, so we can use the sequence navigator to generate all the sequence diagrams
+		for(Method method : toAnalyze) {
+			navigator.generatePlantUMLDiagramFor(component, method, destination);
 		}
 	}
 
