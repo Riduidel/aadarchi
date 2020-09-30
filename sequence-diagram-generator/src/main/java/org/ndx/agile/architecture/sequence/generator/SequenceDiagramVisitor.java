@@ -7,10 +7,12 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -21,7 +23,6 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
@@ -30,7 +31,6 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ClassLoaderTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
@@ -52,23 +52,23 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	/**
 	 * Map container canonical name to the container object.
 	 */
-	private Map<String, Container> allContainers;
+	Map<String, Container> allContainers;
 
 	/**
 	 * Map linking classes names to components they're code element for
 	 */
-	private Map<String, Component> codeToComponents;
+	Map<String, Component> codeToComponents;
 	/**
 	 * Helper map allowing us to understand what is wrong, and when
 	 */
-	private Map<String, Container> pathsToContainers = new LinkedHashMap<String, Container>();
+	Map<String, Container> pathsToContainers = new LinkedHashMap<String, Container>();
 	
 	/**
 	 * The sequence navigator is the element allowing navigation in sequences of calls.
 	 * It is dependent upon the searched container, and is recreated for each container.
 	 * As it depends upon the container, it contains all data required to navigate the container.
 	 */
-	private SequenceNavigator navigator;
+	SequenceNavigator navigator;
 	
 	@Override
 	public boolean isParallel() {
@@ -110,7 +110,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	 */
 	private ProjectRoot createProjectRootFor(Container container) {
 		String associatedModules = container.getProperties().get(SequenceGenerator.GENERATES_WITH);
-		List<Container> associatedContainers = new ArrayList<Container>();
+		Set<Container> associatedContainers = new HashSet<Container>();
 		associatedContainers.add(container);
 		associatedContainers.addAll(Stream.of(associatedModules.split(";"))
 			.map(containerName -> allContainers.get(containerName))

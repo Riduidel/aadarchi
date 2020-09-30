@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
@@ -72,11 +73,12 @@ public class SequenceNavigator {
 	}
 
 	private String methodToFileName(Method method) {
-		return String.format("%s_%s___%s", 
+		return String.format("%s_%s%s", 
 				method.getDeclaringClass().getSimpleName(),
 				method.getName(),
 				Stream.of(method.getParameters())
 					.map(parameter -> parameter.getType().getSimpleName())
+					.collect(Collectors.joining("_", "___", ""))
 				);
 	}
 }
