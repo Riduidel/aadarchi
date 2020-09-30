@@ -10,6 +10,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodRepresentation;
+
 import com.structurizr.model.CodeElement;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
@@ -163,8 +166,9 @@ public class SequenceDiagramGenerator {
 
 	private String getParticipantsDeclaration() {
 		StringBuilder returned = new StringBuilder("actor User as user\n");
-		returned.append(components.stream()
-			.collect(Collectors.groupingBy(component -> component.getContainer()))
+		Map<Container, List<Component>> componentsPerContainers = components.stream()
+			.collect(Collectors.groupingBy(component -> component.getContainer()));
+		returned.append(componentsPerContainers
 			.entrySet()
 			.stream()
 			.map(entry -> getComponentsOfContainerAsParticipants(entry))

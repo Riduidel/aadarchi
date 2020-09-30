@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.sequence.generator.javaparser;
+package org.ndx.agile.architecture.sequence.generator.javaparser.adapter;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.ndx.agile.architecture.sequence.generator.SequenceGeneratorException;
+import org.ndx.agile.architecture.sequence.generator.javaparser.SequenceDiagramGenerator;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -28,7 +29,7 @@ import com.structurizr.model.Component;
 public class CallGraphModel {
 	private static final Logger logger = Logger.getLogger(CallGraphModel.class.getName());
 	
-	final Map<String, Component> classesToComponents;
+	public final Map<String, Component> classesToComponents;
 	Map<String, ClassRepresentation> namesToClasses = new TreeMap<>();
 	
 	/**

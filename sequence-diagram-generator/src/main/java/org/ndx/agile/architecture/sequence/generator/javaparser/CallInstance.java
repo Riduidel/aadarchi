@@ -2,17 +2,17 @@ package org.ndx.agile.architecture.sequence.generator.javaparser;
 
 import java.util.Optional;
 
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodRepresentation;
+
 /**
  * Instance of a call to a method
  */
-class CallInstance {
+public class CallInstance {
 	public final MethodRepresentation called;
 	public Optional<MethodRepresentation> caller = Optional.empty();
 	public final String name;
 	public CallInstance(MethodRepresentation caller, String name, MethodRepresentation called) {
-		super();
-		this.name = name;
-		this.called = called;
+		this(name, called);
 		this.caller = Optional.of(caller);
 	}
 	public CallInstance(String name, MethodRepresentation called) {

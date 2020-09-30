@@ -1,8 +1,10 @@
-package org.ndx.agile.architecture.sequence.generator.javaparser;
+package org.ndx.agile.architecture.sequence.generator.javaparser.visitor;
 
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
@@ -14,6 +16,9 @@ import com.structurizr.model.Component;
 public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter<CallGraphModel, CallGraphModel> {
 	private static final Logger logger =Logger.getLogger(JavaParserVisitorForBuildingCallGraph.class.getName());
 	private boolean inMethod;
+	public JavaParserVisitorForBuildingCallGraph(CallGraphModel model) {
+	}
+
 	@Override
 	public CallGraphModel visit(MethodDeclaration n, CallGraphModel model) {
 		inMethod = true;

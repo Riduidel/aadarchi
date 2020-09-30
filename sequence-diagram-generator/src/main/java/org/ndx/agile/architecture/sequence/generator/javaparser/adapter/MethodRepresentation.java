@@ -1,13 +1,15 @@
-package org.ndx.agile.architecture.sequence.generator.javaparser;
+package org.ndx.agile.architecture.sequence.generator.javaparser.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class MethodRepresentation {
+import org.ndx.agile.architecture.sequence.generator.javaparser.CallInstance;
+
+public class MethodRepresentation {
 	/**
 	 * Calls are set in a list, to make sure they're ordered
 	 */
-	final List<CallInstance> calls = new ArrayList<>();
+	public final List<CallInstance> calls = new ArrayList<>();
 	public final String className;
 	public final String name;
 	public final String signature;

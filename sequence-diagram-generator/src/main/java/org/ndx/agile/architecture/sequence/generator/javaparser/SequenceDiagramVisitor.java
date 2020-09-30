@@ -110,15 +110,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	 * @return
 	 */
 	private ProjectRoot createProjectRootFor(Container container) {
-		String associatedModules = container.getProperties().get(SequenceGenerator.GENERATES_WITH);
-		Set<Container> associatedContainers = new HashSet<Container>();
-		associatedContainers.add(container);
-		associatedContainers.addAll(Stream.of(associatedModules.split(";"))
-			.map(containerName -> allContainers.get(containerName))
-			// now we have a container
-			.filter(associatedContainer -> associatedContainer.getTechnology().toLowerCase().contains("java"))
-			.filter(associatedContainer -> associatedContainer.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES))
-			.collect(Collectors.toList()));
+		Set<Container> associatedContainers = getAssociatedContainersOf(container);
 		ProjectRoot projectRoot = null;
 		for(Container associatedContainer : associatedContainers) {
 			for(String path : associatedContainer.getProperties().get(ModelElementKeys.JAVA_SOURCES).split(";")) {
@@ -146,6 +138,18 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		}
 		return projectRoot;
 	}
+	private Set<Container> getAssociatedContainersOf(Container container) {
+		String containerNames = container.getProperties().get(SequenceGenerator.GENERATES_WITH);
+		Set<Container> returned = new HashSet<Container>();
+		returned.add(container);
+		returned.addAll(Stream.of(containerNames.split(";"))
+			.map(containerName -> allContainers.get(containerName))
+			// now we have a container
+			.filter(associatedContainer -> associatedContainer.getTechnology().toLowerCase().contains("java"))
+			.filter(associatedContainer -> associatedContainer.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES))
+			.collect(Collectors.toList()));
+		return returned;
+	}
 	
 	@Override
 	public boolean startVisit(Container container) {
@@ -156,7 +160,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 				// Now we have all compilation units parsed, let's try to analyze that a little by, say,
 				// mapping class names to their associated compilation units
 				navigator.analyzeCalls(
-						container.getComponents().stream()
+						getComponentsToScanFor(container).stream()
 							.flatMap(component -> component.getCode().stream())
 							.map(code -> code.getType())
 							.collect(Collectors.toList())
@@ -168,6 +172,22 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		}
 		// In any missing info case, return false
 		return false;
+	}
+	
+	/**
+	 * Get all components to scan.
+	 * This obviously includes all component from the given container, but also all components from
+	 * associated containers (for calls to interfaces be resolved against implementations
+	 * @param container
+	 * @return
+	 */
+	private Set<Component> getComponentsToScanFor(Container container) {
+		Set<Component> components = new HashSet<Component>(container.getComponents());
+		components.addAll(getAssociatedContainersOf(container).stream()
+				.flatMap(associatedContainer -> associatedContainer.getComponents().stream())
+				.collect(Collectors.toList())
+				);
+		return components;
 	}
 	private Map<String, CompilationUnit> parseAllSources(ProjectRoot projectRoot) {
 		List<CompilationUnit> allParsed = new ArrayList<CompilationUnit>();
