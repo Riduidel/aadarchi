@@ -145,7 +145,7 @@ public class SequenceDiagramGenerator {
 			.findAny(); 
 		return new CallRepresentation(from,
 				classesToComponents.get(start.called.className), 
-				start.called.signature);
+				start.name);
 	}
 
 	@Override

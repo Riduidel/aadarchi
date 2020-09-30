@@ -8,6 +8,8 @@ import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodRe
  * Instance of a call to a method
  */
 public class CallInstance {
+	private static final String SUFFIX = "...";
+	private static final int MAX_LENGTH = 40;
 	public final MethodRepresentation called;
 	public Optional<MethodRepresentation> caller = Optional.empty();
 	public final String name;
@@ -17,7 +19,11 @@ public class CallInstance {
 	}
 	public CallInstance(String name, MethodRepresentation called) {
 		super();
-		this.name = name;
+		if(name.length()>MAX_LENGTH-SUFFIX.length()) {
+			this.name = name.substring(0, MAX_LENGTH-SUFFIX.length())+SUFFIX;
+		} else {
+			this.name = name;
+		}
 		this.called = called;
 	}
 	@Override
