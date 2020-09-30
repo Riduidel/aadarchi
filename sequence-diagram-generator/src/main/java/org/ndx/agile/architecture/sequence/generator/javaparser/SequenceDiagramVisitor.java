@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.sequence.generator;
+package org.ndx.agile.architecture.sequence.generator.javaparser;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +26,7 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.sequence.generator.SequenceGenerator;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;

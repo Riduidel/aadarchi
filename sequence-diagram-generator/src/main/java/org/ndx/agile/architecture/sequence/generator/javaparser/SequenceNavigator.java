@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.sequence.generator;
+package org.ndx.agile.architecture.sequence.generator.javaparser;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
-import org.ndx.agile.architecture.sequence.generator.javaparser.CallGraphModel;
-import org.ndx.agile.architecture.sequence.generator.javaparser.CallGraphVisitorBuilder;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.structurizr.model.Component;
@@ -51,7 +49,7 @@ public class SequenceNavigator {
 	}
 
 	private void analyze(CompilationUnit compilationUnit) {
-		compilationUnit.accept(new CallGraphVisitorBuilder(), model);
+		compilationUnit.accept(new JavaParserVisitorForBuildingCallGraph(), model);
 	}
 
 	/**

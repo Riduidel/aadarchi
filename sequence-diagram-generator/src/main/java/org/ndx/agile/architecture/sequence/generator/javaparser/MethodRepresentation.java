@@ -17,8 +17,8 @@ class MethodRepresentation {
 		this.name = name;
 		this.signature = signature;
 	}
-	public void call(String string, MethodRepresentation methodFor) {
-		calls.add(new CallInstance(string, methodFor));
+	public void call(String callText, MethodRepresentation methodFor) {
+		calls.add(new CallInstance(this, callText, methodFor));
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -54,5 +54,9 @@ class MethodRepresentation {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((signature == null) ? 0 : signature.hashCode());
 		return result;
+	}
+	@Override
+	public String toString() {
+		return "MethodRepresentation [signature=" + signature + "]";
 	}
 }

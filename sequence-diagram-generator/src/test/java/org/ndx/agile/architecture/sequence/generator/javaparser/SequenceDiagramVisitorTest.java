@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.sequence.generator;
+package org.ndx.agile.architecture.sequence.generator.javaparser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
+import org.ndx.agile.architecture.sequence.generator.SequenceGenerator;
+import org.ndx.agile.architecture.sequence.generator.javaparser.SequenceDiagramVisitor;
+import org.ndx.agile.architecture.sequence.generator.javaparser.SequenceNavigator;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;

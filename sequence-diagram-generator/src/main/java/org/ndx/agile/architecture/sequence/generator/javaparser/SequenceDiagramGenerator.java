@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.structurizr.model.CodeElement;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 
@@ -18,7 +19,7 @@ import com.structurizr.model.Container;
  * @author nicolas-delsaux
  *
  */
-public class SequenceDiagramModel {
+public class SequenceDiagramGenerator {
 
 	public static class Builder {
 		private CallInstance start;
@@ -34,9 +35,9 @@ public class SequenceDiagramModel {
 			return this;
 		}
 
-		public SequenceDiagramModel build(CallGraphModel callGraphModel) {
-			SequenceDiagramModel returned = new SequenceDiagramModel();
-			returned.addCallrecursively(start, callGraphModel.classesToComponents);
+		public SequenceDiagramGenerator build(CallGraphModel callGraphModel) {
+			SequenceDiagramGenerator returned = new SequenceDiagramGenerator();
+			returned.addCallRecursively(start, callGraphModel);
 			return returned;
 		}
 	}
@@ -106,14 +107,33 @@ public class SequenceDiagramModel {
 	 * @param start start call
 	 * @param callGraphModel model containing all classes infos
 	 */
-	public void addCallrecursively(CallInstance start, Map<String, Component> classesToComponents) {
-		components.add(classesToComponents.get(start.called.className));
-		calls.add(new Activation(classesToComponents.get(start.called.className)));
-		calls.add(callRepresentation(start, classesToComponents));
-		for(CallInstance callInstance : start.called.calls) {
-			addCallrecursively(callInstance, classesToComponents);
+	public void addCallRecursively(CallInstance start, CallGraphModel callGraphModel) {
+		Map<String, Component> classesToComponents = callGraphModel.classesToComponents;
+		String calledType = start.called.className;
+		if(classesToComponents.containsKey(calledType)) {
+			Component calledComponent = classesToComponents.get(calledType);
+			components.add(calledComponent);
+			calls.add(callRepresentation(start, classesToComponents));
+			calls.add(new Activation(calledComponent));
+			List<CallInstance> recursiveCalls = start.called.calls;
+			if(recursiveCalls.isEmpty()) {
+				// When no calls are found, it may be because the called class is in fact an interface
+				// So we replace it on the fly with the equivalent call from
+				// the component other code element
+				for(CodeElement element : calledComponent.getCode()) {
+					if(!element.getType().equals(calledType)) {
+						String otherType = element.getType();
+						recursiveCalls = callGraphModel.getClassFor(otherType)
+								.getMethodFor(calledType, start.called.name, start.called.signature).calls;
+						break;
+					}
+				}
+			}
+			for(CallInstance callInstance : recursiveCalls) {
+				addCallRecursively(callInstance, callGraphModel);
+			}
+			calls.add(new Deactivation(calledComponent));
 		}
-		calls.add(new Deactivation(classesToComponents.get(start.called.className)));
 	}
 	
 	private SequenceLine callRepresentation(CallInstance start, Map<String, Component> classesToComponents) {
@@ -154,14 +174,18 @@ public class SequenceDiagramModel {
 
 	private String getComponentsOfContainerAsParticipants(Entry<Container, List<Component>> entry) {
 		String componentsAsParticipants = entry.getValue().stream()
-			.map(component -> String.format("participant %s as %s",
-					component.getName(),
-					componentId(component)
-					))
+			.map(this::componentAsParticipant)
 			.collect(Collectors.joining("\n"));
 		return String.format("box %s\n%s\nend box",
 				entry.getKey().getName(),
 				componentsAsParticipants);
+	}
+
+	private String componentAsParticipant(Component component) {
+		return String.format("participant %s as %s",
+				component.getName(),
+				componentId(component)
+				);
 	}
 	
 	private String componentId(Component component) {

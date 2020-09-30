@@ -11,8 +11,8 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 import com.structurizr.model.Component;
 
-public class CallGraphVisitorBuilder extends GenericVisitorAdapter<CallGraphModel, CallGraphModel> {
-	private static final Logger logger =Logger.getLogger(CallGraphVisitorBuilder.class.getName());
+public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter<CallGraphModel, CallGraphModel> {
+	private static final Logger logger =Logger.getLogger(JavaParserVisitorForBuildingCallGraph.class.getName());
 	private boolean inMethod;
 	@Override
 	public CallGraphModel visit(MethodDeclaration n, CallGraphModel model) {
@@ -29,8 +29,6 @@ public class CallGraphVisitorBuilder extends GenericVisitorAdapter<CallGraphMode
 		if(inMethod) {
 //			logger.info("Found method call "+methodCall);
 			try {
-				ResolvedMethodDeclaration resolvedMethodCall = methodCall.resolve();
-				ResolvedReferenceTypeDeclaration declaringType = resolvedMethodCall.declaringType();
 				model.addCall(methodCall);
 			} catch(RuntimeException e) {
 				// The fact that JavaParser throws RuntimeException really stinks, but well, we have to use their exceptions
