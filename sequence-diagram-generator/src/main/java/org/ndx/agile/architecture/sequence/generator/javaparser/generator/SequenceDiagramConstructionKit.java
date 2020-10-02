@@ -64,9 +64,9 @@ public class SequenceDiagramConstructionKit {
 	}
 
 	private String getParticipantsDeclaration() {
-		StringBuilder returned = new StringBuilder("actor User as user\n");
 		Map<Container, List<Component>> componentsPerContainers = components.stream()
 			.collect(Collectors.groupingBy(component -> component.getContainer()));
+		StringBuilder returned = new StringBuilder();
 		returned.append(componentsPerContainers
 			.entrySet()
 			.stream()
@@ -110,12 +110,12 @@ public class SequenceDiagramConstructionKit {
 		String fromType = methodCallRepresentation.containerOfType(MethodDeclarationRepresentation.class)
 				.stream()
 				.map(declaration -> declaration.className)
-				.findFirst().orElse("user");
+				.findFirst().orElse("[");
 		String toType = methodCallRepresentation.calledTypeName;
 		if(classesToComponents.containsKey(toType)) {
 			Component toComponent = classesToComponents.get(toType);
 			components.add(toComponent);
-			if(fromType.equals("user")) {
+			if(fromType.equals("[")) {
 				methodCalls.append(fromType);
 			} else {
 				Component fromComponent = classesToComponents.get(fromType);
@@ -159,7 +159,7 @@ public class SequenceDiagramConstructionKit {
 		if(classesToComponents.containsKey(methodDeclarationRepresentation.className)) {
 			Component toComponent = classesToComponents.get(methodDeclarationRepresentation.className);
 			components.add(toComponent);
-			methodCalls.append("user->")
+			methodCalls.append("[->")
 				.append(componentId(toComponent))
 				.append(':')
 				.append(StringUtils.abbreviate(methodDeclarationRepresentation.signature, "...", SIGNATURE_WISTH))

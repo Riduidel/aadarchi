@@ -3,7 +3,6 @@ package org.ndx.agile.architecture.sequence.generator.javaparser.visitor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CodeRepresentation;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
