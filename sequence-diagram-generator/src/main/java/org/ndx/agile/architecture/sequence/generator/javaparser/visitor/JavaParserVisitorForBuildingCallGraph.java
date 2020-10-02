@@ -1,45 +1,36 @@
 package org.ndx.agile.architecture.sequence.generator.javaparser.visitor;
 
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CodeRepresentation;
 
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
-import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
-import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.structurizr.model.Component;
 
-public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter<CallGraphModel, CallGraphModel> {
+public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter<CodeRepresentation, CodeRepresentation> {
 	private static final Logger logger =Logger.getLogger(JavaParserVisitorForBuildingCallGraph.class.getName());
-	private boolean inMethod;
-	public JavaParserVisitorForBuildingCallGraph(CallGraphModel model) {
+	
+	@Override
+	public CodeRepresentation visit(ClassOrInterfaceDeclaration n, CodeRepresentation arg) {
+		return super.visit(n, arg.inClassOrInterfaceDeclaration(n));
 	}
 
 	@Override
-	public CallGraphModel visit(MethodDeclaration n, CallGraphModel model) {
-		inMethod = true;
-		try {
-			return super.visit(n, model);
-		} finally {
-			inMethod = false;
-		}
+	public CodeRepresentation visit(MethodDeclaration n, CodeRepresentation representation) {
+		return super.visit(n, representation.inMethodDeclaration(n));
 	}
 	
 	@Override
-	public CallGraphModel visit(MethodCallExpr methodCall, CallGraphModel model) {
-		if(inMethod) {
-//			logger.info("Found method call "+methodCall);
-			try {
-				model.addCall(methodCall);
-			} catch(RuntimeException e) {
-				// The fact that JavaParser throws RuntimeException really stinks, but well, we have to use their exceptions
-				logger.log(Level.SEVERE, String.format("Unable to resolve call %s", methodCall), e);
-			}
+	public CodeRepresentation visit(MethodCallExpr methodCall, CodeRepresentation representation) {
+		try {
+			return super.visit(methodCall, representation.inMethodCall(methodCall));
+		} catch(RuntimeException e) {
+			logger.log(Level.SEVERE, String.format("Unable to resolve method call %s due to exception \"%s\". We give up on that one.", methodCall, e.getMessage()));
+			return super.visit(methodCall, representation);
 		}
-		return super.visit(methodCall, model);
 	}
 }

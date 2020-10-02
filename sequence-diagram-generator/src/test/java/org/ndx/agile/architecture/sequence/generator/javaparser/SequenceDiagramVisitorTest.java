@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
 import org.ndx.agile.architecture.sequence.generator.SequenceGenerator;
-import org.ndx.agile.architecture.sequence.generator.javaparser.SequenceDiagramVisitor;
-import org.ndx.agile.architecture.sequence.generator.javaparser.SequenceNavigator;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
+import org.ndx.agile.architecture.sequence.generator.javaparser.generator.SequenceDiagramGenerator;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;
@@ -31,8 +31,10 @@ class SequenceDiagramVisitorTest {
 		sequenceGenerator.addProperty(ModelElementKeys.JAVA_SOURCES, new File("src/main/java").toURI().toString());
 		Component visitor = sequenceGenerator.addComponent("SequenceDiagramVisitor", "visitor building the sequence");
 		visitor.addSupportingType(SequenceDiagramVisitor.class.getName());
-		Component navigator = sequenceGenerator.addComponent("SequenceNavigator", "navigator accumulating data");
-		navigator.addSupportingType(SequenceNavigator.class.getName());
+		Component callGraphModel = sequenceGenerator.addComponent("CallGraphModel", "navigator accumulating data");
+		callGraphModel.addSupportingType(CallGraphModel.class.getName());
+		Component generator = sequenceGenerator.addComponent("SequenceDiagramGenerator", "Component producing the sequence diagram");
+		generator.addSupportingType(SequenceDiagramGenerator.class.getName());
 		// Let's build a sequence diagram visitor
 		SequenceDiagramVisitor tested = new SequenceDiagramVisitor();
 		tested.logger = Logger.getLogger(getClass().getName());
@@ -41,11 +43,11 @@ class SequenceDiagramVisitorTest {
 		tested.startVisit(model);
 		tested.startVisit(system);
 		assertThat(tested.allContainers).hasSize(1);
-		assertThat(tested.codeToComponents).hasSize(2);
-		assertThat(tested.navigator).isNull();
+		assertThat(tested.codeToComponents).hasSize(3);
+		assertThat(tested.callGraphModel).isNull();
 		// And finally, visit the container and parse source code
 		tested.startVisit(sequenceGenerator);
-		assertThat(tested.navigator).isNotNull();
+		assertThat(tested.callGraphModel).isNotNull();
 		// And visit components to see what happens
 		assertThat(tested.startVisit(visitor)).isTrue();
 		// And that something is generated

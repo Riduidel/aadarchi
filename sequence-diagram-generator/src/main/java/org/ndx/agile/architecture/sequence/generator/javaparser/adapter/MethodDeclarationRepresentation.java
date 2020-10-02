@@ -1,26 +1,19 @@
 package org.ndx.agile.architecture.sequence.generator.javaparser.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.github.javaparser.ast.body.MethodDeclaration;
 
-import org.ndx.agile.architecture.sequence.generator.javaparser.CallInstance;
-
-public class MethodRepresentation {
-	/**
-	 * Calls are set in a list, to make sure they're ordered
-	 */
-	public final List<CallInstance> calls = new ArrayList<>();
+public class MethodDeclarationRepresentation extends AbstractCodeRepresentation{
 	public final String className;
 	public final String name;
 	public final String signature;
-	public MethodRepresentation(String className, String name, String signature) {
+	public final String filename;
+	public MethodDeclarationRepresentation(String className, String name, String signature,
+			String filename) {
 		super();
 		this.className = className;
 		this.name = name;
 		this.signature = signature;
-	}
-	public void call(String callText, MethodRepresentation methodFor) {
-		calls.add(new CallInstance(this, callText, methodFor));
+		this.filename = filename;
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -30,7 +23,7 @@ public class MethodRepresentation {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MethodRepresentation other = (MethodRepresentation) obj;
+		MethodDeclarationRepresentation other = (MethodDeclarationRepresentation) obj;
 		if (className == null) {
 			if (other.className != null)
 				return false;
@@ -60,5 +53,17 @@ public class MethodRepresentation {
 	@Override
 	public String toString() {
 		return "MethodRepresentation [signature=" + signature + "]";
+	}
+	
+	@Override
+	public CodeRepresentation inMethodDeclaration(MethodDeclaration n) {
+		return this;
+	}
+	
+	@Override
+	public void accept(CodeRepresentationVisitor visitor) {
+		visitor.startVisit(this);
+		super.visitChildren(visitor);
+		visitor.endVisit(this);
 	}
 }

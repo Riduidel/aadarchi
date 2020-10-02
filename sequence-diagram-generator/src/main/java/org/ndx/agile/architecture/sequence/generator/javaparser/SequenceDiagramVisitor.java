@@ -27,6 +27,7 @@ import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.sequence.generator.SequenceGenerator;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
 
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
@@ -65,11 +66,10 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	Map<String, Container> pathsToContainers = new LinkedHashMap<String, Container>();
 	
 	/**
-	 * The sequence navigator is the element allowing navigation in sequences of calls.
-	 * It is dependent upon the searched container, and is recreated for each container.
-	 * As it depends upon the container, it contains all data required to navigate the container.
+	 * This call graph model should contain all details of calls between components of application.
+	 * It is populated at each {@link #startVisit(Container)} call and reset after call
 	 */
-	SequenceNavigator navigator;
+	CallGraphModel callGraphModel = null;
 	
 	@Override
 	public boolean isParallel() {
@@ -156,10 +156,11 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		if(allowSequenceGeneration(container)) {
 			if(container.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES)) {
 				ProjectRoot projectRoot = createProjectRootFor(container);
-				navigator = new SequenceNavigator(parseAllSources(projectRoot), codeToComponents);
+				Map<String, CompilationUnit> sources = parseAllSources(projectRoot);
+				callGraphModel = new CallGraphModel(codeToComponents, sources);
 				// Now we have all compilation units parsed, let's try to analyze that a little by, say,
 				// mapping class names to their associated compilation units
-				navigator.analyzeCalls(
+				callGraphModel.analyzeCalls(
 						getComponentsToScanFor(container).stream()
 							.flatMap(component -> component.getCode().stream())
 							.map(code -> code.getType())
@@ -223,6 +224,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	@Override
 	public void endVisit(Container container, OutputBuilder builder) {
 		pathsToContainers.clear();
+		callGraphModel = null;
 		super.endVisit(container, builder);
 	}
 	
@@ -291,9 +293,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		Class<?> analyzed = detectPublicCodeElementOf(component);
 		Collection<Method> toAnalyze = getMethodsToAnalyzeIn(analyzed);
 		// We should have read all source code, so we can use the sequence navigator to generate all the sequence diagrams
-		for(Method method : toAnalyze) {
-			navigator.generatePlantUMLDiagramFor(component, method, destination);
-		}
+		callGraphModel.generatePlantUMLDiagramFor(component, destination);
 	}
 
 	@Override
