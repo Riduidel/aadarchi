@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -62,8 +63,14 @@ public class CallGraphModel {
 	public void analyzeCalls(List<String> typeNames) {
 		for(Collection<String> types : Arrays.asList(typeNames, unknownClasses)) {
 			for(String type : types) {
-				CompilationUnit cu = sources.get(type);
-				cu.accept(new JavaParserVisitorForBuildingCallGraph(), getClassFor(type));
+				// Some classes may not have associated compilation units (that's the case of inner classes, as an example)
+				// So just ignore them
+				if (sources.containsKey(type)) {
+					CompilationUnit cu = sources.get(type);
+					cu.accept(new JavaParserVisitorForBuildingCallGraph(), getClassFor(type));
+				} else {
+					logger.warning(String.format("No source file found for type %s", type));
+				}
 			}
 		}
 	}
@@ -80,9 +87,10 @@ public class CallGraphModel {
 					);
 	}
 
-	public CodeRepresentation getSubClassFor(String parentTypeName, String typeName) {
-		classesToComponents.put(typeName, classesToComponents.get(parentTypeName));
-		return getClassFor(typeName)
-				;
+	public CodeRepresentation getSubClassFor(TypeRepresentation parentTypeDeclaration, String typeName) {
+		classesToComponents.put(typeName, classesToComponents.get(parentTypeDeclaration.name));
+		TypeRepresentation returned = getClassFor(typeName);
+		returned.setParent(parentTypeDeclaration);
+		return returned;
 	}
 }

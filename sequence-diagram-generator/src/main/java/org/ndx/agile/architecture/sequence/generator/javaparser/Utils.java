@@ -17,7 +17,7 @@ import com.github.javaparser.resolution.types.ResolvedTypeVariable;
 
 public class Utils {
 
-	private static final int FILENAME_WIDTH = 40;
+	private static final int FILENAME_WIDTH = 80;
 
 	/**
 	 * From a method name, generates a file name usable for generated sequence diagram

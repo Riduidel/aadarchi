@@ -24,6 +24,7 @@ public class TypeRepresentation extends AbstractCodeRepresentation {
 	final CallGraphModel callGraphModel;
 
 	public TypeRepresentation(CallGraphModel callGraphModel, String className) {
+		super(null);
 		this.callGraphModel = callGraphModel;
 		this.name = className;
 	}
@@ -33,7 +34,7 @@ public class TypeRepresentation extends AbstractCodeRepresentation {
 		String methodName = resolved.getName();
 		String signature = Utils.toSignature(resolved);
 		if(!signaturesToMethods.containsKey(signature)) {
-			signaturesToMethods.put(signature, new MethodDeclarationRepresentation(className, 
+			signaturesToMethods.put(signature, new MethodDeclarationRepresentation(this, className, 
 					methodName, signature, Utils.methodToFileName(resolved)));
 		}
 		return signaturesToMethods.get(signature);

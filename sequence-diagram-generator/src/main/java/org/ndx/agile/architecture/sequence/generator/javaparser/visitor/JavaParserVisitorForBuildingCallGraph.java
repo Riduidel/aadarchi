@@ -4,10 +4,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CodeRepresentation;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.NoParentMethodException;
 
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 
 public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter<CodeRepresentation, CodeRepresentation> {
@@ -24,6 +28,11 @@ public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter
 	}
 	
 	@Override
+	public CodeRepresentation visit(ObjectCreationExpr n, CodeRepresentation representation) {
+		return super.visit(n, representation.inObjectCreation(n));
+	}
+	
+	@Override
 	public CodeRepresentation visit(MethodCallExpr methodCall, CodeRepresentation representation) {
 		try {
 			return super.visit(methodCall, representation.inMethodCall(methodCall));
@@ -31,5 +40,11 @@ public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter
 			logger.log(Level.SEVERE, String.format("Unable to resolve method call %s due to exception \"%s\". We give up on that one.", methodCall, e.getMessage()));
 			return super.visit(methodCall, representation);
 		}
+	}
+	
+	@Override
+	public CodeRepresentation visit(BlockStmt n, CodeRepresentation arg) {
+		// TODO Auto-generated method stub
+		return super.visit(n, arg);
 	}
 }

@@ -10,6 +10,7 @@ import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGrap
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CodeRepresentationVisitor;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodCallRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodDeclarationRepresentation;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.ObjectCreationRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.TypeRepresentation;
 
 import com.structurizr.model.CodeElement;
@@ -100,6 +101,16 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 	@Override
 	public void endVisit(MethodCallRepresentation methodCallRepresentation) {
 		this.kit.deactivateMethodCall(methodCallRepresentation);
+	}
+
+	@Override
+	public void startVisit(ObjectCreationRepresentation objectCreationRepresentation) {
+		this.kit.activateCreation(objectCreationRepresentation);
+	}
+
+	@Override
+	public void endVisit(ObjectCreationRepresentation objectCreationRepresentation) {
+		// Nothing to do after creation
 	}
 
 }

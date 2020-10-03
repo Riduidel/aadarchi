@@ -8,11 +8,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodCallRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodDeclarationRepresentation;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.ObjectCreationRepresentation;
 
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
@@ -172,6 +174,29 @@ public class SequenceDiagramConstructionKit {
 		String toType = methodDeclarationRepresentation.className;
 		if(classesToComponents.containsKey(toType)) {
 			methodCalls.append("deactivate ").append(componentId(classesToComponents.get(toType))).append('\n');
+		}
+	}
+
+	public void activateCreation(ObjectCreationRepresentation objectCreationRepresentation) {
+		if(classesToComponents.containsKey(objectCreationRepresentation.className)) {
+			Component toComponent = classesToComponents.get(objectCreationRepresentation.className);
+			if(!components.contains(toComponent)) {
+				components.add(toComponent);
+				methodCalls.append("create ")
+					.append(componentId(toComponent))
+					.append('\n');
+				// Don't forget to add the "new" call
+				Optional<MethodDeclarationRepresentation> declaration = objectCreationRepresentation.containerOfType(MethodDeclarationRepresentation.class);
+				declaration.stream()
+					.forEach(decl -> {
+						Component fromComponent = classesToComponents.get(decl.className);
+						methodCalls.append(componentId(fromComponent))
+							.append("->")
+							.append(componentId(toComponent))
+							.append(":new\n");
+						
+					});
+			}
 		}
 	}
 }

@@ -9,6 +9,8 @@ import org.ndx.agile.architecture.sequence.generator.javaparser.Utils;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.expr.MethodCallExpr;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 
@@ -17,14 +19,14 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 	 * Ordered list of subelements
 	 */
 	protected final List<CodeRepresentation> children = new ArrayList<CodeRepresentation>();
-	private Optional<CodeRepresentation> parent;
-
-	public AbstractCodeRepresentation() {
-		this.parent = Optional.empty();
-	}
+	private Optional<CodeRepresentation> parent = Optional.empty();
 
 	public AbstractCodeRepresentation(CodeRepresentation parent) {
-		this.parent = Optional.of(parent);
+		setParent(parent);
+	}
+	
+	protected void setParent(CodeRepresentation parent) {
+		this.parent= Optional.ofNullable(parent);
 	}
 
 	@Override
@@ -50,12 +52,15 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 
 	@Override
 	public CodeRepresentation inClassOrInterfaceDeclaration(ClassOrInterfaceDeclaration n) {
-		Optional<TypeRepresentation> parentType = containerOfType(TypeRepresentation.class);
 		ResolvedReferenceTypeDeclaration resolvedTypeDeclaration = n.resolve();
-		String typeName = resolvedTypeDeclaration.getQualifiedName();
+		return createTypeRepresentationOf(resolvedTypeDeclaration.getQualifiedName());
+	}
+
+	CodeRepresentation createTypeRepresentationOf(String typeName) {
+		Optional<TypeRepresentation> parentType = containerOfType(TypeRepresentation.class);
 		// There SHOULD be a typeRepresentation due to initialization mode
 		if(parentType.isEmpty()) {
-			throw new SequenceGeneratorException(String.format("Seems like there is no parent for declaration of %s.", typeName));
+			throw new NoParentMethodException(String.format("Seems like there is no parent for declaration of %s.", typeName));
 		} else {
 			TypeRepresentation parentTypeDeclaration = parentType.get();
 			if(parentTypeDeclaration.name.equals(typeName)) {
@@ -63,7 +68,7 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 			} else {
 				// Mmmh, a subclass.
 				// I guess this class should be added to link between classes and components
-				return parentTypeDeclaration.callGraphModel.getSubClassFor(parentTypeDeclaration.name, typeName);
+				return parentTypeDeclaration.callGraphModel.getSubClassFor(parentTypeDeclaration, typeName);
 			}
 		}
 	}
@@ -87,6 +92,25 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 				calledTypeName);
 		children.add(returned);
 		return returned;
+	}
+	
+	/**
+	 * Creates an object creation representation.
+	 * In order to handle anonymous subclasses, the object creation representation is 
+	 * created with a type representation immediatly attached to.
+	 */
+	public CodeRepresentation inObjectCreation(ObjectCreationExpr objectCreation) {
+		if(objectCreation.getAnonymousClassBody().isPresent()) {
+			ResolvedConstructorDeclaration resolvedCreation = objectCreation.resolve();
+			ObjectCreationRepresentation representation = new ObjectCreationRepresentation(this, resolvedCreation.declaringType().getQualifiedName());
+			children.add(representation);
+			return representation.createTypeRepresentationOf(representation.className);
+		} else {
+			ObjectCreationRepresentation representation = new ObjectCreationRepresentation(this, 
+					objectCreation.getType().resolve().getQualifiedName());
+			children.add(representation);
+			return representation;
+		}
 	}
 
 	/**

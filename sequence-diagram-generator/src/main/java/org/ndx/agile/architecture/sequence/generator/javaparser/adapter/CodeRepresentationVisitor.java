@@ -14,4 +14,8 @@ public interface CodeRepresentationVisitor {
 
 	void endVisit(MethodCallRepresentation methodCallRepresentation);
 
+	void startVisit(ObjectCreationRepresentation objectCreationRepresentation);
+
+	void endVisit(ObjectCreationRepresentation objectCreationRepresentation);
+
 }

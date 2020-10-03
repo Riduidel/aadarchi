@@ -7,9 +7,9 @@ public class MethodDeclarationRepresentation extends AbstractCodeRepresentation{
 	public final String name;
 	public final String signature;
 	public final String filename;
-	public MethodDeclarationRepresentation(String className, String name, String signature,
+	public MethodDeclarationRepresentation(CodeRepresentation typeRepresentation, String className, String name, String signature,
 			String filename) {
-		super();
+		super(typeRepresentation);
 		this.className = className;
 		this.name = name;
 		this.signature = signature;
