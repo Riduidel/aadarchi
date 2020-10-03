@@ -18,4 +18,20 @@ public interface CodeRepresentationVisitor {
 
 	void endVisit(ObjectCreationRepresentation objectCreationRepresentation);
 
+	void startVisit(BlockRepresentation blockRepresentation);
+
+	void endVisit(BlockRepresentation blockRepresentation);
+
+	void startVisit(ForEachRepresentation forEachRepresentation);
+
+	void endVisit(ForEachRepresentation forEachRepresentation);
+
+	void startVisit(ForLoopRepresentation forLoopRepresentation);
+
+	void endVisit(ForLoopRepresentation forLoopRepresentation);
+
+	void startVisit(IfRepresentation ifRepresentation);
+
+	void endVisit(IfRepresentation ifRepresentation);
+
 }

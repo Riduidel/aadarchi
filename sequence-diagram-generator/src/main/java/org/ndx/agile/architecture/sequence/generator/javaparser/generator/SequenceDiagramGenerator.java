@@ -6,8 +6,12 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.ndx.agile.architecture.sequence.generator.SequenceGeneratorException;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.BlockRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CodeRepresentationVisitor;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.ForEachRepresentation;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.ForLoopRepresentation;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.IfRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodCallRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodDeclarationRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.ObjectCreationRepresentation;
@@ -108,9 +112,51 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 		this.kit.activateCreation(objectCreationRepresentation);
 	}
 
+	/**
+	 * There is nothing to do after an object creation
+	 */
 	@Override
-	public void endVisit(ObjectCreationRepresentation objectCreationRepresentation) {
-		// Nothing to do after creation
+	public void endVisit(ObjectCreationRepresentation objectCreationRepresentation) {}
+
+	/**
+	 * Visiting a block is useful when that block is in a condition statement,
+	 * to detect alternatives. But otherwise there is no interest in that ...
+	 */
+	@Override
+	public void startVisit(BlockRepresentation blockRepresentation) {
+	}
+
+	@Override
+	public void endVisit(BlockRepresentation blockRepresentation) {}
+
+	@Override
+	public void startVisit(ForEachRepresentation forEachRepresentation) {
+//		kit.activateForLoop(forEachRepresentation);
+	}
+
+	@Override
+	public void endVisit(ForEachRepresentation forEachRepresentation) {
+//		kit.deactivateForLoop(forEachRepresentation);
+	}
+
+	@Override
+	public void startVisit(ForLoopRepresentation forLoopRepresentation) {
+//		kit.activateForLoop(forLoopRepresentation);
+	}
+
+	@Override
+	public void endVisit(ForLoopRepresentation forLoopRepresentation) {
+//		kit.deactivateForLoop(forLoopRepresentation);
+	}
+
+	@Override
+	public void startVisit(IfRepresentation ifRepresentation) {
+//		kit.activateIf(ifRepresentation);
+	}
+
+	@Override
+	public void endVisit(IfRepresentation ifRepresentation) {
+//		kit.deactivateIf(ifRepresentation);
 	}
 
 }

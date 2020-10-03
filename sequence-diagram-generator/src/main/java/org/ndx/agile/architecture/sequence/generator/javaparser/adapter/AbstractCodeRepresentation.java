@@ -8,8 +8,14 @@ import org.ndx.agile.architecture.sequence.generator.SequenceGeneratorException;
 import org.ndx.agile.architecture.sequence.generator.javaparser.Utils;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.resolution.declarations.ResolvedConstructorDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
@@ -49,6 +55,21 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 		return children;
 	}
 	
+	/**
+	 * A one-liner making sure children are added
+	 * @param representation
+	 * @return
+	 */
+	private CodeRepresentation addChild(CodeRepresentation representation) {
+		children.add(representation);
+		return representation;
+	}
+	
+
+	@Override
+	public CodeRepresentation inMethodDeclaration(MethodDeclaration n) {
+		throw new SequenceGeneratorException("method declarations can't happen anywhere.");
+	}
 
 	@Override
 	public CodeRepresentation inClassOrInterfaceDeclaration(ClassOrInterfaceDeclaration n) {
@@ -88,10 +109,8 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 		String calledSignature = Utils.toSignature(resolved);
 		String calledTypeName = resolved.declaringType().getQualifiedName();
 
-		MethodCallRepresentation returned = new MethodCallRepresentation(this, calledName, calledSignature,
-				calledTypeName);
-		children.add(returned);
-		return returned;
+		return addChild(new MethodCallRepresentation(this, calledName, calledSignature,
+				calledTypeName));
 	}
 	
 	/**
@@ -106,11 +125,21 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 			children.add(representation);
 			return representation.createTypeRepresentationOf(representation.className);
 		} else {
-			ObjectCreationRepresentation representation = new ObjectCreationRepresentation(this, 
-					objectCreation.getType().resolve().getQualifiedName());
-			children.add(representation);
-			return representation;
+			return addChild(new ObjectCreationRepresentation(this, 
+					objectCreation.getType().resolve().getQualifiedName()));
 		}
+	}
+
+	public CodeRepresentation inForEach(ForEachStmt n) {
+		return addChild(new ForEachRepresentation(this));
+	}
+	
+	public CodeRepresentation inForLoop(ForStmt n) {
+		return addChild(new ForLoopRepresentation(this));
+	}
+	
+	public CodeRepresentation inIf(IfStmt n) {
+		return addChild(new IfRepresentation(this));
 	}
 
 	/**

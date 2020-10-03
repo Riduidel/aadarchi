@@ -12,6 +12,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.ForEachRepresentation;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.IfRepresentation;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.LoopRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodCallRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodDeclarationRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.ObjectCreationRepresentation;

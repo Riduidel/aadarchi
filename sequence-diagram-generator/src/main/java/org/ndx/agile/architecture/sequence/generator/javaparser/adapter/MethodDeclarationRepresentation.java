@@ -2,7 +2,7 @@ package org.ndx.agile.architecture.sequence.generator.javaparser.adapter;
 
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-public class MethodDeclarationRepresentation extends AbstractCodeRepresentation{
+public class MethodDeclarationRepresentation extends BlockRepresentation{
 	public final String className;
 	public final String name;
 	public final String signature;

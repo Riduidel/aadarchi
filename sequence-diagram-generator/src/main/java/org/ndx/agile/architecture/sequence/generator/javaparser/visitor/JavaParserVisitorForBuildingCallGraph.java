@@ -4,14 +4,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CodeRepresentation;
-import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.NoParentMethodException;
 
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.BinaryExpr;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
+import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 
 public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter<CodeRepresentation, CodeRepresentation> {
@@ -43,8 +45,26 @@ public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter
 	}
 	
 	@Override
-	public CodeRepresentation visit(BlockStmt n, CodeRepresentation arg) {
-		// TODO Auto-generated method stub
-		return super.visit(n, arg);
+	public CodeRepresentation visit(BlockStmt n, CodeRepresentation representation) {
+		return super.visit(n, representation.inBlock(n));
+	}
+	
+	@Override
+	public CodeRepresentation visit(BinaryExpr n, CodeRepresentation representation) {
+		return super.visit(n, representation.inBinaryExpression(n));
+	}
+	
+	@Override
+	public CodeRepresentation visit(ForEachStmt n, CodeRepresentation representation) {
+		return super.visit(n, representation.inForEach(n));
+	}
+	@Override
+	public CodeRepresentation visit(ForStmt n, CodeRepresentation representation) {
+		return super.visit(n, representation.inForLoop(n));
+	}
+	
+	@Override
+	public CodeRepresentation visit(IfStmt n, CodeRepresentation representation) {
+		return super.visit(n, representation.inIf(n));
 	}
 }
