@@ -2,7 +2,9 @@ package org.ndx.agile.architecture.sequence.generator.javaparser.generator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Stack;
 
 import org.apache.commons.io.FileUtils;
 import org.ndx.agile.architecture.sequence.generator.SequenceGeneratorException;
@@ -23,17 +25,15 @@ import com.structurizr.model.Component;
 public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 
 	private final File outputFolder;
-	private SequenceDiagramConstructionKit kit;
-	private final Map<String, Component> classesToComponents;
 	/**
-	 * Deepness of method call declaration.
-	 * THis allows us to emit consistent method call sequence diagrams even when multiple method declarations are met
+	 * Stack of construction kits. This allow empty loop to generate missing
+	 * diagrams, which are not added to main diagram.
 	 */
-	private int deepness;
+	private Stack<SequenceDiagramConstructionKit> kits = new Stack<>();
+	private final Map<String, Component> classesToComponents;
 	private CallGraphModel callGraphModel;
-	
-	public SequenceDiagramGenerator(File outputFolder, 
-			Map<String, Component> classesToComponents,
+
+	public SequenceDiagramGenerator(File outputFolder, Map<String, Component> classesToComponents,
 			CallGraphModel callGraphModel) {
 		this.outputFolder = outputFolder;
 		this.classesToComponents = classesToComponents;
@@ -53,35 +53,53 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 
 	@Override
 	public void startVisit(MethodDeclarationRepresentation methodDeclarationRepresentation) {
-		if(kit==null) {
-			kit = new SequenceDiagramConstructionKit(classesToComponents);
-			kit.activateMethodCall(methodDeclarationRepresentation);
+		boolean firstCall = kits.isEmpty();
+		activateNewKit();
+		if (firstCall) {
+			// If it is a first call, we have to add the fake call that bootstraps the
+			// diagram
+			// Obviously, this requires equivalent code at endVisit
+			kits.peek().activateMethodCall(methodDeclarationRepresentation);
 		}
-		deepness++;
+	}
+
+	private SequenceDiagramConstructionKit activateNewKit() {
+		SequenceDiagramConstructionKit newKit = new SequenceDiagramConstructionKit(classesToComponents, new LinkedHashSet<Component>());
+		kits.push(newKit);
+		return newKit;
+	}
+
+	private SequenceDiagramConstructionKit deactivateKit() {
+		SequenceDiagramConstructionKit usedKit = kits.pop();
+		if (!kits.isEmpty()) {
+			kits.peek().addAll(usedKit);
+		}
+		return usedKit;
 	}
 
 	@Override
 	public void endVisit(MethodDeclarationRepresentation methodDeclarationRepresentation) {
-		deepness--;
-		if(deepness==0) {
-			kit.deactivateMethodCall(methodDeclarationRepresentation);
-			File outputFile = new File(outputFolder, methodDeclarationRepresentation.filename+".plantuml");
+		SequenceDiagramConstructionKit usedKit = deactivateKit();
+		if (kits.isEmpty()) {
+			// See startVisit for the reason why
+			usedKit.deactivateMethodCall(methodDeclarationRepresentation);
+			File outputFile = new File(outputFolder, methodDeclarationRepresentation.filename + ".plantuml");
 			try {
 				outputFile.getParentFile().mkdirs();
-				FileUtils.write(outputFile, this.kit.sequence(), "UTF-8");
+				FileUtils.write(outputFile, usedKit.sequence(), "UTF-8");
 			} catch (IOException e) {
-				throw new SequenceGeneratorException(String.format("Unable to write to %s", outputFile.getAbsolutePath()), e);
-			} finally {
-				kit = null;
+				throw new SequenceGeneratorException(
+						String.format("Unable to write to %s", outputFile.getAbsolutePath()), e);
 			}
 		}
 	}
 
 	@Override
 	public void startVisit(MethodCallRepresentation methodCallRepresentation) {
-		if(this.kit.activateMethodCall(methodCallRepresentation)) {
+		if (this.kits.peek().activateMethodCall(methodCallRepresentation)) {
 			// So we're in a method call?
-			// If method call target is a method of a component, then we should try to see if that method
+			// If method call target is a method of a component, then we should try to see
+			// if that method
 			// has an implementation.
 			// And if there is an implementation, add it recursively to diagram
 			MethodDeclarationRepresentation implementation = findImplementationOf(methodCallRepresentation);
@@ -91,11 +109,10 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 
 	private MethodDeclarationRepresentation findImplementationOf(MethodCallRepresentation methodCallRepresentation) {
 		Component component = classesToComponents.get(methodCallRepresentation.calledTypeName);
-		MethodDeclarationRepresentation representation = null; 
-		for(CodeElement code : component.getCode()) {
-			representation = callGraphModel.getClassFor(methodCallRepresentation.calledTypeName)
-					.getMethodFor(methodCallRepresentation);
-			if(!representation.getChildren().isEmpty()) {
+		MethodDeclarationRepresentation representation = null;
+		for (CodeElement code : component.getCode()) {
+			representation = callGraphModel.getClassFor(code.getType()).getMethodFor(methodCallRepresentation);
+			if (!representation.getChildren().isEmpty()) {
 				break;
 			}
 		}
@@ -104,59 +121,64 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 
 	@Override
 	public void endVisit(MethodCallRepresentation methodCallRepresentation) {
-		this.kit.deactivateMethodCall(methodCallRepresentation);
+		this.kits.peek().deactivateMethodCall(methodCallRepresentation);
 	}
 
 	@Override
 	public void startVisit(ObjectCreationRepresentation objectCreationRepresentation) {
-		this.kit.activateCreation(objectCreationRepresentation);
+		this.kits.peek().activateCreation(objectCreationRepresentation);
 	}
 
 	/**
 	 * There is nothing to do after an object creation
 	 */
 	@Override
-	public void endVisit(ObjectCreationRepresentation objectCreationRepresentation) {}
+	public void endVisit(ObjectCreationRepresentation objectCreationRepresentation) {
+	}
 
 	/**
-	 * Visiting a block is useful when that block is in a condition statement,
-	 * to detect alternatives. But otherwise there is no interest in that ...
+	 * Visiting a block is useful when that block is in a condition statement, to
+	 * detect alternatives. But otherwise there is no interest in that ...
 	 */
 	@Override
 	public void startVisit(BlockRepresentation blockRepresentation) {
 	}
 
 	@Override
-	public void endVisit(BlockRepresentation blockRepresentation) {}
+	public void endVisit(BlockRepresentation blockRepresentation) {
+	}
 
 	@Override
 	public void startVisit(ForEachRepresentation forEachRepresentation) {
-//		kit.activateForLoop(forEachRepresentation);
+		activateNewKit().activateGroup(forEachRepresentation);
 	}
 
 	@Override
 	public void endVisit(ForEachRepresentation forEachRepresentation) {
-//		kit.deactivateForLoop(forEachRepresentation);
+		kits.peek().deactivateGroup(forEachRepresentation);
+		deactivateKit();
 	}
 
 	@Override
 	public void startVisit(ForLoopRepresentation forLoopRepresentation) {
-//		kit.activateForLoop(forLoopRepresentation);
+		activateNewKit().activateGroup(forLoopRepresentation);
 	}
 
 	@Override
 	public void endVisit(ForLoopRepresentation forLoopRepresentation) {
-//		kit.deactivateForLoop(forLoopRepresentation);
+		kits.peek().deactivateGroup(forLoopRepresentation);
+		deactivateKit();
 	}
 
 	@Override
 	public void startVisit(IfRepresentation ifRepresentation) {
-//		kit.activateIf(ifRepresentation);
+		activateNewKit().activateGroup(ifRepresentation);
 	}
 
 	@Override
 	public void endVisit(IfRepresentation ifRepresentation) {
-//		kit.deactivateIf(ifRepresentation);
+		kits.peek().deactivateGroup(ifRepresentation);
+		deactivateKit();
 	}
 
 }

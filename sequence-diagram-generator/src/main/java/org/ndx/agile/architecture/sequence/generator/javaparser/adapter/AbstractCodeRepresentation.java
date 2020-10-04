@@ -120,6 +120,8 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 	 */
 	public CodeRepresentation inObjectCreation(ObjectCreationExpr objectCreation) {
 		if(objectCreation.getAnonymousClassBody().isPresent()) {
+			// And this is a new inner class!
+			// inner classes have their structure created
 			ResolvedConstructorDeclaration resolvedCreation = objectCreation.resolve();
 			ObjectCreationRepresentation representation = new ObjectCreationRepresentation(this, resolvedCreation.declaringType().getQualifiedName());
 			children.add(representation);

@@ -15,4 +15,9 @@ public class ForEachRepresentation extends AbstractCodeRepresentation implements
 		visitor.endVisit(this);
 	}
 
+	@Override
+	public String getGroupName() {
+		return "for each";
+	}
+
 }

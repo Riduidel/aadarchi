@@ -1,7 +1,5 @@
 package org.ndx.agile.architecture.sequence.generator.javaparser.generator;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -9,12 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
-import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.ForEachRepresentation;
-import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.IfRepresentation;
-import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.LoopRepresentation;
+import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.GroupRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodCallRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodDeclarationRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.ObjectCreationRepresentation;
@@ -26,18 +23,25 @@ public class SequenceDiagramConstructionKit {
 	private static final int SIGNATURE_WISTH = 40;
 	public static final String SEQUENCE_KEY = SequenceDiagramConstructionKit.class.getName()+".Sequence";
 	/**
-	 * List components involved in sequence diagram, used to generate header
+	 * List components involved in sequence diagram, used to generate header.
+	 * Notice components list is shared between all sequence construction kits of a stack.
+	 * THIS IS DANGEROUS, but required to avoid multi-creations with anonymous clases.
 	 */
-	private Collection<Component> components = new LinkedHashSet();
+	private Collection<Component> components;
 	
 	private StringBuilder methodCalls = new StringBuilder();
 
 	private final Map<String, Component> classesToComponents;
+	/**
+	 * Set to true when diagram has some meaning, that's to say contains useful method calls.
+	 */
+	private boolean meaningful = false;
 
-	public SequenceDiagramConstructionKit(Map<String, Component> classesToComponents) {
+	public SequenceDiagramConstructionKit(Map<String, Component> classesToComponents, Collection<Component> components) {
 		super();
 		this.classesToComponents = classesToComponents;
 		mapComponentsToNames(classesToComponents.values());
+		this.components = components;
 	}
 
 	/**
@@ -132,6 +136,7 @@ public class SequenceDiagramConstructionKit {
 					.append(StringUtils.abbreviate(methodCallRepresentation.calledSignature, "...", SIGNATURE_WISTH))
 					.append('\n');
 			methodCalls.append("activate ").append(componentId(toComponent)).append('\n');
+			meaningful = true;
 			return true;
 		} else {
 			return false;
@@ -179,27 +184,57 @@ public class SequenceDiagramConstructionKit {
 			methodCalls.append("deactivate ").append(componentId(classesToComponents.get(toType))).append('\n');
 		}
 	}
-
-	public void activateCreation(ObjectCreationRepresentation objectCreationRepresentation) {
+	
+	public void createIfNeeded(ObjectCreationRepresentation objectCreationRepresentation, 
+			BiConsumer<ObjectCreationRepresentation, Component> consumer) {
 		if(classesToComponents.containsKey(objectCreationRepresentation.className)) {
 			Component toComponent = classesToComponents.get(objectCreationRepresentation.className);
 			if(!components.contains(toComponent)) {
-				components.add(toComponent);
-				methodCalls.append("create ")
+				consumer.accept(objectCreationRepresentation, toComponent);
+			}
+		}
+	}
+
+	public void activateCreation(ObjectCreationRepresentation objectCreationRepresentation) {
+		createIfNeeded(
+				objectCreationRepresentation,
+				(objectCreation, toComponent) ->  {
+					components.add(toComponent);
+					methodCalls.append("create ")
 					.append(componentId(toComponent))
 					.append('\n');
-				// Don't forget to add the "new" call
-				Optional<MethodDeclarationRepresentation> declaration = objectCreationRepresentation.containerOfType(MethodDeclarationRepresentation.class);
-				declaration.stream()
+					// Don't forget to add the "new" call
+					Optional<MethodDeclarationRepresentation> declaration = objectCreation.containerOfType(MethodDeclarationRepresentation.class);
+					declaration.stream()
 					.forEach(decl -> {
 						Component fromComponent = classesToComponents.get(decl.className);
 						methodCalls.append(componentId(fromComponent))
-							.append("->")
-							.append(componentId(toComponent))
-							.append(":new\n");
+						.append("->")
+						.append(componentId(toComponent))
+						.append(":new\n");
 						
 					});
-			}
+				});
+	}
+
+	/**
+	 * Include in this construction kit all elements from the usedKit one.
+	 * Notice we add diagram only if meaningfull, 
+	 * which is easy to see: meaningless diagrams contains no components
+	 * @param usedKit construction kit to add
+	 */
+	public void addAll(SequenceDiagramConstructionKit usedKit) {
+		if(usedKit.meaningful) {
+			components.addAll(usedKit.components);
+			methodCalls.append('\n').append(usedKit.methodCalls);
 		}
+	}
+
+	public void activateGroup(GroupRepresentation groupRepresentation) {
+		methodCalls.append("group ").append(groupRepresentation.getGroupName()).append('\n');
+	}
+
+	public void deactivateGroup(GroupRepresentation forEachRepresentation) {
+		methodCalls.append("end").append('\n');
 	}
 }

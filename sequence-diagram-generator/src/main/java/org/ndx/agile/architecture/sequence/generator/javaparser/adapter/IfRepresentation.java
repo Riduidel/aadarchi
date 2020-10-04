@@ -1,6 +1,6 @@
 package org.ndx.agile.architecture.sequence.generator.javaparser.adapter;
 
-public class IfRepresentation extends AbstractCodeRepresentation implements CodeRepresentation {
+public class IfRepresentation extends AbstractCodeRepresentation implements GroupRepresentation {
 
 	public IfRepresentation(CodeRepresentation parent) {
 		super(parent);
@@ -11,6 +11,11 @@ public class IfRepresentation extends AbstractCodeRepresentation implements Code
 		visitor.startVisit(this);
 		visitChildren(visitor);
 		visitor.endVisit(this);
+	}
+
+	@Override
+	public String getGroupName() {
+		return "if";
 	}
 
 }

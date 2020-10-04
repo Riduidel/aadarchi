@@ -1,5 +1,5 @@
 package org.ndx.agile.architecture.sequence.generator.javaparser.adapter;
 
-public interface LoopRepresentation extends CodeRepresentation {
+public interface LoopRepresentation extends GroupRepresentation {
 
 }

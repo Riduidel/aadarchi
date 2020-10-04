@@ -13,4 +13,9 @@ public class ForLoopRepresentation extends AbstractCodeRepresentation implements
 		visitor.endVisit(this);
 	}
 
+	@Override
+	public String getGroupName() {
+		return "for";
+	}
+
 }
