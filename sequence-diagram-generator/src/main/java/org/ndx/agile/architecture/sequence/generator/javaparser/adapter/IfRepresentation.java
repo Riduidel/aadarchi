@@ -1,9 +1,15 @@
 package org.ndx.agile.architecture.sequence.generator.javaparser.adapter;
 
+import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.stmt.BlockStmt;
+
 public class IfRepresentation extends AbstractCodeRepresentation implements GroupRepresentation {
 
-	public IfRepresentation(CodeRepresentation parent) {
+	private String condition;
+
+	public IfRepresentation(CodeRepresentation parent, Expression expression) {
 		super(parent);
+		this.condition = expression.toString();
 	}
 
 	@Override
@@ -15,7 +21,11 @@ public class IfRepresentation extends AbstractCodeRepresentation implements Grou
 
 	@Override
 	public String getGroupName() {
-		return "if";
+		return "if "+condition;
 	}
 
+	@Override
+	public CodeRepresentation inBlock(BlockStmt n) {
+		return addChild(new BlockRepresentation(this));
+	}
 }

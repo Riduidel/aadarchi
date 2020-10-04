@@ -60,7 +60,7 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 	 * @param representation
 	 * @return
 	 */
-	private CodeRepresentation addChild(CodeRepresentation representation) {
+	protected CodeRepresentation addChild(CodeRepresentation representation) {
 		children.add(representation);
 		return representation;
 	}
@@ -141,7 +141,7 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 	}
 	
 	public CodeRepresentation inIf(IfStmt n) {
-		return addChild(new IfRepresentation(this));
+		return addChild(new IfRepresentation(this, n.getCondition()));
 	}
 
 	/**
