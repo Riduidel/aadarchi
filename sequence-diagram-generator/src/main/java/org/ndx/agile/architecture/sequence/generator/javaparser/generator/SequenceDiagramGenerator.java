@@ -103,7 +103,9 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 			// has an implementation.
 			// And if there is an implementation, add it recursively to diagram
 			MethodDeclarationRepresentation implementation = findImplementationOf(methodCallRepresentation);
-			implementation.accept(this);
+			if(implementation!=null) {
+				implementation.accept(this);
+			}
 		}
 	}
 
@@ -112,8 +114,13 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 		MethodDeclarationRepresentation representation = null;
 		for (CodeElement code : component.getCode()) {
 			representation = callGraphModel.getClassFor(code.getType()).getMethodFor(methodCallRepresentation);
-			if (!representation.getChildren().isEmpty()) {
-				break;
+			// We may encounter null case
+			// Typically when the method we're looking for is a private method in a class, and we're looking at the interface
+			// This will be null.
+			if(representation!=null) {
+				if (!representation.getChildren().isEmpty()) {
+					break;
+				}
 			}
 		}
 		return representation;
