@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 import org.ndx.agile.architecture.sequence.generator.javaparser.generator.SequenceDiagramGenerator;
 import org.ndx.agile.architecture.sequence.generator.javaparser.visitor.JavaParserVisitorForBuildingCallGraph;
 
@@ -81,7 +81,7 @@ public class CallGraphModel {
 			.map(code -> namesToClasses.get(code))
 			.forEach(representation -> 
 				representation.accept( new SequenceDiagramGenerator(
-						new File(destination, component.getCanonicalName().substring(1).replace('.', '.')),
+						new File(destination, StructurizrUtils.getCanonicalPath(component).substring(1).replace('.', '.')),
 						classesToComponents,
 						this))
 					);

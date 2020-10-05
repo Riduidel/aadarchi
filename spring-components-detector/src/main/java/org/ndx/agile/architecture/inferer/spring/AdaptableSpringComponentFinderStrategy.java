@@ -1,8 +1,6 @@
 package org.ndx.agile.architecture.inferer.spring;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,13 +10,11 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
+
 import com.structurizr.analysis.AbstractComponentFinderStrategy;
 import com.structurizr.analysis.AbstractSpringComponentFinderStrategy;
-import com.structurizr.analysis.DuplicateComponentStrategy;
-import com.structurizr.analysis.FirstImplementationOfInterfaceSupportingTypesStrategy;
 import com.structurizr.analysis.IgnoreDuplicateComponentStrategy;
-import com.structurizr.analysis.ReferencedTypesSupportingTypesStrategy;
-import com.structurizr.analysis.SpringRepositoryComponentFinderStrategy;
 import com.structurizr.analysis.SupportingTypesStrategy;
 import com.structurizr.model.CodeElement;
 import com.structurizr.model.CodeElementHack;
@@ -93,7 +89,7 @@ public class AdaptableSpringComponentFinderStrategy extends AbstractSpringCompon
 				componentFinderStrategies.add(newInstance);
 			} catch (Exception e) {
 				logger.log(Level.WARNING, 
-						String.format("Unable to create instance ofs %s. Maybe your Spring version is not compatible ...", strategyClass.getCanonicalName()),
+						String.format("Unable to create instance ofs %s. Maybe your Spring version is not compatible ...", strategyClass.getName()),
 						e);
 			}
         }

@@ -22,7 +22,7 @@ public class SimpleOutputBuilder implements OutputBuilder {
 		return new File(enhancementsBase,
 				// Yup, we use hex values for priority, to have less characters
 				String.format("%s/"+SECTION_PATTERN+"/_%08x-%s.%s", 
-					element.getCanonicalName(),
+					StructurizrUtils.getCanonicalPath(element),
 					section.index(), section.name(),
 					enhancer.priority(), enhancer.getClass().getSimpleName(), format
 					)
@@ -34,7 +34,7 @@ public class SimpleOutputBuilder implements OutputBuilder {
 		return new File(enhancementsBase,
 				// Yup, we use hex values for priority, to have less characters
 				String.format("%s/"+SECTION_PATTERN, 
-					element.getCanonicalName(),
+					StructurizrUtils.getCanonicalPath(element),
 					section.index(), section.name()
 					)
 				);
