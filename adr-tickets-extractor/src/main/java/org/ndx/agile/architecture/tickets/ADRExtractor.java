@@ -1,15 +1,12 @@
 package org.ndx.agile.architecture.tickets;
 
-import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -20,17 +17,18 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.enhancers.tickets.Ticket;
 import org.ndx.agile.architecture.base.enhancers.tickets.TicketStatus;
 import org.ndx.agile.architecture.base.enhancers.tickets.TicketsHandler;
 
 import com.structurizr.model.Element;
+import com.structurizr.model.StaticStructureElement;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -57,8 +55,8 @@ public class ADRExtractor extends ModelElementAdapter implements Enhancer {
 		
 	}
 	
-	public static final String AGILE_ARCHITECTURE_TICKETS_ADR_LABEL = "agile.architecture.tickets.adr.label";
-	public static final String AGILE_ARCHITECTURE_TICKETS_PROJECT = "agile.architecture.tickets.project";
+	public static final String AGILE_ARCHITECTURE_TICKETS_ADR_LABEL = ModelElementKeys.PREFIX+"tickets.adr.label";
+	public static final String AGILE_ARCHITECTURE_TICKETS_PROJECT = ModelElementKeys.PREFIX+"tickets.project";
 	@Inject
 	@ConfigProperty(name = "force", defaultValue="false")
 	boolean force;
@@ -135,7 +133,7 @@ public class ADRExtractor extends ModelElementAdapter implements Enhancer {
 	}
 
 	@Override
-	protected void processElement(Element element, OutputBuilder builder) {
+	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
 		if (element.getProperties().containsKey(AGILE_ARCHITECTURE_TICKETS_PROJECT)) {
 			String ticketsProject = element.getProperties().get(AGILE_ARCHITECTURE_TICKETS_PROJECT);
 			Optional<TicketsHandler> usableHandler = ticketsHandlers.stream()

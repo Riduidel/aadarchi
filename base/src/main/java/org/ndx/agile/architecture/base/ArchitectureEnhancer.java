@@ -2,7 +2,6 @@ package org.ndx.agile.architecture.base;
 
 import java.io.File;
 import java.util.Comparator;
-import java.util.concurrent.ForkJoinPool;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,6 +12,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.UsesComponent;
@@ -23,8 +23,6 @@ import com.structurizr.model.Model;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
-
-import jdk.jfr.Description;
 
 /**
  * Invokes all {@link ModelEnhancer} and {@link ViewEnhancer} on the produced architecture description.
@@ -37,7 +35,7 @@ public class ArchitectureEnhancer implements OutputBuilder {
 	public static final String SECTION_PATTERN = "%02d-%s";
 	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;
 	@Inject Logger logger;
-	@Inject @ConfigProperty(name="agile.architecture.enhancements") File enhancementsBase;
+	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
 
 	public void enhance(Workspace workspace) {
 		logger.info(() -> String.format("Enhancers applied to this architecture are\n%s",  

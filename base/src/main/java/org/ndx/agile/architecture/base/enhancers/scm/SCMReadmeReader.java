@@ -21,6 +21,7 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import com.structurizr.annotation.Component;
 import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.Element;
+import com.structurizr.model.StaticStructureElement;
 
 import nl.jworks.markdown_to_asciidoc.Converter;
 
@@ -44,7 +45,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 	}
 
 	@Override
-	protected void processElement(Element element, OutputBuilder builder) {
+	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
 		writeReadmeFor(element, builder);
 		
 	}

@@ -6,9 +6,9 @@ import org.ndx.agile.architecture.base.OutputBuilder;
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
-import com.structurizr.model.Element;
 import com.structurizr.model.Model;
 import com.structurizr.model.SoftwareSystem;
+import com.structurizr.model.StaticStructureElement;
 
 /** An adapter redirecting all model element processing to the same method */
 public abstract class ModelElementAdapter implements ModelEnhancer {
@@ -18,7 +18,7 @@ public abstract class ModelElementAdapter implements ModelEnhancer {
 	 * @param element element we want to enhance
 	 * @param builder output builder to write data
 	 */
-	protected void processElement(Element element, OutputBuilder builder) {	}
+	protected void processElement(StaticStructureElement element, OutputBuilder builder) {	}
 
 	@Override
 	public boolean isParallel() {

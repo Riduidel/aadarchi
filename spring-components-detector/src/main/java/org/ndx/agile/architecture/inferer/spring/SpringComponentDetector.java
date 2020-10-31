@@ -12,9 +12,6 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
 import com.structurizr.analysis.ComponentFinder;
 import com.structurizr.analysis.FirstImplementationOfInterfaceSupportingTypesStrategy;
-import com.structurizr.analysis.ReferencedTypesInSamePackageSupportingTypesStrategy;
-import com.structurizr.analysis.ReferencedTypesSupportingTypesStrategy;
-import com.structurizr.analysis.SpringComponentFinderStrategy;
 import com.structurizr.model.Container;
 
 @ApplicationScoped

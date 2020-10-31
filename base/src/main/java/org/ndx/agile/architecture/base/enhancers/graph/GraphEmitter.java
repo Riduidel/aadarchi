@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
@@ -14,6 +13,7 @@ import javax.inject.Inject;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.ViewEnhancer;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.Component;
@@ -35,16 +35,16 @@ import com.structurizr.view.ViewSet;
 public class GraphEmitter implements ViewEnhancer {
 	@Inject Logger logger;
 	@Inject 
-	@ConfigProperty(name = "agile.architecture.diagrams", defaultValue = "target/structurizr/architecture")
+	@ConfigProperty(name = ModelElementKeys.AGILE_ARCHITECTURE_DIAGRAMS_PATH, defaultValue = "target/structurizr/architecture")
 	File destination;
 	@Inject @ConfigProperty(name = "force", defaultValue = "false") boolean force;
 
 	@Inject 
-	@ConfigProperty(name = "agile.architecture.diagrams.layout", defaultValue = "LAYOUT_WITH_LEGEND")
+	@ConfigProperty(name = ModelElementKeys.PREFIX+"diagrams.layout", defaultValue = "LAYOUT_WITH_LEGEND")
 	String layoutMode;
 
 	@Inject 
-	@ConfigProperty(name = "agile.architecture.diagrams.plantuml.pencils", defaultValue = "https://github.com/RicardoNiepel/C4-PlantUML")
+	@ConfigProperty(name = ModelElementKeys.PREFIX+"diagrams.plantuml.pencils", defaultValue = "https://github.com/RicardoNiepel/C4-PlantUML")
 	String plantumlPencils;
 	
 	@Override

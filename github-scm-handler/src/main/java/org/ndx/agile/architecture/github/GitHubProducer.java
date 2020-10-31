@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.kohsuke.github.GitHub;

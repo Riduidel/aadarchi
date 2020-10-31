@@ -19,6 +19,7 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import com.structurizr.annotation.Component;
 import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.Element;
+import com.structurizr.model.StaticStructureElement;
 
 /**
  * Generate a link to folder containing readme (because it's where the code is)
@@ -40,7 +41,7 @@ public class SCMLinkGenerator extends ModelElementAdapter {
 	}
 
 	@Override
-	protected void processElement(Element element, OutputBuilder builder) {
+	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
 		writeLinkFor(element, builder);
 		
 	}

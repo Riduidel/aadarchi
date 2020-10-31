@@ -1,8 +1,6 @@
 package org.ndx.agile.architecture.inferer.spring;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,13 +10,11 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+
 import com.structurizr.analysis.AbstractComponentFinderStrategy;
 import com.structurizr.analysis.AbstractSpringComponentFinderStrategy;
-import com.structurizr.analysis.DuplicateComponentStrategy;
-import com.structurizr.analysis.FirstImplementationOfInterfaceSupportingTypesStrategy;
 import com.structurizr.analysis.IgnoreDuplicateComponentStrategy;
-import com.structurizr.analysis.ReferencedTypesSupportingTypesStrategy;
-import com.structurizr.analysis.SpringRepositoryComponentFinderStrategy;
 import com.structurizr.analysis.SupportingTypesStrategy;
 import com.structurizr.model.CodeElement;
 import com.structurizr.model.CodeElementHack;
@@ -28,7 +24,7 @@ import com.structurizr.model.Component;
 public class AdaptableSpringComponentFinderStrategy extends AbstractSpringComponentFinderStrategy {
 	private static final Logger logger = Logger.getLogger(AdaptableSpringComponentFinderStrategy.class.getName());
 
-	public static final String SPRING_COMPONENTS_OPTIONS_FAVOR_INTERFACE = "agile.architecture.spring.options.favor.interface";
+	public static final String SPRING_COMPONENTS_OPTIONS_FAVOR_INTERFACE = ModelElementKeys.PREFIX+"spring.options.favor.interface";
 
 	/**
 	 * A map linkin an annotation full class name to the strategy used to detect it.

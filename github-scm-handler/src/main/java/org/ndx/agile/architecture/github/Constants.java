@@ -1,8 +1,10 @@
 package org.ndx.agile.architecture.github;
 
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+
 public interface Constants {
 
-	String CONFIG_GITHUB_TOKEN = "agile.architecture.github.token";
+	String CONFIG_GITHUB_TOKEN = ModelElementKeys.PREFIX+"github.token";
 	String GITHUB_DOMAIN = "github.com";
 	static boolean isGitHubProject(String project) {
 		return project.contains(GITHUB_DOMAIN);
