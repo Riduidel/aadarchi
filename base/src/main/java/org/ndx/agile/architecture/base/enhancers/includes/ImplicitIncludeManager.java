@@ -9,9 +9,10 @@ import javax.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
-import org.ndx.agile.architecture.base.ArchitectureEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
+import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 
 import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
@@ -59,8 +60,8 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 	}
 
 	private void generateLinkFor(AgileArchitectureSection section, Element element, OutputBuilder builder) {
-		String sectionFolder = String.format(ArchitectureEnhancer.SECTION_PATTERN, section.index(), section.name());
-		String elementName = String.format("%s.adoc", element.getCanonicalName().replace('/', '_'));
+		String sectionFolder = String.format(SimpleOutputBuilder.SECTION_PATTERN, section.index(), section.name());
+		String elementName = String.format("%s.adoc", StructurizrUtils.getCanonicalPath(element).replace('/', '_'));
 		File potentialFile = new File(new File(sourceDir,sectionFolder), elementName);
 		if(potentialFile.exists()) {
 			File targetFile = builder.outputFor(section, element, this, "adoc");

@@ -89,7 +89,7 @@ public class AdaptableSpringComponentFinderStrategy extends AbstractSpringCompon
 				componentFinderStrategies.add(newInstance);
 			} catch (Exception e) {
 				logger.log(Level.WARNING, 
-						String.format("Unable to create instance ofs %s. Maybe your Spring version is not compatible ...", strategyClass.getCanonicalName()),
+						String.format("Unable to create instance ofs %s. Maybe your Spring version is not compatible ...", strategyClass.getName()),
 						e);
 			}
         }

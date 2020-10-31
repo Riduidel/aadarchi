@@ -17,6 +17,7 @@ import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 
 import com.structurizr.annotation.Component;
 import com.structurizr.annotation.UsesComponent;
@@ -68,7 +69,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 			} else {
 				logger.warning(String.format("We have this set of handlers\n%s\nin which we couldn't find one for element %s associated project %s",
 						scmHandlers.stream().map(handler -> handler.toString()).collect(Collectors.joining()),
-						element.getCanonicalName(),
+						StructurizrUtils.getCanonicalPath(element),
 						elementProject
 						));
 			}
@@ -89,11 +90,11 @@ public class SCMReadmeReader extends ModelElementAdapter {
 		if(file.isEmpty()) {
 			logger.severe(String.format("Couldn't find any Readme for element %s"
 					+ "(project is %s, path %s and readme should be %s)", 
-					element.getCanonicalName(), elementProject, elementPath, elementReadme));
+					StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
 		} else if(file.size()>1) {
 			logger.severe(String.format("There are more than one valid Readme for element %s"
 					+ "(project is %s, path %s and readme should be %s)", 
-					element.getCanonicalName(), elementProject, elementPath, elementReadme));
+					StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
 		} else {
 			SCMFile readme = file.iterator().next();
 			if(force) {
@@ -112,7 +113,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 			} catch (Throwable e) {
 				throw new CantExtractReadme(String.format(
 						"Can't extract readme of container %s using SCM project %s, path %s, readme %s", 
-						element.getCanonicalName(), elementProject, elementPath, elementReadme), 
+						StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme), 
 						e);
 			}
 		}

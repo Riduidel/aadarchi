@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -13,12 +14,12 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
-import com.structurizr.model.Element;
 import com.structurizr.model.Model;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.View;
@@ -31,11 +32,16 @@ import com.structurizr.view.ViewSet;
  */
 @com.structurizr.annotation.Component(technology = "Java/CDI")
 @ApplicationScoped
-public class ArchitectureEnhancer implements OutputBuilder {
-	public static final String SECTION_PATTERN = "%02d-%s";
+public class ArchitectureEnhancer {
 	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;
 	@Inject Logger logger;
 	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
+
+	private OutputBuilder outputBuilder;
+	
+	@PostConstruct public void loadOutputBuilder() {
+		outputBuilder = new SimpleOutputBuilder(enhancementsBase);
+	}
 
 	public void enhance(Workspace workspace) {
 		logger.info(() -> String.format("Enhancers applied to this architecture are\n%s",  
@@ -68,14 +74,14 @@ public class ArchitectureEnhancer implements OutputBuilder {
 	private void enhancerVisitWorkspace(Enhancer enhancer, Workspace workspace) {
 		withStopWatch(String.format("Running enhancement %s took %%s", enhancer.getClass().getName()),
 				() -> {
-					if(enhancer.startVisit(workspace, this)) {
+					if(enhancer.startVisit(workspace, outputBuilder)) {
 						if(enhancer instanceof ModelEnhancer) {
 							enhancerVisitModel((ModelEnhancer) enhancer, workspace.getModel());
 						}
 						if(enhancer instanceof ViewEnhancer) {
 							enhancerVisitViews((ViewEnhancer) enhancer, workspace.getViews());
 						}
-						enhancer.endVisit(workspace, this);
+						enhancer.endVisit(workspace, outputBuilder);
 					}
 				}
 			);
@@ -88,8 +94,8 @@ public class ArchitectureEnhancer implements OutputBuilder {
 			if(enhancer.isParallel())
 				views = views.parallel();
 			views.filter(s -> enhancer.startVisit(s))
-				.forEach(s -> enhancer.endVisit(s, this));
-			enhancer.endVisit(viewset, this);
+				.forEach(s -> enhancer.endVisit(s, outputBuilder));
+			enhancer.endVisit(viewset, outputBuilder);
 		}
 	}
 
@@ -100,8 +106,8 @@ public class ArchitectureEnhancer implements OutputBuilder {
 				systems = systems.parallel();
 			systems.filter(s -> enhancer.startVisit(s))
 				.peek(s -> enhancerVisitSystem(enhancer, s))
-				.forEach(s -> enhancer.endVisit(s, this));
-			enhancer.endVisit(model, this);
+				.forEach(s -> enhancer.endVisit(s, outputBuilder));
+			enhancer.endVisit(model, outputBuilder);
 		}
 	}
 
@@ -112,7 +118,7 @@ public class ArchitectureEnhancer implements OutputBuilder {
 			containers = containers.parallel();
 		containers.filter(c -> enhancer.startVisit(c))
 			.peek(c -> enhancerVisitContainer(enhancer, c))
-			.forEach(c -> enhancer.endVisit(c, this));
+			.forEach(c -> enhancer.endVisit(c, outputBuilder));
 	}
 
 
@@ -121,30 +127,7 @@ public class ArchitectureEnhancer implements OutputBuilder {
 		if(enhancer.isParallel())
 			systems = systems.parallel();
 		systems.filter(c -> enhancer.startVisit(c))
-			.forEach(c -> enhancer.endVisit(c, this));
+			.forEach(c -> enhancer.endVisit(c, outputBuilder));
 	}
 
-
-	@Override
-	public File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format) {
-		return new File(enhancementsBase,
-				// Yup, we use hex values for priority, to have less characters
-				String.format("%s/"+SECTION_PATTERN+"/_%08x-%s.%s", 
-					element.getCanonicalName(),
-					section.index(), section.name(),
-					enhancer.priority(), enhancer.getClass().getSimpleName(), format
-					)
-				);
-	}
-
-	@Override
-	public File outputFor(AgileArchitectureSection section, Element element) {
-		return new File(enhancementsBase,
-				// Yup, we use hex values for priority, to have less characters
-				String.format("%s/"+SECTION_PATTERN, 
-					element.getCanonicalName(),
-					section.index(), section.name()
-					)
-				);
-	}
 }

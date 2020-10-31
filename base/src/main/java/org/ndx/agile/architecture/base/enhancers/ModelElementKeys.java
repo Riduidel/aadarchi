@@ -1,5 +1,18 @@
 package org.ndx.agile.architecture.base.enhancers;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.pivovarit.function.ThrowingFunction;
+import com.structurizr.model.Element;
+
 /**
  * This interface only contains a list of strings, each one providing some additionnal content 
  * for elements. Defining one of them could trigger additionnal enhancements, provided the 
@@ -61,4 +74,19 @@ public interface ModelElementKeys {
 	 * It should be aligned with what asciidoc wants, so don't play too much with that property :-D
 	 */
 	public String AGILE_ARCHITECTURE_DIAGRAMS_PATH = PREFIX+"diagrams";
+
+	static List<File> getJavaSourcesFor(Element container) {
+		return Stream.of(container.getProperties().get(ModelElementKeys.JAVA_SOURCES).split(";"))
+			.map(ThrowingFunction.unchecked(ModelElementKeys::fileAsUrltoFile))
+			.filter(file -> file.exists())
+			.collect(Collectors.toList());
+	}
+	
+	static File fileAsUrltoFile(String fileUrl) throws MalformedURLException, URISyntaxException {
+		return Paths.get(new URL(fileUrl).toURI()).toFile();
+	}
+
+	static Path fileAsUrltoPath(String fileUrl) throws MalformedURLException, URISyntaxException {
+		return Paths.get(new URL(fileUrl).toURI());
+	}
 }
