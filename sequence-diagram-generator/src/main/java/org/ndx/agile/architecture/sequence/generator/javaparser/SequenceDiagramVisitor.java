@@ -111,32 +111,16 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	 */
 	private ProjectRoot createProjectRootFor(Container container) {
 		Set<Container> associatedContainers = getAssociatedContainersOf(container);
+		mapPathsToContainers(container, associatedContainers);
 		ProjectRoot projectRoot = null;
+		return new ProjectRootBuilder(pathsToContainers).build(container);
+	}
+	private void mapPathsToContainers(Container container, Set<Container> associatedContainers) {
 		for(Container associatedContainer : associatedContainers) {
 			for(String path : associatedContainer.getProperties().get(ModelElementKeys.JAVA_SOURCES).split(";")) {
 				pathsToContainers.put(path, container);
 			}
 		}
-		// Now we have a big map of paths as string. Let's inject them
-		for(String path : pathsToContainers.keySet()) {
-			try {
-				if(projectRoot==null) {
-					projectRoot = new SymbolSolverCollectionStrategy(
-							new ParserConfiguration()
-								.setSymbolResolver(new JavaSymbolSolver(
-										new CombinedTypeSolver(
-												new JavaParserTypeSolver(ModelElementKeys.fileAsUrltoPath(path)),
-												new ReflectionTypeSolver()
-												)))
-							).collect(ModelElementKeys.fileAsUrltoPath(path));
-				} else {
-					projectRoot.addSourceRoot(ModelElementKeys.fileAsUrltoPath(path));
-				}
-			} catch(Exception e) {
-				logger.log(Level.SEVERE, String.format("There were something unusual while parsing source folder %s to add it to container %s", path, container.getCanonicalName()), e);
-			}
-		}
-		return projectRoot;
 	}
 	private Set<Container> getAssociatedContainersOf(Container container) {
 		String containerNames = container.getProperties().get(SequenceGenerator.GENERATES_WITH);
@@ -216,7 +200,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		// Now they're parsed, let's try to map them to public classes or interfaces contained
 		for(CompilationUnit cu : allParsed) {
 			// Source files for which no primary type exists are ignored (they're useless in our case)
-			cu.getPrimaryTypeName().ifPresent(name -> namesToSources.put(cu.getPrimaryType().get().getFullyQualifiedName().get(), cu));
+			cu.getPrimaryType().ifPresent(name -> namesToSources.put(cu.getPrimaryType().get().getFullyQualifiedName().get(), cu));
 		}
 		return namesToSources;
 	}
