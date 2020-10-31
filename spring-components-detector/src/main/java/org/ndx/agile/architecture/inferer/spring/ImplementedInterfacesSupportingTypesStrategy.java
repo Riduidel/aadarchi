@@ -7,9 +7,7 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.structurizr.analysis.FirstImplementationOfInterfaceSupportingTypesStrategy;
 import com.structurizr.analysis.SupportingTypesStrategy;
-import com.structurizr.analysis.TypeUtils;
 import com.structurizr.model.Component;
 
 /**

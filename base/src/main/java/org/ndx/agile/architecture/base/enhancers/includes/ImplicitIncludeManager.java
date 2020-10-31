@@ -16,6 +16,7 @@ import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 
 import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
+import com.structurizr.model.StaticStructureElement;
 
 /**
  * Enhancer allowing includes to be auto-generated for each element having interesting content.
@@ -52,7 +53,7 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 	}
 
 	@Override
-	protected void processElement(Element element, OutputBuilder builder) {
+	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
 		for(AgileArchitectureSection section : AgileArchitectureSection.values()) {
 			generateLinkFor(section, element, builder);
 		}

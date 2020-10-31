@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.ndx.agile.architecture.base.utils.StructurizrUtils;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
 import com.structurizr.analysis.AbstractComponentFinderStrategy;
 import com.structurizr.analysis.AbstractSpringComponentFinderStrategy;
@@ -24,7 +24,7 @@ import com.structurizr.model.Component;
 public class AdaptableSpringComponentFinderStrategy extends AbstractSpringComponentFinderStrategy {
 	private static final Logger logger = Logger.getLogger(AdaptableSpringComponentFinderStrategy.class.getName());
 
-	public static final String SPRING_COMPONENTS_OPTIONS_FAVOR_INTERFACE = "agile.architecture.spring.options.favor.interface";
+	public static final String SPRING_COMPONENTS_OPTIONS_FAVOR_INTERFACE = ModelElementKeys.PREFIX+"spring.options.favor.interface";
 
 	/**
 	 * A map linkin an annotation full class name to the strategy used to detect it.
