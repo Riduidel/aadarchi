@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.TreeItem;

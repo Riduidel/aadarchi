@@ -12,9 +12,11 @@ import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 
 import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
+import com.structurizr.model.StaticStructureElement;
 
 /**
  * Enhancer allowing includes to be auto-generated for each element having interesting content.
@@ -51,7 +53,7 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 	}
 
 	@Override
-	protected void processElement(Element element, OutputBuilder builder) {
+	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
 		for(AgileArchitectureSection section : AgileArchitectureSection.values()) {
 			generateLinkFor(section, element, builder);
 		}
@@ -59,7 +61,7 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 
 	private void generateLinkFor(AgileArchitectureSection section, Element element, OutputBuilder builder) {
 		String sectionFolder = String.format(SimpleOutputBuilder.SECTION_PATTERN, section.index(), section.name());
-		String elementName = String.format("%s.adoc", element.getCanonicalName().replace('/', '_'));
+		String elementName = String.format("%s.adoc", StructurizrUtils.getCanonicalPath(element).replace('/', '_'));
 		File potentialFile = new File(new File(sourceDir,sectionFolder), elementName);
 		if(potentialFile.exists()) {
 			File targetFile = builder.outputFor(section, element, this, "adoc");

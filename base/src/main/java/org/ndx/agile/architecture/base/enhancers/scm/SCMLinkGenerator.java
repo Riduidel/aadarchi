@@ -15,10 +15,12 @@ import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 
 import com.structurizr.annotation.Component;
 import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.Element;
+import com.structurizr.model.StaticStructureElement;
 
 /**
  * Generate a link to folder containing readme (because it's where the code is)
@@ -40,7 +42,7 @@ public class SCMLinkGenerator extends ModelElementAdapter {
 	}
 
 	@Override
-	protected void processElement(Element element, OutputBuilder builder) {
+	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
 		writeLinkFor(element, builder);
 		
 	}
@@ -69,13 +71,13 @@ public class SCMLinkGenerator extends ModelElementAdapter {
 							"UTF-8");
 				} catch (IOException e) {
 					throw new CantWriteLink(String.format("Can't write link for element %s which is linked to %s/%s", 
-							element.getCanonicalName(), elementProject, elementPath), 
+							StructurizrUtils.getCanonicalPath(element), elementProject, elementPath), 
 							e);
 				}				
 			} else {
 				logger.warning(String.format("We have this set of handlers\n%s\nin which we couldn't find one for element %s associated project %s",
 						scmHandlers.stream().map(handler -> handler.toString()).collect(Collectors.joining()),
-						element.getCanonicalName(),
+						StructurizrUtils.getCanonicalPath(element),
 						elementProject
 						));
 			}

@@ -2,7 +2,6 @@ package org.ndx.agile.architecture.sequence.generator.javaparser.generator;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,6 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.GroupRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodCallRepresentation;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.MethodDeclarationRepresentation;
@@ -104,7 +104,7 @@ public class SequenceDiagramConstructionKit {
 		if(component.getProperties().containsKey(SEQUENCE_KEY)) {
 			return component.getProperties().get(SEQUENCE_KEY);
 		} else {
-			return component.getCanonicalName().substring(1)
+			return StructurizrUtils.getCanonicalPath(component).substring(1)
 					.replace('/', '_')
 					.replace('-', '_');
 		}

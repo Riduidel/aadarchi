@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import org.junit.jupiter.api.Test;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 import org.ndx.agile.architecture.sequence.generator.SequenceGenerator;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
 import org.ndx.agile.architecture.sequence.generator.javaparser.generator.SequenceDiagramGenerator;
@@ -27,7 +28,7 @@ class SequenceDiagramVisitorTest {
 		Model model = workspace.getModel();
 		SoftwareSystem system = model.addSoftwareSystem("agile-architecture-documentation-system");
 		Container sequenceGenerator = system.addContainer("sequence-generator", "generator", "Java/Maven");
-		sequenceGenerator.addProperty(SequenceGenerator.GENERATES_WITH, sequenceGenerator.getCanonicalName());
+		sequenceGenerator.addProperty(SequenceGenerator.GENERATES_WITH, StructurizrUtils.getCanonicalPath(sequenceGenerator));
 		sequenceGenerator.addProperty(ModelElementKeys.JAVA_SOURCES, new File("src/main/java").toURI().toString());
 		Component visitor = sequenceGenerator.addComponent("SequenceDiagramVisitor", "visitor building the sequence");
 		visitor.addSupportingType(SequenceDiagramVisitor.class.getName());

@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -36,6 +38,7 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Element;
+import com.structurizr.model.InteractionStyle;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.model.StaticStructureElement;
 
@@ -86,6 +89,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			loadAllSubElements(mavenProject)
 				.forEach(module -> linkToDependenciesOf(module));
 		}
+
 
 		/**
 		 * When needed, add all dependency links between maven modules
@@ -365,9 +369,23 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		decorateScmUrl(element, mavenProject);
 		decorateIssueManager(element, mavenProject);
 		decorateJavaSource(element, mavenProject);
+		decorateMavenProperties(element, mavenProject);
 		Optional.ofNullable(mavenProject.getDescription())
-		.stream()
-		.forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
+			.stream()
+			.forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
+	}
+
+	/**
+	 * Extract all properties having the good prefix from maven pom and copy them into model element properties.
+	 * THis copy may overwrite properties defined elsewhen
+	 * @param element element to copy properties into
+	 * @param mavenProject maven project to extract properties from
+	 */
+	private void decorateMavenProperties(Element element, MavenProject mavenProject) {
+		mavenProject.getProperties().entrySet().stream()
+			.map(entry -> Map.entry(entry.getKey().toString(), entry.getValue().toString()))
+			.filter(entry -> entry.getKey().startsWith(ModelElementKeys.PREFIX))
+			.forEach(entry -> element.addProperty(entry.getKey(), entry.getValue()));
 	}
 
 	private void decorateJavaSource(Element element, MavenProject mavenProject) {

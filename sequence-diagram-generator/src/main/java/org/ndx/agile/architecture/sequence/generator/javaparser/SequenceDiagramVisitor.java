@@ -26,6 +26,7 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 import org.ndx.agile.architecture.sequence.generator.SequenceGenerator;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
 
@@ -90,7 +91,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		// First make sure we have all container listed
 		allContainers = model.getSoftwareSystems().stream()
 			.flatMap(systems -> systems.getContainers().stream())
-			.collect(Collectors.toMap(container -> container.getCanonicalName(), Function.identity()));
+			.collect(Collectors.toMap(container -> StructurizrUtils.getCanonicalPath(container), Function.identity()));
 		// And all components code elements linked to their associated components
 		codeToComponents = model.getSoftwareSystems().stream()
 				.flatMap(systems -> systems.getContainers().stream())
@@ -111,16 +112,32 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	 */
 	private ProjectRoot createProjectRootFor(Container container) {
 		Set<Container> associatedContainers = getAssociatedContainersOf(container);
-		mapPathsToContainers(container, associatedContainers);
 		ProjectRoot projectRoot = null;
-		return new ProjectRootBuilder(pathsToContainers).build(container);
-	}
-	private void mapPathsToContainers(Container container, Set<Container> associatedContainers) {
 		for(Container associatedContainer : associatedContainers) {
 			for(String path : associatedContainer.getProperties().get(ModelElementKeys.JAVA_SOURCES).split(";")) {
 				pathsToContainers.put(path, container);
 			}
 		}
+		// Now we have a big map of paths as string. Let's inject them
+		for(String path : pathsToContainers.keySet()) {
+			try {
+				if(projectRoot==null) {
+					projectRoot = new SymbolSolverCollectionStrategy(
+							new ParserConfiguration()
+								.setSymbolResolver(new JavaSymbolSolver(
+										new CombinedTypeSolver(
+												new JavaParserTypeSolver(ModelElementKeys.fileAsUrltoPath(path)),
+												new ReflectionTypeSolver()
+												)))
+							).collect(ModelElementKeys.fileAsUrltoPath(path));
+				} else {
+					projectRoot.addSourceRoot(ModelElementKeys.fileAsUrltoPath(path));
+				}
+			} catch(Exception e) {
+				logger.log(Level.SEVERE, String.format("There were something unusual while parsing source folder %s to add it to container %s", path, StructurizrUtils.getCanonicalPath(container)), e);
+			}
+		}
+		return projectRoot;
 	}
 	private Set<Container> getAssociatedContainersOf(Container container) {
 		String containerNames = container.getProperties().get(SequenceGenerator.GENERATES_WITH);
@@ -152,7 +169,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 						);
 				return true;
 			} else {
-				logger.log(Level.SEVERE, String.format("Unable to generate sequence diagrams since container %s has no associated sources", container.getCanonicalName()));
+				logger.log(Level.SEVERE, String.format("Unable to generate sequence diagrams since container %s has no associated sources", StructurizrUtils.getCanonicalPath(container)));
 			}
 		}
 		// In any missing info case, return false
@@ -193,14 +210,14 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 			} catch(IOException e) {
 				Container associated = pathsToContainers.get(sourceRoot.getRoot().toString());
 				logger.log(Level.SEVERE, String.format("Unable to parse source root %s (associated to container %s)", 
-						sourceRoot.getRoot(), associated.getCanonicalName()), e);
+						sourceRoot.getRoot(), StructurizrUtils.getCanonicalPath(associated)), e);
 			}
 		}
 		Map<String, CompilationUnit> namesToSources = new TreeMap<String, CompilationUnit>();
 		// Now they're parsed, let's try to map them to public classes or interfaces contained
 		for(CompilationUnit cu : allParsed) {
 			// Source files for which no primary type exists are ignored (they're useless in our case)
-			cu.getPrimaryType().ifPresent(name -> namesToSources.put(cu.getPrimaryType().get().getFullyQualifiedName().get(), cu));
+			cu.getPrimaryTypeName().ifPresent(name -> namesToSources.put(cu.getPrimaryType().get().getFullyQualifiedName().get(), cu));
 		}
 		return namesToSources;
 	}
@@ -256,7 +273,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 					classesOfComponent.addLast(clazz);
 				}
 			} catch (ClassNotFoundException e) {
-				logger.log(Level.WARNING, String.format("Unable to load code element %s of component %s", element, component.getCanonicalName()), e);
+				logger.log(Level.WARNING, String.format("Unable to load code element %s of component %s", element, StructurizrUtils.getCanonicalPath(component)), e);
 			}
 		}
 		// Now get all declared methods of first class, cause that's the ones we want!

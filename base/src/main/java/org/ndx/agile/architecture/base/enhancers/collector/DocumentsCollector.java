@@ -19,6 +19,8 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;
@@ -39,7 +41,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	/**
 	 * Injecting enhancements base to have a folder where to put our documents.
 	 */
-	@Inject @ConfigProperty(name="agile.architecture.enhancements") File enhancementsBase;
+	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
 	/**
 	 * Map that contains all elements that should be automagically included.
 	 * First level keys are the enums.
@@ -63,7 +65,7 @@ public class DocumentsCollector implements ModelEnhancer {
 		for(AgileArchitectureSection section : AgileArchitectureSection.values()) {
 			hierarchy.put(section, 
 					new TreeMap<Element, 
-						Set<File>>(Comparator.comparing(element -> element.getCanonicalName())));
+						Set<File>>(Comparator.comparing(element -> StructurizrUtils.getCanonicalPath(element))));
 		}
 		return true;
 	}
@@ -113,7 +115,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	}
 
 	String generateElementContent(File target, Element element, Set<File> generated) {
-		int deepness = StringUtils.countMatches(element.getCanonicalName(), '/');
+		int deepness = StringUtils.countMatches(StructurizrUtils.getCanonicalPath(element), '/');
 		return String.format("%s\n%s\n",
 			elementAsTitle(deepness, element),
 			generated.stream()
