@@ -30,11 +30,11 @@ class SequenceDiagramVisitorTest {
 		Container sequenceGenerator = system.addContainer("sequence-generator", "generator", "Java/Maven");
 		sequenceGenerator.addProperty(SequenceGenerator.GENERATES_WITH, StructurizrUtils.getCanonicalPath(sequenceGenerator));
 		sequenceGenerator.addProperty(ModelElementKeys.JAVA_SOURCES, new File("src/main/java").toURI().toString());
-		Component visitor = sequenceGenerator.addComponent("SequenceDiagramVisitor", "visitor building the sequence");
+		Component visitor = sequenceGenerator.addComponent(SequenceDiagramVisitor.class.getSimpleName(), "visitor building the sequence");
 		visitor.addSupportingType(SequenceDiagramVisitor.class.getName());
-		Component callGraphModel = sequenceGenerator.addComponent("CallGraphModel", "navigator accumulating data");
+		Component callGraphModel = sequenceGenerator.addComponent(CallGraphModel.class.getSimpleName(), "navigator accumulating data");
 		callGraphModel.addSupportingType(CallGraphModel.class.getName());
-		Component generator = sequenceGenerator.addComponent("SequenceDiagramGenerator", "Component producing the sequence diagram");
+		Component generator = sequenceGenerator.addComponent(SequenceDiagramGenerator.class.getSimpleName(), "Component producing the sequence diagram");
 		generator.addSupportingType(SequenceDiagramGenerator.class.getName());
 		// Let's build a sequence diagram visitor
 		SequenceDiagramVisitor tested = new SequenceDiagramVisitor();
