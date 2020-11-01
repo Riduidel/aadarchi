@@ -40,7 +40,7 @@ public class ProjectRootBuilder {
 		
 		Path initialPath = paths.get(0);
 		CombinedTypeSolver typeSolver = new CombinedTypeSolver(
-//					new JavaParserTypeSolver(ModelElementKeys.fileAsUrltoPath(initialPath)),
+					new JavaParserTypeSolver(initialPath)
 //					new ReflectionTypeSolver()
 				);
 		for(Path p : paths) {
