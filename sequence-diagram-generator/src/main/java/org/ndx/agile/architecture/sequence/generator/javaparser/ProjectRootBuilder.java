@@ -26,7 +26,7 @@ public class ProjectRootBuilder {
 	private List<String> files;
 
 	public ProjectRootBuilder(Map<String, Container> pathsToContainers) {
-		this.files = new ArrayList(pathsToContainers.keySet());
+		this.files = new ArrayList<>(pathsToContainers.keySet());
 	}
 
 	public ProjectRoot build(Container container) {

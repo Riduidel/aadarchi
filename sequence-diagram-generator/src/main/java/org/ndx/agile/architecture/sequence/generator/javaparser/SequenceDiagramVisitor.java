@@ -111,33 +111,23 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	 * @return
 	 */
 	private ProjectRoot createProjectRootFor(Container container) {
-		Set<Container> associatedContainers = getAssociatedContainersOf(container);
-		ProjectRoot projectRoot = null;
+		mapPathsToContainers(getAssociatedContainersOf(container));
+		ProjectRoot projectRoot = new ProjectRootBuilder(pathsToContainers)
+				.build(container);
+		return projectRoot;
+	}
+	/**
+	 * From the associated containers, build the {@link #pathsToContainers} map and returns it
+	 * @param container
+	 * @return
+	 */
+	private Map<String, Container> mapPathsToContainers(Set<Container> associatedContainers) {
 		for(Container associatedContainer : associatedContainers) {
 			for(String path : associatedContainer.getProperties().get(ModelElementKeys.JAVA_SOURCES).split(";")) {
-				pathsToContainers.put(path, container);
+				pathsToContainers.put(path, associatedContainer);
 			}
 		}
-		// Now we have a big map of paths as string. Let's inject them
-		for(String path : pathsToContainers.keySet()) {
-			try {
-				if(projectRoot==null) {
-					projectRoot = new SymbolSolverCollectionStrategy(
-							new ParserConfiguration()
-								.setSymbolResolver(new JavaSymbolSolver(
-										new CombinedTypeSolver(
-												new JavaParserTypeSolver(ModelElementKeys.fileAsUrltoPath(path)),
-												new ReflectionTypeSolver()
-												)))
-							).collect(ModelElementKeys.fileAsUrltoPath(path));
-				} else {
-					projectRoot.addSourceRoot(ModelElementKeys.fileAsUrltoPath(path));
-				}
-			} catch(Exception e) {
-				logger.log(Level.SEVERE, String.format("There were something unusual while parsing source folder %s to add it to container %s", path, StructurizrUtils.getCanonicalPath(container)), e);
-			}
-		}
-		return projectRoot;
+		return pathsToContainers;
 	}
 	private Set<Container> getAssociatedContainersOf(Container container) {
 		String containerNames = container.getProperties().get(SequenceGenerator.GENERATES_WITH);
