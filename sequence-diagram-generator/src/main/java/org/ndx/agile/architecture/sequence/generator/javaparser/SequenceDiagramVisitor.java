@@ -134,8 +134,10 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		Set<Container> returned = new HashSet<Container>();
 		returned.add(container);
 		returned.addAll(Stream.of(containerNames.split(";"))
+			.filter(containerName -> allContainers.containsKey(containerNames))
 			.map(containerName -> allContainers.get(containerName))
 			// now we have a container
+			.filter(associatedContainer -> associatedContainer.getTechnology()!=null)
 			.filter(associatedContainer -> associatedContainer.getTechnology().toLowerCase().contains("java"))
 			.filter(associatedContainer -> associatedContainer.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES))
 			.collect(Collectors.toList()));
