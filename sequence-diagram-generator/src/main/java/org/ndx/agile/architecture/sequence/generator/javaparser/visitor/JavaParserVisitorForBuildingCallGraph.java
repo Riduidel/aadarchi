@@ -30,8 +30,13 @@ public class JavaParserVisitorForBuildingCallGraph extends GenericVisitorAdapter
 	}
 	
 	@Override
-	public CodeRepresentation visit(ObjectCreationExpr n, CodeRepresentation representation) {
-		return super.visit(n, representation.inObjectCreation(n));
+	public CodeRepresentation visit(ObjectCreationExpr objectCreation, CodeRepresentation representation) {
+		try {
+		return super.visit(objectCreation, representation.inObjectCreation(objectCreation));
+		} catch(RuntimeException e) {
+			logger.log(Level.SEVERE, String.format("Unable to resolve object creation %s due to exception \"%s\". We give up on that one.", objectCreation, e.getMessage()));
+			return super.visit(objectCreation, representation);
+		}
 	}
 	
 	@Override
