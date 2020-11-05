@@ -79,6 +79,7 @@ public class CallGraphModel {
 		component.getCode().stream()
 			.map(code -> code.getType())
 			.map(code -> namesToClasses.get(code))
+			.filter(representation -> representation!=null)
 			.forEach(representation -> 
 				representation.accept( new SequenceDiagramGenerator(
 						new File(destination, StructurizrUtils.getCanonicalPath(component).substring(1).replace('.', '.')),
