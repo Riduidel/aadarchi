@@ -207,10 +207,16 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		}
 		Map<String, CompilationUnit> namesToSources = new TreeMap<String, CompilationUnit>();
 		// Now they're parsed, let's try to map them to public classes or interfaces contained
-		for(CompilationUnit cu : allParsed) {
+		allParsed.stream().parallel().forEach(cu ->
 			// Source files for which no primary type exists are ignored (they're useless in our case)
-			cu.getPrimaryTypeName().ifPresent(name -> namesToSources.put(cu.getPrimaryType().get().getFullyQualifiedName().get(), cu));
-		}
+			cu.getPrimaryTypeName().ifPresent(name -> 
+				cu.getPrimaryType().ifPresent(primaryType ->
+					primaryType.getFullyQualifiedName().ifPresent(fullyQualifiedName ->
+						namesToSources.put(fullyQualifiedName, cu)
+					)
+				)
+			)
+		);
 		return namesToSources;
 	}
 	
