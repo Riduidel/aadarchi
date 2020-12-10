@@ -80,8 +80,6 @@
 				<groupId>nl.jworks.markdown_to_asciidoc</groupId>
 				<artifactId>markdown_to_asciidoc</artifactId>
 				<version>1.1</version>
-				<!-- This is just to overcome the fact that GitHub seems to be unable to connect to spring plugins-release maven repository -->
-				<optional>true</optional>
 			</dependency>
 			<dependency>
 				<groupId>javax.enterprise</groupId>
