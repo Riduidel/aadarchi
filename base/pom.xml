@@ -47,8 +47,8 @@
 			<version>3.9</version>
 		</dependency>
 		<dependency>
-			<groupId>nl.jworks.markdown_to_asciidoc</groupId>
-			<artifactId>markdown_to_asciidoc</artifactId>
+			<groupId>com.github.bodiam</groupId> <!-- Now using Jitpack!(source repo is https://github.com/bodiam/markdown-to-asciidoc) -->
+			<artifactId>markdown-to-asciidoc</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
 		<dependency>
