@@ -44,7 +44,7 @@ public class GraphEmitter implements ViewEnhancer {
 	String layoutMode;
 
 	@Inject 
-	@ConfigProperty(name = ModelElementKeys.PREFIX+"diagrams.plantuml.pencils", defaultValue = "https://github.com/RicardoNiepel/C4-PlantUML")
+	@ConfigProperty(name = ModelElementKeys.PREFIX+"diagrams.plantuml.pencils", defaultValue = "https://github.com/plantuml-stdlib/C4-PlantUML")
 	String plantumlPencils;
 	
 	@Override
