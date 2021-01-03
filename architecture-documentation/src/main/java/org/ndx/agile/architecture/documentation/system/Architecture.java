@@ -40,6 +40,7 @@ public class Architecture implements ArchitectureModelProvider {
 	 * @return
 	 */
 	public Workspace describeArchitecture() {
+		// tag::structurizr-example-context[]
 		Workspace workspace = new Workspace("agile-architecture-documentation-system", "This is the model of the agile architecture documentation system.");
 		Model model = workspace.getModel();
 
@@ -50,8 +51,10 @@ public class Architecture implements ArchitectureModelProvider {
 		agileArchitecture.addProperty(ADRExtractor.AGILE_ARCHITECTURE_TICKETS_ADR_LABEL, "decision");
 		architect.uses(agileArchitecture, "Writes");
 		stakeholder.uses(agileArchitecture, "Read");
+		// end::structurizr-example-context[]
 		/////////////////////////////////////////////////////////////////////////////////////////
 		
+		// tag::structurizr-example-containers[]
 		Container archetype = agileArchitecture.addContainer(CONTAINERS_ARCHETYPE, "Archetype generating a valid build", "maven archetype");
 		archetype.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("archetype/pom.xml"));
 		architect.uses(archetype, "Bootstrap a valid project");
@@ -62,14 +65,17 @@ public class Architecture implements ArchitectureModelProvider {
 		Container base = agileArchitecture.addContainer(CONTAINERS_BASE, "Architecture base", "Java executable");
 		base.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, ArchitectureModelProvider.class.getName());
 		base.addProperty(ModelElementKeys.SCM_PATH, base.getName());
+		// end::structurizr-example-containers[]
 		
+		// tag::structurizr-example-components[]
         ComponentFinder componentFinder = new ComponentFinder(
                 base,
+// Thanks to JPMS from Hell, this component finder no more works in Java 11 !
+//                new SourceCodeComponentFinderStrategy(new File("../base/src/main/java")),
                 ArchitectureModelProvider.class.getPackageName(),
-                new StructurizrAnnotationsComponentFinderStrategy(),
-                new SourceCodeComponentFinderStrategy(new File("../base/src/main/java"))
-                
+                new StructurizrAnnotationsComponentFinderStrategy()
         );
+		// end::structurizr-example-components[]
         if(getClass().getClassLoader()instanceof URLClassLoader) {
         	componentFinder.setUrlClassLoader((URLClassLoader) getClass().getClassLoader());
         }
@@ -123,6 +129,7 @@ public class Architecture implements ArchitectureModelProvider {
 		maven.uses(asciidoc, "Generates documentation as usable text in HTML/PDF/...");
 
 		/////////////////////////////////////////////////////////////////////////////////////////
+		// tag::structurizr-example-views[]
 		ViewSet views = workspace.getViews();
 		SystemContextView contextView = views.createSystemContextView(agileArchitecture, "SystemContext",
 				"Illustration of agile-architecture-documentation usage");
@@ -134,6 +141,7 @@ public class Architecture implements ArchitectureModelProvider {
 		
 		ComponentView agileArchitectureBaseComponents = views.createComponentView(base, "agile.architecture.base.components", "Agile architecture base components view");
 		agileArchitectureBaseComponents.addAllComponents();
+		// end::structurizr-example-views[]
 		
 //		Styles styles = views.getConfiguration().getStyles();
 //		styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");

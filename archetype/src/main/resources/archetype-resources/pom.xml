@@ -36,7 +36,8 @@
 		<version.asciidoctorj>2.4.0</version.asciidoctorj>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
 		<version.asciidoctorj.diagram>2.0.2</version.asciidoctorj.diagram>
-		<version.jruby>9.2.13.0</version.jruby>
+		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
+		<version.jruby>9.2.9.0</version.jruby>
 		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
 		<version.revealjs>4.0.2</version.revealjs>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-revealjs -->
