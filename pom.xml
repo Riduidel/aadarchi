@@ -15,7 +15,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<issues.url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</issues.url>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-client -->
-		<version.structurizr.client>1.6.3</version.structurizr.client>
+		<version.structurizr.client>1.7.0</version.structurizr.client>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-plantuml -->
 		<version.structurizr.plantuml>1.5.2</version.structurizr.plantuml>
 		<version.structurizr.analysis>1.3.5</version.structurizr.analysis>
