@@ -130,8 +130,6 @@
 							<groupId>org.asciidoctor</groupId>
 							<artifactId>asciidoctorj-diagram</artifactId>
 							<version>${version.asciidoctorj.diagram}</version>
-							<scope>system</scope>
-							<systemPath>${asciidoctorj-diagram.wrapper.jar}</systemPath>
 						</dependency>
 					</dependencies>
 					<configuration>
@@ -289,8 +287,6 @@
 								<groupId>org.asciidoctor</groupId>
 								<artifactId>asciidoctorj-diagram</artifactId>
 								<version>${version.asciidoctorj.diagram}</version>
-								<scope>system</scope>
-								<systemPath>${asciidoctorj-diagram.wrapper.jar}</systemPath>
 							</dependency>
 						</dependencies>
 						<configuration>
@@ -538,8 +534,6 @@
 								<groupId>org.asciidoctor</groupId>
 								<artifactId>asciidoctorj-diagram</artifactId>
 								<version>${version.asciidoctorj.diagram}</version>
-								<scope>system</scope>
-								<systemPath>${asciidoctorj-diagram.wrapper.jar}</systemPath>
 							</dependency>
 						</dependencies>
 						<configuration>
@@ -676,91 +670,6 @@
 								<goals>
 									<goal>run</goal>
 								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<!-- This profile is used to unzip the asciidoctorj-diagram dependency 
-				and have some if its content replaced by latest versions -->
-			<id>asciidoctorj-diagram-wrapper-builder</id>
-			<activation>
-				<file>
-					<!-- A classical hack to make sure this profile is always active -->
-					<exists>pom.xml</exists>
-				</file>
-			</activation>
-			<properties>
-				<asciidoctorj-diagram.wrapper.work.directory>${asciidoctorj-diagram.wrapper.directory}/work</asciidoctorj-diagram.wrapper.work.directory>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>1-copy asciidoctorj-diagram and its dependencies</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>unpack</goal>
-								</goals>
-								<configuration>
-									<artifactItems>
-										<artifactItem>
-											<groupId>org.asciidoctor</groupId>
-											<artifactId>asciidoctorj-diagram</artifactId>
-											<version>${version.asciidoctorj.diagram}</version>
-											<type>jar</type>
-											<overWrite>true</overWrite>
-										</artifactItem>
-									</artifactItems>
-									<outputDirectory>${asciidoctorj-diagram.wrapper.work.directory}</outputDirectory>
-								</configuration>
-							</execution>
-							<execution>
-								<id>2-copy plantuml where it should be</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>copy</goal>
-								</goals>
-								<configuration>
-									<artifactItems>
-										<artifactItem>
-											<groupId>net.sourceforge.plantuml</groupId>
-											<artifactId>plantuml</artifactId>
-											<version>${version.plantuml.core}</version>
-											<type>jar</type>
-											<overWrite>true</overWrite>
-										</artifactItem>
-									</artifactItems>
-									<stripClassifier>true</stripClassifier>
-									<stripVersion>true</stripVersion>
-									<outputDirectory>${asciidoctorj-diagram.wrapper.work.directory}/gems/asciidoctor-diagram-${version.asciidoctorj.diagram}/lib</outputDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>3.0.0</version>
-						<executions>
-							<execution>
-								<id>3-rebuild the JAR</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<target>
-										<zip
-											destfile="${asciidoctorj-diagram.wrapper.jar}"
-											basedir="${asciidoctorj-diagram.wrapper.work.directory}" />
-									</target>
-								</configuration>
 							</execution>
 						</executions>
 					</plugin>
