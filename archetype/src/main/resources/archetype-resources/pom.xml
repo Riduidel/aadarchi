@@ -35,7 +35,7 @@
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj -->
 		<version.asciidoctorj>2.4.0</version.asciidoctorj>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
-		<version.asciidoctorj.diagram>2.0.2</version.asciidoctorj.diagram>
+		<version.asciidoctorj.diagram>2.1.0</version.asciidoctorj.diagram>
 		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
 		<version.jruby>9.2.9.0</version.jruby>
 		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
@@ -46,12 +46,6 @@
 		<version.structurizr.client>1.6.3</version.structurizr.client>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-plantuml -->
 		<version.structurizr.extensions>1.5.2</version.structurizr.extensions>
-		<!-- This is one of the consequences of https://github.com/Riduidel/agile-architecture-documentation-system/issues/68 -->
-		<version.plantuml.core>1.2020.7</version.plantuml.core>
-
-		<!-- See for the horrible reasons -->
-		<asciidoctorj-diagram.wrapper.directory>${project.build.directory}/asciidoctorj-diagram-wrapper</asciidoctorj-diagram.wrapper.directory>
-		<asciidoctorj-diagram.wrapper.jar>${asciidoctorj-diagram.wrapper.directory}/asciidoctorj-diagram-rewrapped-${version.asciidoctorj.diagram}.jar</asciidoctorj-diagram.wrapper.jar>
 	</properties>
 
 	<issueManagement>
@@ -446,7 +440,7 @@
 					<url>http://rubygems-proxy.torquebox.org/releases</url>
 				</repository>
 			</repositories>
-			<dependencies>
+ 			<dependencies>
 				<dependency>
 					<groupId>rubygems</groupId>
 					<artifactId>asciidoctor-revealjs</artifactId>

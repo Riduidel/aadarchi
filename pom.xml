@@ -20,7 +20,6 @@
 		<version.structurizr.plantuml>1.5.2</version.structurizr.plantuml>
 		<version.structurizr.analysis>1.3.5</version.structurizr.analysis>
 		<version.structurizr.annotations>1.3.5</version.structurizr.annotations>
-		<version.plantuml.core>1.2020.7</version.plantuml.core>
 	</properties>
 	<scm>
 		<connection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-system.git</connection>
