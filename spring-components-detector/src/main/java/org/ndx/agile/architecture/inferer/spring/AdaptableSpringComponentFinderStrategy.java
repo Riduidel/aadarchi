@@ -140,6 +140,18 @@ public class AdaptableSpringComponentFinderStrategy extends AbstractSpringCompon
     					}
     				}
     			}
+    			boolean foundBase = component.getCode().stream().filter(c -> CodeElementRole.Primary.equals(c.getRole())).findFirst().isPresent();
+    			if(!foundBase) {
+    				// Seems like we never found any interface this component implements as primary
+    				// So that mean its class is the main code element/
+        			componentBaseName = component.getName();
+        			for(CodeElement element : component.getCode()) {
+        				if(element.getName().equals(componentBaseName)) {
+        					foundBase = true;
+       						CodeElementHack.setRole(element, CodeElementRole.Primary);
+        				}
+        			}
+    			}
     		}
     	}
         findDependencies();
