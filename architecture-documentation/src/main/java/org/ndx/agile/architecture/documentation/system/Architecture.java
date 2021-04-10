@@ -13,7 +13,6 @@ import org.ndx.agile.architecture.tickets.ADRExtractor;
 
 import com.structurizr.Workspace;
 import com.structurizr.analysis.ComponentFinder;
-import com.structurizr.analysis.SourceCodeComponentFinderStrategy;
 import com.structurizr.analysis.StructurizrAnnotationsComponentFinderStrategy;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;

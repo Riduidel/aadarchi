@@ -7,13 +7,10 @@ import javax.enterprise.inject.spi.InjectionPoint;
 
 import org.ndx.agile.architecture.base.AgileArchitectureException;
 
-import freemarker.core.ParseException;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.MalformedTemplateNameException;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
-import freemarker.template.TemplateNotFoundException;
 
 public class FreemarkerTemplateProducer {
 	public static class CantLoadTemplate extends AgileArchitectureException {

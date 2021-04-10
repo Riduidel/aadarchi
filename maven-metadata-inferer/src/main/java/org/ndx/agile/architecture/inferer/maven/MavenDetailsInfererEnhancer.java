@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -38,7 +37,6 @@ import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Element;
-import com.structurizr.model.InteractionStyle;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.model.StaticStructureElement;
 

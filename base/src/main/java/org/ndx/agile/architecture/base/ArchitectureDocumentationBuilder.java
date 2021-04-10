@@ -1,9 +1,6 @@
 package org.ndx.agile.architecture.base;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -11,7 +8,6 @@ import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.inject.Inject;
 
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.jboss.weld.config.ConfigurationKey;
 
 import com.structurizr.Workspace;

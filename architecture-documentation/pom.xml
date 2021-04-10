@@ -31,13 +31,13 @@
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctor-maven-plugin -->
 		<version.asciidoctor.maven.plugin>2.1.0</version.asciidoctor.maven.plugin>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-pdf -->
-		<version.asciidoctorj.pdf>1.5.3</version.asciidoctorj.pdf>
+		<version.asciidoctorj.pdf>1.5.4</version.asciidoctorj.pdf>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj -->
-		<version.asciidoctorj>2.4.2</version.asciidoctorj>
+		<version.asciidoctorj>2.4.3</version.asciidoctorj>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-revealjs -->
-		<version.asciidoctor.revealjs>4.0.1</version.asciidoctor.revealjs>
+		<version.asciidoctor.revealjs>4.1.0</version.asciidoctor.revealjs>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
-		<version.asciidoctorj.diagram>2.1.0</version.asciidoctorj.diagram>
+		<version.asciidoctorj.diagram>2.1.2</version.asciidoctorj.diagram>
 		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
 		<version.jruby>9.2.9.0</version.jruby>
 		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->

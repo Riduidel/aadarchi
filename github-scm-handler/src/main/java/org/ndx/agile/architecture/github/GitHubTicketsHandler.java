@@ -48,16 +48,11 @@ public class GitHubTicketsHandler implements TicketsHandler {
 	}
 
 	private boolean hasLabel(GHIssue issue, String label) {
-		try {
-			return issue.getLabels().stream()
-					.map(l -> l.getName())
-					.filter(l -> label.equals(l))
-					.findAny()
-					.isPresent();
-		} catch (IOException e) {
-			logger.log(Level.WARNING, String.format("Unable to read labels of %s", issue), e);
-			return false;
-		}
+		return issue.getLabels().stream()
+				.map(l -> l.getName())
+				.filter(l -> label.equals(l))
+				.findAny()
+				.isPresent();
 	}
 
 	@Override
