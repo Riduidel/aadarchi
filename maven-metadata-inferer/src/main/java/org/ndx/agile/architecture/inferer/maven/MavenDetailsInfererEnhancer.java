@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -158,11 +160,27 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			final String pomDir = pomPath.substring(0, pomPath.lastIndexOf("/pom.xml"));
 			List<String> modules = new ArrayList<>();
 			modules.addAll(((List<String>) mavenProject.getModules()));
-			additionalProfiles.stream()
-				.flatMap(text -> Stream.of(text.split(";")))
+			Set<String> splittedAdditionalProfiles = additionalProfiles.stream()
+					.flatMap(text -> Stream.of(text.split(";")))
+					.collect(Collectors.toCollection(() -> new TreeSet()));
+			splittedAdditionalProfiles.stream()
 				.flatMap(profileName -> getProfileNamed(mavenProject, profileName).stream())
 				.flatMap(profile -> profile.getModules().stream())
 				.forEach(modules::add);
+			// In order to ease debug, we also list profiles which declare modules, since
+			// it led to a weird bug
+			mavenProject.getModel().getProfiles().stream()
+				.filter(profile -> !profile.getModules().isEmpty())
+				.filter(profile -> !splittedAdditionalProfiles.contains(profile.getId()))
+				.forEach(profile -> logger.log(Level.WARNING, 
+						String.format("Maven module %s profile %s declares the modules %s, which will not be handled here. Is it normal?\n"
+								+ "If it is not normal, add the profile in the maven property \"AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES\"", 
+								mavenProject,
+								profile.getId(),
+								profile.getModules()
+								)
+							)
+						);
 			return modules.stream()
 				.map(module -> readMavenProject(String.format("%s/%s/pom.xml", pomDir, module)))
 				.flatMap(module -> module.getPackaging().equals("pom") ?
