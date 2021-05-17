@@ -161,6 +161,12 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			List<String> modules = new ArrayList<>();
 			modules.addAll(((List<String>) mavenProject.getModules()));
 			Set<String> splittedAdditionalProfiles = additionalProfiles.stream()
+					.peek(text -> {
+						if(text.contains(",")||text.contains("|")) {
+							logger.log(Level.SEVERE, 
+									String.format("Separator for AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES is \";\" but you used other strings that may be separators in \"%s\". Is it normal?", text));
+						}
+					})
 					.flatMap(text -> Stream.of(text.split(";")))
 					.collect(Collectors.toCollection(() -> new TreeSet()));
 			splittedAdditionalProfiles.stream()
