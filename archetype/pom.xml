@@ -33,6 +33,7 @@
 					<properties>
 						<agile-architecture-version>${project.version}</agile-architecture-version>
 					</properties>
+					<settingsFile>../.mvn/custom-settings.xml</settingsFile>
 				</configuration>
 			</plugin>
 		</plugins>
