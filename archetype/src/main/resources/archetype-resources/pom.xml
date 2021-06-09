@@ -61,26 +61,33 @@
 		<dependency>
 			<groupId>com.structurizr</groupId>
 			<artifactId>structurizr-analysis</artifactId>
+			<version>1.3.5</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.structurizr</groupId>
+					<artifactId>structurizr-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>base</artifactId>
-			<version>${project.version}</version>
+			<version>${agile-architecture-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>github-scm-handler</artifactId>
-			<version>${project.version}</version>
+			<version>${agile-architecture-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>adr-tickets-extractor</artifactId>
-			<version>${project.version}</version>
+			<version>${agile-architecture-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>maven-metadata-inferer</artifactId>
-			<version>${project.version}</version>
+			<version>${agile-architecture-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -265,14 +272,13 @@
 						</goals>
 						<configuration>
 							<mainClass>${agile.architecture.main.class}</mainClass>
-							<!-- 
-							As this goal is to be invoked repetedly, it is good to have it as fast as possible.
-							And we have enhancers that run in parallel in fork-join thread pool. As this pool is not easily closeable (it depends upon the caller JVM),
-							it pushes maven to wait for those threads until a timeout is reached.
-							TO avoid that, we set that to false and ignore daemon threads.
-							Obviously, this imply some care on synchronization ...
-							(see https://github.com/Riduidel/agile-architecture-documentation-system/issues/50 for discussion) 
-							-->
+							<!-- As this goal is to be invoked repetedly, it is good to have it 
+								as fast as possible. And we have enhancers that run in parallel in fork-join 
+								thread pool. As this pool is not easily closeable (it depends upon the caller 
+								JVM), it pushes maven to wait for those threads until a timeout is reached. 
+								TO avoid that, we set that to false and ignore daemon threads. Obviously, 
+								this imply some care on synchronization ... (see https://github.com/Riduidel/agile-architecture-documentation-system/issues/50 
+								for discussion) -->
 							<cleanupDaemonThreads>false</cleanupDaemonThreads>
 							<systemProperties>
 								<systemProperty>
