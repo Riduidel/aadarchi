@@ -12,6 +12,7 @@
 :architecture: ../../../src/main/java/org/ndx/agile/architecture/documentation/system/Architecture.java
 
 = Can C4 see forward ?
+:sectnums!:
 
 [NOTE.speaker]
 --
@@ -19,6 +20,15 @@ Title is obvisouly a joke, and a lie.
 We're not gonna talk only about C4, because Simon Brown explains his ideas way better than what I'll ever do.
 In fact, we're gonna talk about ways to augment what C4 can easily do.
 --
+
+
+[%notitle]
+== Who am I ?
+
+Nicolas Delsaux / @riduidel on https://twitter.com/riduidel[icon:twitter[]] / https://github.com/riduidel[icon:github[]] / https://stackexchange.com/users/8620[icon:stack-overflow[]]
+
+Java developer since year 2000
+
 
 == Why documenting architecture ?
 
