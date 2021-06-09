@@ -6,6 +6,7 @@
 	<artifactId>${artifactId}</artifactId>
 	<version>${version}</version>
 	<properties>
+		<kroki.server.url>https://kroki.io</kroki.server.url>
 		<version.java>11</version.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -37,7 +38,7 @@
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-revealjs -->
 		<version.asciidoctor.revealjs>4.1.0</version.asciidoctor.revealjs>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
-		<version.asciidoctorj.diagram>2.1.2</version.asciidoctorj.diagram>
+		<version.asciidoctor.kroki>0.4.0</version.asciidoctor.kroki>
 		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
 		<version.jruby>9.2.9.0</version.jruby>
 		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
@@ -48,11 +49,38 @@
 		<url>${issues.url}</url>
 	</issueManagement>
 
+	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs -->
+	<repositories>
+		<repository>
+			<id>rubygems-releases</id>
+			<url>http://rubygems-proxy.torquebox.org/releases</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
+		<dependency>
+			<groupId>com.structurizr</groupId>
+			<artifactId>structurizr-analysis</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>base</artifactId>
-			<version>${agile-architecture-version}</version>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<artifactId>github-scm-handler</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<artifactId>adr-tickets-extractor</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<artifactId>maven-metadata-inferer</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -72,6 +100,29 @@
 			<artifactId>weld-junit-parent</artifactId>
 			<version>2.0.1.Final</version>
 			<type>pom</type>
+		</dependency>
+		<!-- asciidoctor-kroki is added as POM dependency to make sure gem maven 
+			plugin downloads it -->
+		<dependency>
+			<groupId>rubygems</groupId>
+			<artifactId>asciidoctor-kroki</artifactId>
+			<version>${version.asciidoctor.kroki}</version>
+			<type>gem</type>
+			<!-- Avoid downloading gems included in AsciidoctorJ -->
+			<exclusions>
+				<exclusion>
+					<groupId>rubygems</groupId>
+					<artifactId>asciidoctor</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>rubygems</groupId>
+					<artifactId>thread_safe</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>rubygems</groupId>
+					<artifactId>concurrent-ruby</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 
@@ -116,13 +167,13 @@
 							<artifactId>asciidoctorj</artifactId>
 							<version>${version.asciidoctorj}</version>
 						</dependency>
-						<dependency>
-							<groupId>org.asciidoctor</groupId>
-							<artifactId>asciidoctorj-diagram</artifactId>
-							<version>${version.asciidoctorj.diagram}</version>
-						</dependency>
 					</dependencies>
 					<configuration>
+						<gemPath>${project.build.directory}/gems</gemPath>
+						<attributes>
+							<allow-uri-read />
+							<kroki-server-url>${kroki.server.url}</kroki-server-url>
+						</attributes>
 						<logHandler>
 							<outputToConsole>true</outputToConsole>
 							<failIf>
@@ -144,6 +195,26 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>de.saumya.mojo</groupId>
+				<artifactId>gem-maven-plugin</artifactId>
+				<version>1.1.8</version>
+				<configuration>
+					<jrubyVersion>${version.jruby}</jrubyVersion>
+					<gemHome>${project.build.directory}/gems</gemHome>
+					<gemPath>${project.build.directory}/gems</gemPath>
+				</configuration>
+				<executions>
+					<!-- Install required gems in target directory -->
+					<execution>
+						<id>install-gems</id>
+						<goals>
+							<goal>initialize</goal>
+						</goals>
+						<phase>initialize</phase>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
@@ -273,18 +344,13 @@
 								<artifactId>asciidoctorj</artifactId>
 								<version>${version.asciidoctorj}</version>
 							</dependency>
-							<dependency>
-								<groupId>org.asciidoctor</groupId>
-								<artifactId>asciidoctorj-diagram</artifactId>
-								<version>${version.asciidoctorj.diagram}</version>
-							</dependency>
 						</dependencies>
 						<configuration>
 							<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
 							<preserveDirectories>true</preserveDirectories>
 							<relativeBaseDir>true</relativeBaseDir>
 							<requires>
-								<require>asciidoctor-diagram</require>
+								<require>asciidoctor-kroki</require>
 							</requires>
 							<attributes>
 								<!-- Example below shows how to specify in this pom instead of System's 
@@ -430,13 +496,7 @@
 			<properties>
 				<asciidoc.documents.hide.bug.report>false</asciidoc.documents.hide.bug.report>
 			</properties>
-			<repositories>
-				<repository>
-					<id>rubygems-releases</id>
-					<url>http://rubygems-proxy.torquebox.org/releases</url>
-				</repository>
-			</repositories>
- 			<dependencies>
+			<dependencies>
 				<dependency>
 					<groupId>rubygems</groupId>
 					<artifactId>asciidoctor-revealjs</artifactId>
@@ -482,26 +542,6 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>de.saumya.mojo</groupId>
-						<artifactId>gem-maven-plugin</artifactId>
-						<version>1.1.8</version>
-						<configuration>
-							<jrubyVersion>${version.jruby}</jrubyVersion>
-							<gemHome>${project.build.directory}/gems</gemHome>
-							<gemPath>${project.build.directory}/gems</gemPath>
-						</configuration>
-						<executions>
-							<!-- Install required gems in target directory -->
-							<execution>
-								<id>install-gems</id>
-								<goals>
-									<goal>initialize</goal>
-								</goals>
-								<phase>initialize</phase>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
 						<groupId>org.asciidoctor</groupId>
 						<artifactId>asciidoctor-maven-plugin</artifactId>
 						<version>${version.asciidoctor.maven.plugin}</version>
@@ -520,11 +560,6 @@
 								<artifactId>asciidoctorj</artifactId>
 								<version>${version.asciidoctorj}</version>
 							</dependency>
-							<dependency>
-								<groupId>org.asciidoctor</groupId>
-								<artifactId>asciidoctorj-diagram</artifactId>
-								<version>${version.asciidoctorj.diagram}</version>
-							</dependency>
 						</dependencies>
 						<configuration>
 							<preserveDirectories>true</preserveDirectories>
@@ -538,9 +573,8 @@
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
-									<gemPath>${project.build.directory}/gems</gemPath>
 									<requires>
-										<require>asciidoctor-diagram</require>
+										<require>asciidoctor-kroki</require>
 										<require>asciidoctor-revealjs</require>
 									</requires>
 									<sourceDirectory>${asciidoc.source.slides.directory}</sourceDirectory>
@@ -633,7 +667,6 @@
 											<dependency>org.eclipse.jetty:jetty-util</dependency>
 											<dependency>org.eclipse.jetty:jetty-io</dependency>
 											<dependency>org.eclipse.jetty.orbit:javax.servlet:jar</dependency>
-											.
 											<dependency>org.eclipse.jetty:jetty-continuation</dependency>
 											<dependency>org.eclipse.jetty:jetty-server</dependency>
 											<dependency>org.eclipse.jetty.orbit:javax.servlet</dependency>
