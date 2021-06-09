@@ -168,7 +168,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 						}
 					})
 					.flatMap(text -> Stream.of(text.split(";")))
-					.collect(Collectors.toCollection(() -> new TreeSet()));
+					.collect(Collectors.toSet());
 			splittedAdditionalProfiles.stream()
 				.flatMap(profileName -> getProfileNamed(mavenProject, profileName).stream())
 				.flatMap(profile -> profile.getModules().stream())
