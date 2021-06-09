@@ -6,6 +6,7 @@
 	<artifactId>${artifactId}</artifactId>
 	<version>${version}</version>
 	<properties>
+		<!-- If you want to use another kroki server, it is possible by deploying the kroki docker image -->
 		<kroki.server.url>https://kroki.io</kroki.server.url>
 		<version.java>11</version.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
