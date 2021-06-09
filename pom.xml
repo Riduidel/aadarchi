@@ -298,6 +298,7 @@
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<localCheckout>true</localCheckout>
 					<goals>verify</goals>
+					<arguments>"--add-opens java.base/java.lang=ALL-UNNAMED"</arguments>
 				</configuration>
 			</plugin>
 		</plugins>
