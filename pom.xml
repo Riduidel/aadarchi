@@ -4,7 +4,7 @@
 
 	<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 	<artifactId>system</artifactId>
-	<version>0.0.5</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
