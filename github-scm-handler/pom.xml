@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 		<artifactId>system</artifactId>
-		<version>0.0.5-SNAPSHOT</version>
+		<version>0.0.5</version>
 	</parent>
 	<description>Allow github infos to be included in project documentation</description>
 	<artifactId>github-scm-handler</artifactId>
