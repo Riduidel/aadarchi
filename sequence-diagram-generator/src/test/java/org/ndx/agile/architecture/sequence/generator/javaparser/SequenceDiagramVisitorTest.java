@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
@@ -21,7 +22,7 @@ import com.structurizr.model.SoftwareSystem;
 
 class SequenceDiagramVisitorTest {
 
-	@Test
+	@Test @Disabled
 	void can_read_a_model() {
 		// Given all those elements
 		Workspace workspace = new Workspace("test workspace", "test workspace");
