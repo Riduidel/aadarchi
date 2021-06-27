@@ -4,7 +4,7 @@
 
 	<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 	<artifactId>system</artifactId>
-	<version>0.0.5</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -23,7 +23,7 @@
 		<connection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-system.git</connection>
 		<developerConnection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-system.git</developerConnection>
 		<url>https://github.com/Riduidel/agile-architecture-documentation-system.git</url>
-		<tag>0.0.5</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>

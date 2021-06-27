@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 		<artifactId>system</artifactId>
-		<version>0.0.5</version>
+		<version>0.0.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>sequence-diagram-generator</artifactId>
 	<description>Generates sequence diagrams for components in the containers opting in for it. Model elements in those sequence diagrams should also be indicated by containers.</description>
