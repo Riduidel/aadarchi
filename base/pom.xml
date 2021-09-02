@@ -29,7 +29,7 @@
 			<artifactId>structurizr-plantuml</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>cdi-config-extension</artifactId>
 			<version>${project.version}</version>
 		</dependency>
