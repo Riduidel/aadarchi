@@ -99,7 +99,14 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			Contained contained = getContainedElementWithName(module);
 			// Now, for each dependency of the maven project, if there is an associated artifact, link both of them
 			((List<Dependency>) module.getDependencies()).stream()
-				.map(this::getDependencyKey)
+				.map(dependency -> String.format("%s:%s", dependency.getGroupId(), dependency.getArtifactId()))
+				.map(text -> text.replace("${project.groupId}", module.getGroupId()))
+				.peek(text -> {
+					if(text.contains("${") ) {
+						logger.warning(String.format("Container %s has one dependency expressed using Maven property, which we don't parse (excepted some hacks). Please remove that", 
+								contained, text));
+					}
+				})
 				.flatMap(artifactKey -> findContainedWithArtifactKey(artifactKey))
 				.forEach(found -> containedDependsUpon(contained, found, "maven:dependency"));
 		}
@@ -115,14 +122,6 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		}
 		
 		protected abstract Collection<Contained> getEnhancedChildren();
-
-		private String getDependencyKey(Dependency artifact) {
-			return artifact.getGroupId()+":"+artifact.getArtifactId();
-		}
-
-		private String getArtifactKey(Artifact artifact) {
-			return artifact.getGroupId()+":"+artifact.getArtifactId();
-		}
 
 		void findSubComponentFor(MavenProject mavenProject, MavenProject module) {
 			String key = getContainedElementKey(module);

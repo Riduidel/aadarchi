@@ -1,6 +1,8 @@
 package org.ndx.agile.architecture.base.utils;
 
 import java.io.File;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.Enhancer;
@@ -22,7 +24,7 @@ public class SimpleOutputBuilder implements OutputBuilder {
 		return new File(enhancementsBase,
 				// Yup, we use hex values for priority, to have less characters
 				String.format("%s/"+SECTION_PATTERN+"/_%08x-%s.%s", 
-					StructurizrUtils.getCanonicalPath(element),
+					sanitize(StructurizrUtils.getCanonicalPath(element)),
 					section.index(), section.name(),
 					enhancer.priority(), enhancer.getClass().getSimpleName(), format
 					)
@@ -34,10 +36,16 @@ public class SimpleOutputBuilder implements OutputBuilder {
 		return new File(enhancementsBase,
 				// Yup, we use hex values for priority, to have less characters
 				String.format("%s/"+SECTION_PATTERN, 
-					StructurizrUtils.getCanonicalPath(element),
+					sanitize(StructurizrUtils.getCanonicalPath(element)),
 					section.index(), section.name()
 					)
 				);
+	}
+
+	private String sanitize(String canonicalPath) {
+		return Stream.of(canonicalPath.split("\\/"))
+				.map(name -> name.replaceAll("[:\\\\/*?|<>]", "_"))
+				.collect(Collectors.joining("/"));
 	}
 
 }
