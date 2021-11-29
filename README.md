@@ -109,6 +109,11 @@ However, if you want to improve things,
 please run `mvn verify` which will create a project from the archetype and 
 run `mvn package` which will trigger Java class compilation and run and Asciidoc documentation generation.
 
+### Releasing
+Can be performed only on a machine having Nicolas Delsaux GPG key allowing to sign to maven central (not yet enabled on GitHub).
+
+Don't forget to activate the `-Prelease` profile, which enable all the good things (Sonatype staging, signing, ...)
+
 ## Architecture
 Way more details are available in the [architecture documentation (which uses this system, obviously)](https://riduidel.github.io/agile-architecture-documentation-system/).
 
