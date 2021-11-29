@@ -29,6 +29,17 @@ jobs:
       with:
         distribution: adopt
         java-version: 11
+    - name: Pimp some maven "features"
+      uses: s4u/maven-settings-action@v2.4.1
+      with:
+        mirrors: |
+          [{
+              "id": "rubygems-releases-http-unblocker",
+              "name": "rubygems-releases",
+              "mirrorOf": "rubygems-releases",
+              "url": "http://rubygems-proxy.torquebox.org/releases",
+              "blocked": false
+          }]
     - name: Build with Maven
       run: mvn -B install --file pom.xml -DGITHUB_ACCESS_TOKEN=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
       env:
