@@ -80,6 +80,8 @@
 	</modules>
 
 	<repositories>
+		<!-- Jitpack is required for markdown-to-asciidoc (which is used for github 
+			and gitlab markdown transformation) -->
 		<repository>
 			<id>jitpack.io</id>
 			<name>jitpack</name>
