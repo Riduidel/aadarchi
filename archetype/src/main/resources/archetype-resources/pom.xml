@@ -23,7 +23,7 @@
 		<agile.architecture.output.enhancements>${agile.architecture.output.dir}/enhancements</agile.architecture.output.enhancements>
 
 		<!-- Defining a version that doesn't suck -->
-		<agile-architecture-version>master-SNAPSHOT</agile-architecture-version>
+		<agile-architecture-version>${agile-architecture-version}</agile-architecture-version>
 
 		<!-- tag::issues-url[] -->
 		<!-- TODO set a valid value to have doc improvement enabled -->
