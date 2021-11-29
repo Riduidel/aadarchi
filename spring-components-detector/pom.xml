@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+		<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 		<artifactId>system</artifactId>
 		<version>0.0.6-SNAPSHOT</version>
 	</parent>
@@ -10,7 +10,7 @@
 	<description>Component allowing detection of Spring components in a Spring technology based container.</description>
 	<dependencies>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>base</artifactId>
 			<version>${project.version}</version>
 		</dependency>

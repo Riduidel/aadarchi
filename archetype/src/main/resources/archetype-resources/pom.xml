@@ -71,22 +71,22 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>base</artifactId>
 			<version>${agile-architecture-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>github-scm-handler</artifactId>
 			<version>${agile-architecture-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>adr-tickets-extractor</artifactId>
 			<version>${agile-architecture-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>maven-metadata-inferer</artifactId>
 			<version>${agile-architecture-version}</version>
 		</dependency>

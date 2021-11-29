@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>system</artifactId>
-		<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+		<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 		<version>0.0.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>architecture-documentation</artifactId>
@@ -65,22 +65,22 @@
 			<artifactId>structurizr-analysis</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>base</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>github-scm-handler</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>adr-tickets-extractor</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 			<artifactId>maven-metadata-inferer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
