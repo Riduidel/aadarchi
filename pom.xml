@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
 	<artifactId>system</artifactId>
 	<version>0.0.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<name>Agile Architecture Documentation System : root POM</name>
 	<url>https://riduidel.github.io/agile-architecture-documentation-system/</url>
 
@@ -44,6 +46,13 @@
 		</developer>
 	</developers>
 
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
 	<modules>
 		<module>base</module>
 		<module>cdi-config-extension</module>
@@ -56,7 +65,7 @@
 		<module>maven-metadata-inferer</module>
 		<module>spring-components-detector</module>
 		<module>sequence-diagram-generator</module>
- 		<module>archetype</module>
+		<module>archetype</module>
 	</modules>
 
 	<repositories>
