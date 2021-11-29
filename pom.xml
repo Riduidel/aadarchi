@@ -6,6 +6,8 @@
 	<artifactId>system</artifactId>
 	<version>0.0.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	
+	<name>Agile Architecture Documentation System : root POM</name>
 
 	<properties>
 		<maven.compiler.release>11</maven.compiler.release>

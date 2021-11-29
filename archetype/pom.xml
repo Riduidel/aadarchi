@@ -6,6 +6,8 @@
 	<version>0.0.6-SNAPSHOT</version>
 	<packaging>maven-archetype</packaging>
 	
+	<name>Agile Architecture Documentation System : Archetype</name>
+
 	<dependencies>
 		<!-- This dependency ensures the build order is the one we want (in other words it allows base to build before archetype) -->
 		<dependency>

@@ -6,6 +6,7 @@
 		<version>0.0.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>base</artifactId>
+	<name>Agile Architecture Documentation System : Base module</name>
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
