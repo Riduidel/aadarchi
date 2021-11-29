@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 	
 	<name>Agile Architecture Documentation System : root POM</name>
+	<url>https://riduidel.github.io/agile-architecture-documentation-system/</url>
 
 	<properties>
 		<maven.compiler.release>11</maven.compiler.release>
