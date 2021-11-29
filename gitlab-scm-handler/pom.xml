@@ -6,6 +6,7 @@
 		<version>0.0.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>gitlab-scm-handler</artifactId>
+	<name>Agile Architecture Documentation System : Gitlab SCM Handler</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>

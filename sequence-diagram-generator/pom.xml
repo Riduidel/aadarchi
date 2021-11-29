@@ -6,6 +6,7 @@
 		<version>0.0.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>sequence-diagram-generator</artifactId>
+	<name>Agile Architecture Documentation System : Sequence diagram generator</name>
 	<description>Generates sequence diagrams for components in the containers opting in for it. Model elements in those sequence diagrams should also be indicated by containers.</description>
 	<dependencies>
 		<dependency>

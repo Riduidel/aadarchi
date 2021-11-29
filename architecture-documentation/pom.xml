@@ -9,6 +9,7 @@
 		<version>0.0.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>architecture-documentation</artifactId>
+	<name>Agile Architecture Documentation System : System documentation generator</name>
 	<properties>
 		<kroki.server.url>https://kroki.io</kroki.server.url>
 		<version.java>11</version.java>

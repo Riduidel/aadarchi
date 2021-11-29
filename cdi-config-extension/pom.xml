@@ -6,6 +6,7 @@
 		<version>0.0.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>cdi-config-extension</artifactId>
+	<name>Agile Architecture Documentation System : CDI Config extension</name>
 	<dependencies>
 		<dependency>
 			<groupId>javax.enterprise</groupId>

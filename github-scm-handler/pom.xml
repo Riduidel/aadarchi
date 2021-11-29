@@ -5,8 +5,9 @@
 		<artifactId>system</artifactId>
 		<version>0.0.6-SNAPSHOT</version>
 	</parent>
-	<description>Allow github infos to be included in project documentation</description>
 	<artifactId>github-scm-handler</artifactId>
+	<name>Agile Architecture Documentation System : GitHub SCM handler</name>
+	<description>Allow github infos to be included in project documentation</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
