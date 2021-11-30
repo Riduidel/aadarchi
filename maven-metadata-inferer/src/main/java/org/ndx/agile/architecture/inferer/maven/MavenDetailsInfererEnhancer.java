@@ -519,7 +519,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 
 	/**
 	 * Find the maven project containing the given class name
-	 * @param application a class name
+	 * @param loadedClass a class for which we want a maven project
 	 * @return the associated maven project
 	 */
 	public MavenProject findMavenProjectOf(Class<?> loadedClass) {

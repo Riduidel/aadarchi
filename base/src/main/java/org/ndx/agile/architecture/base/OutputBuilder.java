@@ -11,7 +11,7 @@ public interface OutputBuilder {
 	 * @param section the section in which we want to add some content
 	 * @param element the element to which we want to add some content
 	 * @param format file format (without the dot!). Typically it will be "adoc"
-	 * @param the enhancer producing that content
+	 * @param enhancer the enhancer producing that content
 	 * @return a path, relative to base
 	 */
 	File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format);

@@ -161,8 +161,8 @@ public class DocumentsCollector implements ModelEnhancer {
 
 	/**
 	 * Collect elements of all sections produced for the given component
-	 * @param component
-	 * @param builder
+	 * @param element the element for which we want the output
+	 * @param builder output generator used
 	 */
 	public void collect(Element element, OutputBuilder builder) {
 		for(AgileArchitectureSection section : AgileArchitectureSection.values()) {

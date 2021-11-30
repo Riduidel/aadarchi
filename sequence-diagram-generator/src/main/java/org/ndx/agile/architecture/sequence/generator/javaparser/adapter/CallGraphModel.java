@@ -58,7 +58,7 @@ public class CallGraphModel {
 
 	/**
 	 * Perform call analysis to build model
-	 * @param collect
+	 * @param typeNames list of names to visit
 	 */
 	public void analyzeCalls(List<String> typeNames) {
 		for(Collection<String> types : Arrays.asList(typeNames, unknownClasses)) {
