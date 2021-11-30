@@ -40,7 +40,7 @@ Then, you can use the archetype by running this maven-friendly 😅command.
 Don't forget to replace `${VERSION}` by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Fagile-architecture-documentation-system.svg)
 
 ```sh
-mvn archetype:generate -DarchetypeVersion=${VERSION} -DarchetypeRepository=https://jitpack.io -DarchetypeGroupId=com.github.Riduidel.agile-architecture-documentation-system -DarchetypeArtifactId=archetype -Pjitpack
+mvn archetype:generate -DarchetypeGroupId=io.github.Riduidel.agile-architecture-documentation-system -DarchetypeArtifactId=archetype
 ```
 
 This will ask you a few questions and generate the project.
