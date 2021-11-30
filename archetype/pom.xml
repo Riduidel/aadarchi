@@ -3,7 +3,7 @@
 
 	<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 	<artifactId>archetype</artifactId>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.6</version>
 	<packaging>maven-archetype</packaging>
 	
 	<name>Agile Architecture Documentation System : Archetype</name>
