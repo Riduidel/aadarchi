@@ -40,13 +40,15 @@ public class Architecture implements ArchitectureModelProvider {
 	 */
 	public Workspace describeArchitecture() {
 		// tag::structurizr-example-context[]
-		Workspace workspace = new Workspace("agile-architecture-documentation-system", "This is the model of the agile architecture documentation system.");
+		String name = "agile-architecture-documentation-system";
+		Workspace workspace = new Workspace(name, "This is the model of the agile architecture documentation system.");
 		Model model = workspace.getModel();
 
 		Person architect = model.addPerson("Architect", "The architect as team scribe is the writer of this kind of documentation.");
 		Person stakeholder = model.addPerson("Stakeholder", "All project stakeholders are readers of this kind of documentation.");
 		SoftwareSystem agileArchitecture = model.addSoftwareSystem(AGILE_ARCHITECTURE_DOCUMENTATION, "This software system generates the documentation.");
 		agileArchitecture.addProperty(ModelElementKeys.ISSUE_MANAGER, "https://github.com/Riduidel/agile-architecture-documentation-system");
+		agileArchitecture.addProperty(ADRExtractor.AGILE_ARCHITECTURE_TICKETS_PROJECT, name);
 		agileArchitecture.addProperty(ADRExtractor.AGILE_ARCHITECTURE_TICKETS_ADR_LABEL, "decision");
 		architect.uses(agileArchitecture, "Writes");
 		stakeholder.uses(agileArchitecture, "Read");
