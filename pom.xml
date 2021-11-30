@@ -357,7 +357,7 @@
 							<releaseProfiles>settings-agile-architecture,release</releaseProfiles>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<localCheckout>true</localCheckout>
-							<goals>verify</goals>
+							<goals>deploy</goals>
 						</configuration>
 					</plugin>
 					<plugin>
