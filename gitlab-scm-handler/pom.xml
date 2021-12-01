@@ -7,6 +7,7 @@
 	</parent>
 	<artifactId>gitlab-scm-handler</artifactId>
 	<name>Agile Architecture Documentation System : Gitlab SCM Handler</name>
+	<description>Allow gitlab infos to be included in project documentation</description>
 	<dependencies>
 		<dependency>
 			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>

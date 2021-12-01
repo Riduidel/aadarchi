@@ -7,6 +7,7 @@
 	</parent>
 	<artifactId>base</artifactId>
 	<name>Agile Architecture Documentation System : Base module</name>
+	<description>Base module defining the various used interfaces, and some very useful implementations</description>
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>

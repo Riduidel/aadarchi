@@ -7,6 +7,7 @@
 	</parent>
 	<artifactId>architecture-documentation</artifactId>
 	<name>Agile Architecture Documentation System : System documentation generator</name>
+	<description>Using agile architecture documentation system to document agile archiecture documentation system</description>
 	<properties>
 		<kroki.server.url>https://kroki.io</kroki.server.url>
 		<version.java>11</version.java>
