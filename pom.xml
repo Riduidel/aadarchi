@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 	<artifactId>system</artifactId>
-	<version>0.0.7-SNAPSHOT</version>
+	<version>0.0.7</version>
 	<packaging>pom</packaging>
 
 	<description>Base module of a set of tools created to allow easy architecture documentation based upon Simon Brown work.</description>
@@ -30,7 +28,7 @@
 		<connection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-system.git</connection>
 		<developerConnection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-system.git</developerConnection>
 		<url>https://github.com/Riduidel/agile-architecture-documentation-system.git</url>
-		<tag>HEAD</tag>
+		<tag>0.0.7</tag>
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
