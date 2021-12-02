@@ -4,7 +4,7 @@
 
 	<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 	<artifactId>system</artifactId>
-	<version>0.0.10-SNAPSHOT</version>
+	<version>0.0.9-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<description>Base module of a set of tools created to allow easy architecture documentation based upon Simon Brown work.</description>

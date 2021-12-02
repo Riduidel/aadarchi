@@ -1,9 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
 		<artifactId>system</artifactId>
-		<version>0.0.10-SNAPSHOT</version>
+		<version>0.0.9-SNAPSHOT</version>
 	</parent>
 	<artifactId>markdown-to-asciidoc</artifactId>
 	<name>Markdown to Asciidoc converter</name>
@@ -80,13 +82,16 @@
 								<phase>generate-sources</phase>
 								<configuration>
 									<tasks>
-										<unzip src="${download.dir}/master.zip" dest="${download.dir}/unzip">
+										<unzip src="${download.dir}/master.zip"
+											dest="${download.dir}/unzip">
 										</unzip>
 										<copy todir="${project.basedir}/src">
-											<fileset dir="${download.dir}/unzip/markdown-to-asciidoc-master/src" />
+											<fileset
+												dir="${download.dir}/unzip/markdown-to-asciidoc-master/src" />
 										</copy>
 										<copy todir="${project.basedir}">
-											<fileset dir="${download.dir}/unzip/markdown-to-asciidoc-master/">
+											<fileset
+												dir="${download.dir}/unzip/markdown-to-asciidoc-master/">
 												<include name="README.adoc" />
 												<include name="LICENSE" />
 											</fileset>
