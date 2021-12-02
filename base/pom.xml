@@ -36,6 +36,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>markdown-to-asciidoc</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<!-- Using this version just because other components use it -->
@@ -45,10 +50,6 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.12.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.bodiam</groupId> <!-- Now using Jitpack!(source repo is https://github.com/bodiam/markdown-to-asciidoc) -->
-			<artifactId>markdown-to-asciidoc</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
 		<dependency>

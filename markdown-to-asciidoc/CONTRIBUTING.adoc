@@ -1,0 +1,14 @@
+This module is a fork of https://github.com/bodiam/markdown-to-asciidoc created to allow it to be used in entrerprisey contexts.
+
+**Do not** contribute to this module, but rather to upstream project.
+
+To retrieve code, run the command
+
+> mvn generate-sources -pl :markdown-to-asciidoc -Pdownload
+
+It will download source code (and README file), but won't manage dependencies, so you may have errors to fix.
+
+IMPORTANT: WE DO NOT USE Kotlin here, so all kotlin code has been replaced by equivalent Java code. 
+Why? 
+Because the cost of foreign syntax doesn't pay when there is only one 18 KB file!
+As a consequence, there is one error in `Converter.java` which can be fixed by simply replacing the Kotlin converter by the Java one.

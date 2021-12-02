@@ -77,31 +77,11 @@
 		<module>spring-components-detector</module>
 		<module>sequence-diagram-generator</module>
 		<module>archetype</module>
+		<module>markdown-to-asciidoc</module>
 	</modules>
-
-	<repositories>
-		<!-- Jitpack is required for markdown-to-asciidoc (which is used for github 
-			and gitlab markdown transformation) -->
-		<repository>
-			<id>jitpack.io</id>
-			<name>jitpack</name>
-			<url>https://jitpack.io</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>com.github.bodiam</groupId> <!-- Now using Jitpack!(source repo is https://github.com/bodiam/markdown-to-asciidoc) -->
-				<artifactId>markdown-to-asciidoc</artifactId>
-				<version>2.0</version>
-			</dependency>
 			<dependency>
 				<groupId>javax.enterprise</groupId>
 				<artifactId>cdi-api</artifactId>
@@ -351,7 +331,7 @@
 							<!-- We install each artifact at end of prepare, for archetype to 
 								have a working base dependency -->
 							<preparationGoals>install</preparationGoals>
-							<!-- For jitpack to use correct version names, I do prefer to ahve 
+							<!-- For jitpack to use correct version names, I do prefer to have 
 								only version in release tag -->
 							<tagNameFormat>@{version}</tagNameFormat>
 							<!-- This profile MUST be defined in settings.xml and contains the 

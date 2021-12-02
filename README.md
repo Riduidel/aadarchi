@@ -13,30 +13,7 @@
 
 ## Install
 
-Since I use Jitpack for easy deployment of that archetype, and [maven requires archetypes to be defined in settings.xml](http://maven.apache.org/archetype/maven-archetype-plugin/archetype-repository.html), you first have to define a jitpack profile in your settings.xml this way
-
-```xml
-		<profile>
-			<id>jitpack</id>
-			<repositories>
-				<repository>
-					<id>archetype</id><!-- id expected by maven-archetype-plugin to avoid 
-						fetching from everywhere -->
-					<url>https://jitpack.io</url>
-					<releases>
-						<enabled>true</enabled>
-						<checksumPolicy>fail</checksumPolicy>
-					</releases>
-					<snapshots>
-						<enabled>true</enabled>
-						<checksumPolicy>warn</checksumPolicy>
-					</snapshots>
-				</repository>
-			</repositories>
-		</profile>
-```
-
-Then, you can use the archetype by running this maven-friendly 😅command.
+You can use the archetype by running this maven-friendly 😅command.
 Don't forget to replace `${VERSION}` by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Fagile-architecture-documentation-system.svg)
 
 ```sh

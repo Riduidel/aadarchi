@@ -15,8 +15,9 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.bodiam</groupId> <!-- Now using Jitpack!(source repo is https://github.com/bodiam/markdown-to-asciidoc) -->
+			<groupId>${project.groupId}</groupId>
 			<artifactId>markdown-to-asciidoc</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.kohsuke</groupId>
