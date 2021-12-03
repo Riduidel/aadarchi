@@ -28,6 +28,7 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.kohsuke.MetaInfServices;
+import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
@@ -44,8 +45,10 @@ import com.structurizr.model.StaticStructureElement;
  * @author nicolas-delsaux
  *
  */
-@MetaInfServices
-public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements ModelEnhancer {
+@MetaInfServices(Enhancer.class)
+public class MavenDetailsInfererEnhancer 
+	extends ModelElementAdapter 
+	implements ModelEnhancer {
 	private abstract class ModelElementMavenEnhancer<Enhanced extends StaticStructureElement> {
 		
 		protected final Enhanced enhanced;

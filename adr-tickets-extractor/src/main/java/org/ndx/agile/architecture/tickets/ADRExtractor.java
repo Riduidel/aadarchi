@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.kohsuke.MetaInfServices;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.Enhancer;
@@ -63,12 +63,13 @@ public class ADRExtractor
 	Template decisionList;
 	
 	@Override
-		public void configure(Configuration configuration) {
+		public void configure(ImmutableConfiguration configuration) {
 			super.configure(configuration);
 			FreemarkerTemplateProducer producer = new FreemarkerTemplateProducer();
 			freemarker.template.Configuration c = producer.createConfiguration();
 			decision = producer.produceTemplate(c, getClass(), "decision");
 			decision = producer.produceTemplate(c, getClass(), "decisionList");
+			ticketsHandlers = ServiceLoader.load(TicketsHandler.class);
 		}
 
 	@Override

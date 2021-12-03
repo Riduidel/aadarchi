@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.MetaInfServices;
@@ -41,7 +41,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 	ServiceLoader<SCMHandler> scmHandlers;
 
 	@Override
-	public void configure(Configuration configuration) {
+	public void configure(ImmutableConfiguration configuration) {
 		super.configure(configuration);
 		scmHandlers = ServiceLoader.load(SCMHandler.class);
 	}

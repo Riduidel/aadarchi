@@ -39,7 +39,6 @@ class SequenceDiagramVisitorTest {
 		generator.addSupportingType(SequenceDiagramGenerator.class.getName());
 		// Let's build a sequence diagram visitor
 		SequenceDiagramVisitor tested = new SequenceDiagramVisitor();
-		tested.logger = Logger.getLogger(getClass().getName());
 		tested.destination = new File("target/tests/"+getClass().getSimpleName());
 		// Emulate the standard visit
 		tested.startVisit(model);

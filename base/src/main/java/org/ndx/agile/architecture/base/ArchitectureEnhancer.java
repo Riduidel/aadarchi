@@ -2,6 +2,7 @@ package org.ndx.agile.architecture.base;
 
 import java.io.File;
 import java.util.Comparator;
+import java.util.ServiceLoader;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,7 +29,7 @@ import com.structurizr.view.ViewSet;
  */
 @com.structurizr.annotation.Component(technology = "Java/CDI")
 public class ArchitectureEnhancer {
-	@UsesComponent(description="Uses all enhancers") Iterable<Enhancer> enhancers;
+	@UsesComponent(description="Uses all enhancers") ServiceLoader<Enhancer> enhancers;
 	private static final Logger logger = Logger.getLogger(ArchitectureEnhancer.class.getName());
 	File enhancementsBase;
 
@@ -38,15 +39,14 @@ public class ArchitectureEnhancer {
 	public ArchitectureEnhancer(ImmutableConfiguration configuration) {
 		this.configuration = configuration;
 		enhancementsBase = configuration.get(File.class, ModelElementKeys.PREFIX+"enhancements");
-	}
-
-	public void loadOutputBuilder() {
+		enhancers = ServiceLoader.load(Enhancer.class);
 		outputBuilder = new SimpleOutputBuilder(enhancementsBase);
 	}
 
 	public void enhance(Workspace workspace) {
 		logger.info(String.format("Enhancers applied to this architecture are\n%s", 
 			StreamSupport.stream(enhancers.spliterator(), false)
+				.peek(enhancer -> enhancer.configure(configuration))
 				.sorted(Comparator.comparingInt(e -> e.priority()))
 				.map(e -> String.format("%s => %d", e.getClass().getName(), e.priority()))
 				.collect(Collectors.joining("\n"))));

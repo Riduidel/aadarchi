@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.kohsuke.MetaInfServices;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
+import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
@@ -37,7 +38,7 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 	private File sourceDir;
 
 	@Override
-	public void configure(Configuration configuration) {
+	public void configure(ImmutableConfiguration configuration) {
 		super.configure(configuration);
 		setDocumentsFolder(configuration.get(File.class, ASCIIDOC_SOURCE_DIR));
 	}

@@ -7,8 +7,11 @@ import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import org.apache.commons.configuration2.BaseConfiguration;
+import org.apache.commons.configuration2.CompositeConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.EnvironmentConfiguration;
 import org.apache.commons.configuration2.ImmutableConfiguration;
-import org.apache.commons.configuration2.builder.BasicConfigurationBuilder;
+import org.apache.commons.configuration2.SystemConfiguration;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.Component;
@@ -25,10 +28,19 @@ import com.structurizr.annotation.UsesComponent;
 public class ArchitectureDocumentationBuilder {
 
 	public static void main(String[] args) throws Throwable {
-		BasicConfigurationBuilder<ImmutableConfiguration> builder = new BasicConfigurationBuilder<ImmutableConfiguration>(BaseConfiguration.class);
-		builder.setParameters(commandLineToMap(args));
-		ArchitectureDocumentationBuilder architecture = new ArchitectureDocumentationBuilder(builder.getConfiguration());
+        CompositeConfiguration configuration = new CompositeConfiguration();
+        configuration.addConfiguration(new EnvironmentConfiguration());
+        configuration.addConfiguration(new SystemConfiguration());
+        configuration.addConfiguration(commandLineArgsAsConfiguration(args));
+        ArchitectureDocumentationBuilder architecture = new ArchitectureDocumentationBuilder(configuration);
         architecture.run();
+	}
+
+	private static Configuration commandLineArgsAsConfiguration(String[] args) {
+		var map = commandLineToMap(args);
+		BaseConfiguration returned = new BaseConfiguration();
+		map.entrySet().forEach(entry -> returned.setProperty(entry.getKey(), entry.getValue()));
+		return returned;
 	}
 
 	private static Map<String, Object> commandLineToMap(String[] args) {

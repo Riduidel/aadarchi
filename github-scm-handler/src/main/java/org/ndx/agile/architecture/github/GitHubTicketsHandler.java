@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.kohsuke.MetaInfServices;
 import org.kohsuke.github.GHIssue;
 import org.kohsuke.github.GHIssueState;
@@ -85,7 +85,7 @@ public class GitHubTicketsHandler implements TicketsHandler {
 
 
 	@Override
-	public void configure(Configuration configuration) {
+	public void configure(ImmutableConfiguration configuration) {
 		github = new GitHubProducer().initialize(configuration.getString(Constants.CONFIG_GITHUB_TOKEN));
 	}
 

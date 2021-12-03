@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.kohsuke.MetaInfServices;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
@@ -55,7 +55,7 @@ public class GithubSCMHandler implements SCMHandler {
 	}
 
 	@Override
-	public void configure(Configuration configuration) {
+	public void configure(ImmutableConfiguration configuration) {
 		github = new GitHubProducer().initialize(configuration.getString(Constants.CONFIG_GITHUB_TOKEN));
 	}
 

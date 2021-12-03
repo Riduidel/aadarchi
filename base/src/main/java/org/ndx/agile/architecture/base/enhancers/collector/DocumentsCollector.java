@@ -11,7 +11,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.MetaInfServices;
@@ -52,7 +52,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	Map<AgileArchitectureSection, Map<Element, Set<File>>> hierarchy = new EnumMap<>(AgileArchitectureSection.class);
 	
 	@Override
-	public void configure(Configuration configuration) {
+	public void configure(ImmutableConfiguration configuration) {
 		enhancementsBase = configuration.get(File.class, ModelElementKeys.PREFIX+"enhancements");
 	}
 

@@ -6,10 +6,11 @@ import java.util.ServiceLoader;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.kohsuke.MetaInfServices;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
+import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
@@ -36,7 +37,7 @@ public class SCMLinkGenerator extends ModelElementAdapter {
 	ServiceLoader<SCMHandler> scmHandlers;
 
 	@Override
-	public void configure(Configuration configuration) {
+	public void configure(ImmutableConfiguration configuration) {
 		super.configure(configuration);
 		scmHandlers = ServiceLoader.load(SCMHandler.class);
 	}

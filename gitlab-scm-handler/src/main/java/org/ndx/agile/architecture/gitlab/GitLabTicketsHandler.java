@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Issue;
@@ -24,7 +24,7 @@ public class GitLabTicketsHandler implements TicketsHandler {
 	GitLabApi gitlab;
 
 	@Override
-	public void configure(Configuration configuration) {
+	public void configure(ImmutableConfiguration configuration) {
 		gitlab = new GitLabProducer().initialize(
 				configuration.getString(Constants.CONFIG_GITLAB_TOKEN),
 				configuration.getString(Constants.CONFIG_GITLAB_URL, "https://gitlab.com"));

@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.kohsuke.MetaInfServices;
 import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
@@ -39,7 +39,7 @@ public class GraphEmitter implements ViewEnhancer {
 	String plantumlPencils;
 
 	@Override
-	public void configure(Configuration configuration) {
+	public void configure(ImmutableConfiguration configuration) {
 		destination = configuration.get(File.class, ModelElementKeys.AGILE_ARCHITECTURE_DIAGRAMS_PATH, new File("target/structurizr/architecture"));
 		layoutMode = configuration.getString(ModelElementKeys.PREFIX + "diagrams.layout", "LAYOUT_WITH_LEGEND");
 		plantumlPencils = configuration.getString(ModelElementKeys.PREFIX

@@ -1,6 +1,6 @@
 package org.ndx.agile.architecture.base;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 
 /**
  * All elements having init code should implement that interface
@@ -8,5 +8,5 @@ import org.apache.commons.configuration2.Configuration;
  *
  */
 public interface Configurable {
-	void configure(Configuration configuration);
+	void configure(ImmutableConfiguration configuration);
 }

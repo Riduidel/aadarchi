@@ -1,6 +1,6 @@
 package org.ndx.agile.architecture.base.enhancers;
 
-import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 
@@ -15,11 +15,11 @@ import com.structurizr.model.StaticStructureElement;
 public abstract class ModelElementAdapter implements ModelEnhancer {
 	
 	protected boolean force;
-	protected Configuration configuration;
+	protected ImmutableConfiguration configuration;
 
 	@Override
-	public void configure(Configuration configuration) {
-		force = configuration.getBoolean("force", false);
+	public void configure(ImmutableConfiguration configuration) {
+		force = Boolean.parseBoolean(configuration.getString("force", "false"));
 		this.configuration = configuration;
 	}
 
