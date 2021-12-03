@@ -1,14 +1,14 @@
 package org.ndx.agile.architecture.base;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.ServiceLoader;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.se.SeContainer;
-import javax.enterprise.inject.se.SeContainerInitializer;
-import javax.inject.Inject;
-
-import org.jboss.weld.config.ConfigurationKey;
+import org.apache.commons.configuration2.BaseConfiguration;
+import org.apache.commons.configuration2.ImmutableConfiguration;
+import org.apache.commons.configuration2.builder.BasicConfigurationBuilder;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.Component;
@@ -22,23 +22,34 @@ import com.structurizr.annotation.UsesComponent;
  *
  */
 @Component(technology = "Java/CDI")
-@ApplicationScoped
 public class ArchitectureDocumentationBuilder {
 
 	public static void main(String[] args) throws Throwable {
-		// TODO Disable weld INFO logging, cause it outputs too much things of no interest
-		// Disable the Weld thread pool (unless it is defined on command-line)
-		System.setProperty(ConfigurationKey.EXECUTOR_THREAD_POOL_TYPE.get(), "NONE");
-        SeContainerInitializer containerInit = SeContainerInitializer.newInstance();
-        SeContainer container = containerInit.initialize();
-        ArchitectureDocumentationBuilder architecture = container.select(ArchitectureDocumentationBuilder.class).get();
+		BasicConfigurationBuilder<ImmutableConfiguration> builder = new BasicConfigurationBuilder<ImmutableConfiguration>(BaseConfiguration.class);
+		builder.setParameters(commandLineToMap(args));
+		ArchitectureDocumentationBuilder architecture = new ArchitectureDocumentationBuilder(builder.getConfiguration());
         architecture.run();
-        container.close();
 	}
 
-	@Inject Logger logger;
-	@Inject @UsesComponent(description = "Adds information to initial architecture description") ArchitectureEnhancer enhancer;
-	@Inject @UsesComponent(description = "Generates initial architecture description") ArchitectureModelProvider provider;
+	private static Map<String, Object> commandLineToMap(String[] args) {
+		Map<String, Object> returned = new TreeMap<String, Object>();
+		for (int i = 0; i < args.length; i+=2) {
+			if(args.length>i+1) {
+				returned.put(args[i], args[i+1]);
+			}
+		}
+		return returned;
+	}
+
+	private static final Logger logger = Logger.getLogger(ArchitectureDocumentationBuilder.class.getName());
+	@UsesComponent(description = "Adds information to initial architecture description") ArchitectureEnhancer enhancer;
+	@UsesComponent(description = "Generates initial architecture description") ArchitectureModelProvider provider;
+
+
+	public ArchitectureDocumentationBuilder(ImmutableConfiguration configuration) {
+		enhancer = new ArchitectureEnhancer(configuration);
+		provider = ServiceLoader.load(ArchitectureModelProvider.class).findFirst().orElseThrow();
+	}
 
 	/**
 	 * Run method that will allow the description to be invoked and augmentations to be performed

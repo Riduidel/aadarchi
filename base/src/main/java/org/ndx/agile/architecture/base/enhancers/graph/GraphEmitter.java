@@ -7,10 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.apache.commons.configuration2.Configuration;
+import org.kohsuke.MetaInfServices;
+import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.ViewEnhancer;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
@@ -27,26 +26,26 @@ import com.structurizr.view.ViewSet;
 
 /**
  * Generates all graph and output them in the {@link #destination} folder
+ * 
  * @author nicolas-delsaux
  *
  */
 @Component(technology = "Java/CDI")
-@ApplicationScoped
+@MetaInfServices(value = Enhancer.class)
 public class GraphEmitter implements ViewEnhancer {
-	@Inject Logger logger;
-	@Inject 
-	@ConfigProperty(name = ModelElementKeys.AGILE_ARCHITECTURE_DIAGRAMS_PATH, defaultValue = "target/structurizr/architecture")
+	private static final Logger logger = Logger.getLogger(GraphEmitter.class.getName());
 	File destination;
-	@Inject @ConfigProperty(name = "force", defaultValue = "false") boolean force;
-
-	@Inject 
-	@ConfigProperty(name = ModelElementKeys.PREFIX+"diagrams.layout", defaultValue = "LAYOUT_WITH_LEGEND")
 	String layoutMode;
-
-	@Inject 
-	@ConfigProperty(name = ModelElementKeys.PREFIX+"diagrams.plantuml.pencils", defaultValue = "https://github.com/plantuml-stdlib/C4-PlantUML")
 	String plantumlPencils;
-	
+
+	@Override
+	public void configure(Configuration configuration) {
+		destination = configuration.get(File.class, ModelElementKeys.AGILE_ARCHITECTURE_DIAGRAMS_PATH, new File("target/structurizr/architecture"));
+		layoutMode = configuration.getString(ModelElementKeys.PREFIX + "diagrams.layout", "LAYOUT_WITH_LEGEND");
+		plantumlPencils = configuration.getString(ModelElementKeys.PREFIX
+		+ "diagrams.plantuml.pencils", "https://github.com/plantuml-stdlib/C4-PlantUML");
+	}
+
 	@Override
 	public boolean isParallel() {
 		return true;
@@ -57,25 +56,31 @@ public class GraphEmitter implements ViewEnhancer {
 		return Integer.MAX_VALUE;
 	}
 
-	@Override public boolean startVisit(ViewSet viewset) { return true; }
+	@Override
+	public boolean startVisit(ViewSet viewset) {
+		return true;
+	}
 
 	@Override
-	public boolean startVisit(View s) { return true; }
+	public boolean startVisit(View s) {
+		return true;
+	}
 
 	/**
-	 * At view end visit, we selectively remove the layout information if it is layout with legend
+	 * At view end visit, we selectively remove the layout information if it is
+	 * layout with legend
 	 */
 	@Override
 	public void endVisit(View diagram, OutputBuilder builder) {
-		if(diagram instanceof ComponentView || diagram instanceof ContainerView) {
-			Path path = new File(destination, diagram.getKey()+".plantuml").toPath();
+		if (diagram instanceof ComponentView || diagram instanceof ContainerView) {
+			Path path = new File(destination, diagram.getKey() + ".plantuml").toPath();
 			try {
 				String diagramText = Files.readString(path);
-				if(diagramText.contains(C4PlantUMLWriter.Layout.LAYOUT_WITH_LEGEND.name())) {
-					diagramText = diagramText.replace(C4PlantUMLWriter.Layout.LAYOUT_WITH_LEGEND.name()+"()", "");
+				if (diagramText.contains(C4PlantUMLWriter.Layout.LAYOUT_WITH_LEGEND.name())) {
+					diagramText = diagramText.replace(C4PlantUMLWriter.Layout.LAYOUT_WITH_LEGEND.name() + "()", "");
 					Files.writeString(path, diagramText);
 				}
-			} catch(IOException e) {
+			} catch (IOException e) {
 				// Nothing to do
 			}
 		}
@@ -103,24 +108,19 @@ public class GraphEmitter implements ViewEnhancer {
 		plantUMLWriter.addSkinParam("pathHoverColor", "GreenYellow");
 		plantUMLWriter.addSkinParam("ArrowThickness", "3");
 		plantUMLWriter.addSkinParam("svgLinkTarget", "_parent");
-		
+
 		destination.mkdirs();
-		plantUMLWriter.toPlantUMLDiagrams(workspace).stream().parallel()
-			.forEach(diagram -> {
-				// Incredibly enough, that's not a view!
-				Path path = new File(destination, diagram.getKey()+".plantuml").toPath();
-				try {
-					Files.write(
-							path, 
-							diagram.getDefinition().getBytes(Charset.forName("UTF-8")));
-					logger.info(String.format("Generated diagram %s in file %s", diagram.getKey(), path));
-				} catch(IOException e) {
-					throw new CantWriteDiagram(
-							String.format("Can't write diagram %s in file %s",
-									diagram.getKey(), path),
-							e);
-				}
-			});
+		plantUMLWriter.toPlantUMLDiagrams(workspace).stream().parallel().forEach(diagram -> {
+			// Incredibly enough, that's not a view!
+			Path path = new File(destination, diagram.getKey() + ".plantuml").toPath();
+			try {
+				Files.write(path, diagram.getDefinition().getBytes(Charset.forName("UTF-8")));
+				logger.info(String.format("Generated diagram %s in file %s", diagram.getKey(), path));
+			} catch (IOException e) {
+				throw new CantWriteDiagram(String.format("Can't write diagram %s in file %s", diagram.getKey(), path),
+						e);
+			}
+		});
 	}
 
 }

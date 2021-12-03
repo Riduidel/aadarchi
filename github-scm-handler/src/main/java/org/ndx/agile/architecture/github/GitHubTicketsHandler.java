@@ -3,12 +3,11 @@ package org.ndx.agile.architecture.github;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
+import org.apache.commons.configuration2.Configuration;
+import org.kohsuke.MetaInfServices;
 import org.kohsuke.github.GHIssue;
 import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHRepository;
@@ -16,9 +15,10 @@ import org.kohsuke.github.GitHub;
 import org.ndx.agile.architecture.base.enhancers.tickets.Ticket;
 import org.ndx.agile.architecture.base.enhancers.tickets.TicketsHandler;
 
+@MetaInfServices
 public class GitHubTicketsHandler implements TicketsHandler {
-	@Inject Logger logger;
-	@Inject GitHub github;
+	private static final Logger logger = Logger.getLogger(GitHubTicketsHandler.class.getName());
+	GitHub github;
 
 	@Override
 	public boolean canHandle(String ticketsProject) {
@@ -81,6 +81,12 @@ public class GitHubTicketsHandler implements TicketsHandler {
 			throw new GitHubHandlerException(String.format("Unable to read project %s", 
 					project), e);
 		}
+	}
+
+
+	@Override
+	public void configure(Configuration configuration) {
+		github = new GitHubProducer().initialize(configuration.getString(Constants.CONFIG_GITHUB_TOKEN));
 	}
 
 }

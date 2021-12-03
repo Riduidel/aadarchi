@@ -5,14 +5,10 @@ import java.util.Comparator;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.apache.commons.lang3.time.StopWatch;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
 
@@ -31,25 +27,30 @@ import com.structurizr.view.ViewSet;
  *
  */
 @com.structurizr.annotation.Component(technology = "Java/CDI")
-@ApplicationScoped
 public class ArchitectureEnhancer {
-	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;
-	@Inject Logger logger;
-	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
+	@UsesComponent(description="Uses all enhancers") Iterable<Enhancer> enhancers;
+	private static final Logger logger = Logger.getLogger(ArchitectureEnhancer.class.getName());
+	File enhancementsBase;
 
 	private OutputBuilder outputBuilder;
+	private ImmutableConfiguration configuration;
 	
-	@PostConstruct public void loadOutputBuilder() {
+	public ArchitectureEnhancer(ImmutableConfiguration configuration) {
+		this.configuration = configuration;
+		enhancementsBase = configuration.get(File.class, ModelElementKeys.PREFIX+"enhancements");
+	}
+
+	public void loadOutputBuilder() {
 		outputBuilder = new SimpleOutputBuilder(enhancementsBase);
 	}
 
 	public void enhance(Workspace workspace) {
-		logger.info(() -> String.format("Enhancers applied to this architecture are\n%s",  
-			enhancers.stream()
+		logger.info(String.format("Enhancers applied to this architecture are\n%s", 
+			StreamSupport.stream(enhancers.spliterator(), false)
 				.sorted(Comparator.comparingInt(e -> e.priority()))
 				.map(e -> String.format("%s => %d", e.getClass().getName(), e.priority()))
 				.collect(Collectors.joining("\n"))));
-		withStopWatch("Running all enhancements took %s", () -> enhancers.stream()
+		withStopWatch("Running all enhancements took %s", () -> StreamSupport.stream(enhancers.spliterator(), false)
 			.sorted(Comparator.comparingInt(e -> e.priority()))
 			.forEach(enhancer -> enhancerVisitWorkspace(enhancer, workspace)));
 	}

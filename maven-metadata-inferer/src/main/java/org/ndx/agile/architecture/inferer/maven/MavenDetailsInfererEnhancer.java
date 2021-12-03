@@ -17,20 +17,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-
-import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Profile;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.kohsuke.MetaInfServices;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
@@ -47,6 +44,7 @@ import com.structurizr.model.StaticStructureElement;
  * @author nicolas-delsaux
  *
  */
+@MetaInfServices
 public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements ModelEnhancer {
 	private abstract class ModelElementMavenEnhancer<Enhanced extends StaticStructureElement> {
 		
@@ -279,7 +277,8 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	private static final String MAVEN_POM_URL = MavenDetailsInfererEnhancer.class.getName()+"#MAVEN_POM_URL";
 	private static final String MAVEN_MODULE_DIR = MavenDetailsInfererEnhancer.class.getName()+"#MAVEN_MODULE_DIR";
 
-	@Inject Logger logger;
+	private static final Logger logger = Logger.getLogger(MavenDetailsInfererEnhancer.class.getName());
+	
 	/**
 	 * The maven reader used to read all poms
 	 */

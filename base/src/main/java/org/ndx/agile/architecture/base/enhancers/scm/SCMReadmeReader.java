@@ -3,17 +3,17 @@ package org.ndx.agile.architecture.base.enhancers.scm;
 import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.ServiceLoader;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-
+import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.kohsuke.MetaInfServices;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
+import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
@@ -32,13 +32,19 @@ import nl.jworks.markdown_to_asciidoc.Converter;
  * @author nicolas-delsaux
  *
  */
+@MetaInfServices(value = Enhancer.class)
 @Component(technology = "Java/CDI")
 public class SCMReadmeReader extends ModelElementAdapter {
-	@Inject @ConfigProperty(name="force", defaultValue="false") boolean force;
-	
-	@Inject Logger logger;
-	
-	@Inject @UsesComponent(description = "Get SCM infos") Instance<SCMHandler> scmHandlers;
+	private static final Logger logger = Logger.getLogger(SCMReadmeReader.class.getName());
+
+	@UsesComponent(description = "Get SCM infos")
+	ServiceLoader<SCMHandler> scmHandlers;
+
+	@Override
+	public void configure(Configuration configuration) {
+		super.configure(configuration);
+		scmHandlers = ServiceLoader.load(SCMHandler.class);
+	}
 
 	@Override
 	public int priority() {
@@ -59,12 +65,13 @@ public class SCMReadmeReader extends ModelElementAdapter {
 	void writeReadmeFor(Element element, OutputBuilder builder) {
 		if(element.getProperties().containsKey(ModelElementKeys.SCM_PROJECT)) {
 			String elementProject = element.getProperties().get(ModelElementKeys.SCM_PROJECT);
-			Optional<SCMHandler> usableHandler = scmHandlers.stream()
+			Optional<SCMHandler> usableHandler = scmHandlers.stream().map(provider -> provider.get())
 				.filter(handler -> handler.canHandle(elementProject))
 				.findFirst()
 				;
 			if(usableHandler.isPresent()) {
 				SCMHandler handler = usableHandler.get();
+				handler.configure(configuration);
 				writeReadmeFor(handler, element, elementProject, builder);
 			} else {
 				logger.warning(String.format("We have this set of handlers\n%s\nin which we couldn't find one for element %s associated project %s",

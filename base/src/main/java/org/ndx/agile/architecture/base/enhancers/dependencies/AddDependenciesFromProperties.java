@@ -4,19 +4,20 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
 import org.apache.commons.text.similarity.LevenshteinDistance;
+import org.kohsuke.MetaInfServices;
+import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
+import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
 import com.structurizr.model.InteractionStyle;
 import com.structurizr.model.StaticStructureElement;
 
 /**
- * Under some circumstances (typically maven projects some elements may ahve
+ * Under some circumstances (typically maven projects some elements may have
  * dependencies links added as properties of element ... This component process
  * those properties and transform these into valid agile Structurizr
  * dependencies.
@@ -24,9 +25,10 @@ import com.structurizr.model.StaticStructureElement;
  * @author Nicolas
  *
  */
+@Component(technology = "Java/CDI")
+@MetaInfServices(value = Enhancer.class)
 public class AddDependenciesFromProperties extends ModelElementAdapter {
-	@Inject
-	Logger logger;
+	private static final Logger logger = Logger.getLogger(AddDependenciesFromProperties.class.getName());
 
 	@Override
 	public int priority() {

@@ -1,5 +1,6 @@
 package org.ndx.agile.architecture.base.enhancers;
 
+import org.apache.commons.configuration2.Configuration;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 
@@ -12,6 +13,15 @@ import com.structurizr.model.StaticStructureElement;
 
 /** An adapter redirecting all model element processing to the same method */
 public abstract class ModelElementAdapter implements ModelEnhancer {
+	
+	protected boolean force;
+	protected Configuration configuration;
+
+	@Override
+	public void configure(Configuration configuration) {
+		force = configuration.getBoolean("force", false);
+		this.configuration = configuration;
+	}
 
 	/**
 	 * Override this method to do anything on all elements

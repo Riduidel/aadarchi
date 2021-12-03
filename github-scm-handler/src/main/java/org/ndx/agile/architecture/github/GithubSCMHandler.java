@@ -7,19 +7,19 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
+import org.apache.commons.configuration2.Configuration;
+import org.kohsuke.MetaInfServices;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.ndx.agile.architecture.base.enhancers.scm.SCMFile;
 import org.ndx.agile.architecture.base.enhancers.scm.SCMHandler;
 
-@ApplicationScoped
+@MetaInfServices
 public class GithubSCMHandler implements SCMHandler {
-	@Inject Logger logger;
-	@Inject GitHub github;
+	private static final Logger logger = Logger.getLogger(GithubSCMHandler.class.getName());
+	GitHub github;
+	
 	@Override
 	public boolean canHandle(String project) {
 		return Constants.isGitHubProject(project);
@@ -52,6 +52,11 @@ public class GithubSCMHandler implements SCMHandler {
 	@Override
 	public String asciidocText() {
 		return "icon:github[set=fab] GitHub";
+	}
+
+	@Override
+	public void configure(Configuration configuration) {
+		github = new GitHubProducer().initialize(configuration.getString(Constants.CONFIG_GITHUB_TOKEN));
 	}
 
 }

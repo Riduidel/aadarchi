@@ -8,17 +8,27 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.apache.commons.configuration2.Configuration;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.TreeItem;
+import org.kohsuke.MetaInfServices;
 import org.ndx.agile.architecture.base.enhancers.scm.SCMFile;
 import org.ndx.agile.architecture.base.enhancers.scm.SCMHandler;
 
 import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.exception.WrappedException;
 
+@MetaInfServices
 public class GitlabSCMHandler implements SCMHandler {
-	private @Inject GitLabApi gitlab;
+	private GitLabApi gitlab;
+
+	@Override
+	public void configure(Configuration configuration) {
+		gitlab = new GitLabProducer().initialize(
+				configuration.getString(Constants.CONFIG_GITLAB_TOKEN),
+				configuration.getString(Constants.CONFIG_GITLAB_URL, "https://gitlab.com"));
+	}
 
 	@Override
 	public boolean canHandle(String project) {
