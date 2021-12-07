@@ -20,9 +20,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-
-import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.apache.commons.configuration2.ImmutableConfiguration;
+import org.kohsuke.MetaInfServices;
+import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
@@ -39,12 +39,9 @@ import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Model;
 
+@MetaInfServices(value = Enhancer.class)
 public class SequenceDiagramVisitor extends ModelElementAdapter {
-	@Inject Logger logger;
-
-	@Inject 
-	@ConfigProperty(name = "agile.architecture.diagrams", defaultValue = "target/structurizr/architecture")
-	File destination;
+	static final Logger logger = Logger.getLogger(SequenceDiagramVisitor.class.getName());
 
 	/**
 	 * Map container canonical name to the container object.
@@ -65,6 +62,15 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	 * It is populated at each {@link #startVisit(Container)} call and reset after call
 	 */
 	CallGraphModel callGraphModel = null;
+
+	File destination;
+	
+	@Override
+	public void configure(ImmutableConfiguration configuration) {
+		// TODO Auto-generated method stub
+		super.configure(configuration);
+		destination = configuration.get(File.class, "agile.architecture.diagrams", new File("target/structurizr/architecture"));
+	}
 	
 	@Override
 	public boolean isParallel() {

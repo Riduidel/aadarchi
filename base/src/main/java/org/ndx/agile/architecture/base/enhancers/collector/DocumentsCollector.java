@@ -11,12 +11,12 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
+import org.apache.commons.configuration2.ImmutableConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.kohsuke.MetaInfServices;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
+import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
@@ -36,12 +36,13 @@ import com.structurizr.model.SoftwareSystem;
  * @author nicolas-delsaux
  *
  */
+@MetaInfServices(value = Enhancer.class)
 @com.structurizr.annotation.Component(technology = "Java/CDI")
 public class DocumentsCollector implements ModelEnhancer {
 	/**
 	 * Injecting enhancements base to have a folder where to put our documents.
 	 */
-	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
+	File enhancementsBase;
 	/**
 	 * Map that contains all elements that should be automagically included.
 	 * First level keys are the enums.
@@ -49,6 +50,12 @@ public class DocumentsCollector implements ModelEnhancer {
 	 * And value is a sorted set of file names.
 	 */
 	Map<AgileArchitectureSection, Map<Element, Set<File>>> hierarchy = new EnumMap<>(AgileArchitectureSection.class);
+	
+	@Override
+	public void configure(ImmutableConfiguration configuration) {
+		enhancementsBase = configuration.get(File.class, ModelElementKeys.PREFIX+"enhancements");
+	}
+
 	@Override
 	public boolean isParallel() {
 		return false;

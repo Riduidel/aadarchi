@@ -4,8 +4,7 @@ import java.io.File;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 
-import javax.enterprise.context.ApplicationScoped;
-
+import org.kohsuke.MetaInfServices;
 import org.ndx.agile.architecture.base.ArchitectureModelProvider;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.inferer.maven.MavenEnhancer;
@@ -24,7 +23,7 @@ import com.structurizr.view.ContainerView;
 import com.structurizr.view.SystemContextView;
 import com.structurizr.view.ViewSet;
 
-@ApplicationScoped
+@MetaInfServices
 public class Architecture implements ArchitectureModelProvider {
 
 	public static final String CONTAINERS_ARCHETYPE = "archetype";
@@ -114,14 +113,9 @@ public class Architecture implements ArchitectureModelProvider {
 		adrTicketsExtractor.uses(gitHub, "Read tickets from GitHub if configured so");
 		base.getComponentWithName("ArchitectureEnhancer").uses(adrTicketsExtractor, "Produces ADR reporting");
 
-		Component cdiConfigExtension = base.addComponent("cdi-config-extension", "CDI Config extensions", "java");
-		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("cdi-config-extension/pom.xml"));
-		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, cdiConfigExtension.getName());
-		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(cdiConfigExtension, "Eases out some CDI code");
-
 		Component mavenEnhancer = base.addComponent("maven-metadata-inferer", "Enhanced by Maven");
-		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, MavenEnhancer.class.getName());
-		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, mavenEnhancer.getName());
+		mavenEnhancer.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, MavenEnhancer.class.getName());
+		mavenEnhancer.addProperty(ModelElementKeys.SCM_PATH, mavenEnhancer.getName());
 		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(mavenEnhancer, "Infer most of element details from Maven infos");
 
 		Container asciidoc = agileArchitecture.addContainer("asciidoc", "Asciidoc tooling", "Maven plugin");

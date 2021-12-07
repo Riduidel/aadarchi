@@ -3,12 +3,14 @@ package org.ndx.agile.architecture.base.enhancers.scm;
 import java.util.Collection;
 import java.util.function.Predicate;
 
+import org.ndx.agile.architecture.base.Configurable;
+
 /**
  * Interface implemented by SCM handlers to read files from SCM storage
  * @author nicolas-delsaux
  *
  */
-public interface SCMHandler {
+public interface SCMHandler extends Configurable {
 	/**
 	 * 
 	 * @param project
