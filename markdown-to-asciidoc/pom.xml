@@ -8,6 +8,10 @@
 	<artifactId>markdown-to-asciidoc</artifactId>
 	<name>Markdown to Asciidoc converter</name>
 	<description>This project is a fork of https://github.com/bodiam/markdown-to-asciidoc to avoid depending upon Jitpack (which prevents usage in legacy companies)</description>
+	
+	<properties>
+		<cucumber.version>7.2.3</cucumber.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -22,21 +26,27 @@
 		</dependency>
 
 		<dependency>
-			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-picocontainer</artifactId>
-			<version>1.1.8</version>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>info.cukes</groupId>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-picocontainer</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
 			<artifactId>cucumber-junit</artifactId>
-			<version>1.1.8</version>
+			<version>${cucumber.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -80,8 +90,7 @@
 								<phase>generate-sources</phase>
 								<configuration>
 									<tasks>
-										<unzip src="${download.dir}/master.zip" dest="${download.dir}/unzip">
-										</unzip>
+										<unzip src="${download.dir}/master.zip" dest="${download.dir}/unzip"></unzip>
 										<copy todir="${project.basedir}/src">
 											<fileset dir="${download.dir}/unzip/markdown-to-asciidoc-master/src" />
 										</copy>
