@@ -268,6 +268,14 @@
 						</goals>
 						<configuration>
 							<mainClass>${agile.architecture.main.class}</mainClass>
+							<!-- As this goal is to be invoked repetedly, it is good to have it 
+								as fast as possible. And we have enhancers that run in parallel in fork-join 
+								thread pool. As this pool is not easily closeable (it depends upon the caller 
+								JVM), it pushes maven to wait for those threads until a timeout is reached. 
+								TO avoid that, we set that to false and ignore daemon threads. Obviously, 
+								this imply some care on synchronization ... (see https://github.com/Riduidel/agile-architecture-documentation-system/issues/50 
+								for discussion) -->
+							<cleanupDaemonThreads>false</cleanupDaemonThreads>
 							<systemProperties>
 								<systemProperty>
 									<key>maven.source.dir</key>
