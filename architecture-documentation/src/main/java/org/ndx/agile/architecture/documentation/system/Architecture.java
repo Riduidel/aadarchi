@@ -23,7 +23,7 @@ import com.structurizr.view.ContainerView;
 import com.structurizr.view.SystemContextView;
 import com.structurizr.view.ViewSet;
 
-@MetaInfServices
+@MetaInfServices(value = ArchitectureModelProvider.class)
 public class Architecture implements ArchitectureModelProvider {
 
 	public static final String CONTAINERS_ARCHETYPE = "archetype";
