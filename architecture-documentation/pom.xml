@@ -295,7 +295,7 @@
 								</systemProperty>
 								<systemProperty>
 									<key>agile.architecture.github.token</key>
-									<value>${GITHUB_ACCESS_TOKEN}</value>
+									<value>${agile.architecture.github.token}</value>
 								</systemProperty>
 								<systemProperty>
 									<key>force</key>
