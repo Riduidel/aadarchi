@@ -89,4 +89,4 @@ This component generates all the diagrams defined in Architecture class.
 ##### System properties
 The component can be forced to rewrite the generated files by the common `force` flag.
 
-Diagrams will be generated in `agile.architecture.diagrams` folder, which defaults in Java code to `target/structurizr/architecture`.
+Diagrams will be generated in `agile.architecture.diagrams` folder, which defaults in Java code to `target/structurizr/diagrams`.
