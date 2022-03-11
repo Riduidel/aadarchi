@@ -1,6 +1,6 @@
-# github-scm-handler
+# gitlab-scm-handler
 
-SCM Handler for GitHub project.
+SCM Handler for GitLab project.
 
 This handler defines implementations of the `SCMHandler` interface.
 
