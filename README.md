@@ -44,14 +44,11 @@ This is where you should put all the systems, containers, components that are di
 ### Faster edit loop
 A faster developer feedback loop can be achieved using the [fizzed-watcher-maven-plugin](https://github.com/fizzed/maven-plugins).
 Don't worry, you don't have to configure it by yourself!
-You can run
+You can run `mvn -Plivereload` when working on documents.
+This will watch both the `src/docs` (if it exists), `src/slides` (if it exists) and the `src/main/java` folder and run a `mvn package` when any of these folders have changes in.
 
-* `mvn -Pgenerate-docs -Plivereload` when working on documents.
-This will watch both the `src/docs` and the `src/main/java` folder and run a `mvn package` when any of these folders have changes in.
-Visit [http://localhost:35729/docs/html/](http://localhost:35729/docs/html/) to view your generated document in HTML form
-* `mvn -Pgenerate-docs -Plivereload` when working on slides.
-This will watch both the `src/slides` and the `src/main/java` folder and run a `mvn package` when any of these folders have changes in.
-Visit [http://localhost:35729/slides/html/](http://localhost:35729/slides/html/) to view your generated slides in HTML form
+Visit [http://localhost:35729/docs/html/](http://localhost:35729/docs/html/) to view your generated slides in HTML form.
+Visit [http://localhost:35729/slides/html/](http://localhost:35729/slides/html/) to view your generated slides in HTML form.
 
 If you have installed the [livereload browser extension](http://livereload.com/extensions/) (but not the livereload desktop application, which job is handled by the maven build), any change in the project will be immedialty visible in browser, allowing you to work in a pleasant environment (well, I hope)
 
