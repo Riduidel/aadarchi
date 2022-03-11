@@ -50,21 +50,21 @@ This will watch both the `src/docs` (if it exists), `src/slides` (if it exists) 
 Visit [http://localhost:35729/docs/html/](http://localhost:35729/docs/html/) to view your generated slides in HTML form.
 Visit [http://localhost:35729/slides/html/](http://localhost:35729/slides/html/) to view your generated slides in HTML form.
 
-If you have installed the [livereload browser extension](http://livereload.com/extensions/) (but not the livereload desktop application, which job is handled by the maven build), any change in the project will be immedialty visible in browser, allowing you to work in a pleasant environment (well, I hope)
+If you have installed the [livereload browser extension](http://livereload.com/extensions/) (but not the livereload desktop application, which job is handled by the maven build), any change in the project will be immedialety  visible in browser, allowing you to work in a pleasant environment (well, I hope)
 
 ### Best practices
 * Define systems, containers and components options **only** through structurizr properties. 
 The useful method for that is `ModelItem#addProperty(String, String)`. Don't try to load properties from other means, cause it'll introduce incoherence.
 * Try to stay close to describe=>extend=>generate. In other words, first describe architecture in `Architecture` class. 
-Then use available extension points (provided by CDI) to add additionnal infos.
+Then use available extension points (provided by CDI) to add additional infos.
 
 #### describe=>extend=>generate
 What are we talking about here ?
-In fact, the simplest way to have a good model, from what w've already tested, is to
+In fact, the simplest way to have a good model, from what we've already tested, is to
 
 1. Create a valid and complete model, by either describing all elements or finding them (using enhancers like `MavenDetailsInfererEnhancer`)
 2. Extend that model by adding associated resources (that's typically the case of the `SCMLinkGenerator` and `SCMReadmeReader`)
-3. Generate the good resources, like the viewss (using the archetype proveided `ViewsGenerator`) and the document includes
+3. Generate the good resources, like the views (using the archetype provided `ViewsGenerator`) and the document includes
 
 #### Writing an Enhancer
 Since we're talking about the `Enhancer` interface, this is the main interface allowing us to have an extendable architecture model.
@@ -73,7 +73,7 @@ First, choose what to enhance : model or views ?
 Both of them have dedicated subinterfaces (`ModelEnhancer` and `ViewEnhancer`).
 There even is a `ModelElementAdapter` that will ease things out for model enhancers, since it's the interface you may extend.
 So, once you've chosen what to extend, choose when this enhancer will run by setting a priority.
-This priority defines the order in whcih the enhacer will run, and all running enhancers are displayed ordered by priority at start of generation.
+This priority defines the order in which the enhacer will run, and all running enhancers are displayed ordered by priority at start of generation.
 Now, you'll have to implement the visiting methods, for which you can find numerous examples in our code.
 Don't forget to take a look at the `isParallel()` method, which may fasten things a lot, since it can allow the enhancer to be run using parallel features of Java system executor services.
 
