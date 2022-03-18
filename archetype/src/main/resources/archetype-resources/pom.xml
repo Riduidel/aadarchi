@@ -267,6 +267,14 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<release>${version.java}</release>
+					<annotationProcessorPaths>
+						<!-- https://mvnrepository.com/artifact/org.kohsuke.metainf-services/metainf-services -->
+						<annotationProcessorPath>
+							<groupId>org.kohsuke.metainf-services</groupId>
+							<artifactId>metainf-services</artifactId>
+							<version>${version.metainf.services}</version>
+						</annotationProcessorPath>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 			<plugin>
