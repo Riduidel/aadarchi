@@ -60,7 +60,8 @@ public class ArchitectureDocumentationBuilder {
 
 	public ArchitectureDocumentationBuilder(ImmutableConfiguration configuration) {
 		enhancer = new ArchitectureEnhancer(configuration);
-		provider = ServiceLoader.load(ArchitectureModelProvider.class).findFirst().orElseThrow();
+		provider = ServiceLoader.load(ArchitectureModelProvider.class).findFirst().orElseThrow(() -> new AgileArchitectureException("Unable to find an instance of ArchitectureModelProvider using ServiceLoader") {
+		});
 	}
 
 	/**
