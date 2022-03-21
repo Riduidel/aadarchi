@@ -1,7 +1,13 @@
 package org.ndx.agile.architecture.github;
 
+import static org.ndx.agile.architecture.github.Constants.CONFIG_GITHUB_TOKEN;
+
 import java.io.IOException;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+
+import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 
@@ -12,7 +18,7 @@ import org.kohsuke.github.GitHubBuilder;
  */
 public class GitHubProducer {
 
-	public GitHub initialize(String token) {
+	public @Produces @ApplicationScoped GitHub initialize(@ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token) {
 		if(token==null || token.isBlank()) {
 			throw new GitHubHandlerException(String.format("Can't connect to GitHub if token %s isn't defined as system property", Constants.CONFIG_GITHUB_TOKEN));
 		}

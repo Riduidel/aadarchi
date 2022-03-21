@@ -24,10 +24,6 @@
 			<artifactId>github-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.kohsuke.metainf-services</groupId>
-			<artifactId>metainf-services</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.pivovarit</groupId>
 			<artifactId>throwing-function</artifactId>
 		</dependency>

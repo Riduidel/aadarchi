@@ -2,7 +2,7 @@ package org.ndx.agile.architecture.base;
 
 import com.structurizr.Workspace;
 
-public interface Enhancer extends Configurable {
+public interface Enhancer {
 	/**
 	 * This is the best priority an enhancer which manipulates generated containers/components should get.
 	 * In other words, users enhancers generating those model elements can get best priorities,
@@ -21,7 +21,7 @@ public interface Enhancer extends Configurable {
 	 * @return Any int. Lower values will run first, higher values will run last.
 	 */
 	int priority();
-	
+
 	boolean startVisit(Workspace workspace, OutputBuilder builder);
 
 	void endVisit(Workspace workspace, OutputBuilder builder);

@@ -4,8 +4,9 @@ import java.net.URLClassLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.kohsuke.MetaInfServices;
-import org.ndx.agile.architecture.base.Enhancer;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.utils.StructurizrUtils;
@@ -14,9 +15,9 @@ import com.structurizr.analysis.ComponentFinder;
 import com.structurizr.analysis.FirstImplementationOfInterfaceSupportingTypesStrategy;
 import com.structurizr.model.Container;
 
-@MetaInfServices(value = Enhancer.class)
+@ApplicationScoped
 public class SpringComponentDetector extends ModelElementAdapter {
-	private static final Logger logger = Logger.getLogger(SpringComponentDetector.class.getName());
+	@Inject Logger logger;
 
 	@Override
 	public int priority() {

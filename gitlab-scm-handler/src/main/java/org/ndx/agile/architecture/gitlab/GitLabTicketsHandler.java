@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.commons.configuration2.ImmutableConfiguration;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Issue;
@@ -19,16 +21,10 @@ import com.structurizr.annotation.Component;
  * @author nicolas-delsaux
  *
  */
+@ApplicationScoped
 @Component(technology = "Java")
 public class GitLabTicketsHandler implements TicketsHandler {
-	GitLabApi gitlab;
-
-	@Override
-	public void configure(ImmutableConfiguration configuration) {
-		gitlab = new GitLabProducer().initialize(
-				configuration.getString(Constants.CONFIG_GITLAB_TOKEN),
-				configuration.getString(Constants.CONFIG_GITLAB_URL, "https://gitlab.com"));
-	}
+	@Inject GitLabApi gitlab;
 
 	@Override
 	public boolean canHandle(String ticketsProject) {

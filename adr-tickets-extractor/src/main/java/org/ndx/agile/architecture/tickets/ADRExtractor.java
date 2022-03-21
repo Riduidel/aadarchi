@@ -9,13 +9,15 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
-import java.util.ServiceLoader;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.apache.commons.configuration2.ImmutableConfiguration;
-import org.kohsuke.MetaInfServices;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+
+import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
@@ -37,7 +39,7 @@ import freemarker.template.TemplateException;
  * @author nicolas-delsaux
  *
  */
-@MetaInfServices(value = Enhancer.class)
+@ApplicationScoped
 public class ADRExtractor 
 	extends ModelElementAdapter 
 	implements Enhancer {
@@ -57,20 +59,15 @@ public class ADRExtractor
 	
 	public static final String AGILE_ARCHITECTURE_TICKETS_ADR_LABEL = ModelElementKeys.PREFIX+"tickets.adr.label";
 	public static final String AGILE_ARCHITECTURE_TICKETS_PROJECT = ModelElementKeys.PREFIX+"tickets.project";
-	ServiceLoader<TicketsHandler> ticketsHandlers;
-	private static final Logger logger = Logger.getLogger(ADRExtractor.class.getName());
-	Template decision;
-	Template decisionList;
-	
-	@Override
-		public void configure(ImmutableConfiguration configuration) {
-			super.configure(configuration);
-			FreemarkerTemplateProducer producer = new FreemarkerTemplateProducer();
-			freemarker.template.Configuration c = producer.createConfiguration();
-			decision = producer.produceTemplate(c, getClass(), "decision");
-			decision = producer.produceTemplate(c, getClass(), "decisionList");
-			ticketsHandlers = ServiceLoader.load(TicketsHandler.class);
-		}
+	@Inject
+	@ConfigProperty(name = "force", defaultValue="false")
+	boolean force;
+	@Inject
+	Instance<TicketsHandler> ticketsHandlers;
+	@Inject
+	Logger logger;
+	@Inject Template decision;
+	@Inject Template decisionList;
 
 	@Override
 	public boolean isParallel() {
@@ -141,7 +138,7 @@ public class ADRExtractor
 	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
 		if (element.getProperties().containsKey(AGILE_ARCHITECTURE_TICKETS_PROJECT)) {
 			String ticketsProject = element.getProperties().get(AGILE_ARCHITECTURE_TICKETS_PROJECT);
-			Optional<TicketsHandler> usableHandler = ticketsHandlers.stream().map(producer -> producer.get())
+			Optional<TicketsHandler> usableHandler = ticketsHandlers.stream()
 					.filter(handler -> handler.canHandle(ticketsProject)).findFirst();
 			if (usableHandler.isPresent()) {
 				String label = element.getProperties().getOrDefault(AGILE_ARCHITECTURE_TICKETS_ADR_LABEL, "decision");
