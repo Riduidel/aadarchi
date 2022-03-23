@@ -44,14 +44,13 @@ jobs:
       run: mvn -B install --file pom.xml -Dagile.architecture.github.token=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
       env:
         TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
-        GET_COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
     - name: Temporary file create
-      run: mkdir temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./temp
+      run: mkdir temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./temp && echo ${{ Build.SourceVersionMessage }}
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
         publish_dir: ./temp
-        commit_message: ${{ secrets.GET_COMMIT_MESSAGE }}
+        commit_message: $(git log -1 --pretty=%B)
     - name: Temporary file delete
       run: rm -r ./temp
