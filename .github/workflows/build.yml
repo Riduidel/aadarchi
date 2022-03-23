@@ -47,5 +47,5 @@ jobs:
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
         publish_dir: ./architecture-documentation/target/asciidoc/docs/html
