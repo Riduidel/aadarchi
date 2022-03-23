@@ -44,10 +44,18 @@ jobs:
       run: mvn -B install --file pom.xml -DGITHUB_ACCESS_TOKEN=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
       env:
         TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
+    - name: Temporary file
+      run: mkdir temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html /temp/index.html
+    - name: Commit message
+      env:
+        get_commit_message: ${{ github.event.head_commit.message }}
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./architecture-documentation/target/asciidoc/docs/html/
-        exclude_assets: '.github,decisions/,01-context.html,02-functional_overview.html,03-quality_attributes.html,04-constraints.html,05-principles.html,06-software_architecture.html,07-code.html,08-data.html,09-infrastructure_architecture.html,10-deployment.html,11-development_environment.html,12-operation_and_support.html,13-decision_log.html'
-        commit_message: ${{ github.event.head_commit.message }}
+        publish_dir: ./temp
+#        exclude_assets: '.github,decisions/,01-context.html,02-functional_overview.html,03-quality_attributes.html,04-constraints.html,05-principles.html,06-software_architecture.html,07-code.html,08-data.html,09-infrastructure_architecture.html,10-deployment.html,11-development_environment.html,12-operation_and_support.html,13-decision_log.html'
+        commit_message: "{{ get_commit_message }}"
+      -
+    - name: Temporary file delete
+      run: rm -r /temp
