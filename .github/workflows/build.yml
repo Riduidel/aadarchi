@@ -41,7 +41,7 @@ jobs:
               "blocked": false
           }]
     - name: Build with Maven
-      run: mvn -B install --file pom.xml -DGITHUB_ACCESS_TOKEN=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
+      run: mvn -B install --file pom.xml -Dagile.architecture.github.token=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
       env:
         TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
     - name: Temporary file
@@ -52,7 +52,7 @@ jobs:
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
         publish_dir: ./temp
 #        exclude_assets: '.github,decisions/,01-context.html,02-functional_overview.html,03-quality_attributes.html,04-constraints.html,05-principles.html,06-software_architecture.html,07-code.html,08-data.html,09-infrastructure_architecture.html,10-deployment.html,11-development_environment.html,12-operation_and_support.html,13-decision_log.html'
         commit_message: "{{ get_commit_message }}"

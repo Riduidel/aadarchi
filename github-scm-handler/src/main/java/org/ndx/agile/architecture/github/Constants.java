@@ -19,6 +19,9 @@ public interface Constants {
 		if(project.startsWith("/")) {
 			project = project.substring(1);
 		}
+		if(project.endsWith(".git")) {
+			project = project.substring(0, project.indexOf(".git"));
+		}
 		return project;
 	}
 
