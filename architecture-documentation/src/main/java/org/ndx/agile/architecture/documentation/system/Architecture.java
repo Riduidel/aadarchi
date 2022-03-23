@@ -64,7 +64,7 @@ public class Architecture implements ArchitectureModelProvider {
 		architect.uses(maven, "Generates documentation");
 
 		Container base = agileArchitecture.addContainer(CONTAINERS_BASE, "Architecture base", "Java executable");
-		base.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, ArchitectureModelProvider.class.getName());
+		base.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("base/pom.xml"));
 		base.addProperty(ModelElementKeys.SCM_PATH, base.getName());
 		// end::structurizr-example-containers[]
 		
@@ -108,7 +108,7 @@ public class Architecture implements ArchitectureModelProvider {
 		base.getComponentWithName("SCMReadmeReader").uses(gitLab, "Get project readme");
 
 		Component adrTicketsExtractor = base.addComponent("adr-tickets-extractor", "enhanced by maven");
-		adrTicketsExtractor.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, ADRExtractor.class.getName());
+		adrTicketsExtractor.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("adr-tickets-extractor/pom.xml"));
 		adrTicketsExtractor.addProperty(ModelElementKeys.SCM_PATH, adrTicketsExtractor.getName());
 		adrTicketsExtractor.uses(gitLab, "Read tickets from Gitlab if configured so");
 		adrTicketsExtractor.uses(gitHub, "Read tickets from GitHub if configured so");
@@ -120,7 +120,7 @@ public class Architecture implements ArchitectureModelProvider {
 		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(cdiConfigExtension, "Eases out some CDI code");
 
 		Component mavenEnhancer = base.addComponent("maven-metadata-inferer", "Enhanced by Maven");
-		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, MavenEnhancer.class.getName());
+		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("maven-metadata-inferer/pom.xml"));
 		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, mavenEnhancer.getName());
 		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(mavenEnhancer, "Infer most of element details from Maven infos");
 

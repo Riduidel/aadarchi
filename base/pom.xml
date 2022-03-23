@@ -25,6 +25,12 @@
 		<dependency>
 			<groupId>com.structurizr</groupId>
 			<artifactId>structurizr-client</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.structurizr</groupId>

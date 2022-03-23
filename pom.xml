@@ -146,7 +146,7 @@
 			<dependency>
 				<groupId>org.kohsuke</groupId>
 				<artifactId>github-api</artifactId>
-				<version>1.130</version>
+				<version>1.303</version>
 			</dependency>
 			<dependency>
 				<groupId>com.pivovarit</groupId>
