@@ -52,6 +52,6 @@ jobs:
         with:
           github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
           publish_dir: ./temp
-          commit_message: ${{ Build.SourceVersionMessage }}
+          commit_message: ${{ github.event.head_commit.message }}
       - name: Temporary file delete
         run: rm -r ./temp
