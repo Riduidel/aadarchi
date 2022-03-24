@@ -45,7 +45,7 @@ jobs:
       env:
         TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
     - name: Temporary file create
-      run: mkdir temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./temp && echo "${{ Build.SourceVersionMessage }}"
+      run: mkdir temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./temp && echo test
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
