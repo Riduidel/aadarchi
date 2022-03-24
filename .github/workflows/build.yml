@@ -16,42 +16,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install linker
-        run: sudo apt-get update &&  sudo apt-get install graphviz
-      - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          distribution: adopt
-          java-version: 11
-      - name: Pimp some maven "features"
-        uses: s4u/maven-settings-action@v2.4.1
-        with:
-          mirrors: |
-            [{
-                "id": "rubygems-releases-http-unblocker",
-                "name": "rubygems-releases",
-                "mirrorOf": "rubygems-releases",
-                "url": "http://rubygems-proxy.torquebox.org/releases",
-                "blocked": false
-            }]
-      - name: Build with Maven
-        run: mvn -B install --file pom.xml -Dagile.architecture.github.token=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
-        env:
-          TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
-      - name: Temporary file create
-        run: mkdir temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./temp
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
-          publish_dir: ./temp
-          commit_message: ${{ github.event.head_commit.message }}
-      - name: Temporary file delete
-        run: rm -r ./temp
+    - name: Install linker
+      run: sudo apt-get update &&  sudo apt-get install graphviz
+    - uses: actions/checkout@v2
+    - name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: adopt
+        java-version: 11
+    - name: Pimp some maven "features"
+      uses: s4u/maven-settings-action@v2.4.1
+      with:
+        mirrors: |
+          [{
+              "id": "rubygems-releases-http-unblocker",
+              "name": "rubygems-releases",
+              "mirrorOf": "rubygems-releases",
+              "url": "http://rubygems-proxy.torquebox.org/releases",
+              "blocked": false
+          }]
+    - name: Build with Maven
+      run: mvn -B install --file pom.xml -Dagile.architecture.github.token=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
+      env:
+        TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
+    - name: Temporary file create
+      run: mkdir temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./temp
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
+        publish_dir: ./temp
+        commit_message: ${{ github.event.head_commit.message }}
+    - name: Temporary file delete
+      run: rm -r ./temp
