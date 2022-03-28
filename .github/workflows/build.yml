@@ -16,6 +16,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    test:
+      unevar: 'etst'
+
     steps:
       - name: Install linker
         run: sudo apt-get update &&  sudo apt-get install graphviz
@@ -52,7 +55,7 @@ jobs:
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
       - name: Temporary file create
-        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp && cat ${MSG}
+        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp && cat ${{test.unevar}}
       - name: Test
         run: echo test
       - name: Deploy
@@ -60,4 +63,4 @@ jobs:
         with:
           github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
           publish_dir: ./temp
-          commit_message: ${{github.event.after}}
+          commit_message: ${{MSG}}
