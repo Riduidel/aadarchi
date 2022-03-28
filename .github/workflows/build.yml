@@ -20,6 +20,11 @@ jobs:
       - name: Install linker
         run: sudo apt-get update &&  sudo apt-get install graphviz
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{github.event.after}}
+      - name: Get Commit Message
+        run: MSG=$(git log --format=%B -n 1 ${{github.event.after}})
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -47,7 +52,7 @@ jobs:
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
       - name: Temporary file create
-        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp && cat ${{ runner.os }}
+        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp && cat ${{github.event.after}} && cat ${{env.COMMIT_MESSAGE}} && cat ${COMMIT_MESSAGE}
       - name: Test
         run: echo test
       - name: Deploy
