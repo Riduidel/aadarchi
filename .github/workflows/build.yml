@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
           ref: ${{github.event.after}}
       - name: Get Commit Message
-        run: MSG=$(git log --format=%B -n 1 ${{github.event.after}})
+        run: MSG=$(git log --format=%B -n 1 ${{github.event.after}}) && echo ${MSG}
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -53,8 +53,6 @@ jobs:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
       - name: Temporary file create
         run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp
-      - name: Test
-        run: echo ${MSG}
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
