@@ -25,8 +25,6 @@ jobs:
           ref: ${{github.event.after}}
       - name: Get Commit Message
         run: MSG=$(git log --format=%B -n 1 ${{github.event.after}}) && echo ${MSG}
-        env:
-          mymsg: $(Foo)
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
