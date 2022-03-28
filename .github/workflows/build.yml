@@ -4,10 +4,12 @@
 name: Java CI with Maven
 
 on:
+  workflow_dispatch:
+    branches: [ master ]
   push:
-    branches: [master]
+    branches: [ master ]
   pull_request:
-    branches: [master]
+    branches: [ master ]
 
 jobs:
   build:
@@ -45,12 +47,12 @@ jobs:
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
       - name: Temporary file create
-        run: mkdir temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./temp
+        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp
+      - name: Test
+        run: echo test
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
           publish_dir: ./temp
-          commit_message: test
-      - name: Temporary file delete
-        run: rm -r ./temp
+#          commit_message: test
