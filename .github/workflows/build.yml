@@ -20,9 +20,6 @@ jobs:
       - name: Install linker
         run: sudo apt-get update &&  sudo apt-get install graphviz
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          ref: ${{github.event.after}}
       - name: Get Commit Message
         run: MSG=$(git log --format=%B -n 1 ${{github.event.after}})
       - name: Cache Maven packages
