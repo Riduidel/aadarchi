@@ -26,7 +26,7 @@ jobs:
       - name: Get Commit Message
         run: MSG=$(git log --format=%B -n 1 ${{github.event.after}}) && echo ${MSG}
         env:
-          mymsg: $(Foo)
+          mymsg: ${{ MYMSG }}
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -54,7 +54,7 @@ jobs:
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
       - name: Temporary file create
-        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp && echo $(Foo)
+        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp && echo ${{ MYMSG }}
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
