@@ -46,8 +46,10 @@ jobs:
         run: mvn -B install --file pom.xml -Dagile.architecture.github.token=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
+      - name: Get Commit Message
+        run: MSG=$(git log --format=%B -n 1 ${{github.event.after}})
       - name: Temporary file create
-        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp && cat ${{env.COMMIT_MESSAGE}} && cat ${COMMIT_MESSAGE}
+        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp && cat ${MSG}
       - name: Test
         run: echo test
       - name: Deploy
