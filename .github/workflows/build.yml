@@ -4,8 +4,6 @@
 name: Java CI with Maven
 
 on:
-  workflow_dispatch:
-    branches: [ master ]
   push:
     branches: [ master ]
   pull_request:
@@ -20,13 +18,12 @@ jobs:
       - name: Install linker
         run: sudo apt-get update &&  sudo apt-get install graphviz
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          ref: ${{github.event.after}}
-      - name: Get Commit Message
-        run: MSG=$(git log --format=%B -n 1 ${{github.event.after}}) && echo ${MSG}
-        env:
-          mymsg: ${{ MYMSG }}
+#              [following lines get the last commit message and put it in a variable "MSG"]
+#        with:
+#          fetch-depth: 0
+#          ref: ${{github.event.after}}
+#      - name: Get Commit Message
+#        run: MSG=$(git log --format=%B -n 1 ${{github.event.after}}) && echo ${MSG}
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
@@ -53,11 +50,10 @@ jobs:
         run: mvn -B install --file pom.xml -Dagile.architecture.github.token=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
-      - name: Temporary file create
-        run: mkdir ./architecture-documentation/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/temp
+      - name: Temporary file for gh-pages
+        run: mkdir ./architecture-documentation/target/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/target/temp
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
           publish_dir: ./temp
-#          commit_message: ${{ Foo }}
