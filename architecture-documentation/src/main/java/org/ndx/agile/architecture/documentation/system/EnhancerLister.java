@@ -13,14 +13,10 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class EnhancerLister extends ModelElementAdapter {
-    @Inject
-    Logger logger;
-
     @Inject
     Instance<Enhancer> enhancerInstance;
 
