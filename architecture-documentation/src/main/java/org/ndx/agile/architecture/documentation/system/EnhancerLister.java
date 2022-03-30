@@ -16,6 +16,14 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Enhancer that list all the enhancers
+ * The enhancers list contain the priority and the name of the loaded enhancers
+ * The list is generated in an Adoc file in a table format
+ * @author jason-sycz feat nicolas-delsaux
+ *
+ */
+
 public class EnhancerLister extends ModelElementAdapter {
     @Inject
     Instance<Enhancer> enhancerInstance;
