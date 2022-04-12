@@ -41,7 +41,7 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
     @Override
     public boolean startVisit(Workspace workspace, OutputBuilder builder) {
-        architecture = String.format("workspace \"%s\" {\n\n", workspace.getName());
+        architecture = String.format("workspace \"%s\" {\n\n", getSimpleName(workspace.getName()));
         return true;
     }
 
@@ -53,19 +53,19 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
     @Override
     public boolean startVisit(SoftwareSystem softwareSystem) {
-        architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", softwareSystem.getName(), softwareSystem.getName());
+        architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", getSimpleName(softwareSystem.getName()), getSimpleName(softwareSystem.getName()));
         return true;
     }
 
     @Override
     public boolean startVisit(Container container) {
-        architecture += String.format("\t\t\t%s = container \"%s\" {\n", container.getName(), container.getName());
+        architecture += String.format("\t\t\t%s = container \"%s\" {\n", getSimpleName(container.getName()), getSimpleName(container.getName()));
         return true;
     }
 
     @Override
     public boolean startVisit(Component component) {
-        architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", component.getName(), component.getName());
+        architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", getSimpleName(component.getName()), getSimpleName(component.getName()));
         return true;
     }
 
@@ -92,7 +92,6 @@ public class EnhancerArchitecture implements ModelEnhancer {
     @Override
     public void endVisit(Workspace workspace, OutputBuilder builder) {
         architecture = architecture +
-                "\t}\n" +
                 "\tviews {\n" +
                 "\t\tstyles {\n" +
                 "\t\t\telement \"Software System\" {\n" +
@@ -115,6 +114,10 @@ public class EnhancerArchitecture implements ModelEnhancer {
 //            throw new RuntimeException("Can't believe I can't write the file " + output.getAbsolutePath(), e);
 //        }
         logger.info(architecture);
+    }
+
+    private String getSimpleName(String name) {
+        return name.replaceAll("[^A-Za-z0-9]","");
     }
 
 }
