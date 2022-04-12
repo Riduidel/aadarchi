@@ -41,7 +41,7 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
     @Override
     public boolean startVisit(Workspace workspace, OutputBuilder builder) {
-        architecture = String.format("workspace \"%s\" {\n\n", getSimpleName(workspace.getName()));
+        architecture = String.format("workspace \"%s\" {\n\n", workspace.getName());
         return true;
     }
 
@@ -53,19 +53,19 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
     @Override
     public boolean startVisit(SoftwareSystem softwareSystem) {
-        architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", getSimpleName(softwareSystem.getName()), getSimpleName(softwareSystem.getName()));
+        architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", getSimpleName(softwareSystem.getName()), softwareSystem.getName());
         return true;
     }
 
     @Override
     public boolean startVisit(Container container) {
-        architecture += String.format("\t\t\t%s = container \"%s\" {\n", getSimpleName(container.getName()), getSimpleName(container.getName()));
+        architecture += String.format("\t\t\t%s = container \"%s\" {\n", getSimpleName(container.getName()), container.getName());
         return true;
     }
 
     @Override
     public boolean startVisit(Component component) {
-        architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", getSimpleName(component.getName()), getSimpleName(component.getName()));
+        architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", getSimpleName(component.getName()), component.getName());
         return true;
     }
 
