@@ -53,19 +53,19 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
     @Override
     public boolean startVisit(SoftwareSystem softwareSystem) {
-        architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", getSimpleName(softwareSystem.getName()), softwareSystem.getName());
+        architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", noSpecialChar(softwareSystem.getName()), softwareSystem.getName());
         return true;
     }
 
     @Override
     public boolean startVisit(Container container) {
-        architecture += String.format("\t\t\t%s = container \"%s\" {\n", getSimpleName(container.getName()), container.getName());
+        architecture += String.format("\t\t\t%s = container \"%s\" {\n", noSpecialChar(container.getName()), container.getName());
         return true;
     }
 
     @Override
     public boolean startVisit(Component component) {
-        architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", getSimpleName(component.getName()), component.getName());
+        architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", noSpecialChar(component.getName()), component.getName());
         return true;
     }
 
@@ -116,7 +116,7 @@ public class EnhancerArchitecture implements ModelEnhancer {
         logger.info(architecture);
     }
 
-    private String getSimpleName(String name) {
+    private String noSpecialChar(String name) {
         return name.replaceAll("[^A-Za-z0-9]","");
     }
 
