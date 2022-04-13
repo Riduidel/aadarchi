@@ -19,6 +19,8 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,28 +53,28 @@ public class EnhancerArchitecture implements ModelEnhancer {
     @Override
     public boolean startVisit(Model model) {
         architecture = architecture + "\tmodel {\n";
-        relations += model.getRelationships() + "\n";
+        relations += parseRelation(model.getRelationships()) + "\n";
         return true;
     }
 
     @Override
     public boolean startVisit(SoftwareSystem softwareSystem) {
         architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", noSpecialChar(softwareSystem.getName()), softwareSystem.getName());
-        relations += softwareSystem.getRelationships() + "\n";
+        relations += parseRelation(softwareSystem.getRelationships()) + "\n";
         return true;
     }
 
     @Override
     public boolean startVisit(Container container) {
         architecture += String.format("\t\t\t%s = container \"%s\" {\n", noSpecialChar(container.getName()), container.getName());
-        relations += container.getRelationships() + "\n";
+        relations += parseRelation(container.getRelationships()) + "\n";
         return true;
     }
 
     @Override
     public boolean startVisit(Component component) {
         architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", noSpecialChar(component.getName()), component.getName());
-        relations += component.getRelationships() + "\n";
+        relations += parseRelation(component.getRelationships()) + "\n";
         return true;
     }
 
@@ -125,11 +127,35 @@ public class EnhancerArchitecture implements ModelEnhancer {
             e.printStackTrace();
         }
 
-        logger.info(relations);
     }
 
     private String noSpecialChar(String name) {
         return name.replaceAll("[^A-Za-z0-9]","");
+    }
+
+    private String parseRelation(Set relations) {
+        String parsed = String.valueOf(relations);
+        StringBuilder test = new StringBuilder();
+        while (parsed.length() > 6) {
+            parsed = parsed.substring(parsed.indexOf("|") + 2);
+            test.append(parsed, 0, parsed.indexOf("|") - 1);
+            test.append("/");
+            parsed = parsed.substring(parsed.indexOf("|") + 2);
+            test.append(parsed, 0, parsed.indexOf("}"));
+            test.append("_");
+            parsed = parsed.substring(parsed.indexOf("[") + 1);
+            test.append(parsed, 0, parsed.indexOf("]"));
+            test.append("_");
+            parsed = parsed.substring(parsed.indexOf("|") + 2);
+            test.append(parsed, 0, parsed.indexOf("|") - 1);
+            test.append("/");
+            parsed = parsed.substring(parsed.indexOf("|") + 2);
+            test.append(parsed, 0, parsed.indexOf("}"));
+            test.append("\n");
+            parsed = parsed.substring(parsed.indexOf("}") + 1);
+        }
+        logger.info(String.valueOf(test));
+        return parsed;
     }
 
 }
