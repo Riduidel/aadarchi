@@ -7,11 +7,13 @@ import com.structurizr.model.Container;
 import com.structurizr.model.Model;
 import com.structurizr.model.SoftwareSystem;
 import org.apache.commons.io.FileUtils;
+import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -25,6 +27,7 @@ import static org.apache.commons.lang3.ClassUtils.getSimpleName;
 
 public class EnhancerArchitecture implements ModelEnhancer {
     String architecture = null;
+    String relations = "\n";
 
     @Inject
     Logger logger;
@@ -48,24 +51,28 @@ public class EnhancerArchitecture implements ModelEnhancer {
     @Override
     public boolean startVisit(Model model) {
         architecture = architecture + "\tmodel {\n";
+        relations += model.getRelationships() + "\n";
         return true;
     }
 
     @Override
     public boolean startVisit(SoftwareSystem softwareSystem) {
         architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", noSpecialChar(softwareSystem.getName()), softwareSystem.getName());
+        relations += softwareSystem.getRelationships() + "\n";
         return true;
     }
 
     @Override
     public boolean startVisit(Container container) {
         architecture += String.format("\t\t\t%s = container \"%s\" {\n", noSpecialChar(container.getName()), container.getName());
+        relations += container.getRelationships() + "\n";
         return true;
     }
 
     @Override
     public boolean startVisit(Component component) {
         architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", noSpecialChar(component.getName()), component.getName());
+        relations += component.getRelationships() + "\n";
         return true;
     }
 
@@ -89,8 +96,10 @@ public class EnhancerArchitecture implements ModelEnhancer {
         architecture += "\t}\n";
     }
 
+    @Inject @ConfigProperty(name= ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
+
     @Override
-    public void endVisit(Workspace workspace, OutputBuilder builder) {
+    public void endVisit(Workspace workspace, OutputBuilder outputBuilder) {
         architecture = architecture +
                 "\tviews {\n" +
                 "\t\tstyles {\n" +
@@ -107,13 +116,16 @@ public class EnhancerArchitecture implements ModelEnhancer {
                 "\t}\n" +
                 "\n" +
                 "}";
-//        File output = builder.outputFor(AgileArchitectureSection.software_architecture, workspace, this, "dsl");
-//        try {
-//            FileUtils.write(output, architecture, "UTF-8");
-//        } catch (IOException e) {
-//            throw new RuntimeException("Can't believe I can't write the file " + output.getAbsolutePath(), e);
-//        }
-        logger.info(architecture);
+
+        StringBuilder builder = new StringBuilder(architecture);
+        File target = new File(enhancementsBase.getParentFile(), "workspace.dsl");
+        try {
+            FileUtils.write(target, builder, "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        logger.info(relations);
     }
 
     private String noSpecialChar(String name) {
