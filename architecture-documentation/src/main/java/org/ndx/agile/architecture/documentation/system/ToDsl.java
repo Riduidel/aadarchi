@@ -23,7 +23,7 @@ import com.structurizr.model.Model;
 import com.structurizr.model.Relationship;
 import com.structurizr.model.SoftwareSystem;
 
-public class EnhancerArchitecture implements ModelEnhancer {
+public class ToDsl implements ModelEnhancer {
     String architecture = null;
     String relations = "";
 
