@@ -1,31 +1,27 @@
 package org.ndx.agile.architecture.documentation.system;
 
 
-import com.structurizr.Workspace;
-import com.structurizr.model.Component;
-import com.structurizr.model.Container;
-import com.structurizr.model.Model;
-import com.structurizr.model.SoftwareSystem;
-import org.apache.commons.io.FileUtils;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.ndx.agile.architecture.base.AgileArchitectureSection;
-import org.ndx.agile.architecture.base.Enhancer;
-import org.ndx.agile.architecture.base.ModelEnhancer;
-import org.ndx.agile.architecture.base.OutputBuilder;
-import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
-import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
-
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.apache.commons.lang3.ClassUtils.getSimpleName;
+import javax.inject.Inject;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.ndx.agile.architecture.base.ModelEnhancer;
+import org.ndx.agile.architecture.base.OutputBuilder;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+
+import com.structurizr.Workspace;
+import com.structurizr.model.Component;
+import com.structurizr.model.Container;
+import com.structurizr.model.Element;
+import com.structurizr.model.Model;
+import com.structurizr.model.Relationship;
+import com.structurizr.model.SoftwareSystem;
 
 public class EnhancerArchitecture implements ModelEnhancer {
     String architecture = null;
@@ -33,6 +29,8 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
     @Inject
     Logger logger;
+
+    @Inject @ConfigProperty(name= ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
 
     @Override
     public boolean isParallel() {
@@ -53,28 +51,44 @@ public class EnhancerArchitecture implements ModelEnhancer {
     @Override
     public boolean startVisit(Model model) {
         architecture = architecture + "\tmodel {\n";
-        relations += parseRelation(model.getRelationships()) + "\n";
+        relations += relationshipSetToDsl(model.getRelationships());
         return true;
     }
 
     @Override
     public boolean startVisit(SoftwareSystem softwareSystem) {
-        architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", noSpecialChar(softwareSystem.getName()), softwareSystem.getName());
-        relations += parseRelation(softwareSystem.getRelationships()) + "\n";
+        architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", asVariableName(softwareSystem), softwareSystem.getName());
+        relations += relationshipSetToDsl(softwareSystem.getRelationships());
         return true;
     }
 
     @Override
     public boolean startVisit(Container container) {
-        architecture += String.format("\t\t\t%s = container \"%s\" {\n", noSpecialChar(container.getName()), container.getName());
-        relations += parseRelation(container.getRelationships()) + "\n";
+        architecture += String.format("\t\t\t%s = container \"%s\" {\n", asVariableName(container), container.getName());
+        relations += relationshipSetToDsl(container.getRelationships());
         return true;
     }
 
-    @Override
+    private String relationshipSetToDsl(Set<Relationship> relationships) {
+		return relationships.stream()
+				.map(this::relationshipToDsl)
+				.collect(Collectors.joining("\n", "\n", "\n"));
+	}
+
+
+	private String relationshipToDsl(Relationship relationship) {
+		return String.format("%s -> %s \"%s\" \"%s\"", 
+				asVariableName(relationship.getSource()),
+				asVariableName(relationship.getDestination()),
+				relationship.getDescription(),
+				relationship.getTechnology()
+				);
+	}
+
+	@Override
     public boolean startVisit(Component component) {
-        architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", noSpecialChar(component.getName()), component.getName());
-        relations += parseRelation(component.getRelationships()) + "\n";
+        architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", asVariableName(component), component.getName());
+        relations += relationshipSetToDsl(component.getRelationships());
         return true;
     }
 
@@ -97,8 +111,6 @@ public class EnhancerArchitecture implements ModelEnhancer {
     public void endVisit(Model model, OutputBuilder builder) {
         architecture += "\t}\n";
     }
-
-    @Inject @ConfigProperty(name= ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
 
     @Override
     public void endVisit(Workspace workspace, OutputBuilder outputBuilder) {
@@ -129,33 +141,9 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
     }
 
-    private String noSpecialChar(String name) {
-        return name.replaceAll("[^A-Za-z0-9]","");
+    private String asVariableName(Element element) {
+    	return String.format("%s_%d", 
+    			element.getName().replaceAll("[^A-Za-z0-9]", "_"), 
+    			element.getId());
     }
-
-    private String parseRelation(Set relations) {
-        String parsed = String.valueOf(relations);
-        StringBuilder test = new StringBuilder();
-        while (parsed.length() > 6) {
-            parsed = parsed.substring(parsed.indexOf("|") + 2);
-            test.append(parsed, 0, parsed.indexOf("|") - 1);
-            test.append("/");
-            parsed = parsed.substring(parsed.indexOf("|") + 2);
-            test.append(parsed, 0, parsed.indexOf("}"));
-            test.append("_");
-            parsed = parsed.substring(parsed.indexOf("[") + 1);
-            test.append(parsed, 0, parsed.indexOf("]"));
-            test.append("_");
-            parsed = parsed.substring(parsed.indexOf("|") + 2);
-            test.append(parsed, 0, parsed.indexOf("|") - 1);
-            test.append("/");
-            parsed = parsed.substring(parsed.indexOf("|") + 2);
-            test.append(parsed, 0, parsed.indexOf("}"));
-            test.append("\n");
-            parsed = parsed.substring(parsed.indexOf("}") + 1);
-        }
-        logger.info(String.valueOf(test));
-        return parsed;
-    }
-
 }
