@@ -3,12 +3,13 @@ package org.ndx.agile.architecture.documentation.system;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import com.structurizr.model.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.ModelEnhancer;
@@ -16,19 +17,18 @@ import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 
 import com.structurizr.Workspace;
-import com.structurizr.model.Component;
-import com.structurizr.model.Container;
-import com.structurizr.model.Element;
-import com.structurizr.model.Model;
-import com.structurizr.model.Relationship;
-import com.structurizr.model.SoftwareSystem;
+
+/**
+ * Enhancer that generate a structurizr dsl file
+ * The dsl file is used to generate structurizr diagrams of the project architecture
+ * This dsl file will be located in target/structurizr/workspace.dsl
+ * @author jason-sycz feat nicolas-delsaux
+ *
+ */
 
 public class ToDsl implements ModelEnhancer {
     String architecture = null;
     String relations = "";
-
-    @Inject
-    Logger logger;
 
     @Inject @ConfigProperty(name= ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
 
@@ -51,6 +51,9 @@ public class ToDsl implements ModelEnhancer {
     @Override
     public boolean startVisit(Model model) {
         architecture = architecture + "\tmodel {\n";
+        if(!model.getPeople().isEmpty()) {
+            architecture += personSetToDsl(model.getPeople());
+        }
         if(!model.getRelationships().isEmpty()) {
             relations += relationshipSetToDsl(model.getRelationships());
         }
@@ -125,13 +128,28 @@ public class ToDsl implements ModelEnhancer {
 
         StringBuilder builder = new StringBuilder(architecture);
         File target = new File(enhancementsBase.getParentFile(), "workspace.dsl");
-        logger.info(relations);
         try {
             FileUtils.write(target, builder, "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private String personSetToDsl(Set<Person> person) {
+        return person.stream()
+                .map(this::personToDsl)
+                .collect(Collectors.joining("\n", "", "\n"));
+    }
+
+    private String personToDsl(Person person) {
+        String description = "";
+        if(person.getDescription() != null) description = person.getDescription();
+        return String.format("\t\t%s = person \"%s\" \"%s\"",
+                Objects.requireNonNull(asVariableName(person)),
+                Objects.requireNonNull(person.getName()),
+                description
+        );
     }
 
     private String relationshipSetToDsl(Set<Relationship> relationships) {
@@ -141,17 +159,13 @@ public class ToDsl implements ModelEnhancer {
     }
 
     private String relationshipToDsl(Relationship relationship) {
-        String source = "";
-        if(relationship.getSource() != null) source = asVariableName(relationship.getSource());
-        String destination = "";
-        if(relationship.getDestination() != null) destination = asVariableName(relationship.getDestination());
         String description = "";
         if(relationship.getDescription() != null) description = relationship.getDescription();
         String technology = "";
         if(relationship.getTechnology() != null) technology = relationship.getTechnology();
         return String.format("\t\t%s -> %s \"%s\" \"%s\"",
-                source,
-                destination,
+                asVariableName(Objects.requireNonNull(relationship.getSource())),
+                asVariableName(Objects.requireNonNull(relationship.getDestination())),
                 description,
                 technology
         );
