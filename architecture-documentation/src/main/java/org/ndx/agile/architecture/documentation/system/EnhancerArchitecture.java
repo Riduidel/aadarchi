@@ -25,7 +25,7 @@ import com.structurizr.model.SoftwareSystem;
 
 public class EnhancerArchitecture implements ModelEnhancer {
     String architecture = null;
-    String relations = "\n";
+    String relations = "";
 
     @Inject
     Logger logger;
@@ -51,44 +51,36 @@ public class EnhancerArchitecture implements ModelEnhancer {
     @Override
     public boolean startVisit(Model model) {
         architecture = architecture + "\tmodel {\n";
-        relations += relationshipSetToDsl(model.getRelationships());
+        if(!model.getRelationships().isEmpty()) {
+            relations += relationshipSetToDsl(model.getRelationships());
+        }
         return true;
     }
 
     @Override
     public boolean startVisit(SoftwareSystem softwareSystem) {
         architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", asVariableName(softwareSystem), softwareSystem.getName());
-        relations += relationshipSetToDsl(softwareSystem.getRelationships());
+        if(!softwareSystem.getRelationships().isEmpty()) {
+            relations += relationshipSetToDsl(softwareSystem.getRelationships());
+        }
         return true;
     }
 
     @Override
     public boolean startVisit(Container container) {
         architecture += String.format("\t\t\t%s = container \"%s\" {\n", asVariableName(container), container.getName());
-        relations += relationshipSetToDsl(container.getRelationships());
+        if(!container.getRelationships().isEmpty()) {
+            relations += relationshipSetToDsl(container.getRelationships());
+        }
         return true;
     }
-
-    private String relationshipSetToDsl(Set<Relationship> relationships) {
-		return relationships.stream()
-				.map(this::relationshipToDsl)
-				.collect(Collectors.joining("\n", "\n", "\n"));
-	}
-
-
-	private String relationshipToDsl(Relationship relationship) {
-		return String.format("%s -> %s \"%s\" \"%s\"", 
-				asVariableName(relationship.getSource()),
-				asVariableName(relationship.getDestination()),
-				relationship.getDescription(),
-				relationship.getTechnology()
-				);
-	}
 
 	@Override
     public boolean startVisit(Component component) {
         architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", asVariableName(component), component.getName());
-        relations += relationshipSetToDsl(component.getRelationships());
+        if(!component.getRelationships().isEmpty()) {
+            relations += relationshipSetToDsl(component.getRelationships());
+        }
         return true;
     }
 
@@ -109,7 +101,7 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
     @Override
     public void endVisit(Model model, OutputBuilder builder) {
-        architecture += "\t}\n";
+        architecture += relations + "\t}\n";
     }
 
     @Override
@@ -133,6 +125,7 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
         StringBuilder builder = new StringBuilder(architecture);
         File target = new File(enhancementsBase.getParentFile(), "workspace.dsl");
+        logger.info(relations);
         try {
             FileUtils.write(target, builder, "UTF-8");
         } catch (IOException e) {
@@ -141,8 +134,31 @@ public class EnhancerArchitecture implements ModelEnhancer {
 
     }
 
+    private String relationshipSetToDsl(Set<Relationship> relationships) {
+        return relationships.stream()
+                .map(this::relationshipToDsl)
+                .collect(Collectors.joining("\n", "", "\n"));
+    }
+
+    private String relationshipToDsl(Relationship relationship) {
+        String source = "";
+        if(relationship.getSource() != null) source = asVariableName(relationship.getSource());
+        String destination = "";
+        if(relationship.getDestination() != null) destination = asVariableName(relationship.getDestination());
+        String description = "";
+        if(relationship.getDescription() != null) description = relationship.getDescription();
+        String technology = "";
+        if(relationship.getTechnology() != null) technology = relationship.getTechnology();
+        return String.format("\t\t%s -> %s \"%s\" \"%s\"",
+                source,
+                destination,
+                description,
+                technology
+        );
+    }
+
     private String asVariableName(Element element) {
-    	return String.format("%s_%d", 
+    	return String.format("%s_%s",
     			element.getName().replaceAll("[^A-Za-z0-9]", "_"), 
     			element.getId());
     }
