@@ -78,7 +78,8 @@
 		<module>sequence-diagram-generator</module>
 		<module>archetype</module>
 		<module>markdown-to-asciidoc</module>
-	</modules>
+        <module>aadarchi-maven-plugin</module>
+    </modules>
 
 	<dependencyManagement>
 		<dependencies>
