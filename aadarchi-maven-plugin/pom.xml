@@ -62,11 +62,20 @@
                     <pomIncludes>
                         <pomInclude>**/pom.xml</pomInclude>
                     </pomIncludes>
+                    <!-- Without this configuration, projects are run directly from src, which means no interpolation is done -->
+                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                    <!-- Local repository used for tests -->
+                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+                    <!-- The settings file will fasten build download according to https://maven.apache.org/plugins/maven-invoker-plugin/examples/fast-use.html -->
+                    <settingsFile>src/it/settings.xml</settingsFile>
                     <postBuildHookScript>verify</postBuildHookScript>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
+                            <!-- Invoking install prior to running tests will make sure this artifact is correctly copied
+                            (see https://maven.apache.org/plugins/maven-invoker-plugin/examples/install-artifacts.html) -->
+                            <goal>install</goal>
                             <goal>run</goal>
                         </goals>
                     </execution>

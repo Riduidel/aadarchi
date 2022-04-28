@@ -18,6 +18,9 @@
                         <goals>
                             <goal>generate-model</goal>
                         </goals>
+                        <configuration>
+                            <name>read from workspace.dsl file</name>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
