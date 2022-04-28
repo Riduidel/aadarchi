@@ -1,9 +1,12 @@
 package org.ndx.agile.architecture.base;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.se.SeContainer;
 import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.inject.Inject;
@@ -38,7 +41,7 @@ public class ArchitectureDocumentationBuilder {
 
 	@Inject Logger logger;
 	@Inject @UsesComponent(description = "Adds information to initial architecture description") ArchitectureEnhancer enhancer;
-	@Inject @UsesComponent(description = "Generates initial architecture description") ArchitectureModelProvider provider;
+	@Inject @UsesComponent(description = "Generates initial architecture description") @Any Instance<ArchitectureModelProvider> availableProviders;
 
 	/**
 	 * Run method that will allow the description to be invoked and augmentations to be performed
@@ -46,8 +49,21 @@ public class ArchitectureDocumentationBuilder {
 	 * @throws IOException
 	 */
 	public void run() throws IOException {
-		Workspace workspace = provider.describeArchitecture();
+		Workspace workspace = getArchitecture();
 		logger.info("Architecture has been described. Now enhancing it (including writing the diagrams)!");
 		enhancer.enhance(workspace);
+	}
+
+	private Workspace getArchitecture() {
+		for(ArchitectureModelProvider provider : availableProviders) {
+			try {
+				return provider.describeArchitecture();
+			} catch(Throwable e) {
+				logger.log(Level.WARNING, 
+						String.format("model provider %s failed to load any workspace", provider.getClass().getName()), 
+						e);
+			}
+		}
+		throw new UnsupportedOperationException("There is no instance of ArchitectureModelProvider defined in project, and no workspace.dsl file to parse");
 	}
 }
