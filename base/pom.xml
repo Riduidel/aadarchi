@@ -34,6 +34,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.structurizr</groupId>
+			<artifactId>structurizr-dsl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.structurizr</groupId>
 			<artifactId>structurizr-plantuml</artifactId>
 		</dependency>
 		<dependency>
