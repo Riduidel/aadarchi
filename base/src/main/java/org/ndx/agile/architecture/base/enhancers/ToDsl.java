@@ -44,11 +44,11 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 	String relations = "";
 
 	@Inject
-	@ConfigProperty(name = ModelElementKeys.PREFIX + "enhancements")
-	File enhancementsBase;
-	@Inject
 	@ConfigProperty(name = ModelElementKeys.PREFIX + "todsl.enabled", defaultValue = "false")
 	boolean toDslEnabled;
+	@Inject
+	@ConfigProperty(name = ModelElementKeys.PREFIX + "todsl.target", defaultValue = "target/structurizr/workspace.dsl")
+	private File dslTargetFile;
 
 	@Override
 	public boolean isParallel() {
@@ -133,13 +133,13 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 	@Override
 	public void endVisit(Workspace workspace, OutputBuilder outputBuilder) {
 		if (toDslEnabled) {
-			File target = new File(enhancementsBase.getParentFile(), "workspace.dsl");
 			try {
 				StringBuilder builder = new StringBuilder(architecture);
-				FileUtils.write(target, builder, "UTF-8");
+				dslTargetFile.getParentFile().mkdirs();
+				FileUtils.write(dslTargetFile, builder, "UTF-8");
 			} catch (IOException e) {
 				throw new UnableToBuildDslException(
-						String.format("Unable to build dsl file %s", target.getAbsolutePath()), e);
+						String.format("Unable to build dsl file %s", dslTargetFile.getAbsolutePath()), e);
 			}
 		}
 	}
