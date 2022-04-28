@@ -198,7 +198,7 @@
 				<version>${project.version}</version>
 				<executions>
 					<execution>
-						<goals><goal>greet</goal></goals>
+						<goals><goal>generate-model</goal></goals>
 					</execution>
 				</executions>
 				<configuration>
