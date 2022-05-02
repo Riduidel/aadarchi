@@ -1,92 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>system</artifactId>
-        <groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
-        <version>0.0.12-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>system</artifactId>
+		<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+		<version>0.0.12-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
 
-    <artifactId>aadarchi-maven-plugin</artifactId>
-    <packaging>maven-plugin</packaging>
+	<artifactId>aadarchi-maven-plugin</artifactId>
+	<packaging>maven-plugin</packaging>
 
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-core -->
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-core</artifactId>
-            <version>3.8.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.4</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>base</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <!-- Directly referenced to make sure we can create the ConfigSource allowing us to provide maven properties as config properties -->
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/com.itemis.maven.plugins/cdi-plugin-utils -->
+		<dependency>
+			<groupId>com.itemis.maven.plugins</groupId>
+			<artifactId>cdi-plugin-utils</artifactId>
+			<version>3.4.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.maven/maven-core -->
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-core</artifactId>
+			<version>3.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugin-tools</groupId>
+			<artifactId>maven-plugin-annotations</artifactId>
+			<version>3.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>base</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- Directly referenced to make sure we can create the ConfigSource allowing us to provide maven properties as config properties -->
 		<dependency>
 			<groupId>org.apache.deltaspike.core</groupId>
 			<artifactId>deltaspike-core-impl</artifactId>
 		</dependency>
-    </dependencies>
+	</dependencies>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-plugin-plugin</artifactId>
-                    <version>3.6.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-invoker-plugin</artifactId>
-                <version>1.10</version>
-                <configuration>
-                    <projectsDirectory>src/it</projectsDirectory>
-                    <pomIncludes>
-                        <pomInclude>**/pom.xml</pomInclude>
-                    </pomIncludes>
-                    <!-- Without this configuration, projects are run directly from src, which means no interpolation is done -->
-                    <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-                    <!-- Local repository used for tests -->
-                    <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-                    <!-- The settings file will fasten build download according to https://maven.apache.org/plugins/maven-invoker-plugin/examples/fast-use.html -->
-                    <settingsFile>src/it/settings.xml</settingsFile>
-                    <postBuildHookScript>verify</postBuildHookScript>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <!-- Invoking install prior to running tests will make sure this artifact is correctly copied
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-plugin-plugin</artifactId>
+					<version>3.6.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-invoker-plugin</artifactId>
+				<version>1.10</version>
+				<configuration>
+					<projectsDirectory>src/it</projectsDirectory>
+					<pomIncludes>
+						<pomInclude>**/pom.xml</pomInclude>
+					</pomIncludes>
+					<!-- Without this configuration, projects are run directly from src, which means no interpolation is done -->
+					<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+					<!-- Local repository used for tests -->
+					<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+					<!-- The settings file will fasten build download according to https://maven.apache.org/plugins/maven-invoker-plugin/examples/fast-use.html -->
+					<settingsFile>src/it/settings.xml</settingsFile>
+					<postBuildHookScript>verify</postBuildHookScript>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<!-- Invoking install prior to running tests will make sure this artifact is correctly copied
                             (see https://maven.apache.org/plugins/maven-invoker-plugin/examples/install-artifacts.html) -->
-                            <goal>install</goal>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+							<goal>install</goal>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
