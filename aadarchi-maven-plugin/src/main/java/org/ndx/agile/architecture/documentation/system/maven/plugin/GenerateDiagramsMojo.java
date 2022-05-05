@@ -20,7 +20,13 @@ public class GenerateDiagramsMojo extends AbstractMojo {
         Logger root = Logger.getLogger("");
         Arrays.stream(root.getHandlers()).forEach(root::removeHandler);
         root.addHandler(new MavenLoggingRedirectorHandler(getLog()));
-        logger.info("I'm writing a message");
+        logger.info("info msg");
+        logger.warning("warning msg");
+        logger.config("config msg");
+        logger.fine("fine msg");
+        logger.finer("finer msg");
+        logger.finest("finest msg");
+        logger.severe("severe  msg");
     }
 
 }

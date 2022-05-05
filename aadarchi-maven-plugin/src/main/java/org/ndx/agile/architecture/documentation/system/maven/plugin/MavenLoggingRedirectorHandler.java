@@ -1,9 +1,9 @@
 package org.ndx.agile.architecture.documentation.system.maven.plugin;
 
+import org.apache.maven.plugin.logging.Log;
+
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
-
-import org.apache.maven.plugin.logging.Log;
 
 public class MavenLoggingRedirectorHandler extends Handler {
 
@@ -15,7 +15,25 @@ public class MavenLoggingRedirectorHandler extends Handler {
 
     @Override
     public void publish(LogRecord record) {
-        mavenLog.info(record.getMessage());
+        if(record.getLevel().intValue() < 300) {             //ALL
+            mavenLog.info("(" + record.getLevel() + " " + record.getLevel().intValue() + " " + record.getSourceClassName() + ") " + record.getMessage());
+        } else if (record.getLevel().intValue() == 300) {    //FINEST
+            mavenLog.info("(" + record.getLevel() + " " + record.getLevel().intValue() + " " + record.getSourceClassName() + ") " + record.getMessage());
+        } else if(record.getLevel().intValue() == 400) {     //FINER
+            mavenLog.info("(" + record.getLevel() + " " + record.getLevel().intValue() + " " + record.getSourceClassName() + ") " + record.getMessage());
+        } else if(record.getLevel().intValue() == 500) {     //FINE
+            mavenLog.info("(" + record.getLevel() + " " + record.getLevel().intValue() + " " + record.getSourceClassName() + ") " + record.getMessage());
+        } else if(record.getLevel().intValue() == 700) {     //CONFIG
+            mavenLog.info("(" + record.getLevel() + " " + record.getLevel().intValue() + " " + record.getSourceClassName() + ") " + record.getMessage());
+        } else if(record.getLevel().intValue() == 800) {     //INFO
+            mavenLog.info("(" + record.getLevel() + " " + record.getLevel().intValue() + " " + record.getSourceClassName() + ") " + record.getMessage());
+        } else if(record.getLevel().intValue() == 900) {     //WARNING
+            mavenLog.warn("(" + record.getLevel() + " " + record.getLevel().intValue() + " " + record.getSourceClassName() + ") " + record.getMessage());
+        } else if(record.getLevel().intValue() == 1000) {    //SEVERE
+            mavenLog.error("(" + record.getLevel() + " " + record.getLevel().intValue() + " " + record.getSourceClassName() + ") " + record.getMessage());
+        } else {                                             //OFF
+            mavenLog.error("(" + record.getLevel() + " " + record.getLevel().intValue() + " " + record.getSourceClassName() + ") " + record.getMessage());
+        }
     }
 
     @Override
