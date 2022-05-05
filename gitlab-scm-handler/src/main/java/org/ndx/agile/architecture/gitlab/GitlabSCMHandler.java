@@ -18,20 +18,20 @@ import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.exception.WrappedException;
 
 public class GitlabSCMHandler implements SCMHandler {
-	private @Inject GitLabApi gitlab;
+	private @Inject GitLabContainer gitlab;
 
 	@Override
 	public boolean canHandle(String project) {
-		return Constants.isGitLabProject(gitlab, project);
+		return Constants.isGitLabProject(gitlab.getApi(), project);
 	}
 
 	@Override
 	public Collection<SCMFile> find(String project, String path, Predicate<SCMFile> filter) {
 		try {
-			List<TreeItem> items = gitlab.getRepositoryApi().getTree(project, path, null);
+			List<TreeItem> items = gitlab.getApi().getRepositoryApi().getTree(project, path, null);
 			return items.stream()
 					.map(ThrowingFunction.unchecked(item -> new GitlabFile(
-							gitlab.getRepositoryFileApi().getFile(project, item.getPath(), "master"))))
+							gitlab.getApi().getRepositoryFileApi().getFile(project, item.getPath(), "master"))))
 					.filter(file -> filter.test(file))
 					.collect(Collectors.toList());
 		} catch (WrappedException e) {

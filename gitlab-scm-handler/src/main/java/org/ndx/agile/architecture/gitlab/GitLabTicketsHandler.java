@@ -24,23 +24,23 @@ import com.structurizr.annotation.Component;
 @ApplicationScoped
 @Component(technology = "Java")
 public class GitLabTicketsHandler implements TicketsHandler {
-	@Inject GitLabApi gitlab;
+	@Inject GitLabContainer gitlab;
 
 	@Override
 	public boolean canHandle(String ticketsProject) {
-		return Constants.isGitLabProject(gitlab, ticketsProject);
+		return Constants.isGitLabProject(gitlab.getApi(), ticketsProject);
 	}
 
 	@Override
 	public Collection<Ticket> getTicketsTagged(String project, String label) {
 		try {
-			Object projectId = gitlab.getIssuesApi().getProjectIdOrPath(project);
+			Object projectId = gitlab.getApi().getIssuesApi().getProjectIdOrPath(project);
 			IssueFilter filter = new IssueFilter();
 			filter.setLabels(Arrays.asList(label));
 			Collection<Ticket> returned = new ArrayList<>();
-			for(Issue issue : gitlab.getIssuesApi().getIssues(filter)) {
+			for(Issue issue : gitlab.getApi().getIssuesApi().getIssues(filter)) {
 				returned.add(new GitLabTicket(issue, 
-						gitlab.getDiscussionsApi().getIssueDiscussions(projectId, issue.getId())));
+						gitlab.getApi().getDiscussionsApi().getIssueDiscussions(projectId, issue.getId())));
 			}
 			return returned;
 		} catch (GitLabApiException e) {
@@ -56,8 +56,8 @@ public class GitLabTicketsHandler implements TicketsHandler {
 	@Override
 	public String getProjectName(String project) {
 		try {
-			Object projectId = gitlab.getProjectApi().getProjectIdOrPath(project);
-			return gitlab.getProjectApi().getProject(projectId).getName();
+			Object projectId = gitlab.getApi().getProjectApi().getProjectIdOrPath(project);
+			return gitlab.getApi().getProjectApi().getProject(projectId).getName();
 		} catch (GitLabApiException e) {
 			throw new GitLabHandlerException(String.format("Unable to et project name of %s",  project), e);
 		}
