@@ -15,6 +15,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
+import org.ndx.agile.architecture.base.OutputBuilder.Format;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
 import org.ndx.agile.architecture.base.utils.StructurizrUtils;
@@ -79,7 +80,6 @@ public class SCMReadmeReader extends ModelElementAdapter {
 	void writeReadmeFor(SCMHandler handler, Element element, String elementProject, OutputBuilder builder) {
 		String elementPath = element.getProperties().getOrDefault(ModelElementKeys.SCM_PATH, "");
 		String elementReadme = element.getProperties().get(ModelElementKeys.SCM_README);
-		File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, "adoc");
 		Predicate<SCMFile> filter;
 		if(elementReadme==null) {
 			filter = (file) -> file.name().toLowerCase().startsWith("readme.");
@@ -97,6 +97,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 					StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
 		} else {
 			SCMFile readme = file.iterator().next();
+			File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, Format.adoc);
 			if(force) {
 				outputFor.delete();
 			} else {
@@ -109,7 +110,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 				if(readme.name().toLowerCase().endsWith(".md")) {
 					readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
 				}
-				FileUtils.write(outputFor, readmeText, "UTF-8");
+				builder.writeToOutputFor(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
 			} catch (Throwable e) {
 				throw new CantExtractReadme(String.format(
 						"Can't extract readme of container %s using SCM project %s, path %s, readme %s", 

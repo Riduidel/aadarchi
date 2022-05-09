@@ -1,9 +1,12 @@
 package org.ndx.agile.architecture.base.utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.FileUtils;
+import org.ndx.agile.architecture.base.AgileArchitectureException;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
@@ -11,6 +14,11 @@ import org.ndx.agile.architecture.base.OutputBuilder;
 import com.structurizr.model.Element;
 
 public class SimpleOutputBuilder implements OutputBuilder {
+	public static final class UnableToWiteOutput extends AgileArchitectureException {
+		public UnableToWiteOutput(String message, Throwable cause) {
+			super(message, cause);
+		}
+	}
 	private final File enhancementsBase;
 	public static final String SECTION_PATTERN = "%02d-%s";
 
@@ -46,6 +54,28 @@ public class SimpleOutputBuilder implements OutputBuilder {
 		return Stream.of(canonicalPath.split("\\/"))
 				.map(name -> name.replaceAll("[:\\\\/*?|<>]", "_"))
 				.collect(Collectors.joining("/"));
+	}
+
+	@Override
+	public File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format) {
+		return outputFor(section, element, enhancer, format.getExtension());
+	}
+
+	@Override
+	public File writeToOutputFor(AgileArchitectureSection section, Element element, Enhancer enhancer,
+			HandledFormat format, CharSequence text) {
+		File returned = outputFor(section, element, enhancer, format);
+		returned.getParentFile().mkdirs();
+		try {
+			FileUtils.write(returned, format.createCommentForEnhancer(enhancer), format.encoding());
+			FileUtils.write(returned, text, format.encoding(), true);
+		} catch(IOException e) {
+			throw new UnableToWiteOutput(
+					String.format("Unable to write output to file %s", returned.getAbsolutePath()),
+					e
+					);
+		}
+		return returned;
 	}
 
 }

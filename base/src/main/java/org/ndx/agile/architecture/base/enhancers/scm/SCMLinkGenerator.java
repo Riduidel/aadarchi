@@ -62,18 +62,11 @@ public class SCMLinkGenerator extends ModelElementAdapter {
 				;
 			if(usableHandler.isPresent()) {
 				SCMHandler handler = usableHandler.get();
-				try {
-					FileUtils.write(builder.outputFor(AgileArchitectureSection.code, element, this, "adoc"),
-							 String.format("%s[See on %s]", 
-									 handler.linkTo(elementProject, elementPath),
-									 handler.asciidocText()
-									 ), 
-							"UTF-8");
-				} catch (IOException e) {
-					throw new CantWriteLink(String.format("Can't write link for element %s which is linked to %s/%s", 
-							StructurizrUtils.getCanonicalPath(element), elementProject, elementPath), 
-							e);
-				}				
+				builder.writeToOutputFor(AgileArchitectureSection.code, element, this, OutputBuilder.Format.adoc,
+					String.format("%s[See on %s]", 
+						 handler.linkTo(elementProject, elementPath),
+						 handler.asciidocText()
+						 ));
 			} else {
 				logger.warning(String.format("We have this set of handlers\n%s\nin which we couldn't find one for element %s associated project %s",
 						scmHandlers.stream().map(handler -> handler.toString()).collect(Collectors.joining()),

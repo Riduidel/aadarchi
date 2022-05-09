@@ -46,12 +46,7 @@ public class EnhancerLister extends ModelElementAdapter {
     @Override
     public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {
         String table = toAsciidocTable(enhancerInstance.stream());
-        File output = builder.outputFor(AgileArchitectureSection.code, softwareSystem, this, "adoc");
-        try {
-            FileUtils.write(output, table, "UTF-8");
-        } catch (IOException e) {
-            throw new RuntimeException("Can't believe I can't write the file " + output.getAbsolutePath(), e);
-        }
+        builder.writeToOutputFor(AgileArchitectureSection.code, softwareSystem, this, OutputBuilder.Format.adoc, table);
     }
 
     String toAsciidocTable(Stream<Enhancer> stream) {
