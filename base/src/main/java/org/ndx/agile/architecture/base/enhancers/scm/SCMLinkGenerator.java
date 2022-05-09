@@ -62,7 +62,7 @@ public class SCMLinkGenerator extends ModelElementAdapter {
 				;
 			if(usableHandler.isPresent()) {
 				SCMHandler handler = usableHandler.get();
-				builder.writeToOutputFor(AgileArchitectureSection.code, element, this, OutputBuilder.Format.adoc,
+				builder.writeToOutput(AgileArchitectureSection.code, element, this, OutputBuilder.Format.adoc,
 					String.format("%s[See on %s]", 
 						 handler.linkTo(elementProject, elementPath),
 						 handler.asciidocText()

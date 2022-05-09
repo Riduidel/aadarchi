@@ -10,6 +10,7 @@ import org.ndx.agile.architecture.base.AgileArchitectureException;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
+import org.ndx.agile.architecture.base.enhancers.includes.ImplicitIncludeManager;
 
 import com.structurizr.model.Element;
 
@@ -40,7 +41,7 @@ public class SimpleOutputBuilder implements OutputBuilder {
 	}
 
 	@Override
-	public File outputFor(AgileArchitectureSection section, Element element) {
+	public File outputDirectoryFor(AgileArchitectureSection section, Element element) {
 		return new File(enhancementsBase,
 				// Yup, we use hex values for priority, to have less characters
 				String.format("%s/"+SECTION_PATTERN, 
@@ -61,13 +62,12 @@ public class SimpleOutputBuilder implements OutputBuilder {
 		return outputFor(section, element, enhancer, format.getExtension());
 	}
 
-	@Override
-	public File writeToOutputFor(AgileArchitectureSection section, Element element, Enhancer enhancer,
-			HandledFormat format, CharSequence text) {
+	public File writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer,
+			HandledFormat format, CharSequence text, boolean append) {
 		File returned = outputFor(section, element, enhancer, format);
 		returned.getParentFile().mkdirs();
 		try {
-			FileUtils.write(returned, format.createCommentForEnhancer(enhancer), format.encoding());
+			FileUtils.write(returned, format.createCommentForEnhancer(enhancer), format.encoding(), append);
 			FileUtils.write(returned, text, format.encoding(), true);
 		} catch(IOException e) {
 			throw new UnableToWiteOutput(
@@ -76,6 +76,18 @@ public class SimpleOutputBuilder implements OutputBuilder {
 					);
 		}
 		return returned;
+	}
+
+	@Override
+	public File writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer,
+			HandledFormat format, CharSequence text) {
+		return writeToOutput(section, element, enhancer, format, text, false);
+	}
+
+	@Override
+	public File appendToOutput(AgileArchitectureSection section, Element element,
+			Enhancer enhancer, HandledFormat format, CharSequence text) {
+		return writeToOutput(section, element, enhancer, format, text, true);
 	}
 
 }

@@ -2,6 +2,9 @@ package org.ndx.agile.architecture.base;
 
 import java.io.File;
 
+import org.ndx.agile.architecture.base.OutputBuilder.Format;
+import org.ndx.agile.architecture.base.enhancers.includes.ImplicitIncludeManager;
+
 import com.structurizr.model.Element;
 
 public interface OutputBuilder {
@@ -75,9 +78,19 @@ public interface OutputBuilder {
 	 * @param enhancer the enhancer producing that content
 	 * @return the file in which content has been written, for later reference (typically useful for generating links)
 	 */
-	File writeToOutputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format, CharSequence text);
+	File writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format, CharSequence text);
+	/**
+	 * Write the given text in the output file for the given enhancer.
+	 * BEWARE: This is pure append. Any preexisting content will be kept.
+	 * @param section the section in which we want to add some content
+	 * @param element the element to which we want to add some content
+	 * @param format file format. For asciidoc, one should use {@link Format#adoc}
+	 * @param enhancer the enhancer producing that content
+	 * @return the file in which content has been written, for later reference (typically useful for generating links)
+	 */
+	File appendToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format, CharSequence text);
 	/**
 	 * Get the output directory in which all output is to be written.
 	 */
-	File outputFor(AgileArchitectureSection section, Element element);
+	File outputDirectoryFor(AgileArchitectureSection section, Element element);
 }

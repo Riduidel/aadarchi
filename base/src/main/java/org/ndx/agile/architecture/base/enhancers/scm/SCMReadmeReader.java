@@ -110,7 +110,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 				if(readme.name().toLowerCase().endsWith(".md")) {
 					readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
 				}
-				builder.writeToOutputFor(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
+				builder.writeToOutput(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
 			} catch (Throwable e) {
 				throw new CantExtractReadme(String.format(
 						"Can't extract readme of container %s using SCM project %s, path %s, readme %s", 
