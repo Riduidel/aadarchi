@@ -34,6 +34,7 @@ local.properties
 ### IntelliJ ###
 
 *.iml
+.DS_Store
 
 # External tool builders
 .externalToolBuilders/

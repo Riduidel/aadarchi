@@ -378,6 +378,8 @@
 								<project-issues-not-defined>${issues.url}</project-issues-not-defined>
 								<!-- TODO Uncomment this line if you use GitHub issues -->
 								<!-- <project-issues-on-github>${issues.url}</project-issues-on-github> -->
+								<!-- TODO Uncomment this line if you use GitLab issues -->
+								<!-- <project-issues-on-gitlab>${issues.url}</project-issues-on-gitlab> -->
 								<!-- end::bug-tracking-define[] -->
 								<!-- These properties generate a footer with revision number and 
 									date -->
