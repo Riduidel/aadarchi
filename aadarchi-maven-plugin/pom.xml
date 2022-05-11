@@ -78,6 +78,9 @@
 					<!-- The settings file will fasten build download according to https://maven.apache.org/plugins/maven-invoker-plugin/examples/fast-use.html -->
 					<settingsFile>src/it/settings.xml</settingsFile>
 					<postBuildHookScript>verify</postBuildHookScript>
+					<showErrors>true</showErrors>
+					<streamLogsOnFailure>true</streamLogsOnFailure>
+					<writeJunitReports>true</writeJunitReports>
 				</configuration>
 				<executions>
 					<execution>
