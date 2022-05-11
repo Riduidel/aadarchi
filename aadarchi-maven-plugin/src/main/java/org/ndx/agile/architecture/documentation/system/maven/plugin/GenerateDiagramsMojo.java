@@ -5,6 +5,7 @@ import com.itemis.maven.plugins.cdi.ExecutionContext;
 import com.itemis.maven.plugins.cdi.annotations.MojoProduces;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -21,10 +22,8 @@ public class GenerateDiagramsMojo extends AbstractCDIMojo {
 	@MojoProduces
 	private MavenProject project;
 
-
-	public void execute(ExecutionContext context) throws MojoExecutionException, MojoFailureException {
-		Logger root = Logger.getLogger("");
-		Arrays.stream(root.getHandlers()).forEach(root::removeHandler);
-		root.addHandler(new MavenLoggingRedirectorHandler(getLog()));
-	}
+//	@Override @MojoProduces
+//	public Log getLog() {
+//		return super.getLog();
+//	}
 }
