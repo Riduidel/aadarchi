@@ -16,10 +16,13 @@ public class InitializeLoggerStep implements CDIMojoProcessingStep {
     @Inject
     private Log log;
 
+    @Inject Logger logger;
+
     @Override
     public void execute(ExecutionContext context) throws MojoExecutionException, MojoFailureException {
         Logger root = Logger.getLogger("");
         Arrays.stream(root.getHandlers()).forEach(root::removeHandler);
         root.addHandler(new MavenLoggingRedirectorHandler(log));
+        logger.info("msg de test");
     }
 }
