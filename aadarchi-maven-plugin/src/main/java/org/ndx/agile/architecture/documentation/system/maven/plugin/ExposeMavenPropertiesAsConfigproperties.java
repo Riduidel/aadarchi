@@ -3,21 +3,21 @@ package org.ndx.agile.architecture.documentation.system.maven.plugin;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Initialized;
-import javax.enterprise.event.Observes;
-import javax.enterprise.event.Reception;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.Source;
+import org.apache.deltaspike.core.api.projectstage.ProjectStage;
 import org.apache.deltaspike.core.spi.config.ConfigSource;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
 
 @Source
 public class ExposeMavenPropertiesAsConfigproperties implements ConfigSource {
@@ -25,13 +25,17 @@ public class ExposeMavenPropertiesAsConfigproperties implements ConfigSource {
 
 	private static final int DELTASPIKE_PRIORITY = 1000;
 
-	@Inject
-	MavenProject mavenProject;
-
-	private Map<String, String> properties = new HashMap();
+	private PluginParameterExpressionEvaluator evaluator;
 
 	public ExposeMavenPropertiesAsConfigproperties() {
 		super();
+	}
+	
+	@Inject ProjectStage projectStage;
+	
+	@Inject
+	public void createMavenExpressionEvaluator(MavenSession mavenSession, MojoExecution execution) {
+		evaluator = new PluginParameterExpressionEvaluator(mavenSession, execution);
 	}
 
 	@Override
@@ -39,48 +43,28 @@ public class ExposeMavenPropertiesAsConfigproperties implements ConfigSource {
 		return "maven-properties";
 	}
 
-	@PostConstruct
-	public void initialize() {
-		logger.info("Initializing maven properties exposer");
-		properties = initProperties(mavenProject);
-		logger.info(String.format("Loaded a total of %d properties", properties.size()));
-	}
-
 	@Override
 	public Map<String, String> getProperties() {
-		return properties;
-	}
-
-	private Map<String, String> initProperties(MavenProject project) {
-		Map<String, String> returned = new TreeMap<String, String>();
-		returned.putAll(toMap(project.getProperties()));
-		// Mind you, maven properties not only include maven properties, but also build
-		// properties (project.version, and so on)
-		// So we're gonna find them, and we're gonna add them
-		// the simplest possible solution is, just, to, well, rewrite them
-		returned.put("project.basedir", project.getBasedir().getAbsolutePath());
-		returned.put("project.baseUri", project.getBasedir().toURI().toString());
-		returned.put("project.version", project.getVersion());
-		returned.put("project.build.directory", project.getBuild().getDirectory());
-		returned.put("project.build.outputDirectory", project.getBuild().getOutputDirectory());
-		returned.put("project.name", project.getName());
-		returned.put("project.version", project.getVersion());
-		returned.put("project.groupId", project.getGroupId());
-		returned.put("project.artifactId", project.getArtifactId());
-		returned.put("project.description", project.getDescription());
-		returned.put("project.build.finalName", project.getBuild().getFinalName());
-		return returned;
-	}
-
-	private static Map<String, String> toMap(Properties properties2) {
-		Map<String, String> returned = new HashMap<String, String>();
-		properties2.entrySet().forEach(entry -> returned.put(entry.getKey().toString(), entry.getValue().toString()));
-		return returned;
+		return null;
 	}
 
 	@Override
 	public String getPropertyValue(String key) {
-		return properties.get(key);
+		try {
+			// Property key may contain a suffix containing the DeltaSpike ProjectStage value.
+			// If so, remove it prior to evaluation
+			if(key.endsWith(projectStage.toString())) {
+				key = key.substring(0, key.indexOf("."+projectStage.toString()));
+			}
+			// Seems like evaluator wants the "${" maven uses to detect variables, so let's add it (if not already present)
+			if(!key.contains("${")) {
+				key = "${"+key+"}";
+			}
+			return evaluator.evaluate(key).toString();
+		} catch (Exception e) {
+			logger.log(Level.FINE, String.format("Unable to evaluate property %s", key), e);
+			return null;
+		}
 	}
 
 	@Override
