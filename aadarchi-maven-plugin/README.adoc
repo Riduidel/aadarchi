@@ -1,0 +1,29 @@
+= aadarchi-maven-plugin
+
+Since the goal of this whole project is to simplify the life of developers,
+and since `ArchitectureDocumentationBuilder` is a standard java class, not linked to any kind of build tool,
+this module is a maven project dedicated to remove all complexity of initial usage of aadarchi in maven.
+
+What kind of complexity, may one ask?
+
+Well, take a look at `architecture-documentation` maven POM prior to version 0.0.12 (take as an example the https://github.com/Riduidel/agile-architecture-documentation-system/blob/0.0.11/architecture-documentation/pom.xml[0.0.11 version]).
+Is it readable?
+Is it usable?
+
+I dont think so.
+
+As a consequence, this maven plugin provides mojos for each steps of documentation generation.
+
+== Available mojos
+
+* `generate-model` invokes the `ArchitectureDocumentationBuilder` class with elements from CLASSPATH added for easier introspection.
+
+== Developing
+
+=== Debugging integration tests
+Since this is a maven plugin, integration tests are other maven projects, defined using maven-invoker-plugin.
+This has the inconvenient that debugging those tests is rather convoluted.
+Ideally (as described in maven-invoker-plugin), this is done in two steps
+
+1. Run `mvn verify -Dinvoker.mavenExecutable=mvnDebug` (use `mvnDebug.cmd` on Windows)
+2. Connect your IDE to the waiting maven instance
