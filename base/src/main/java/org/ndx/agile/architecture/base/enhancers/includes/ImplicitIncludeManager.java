@@ -63,19 +63,16 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 		String sectionFolder = String.format(SimpleOutputBuilder.SECTION_PATTERN, section.index(), section.name());
 		String elementName = String.format("%s.adoc", StructurizrUtils.getCanonicalPath(element).replace('/', '_'));
 		File potentialFile = new File(new File(sourceDir,sectionFolder), elementName);
+		File targetFile = builder.outputFor(section, element, this, OutputBuilder.Format.adoc);
 		if(potentialFile.exists()) {
-			File targetFile = builder.outputFor(section, element, this, "adoc");
-			if(!targetFile.exists()) {
-				try {
-					Path relativePath = targetFile.getParentFile().getCanonicalFile().toPath()
-							.relativize(potentialFile.getCanonicalFile().toPath());
-					FileUtils.write(targetFile, 
-							String.format("include::%s[leveloffset=+1]", 
-									relativePath.toString()), 
-							"UTF-8");
-				} catch (IOException e) {
-					throw new CantCreateImplicitInclude(String.format("Can't create file %s", targetFile), e);
-				}
+			try {
+				Path relativePath = targetFile.getParentFile().getCanonicalFile().toPath()
+						.relativize(potentialFile.getCanonicalFile().toPath());
+				builder.writeToOutput(section, element, this, OutputBuilder.Format.adoc, 
+						String.format("include::%s[leveloffset=+1]\n",
+								relativePath.toString()));
+			} catch (IOException e) {
+				throw new CantCreateImplicitInclude(String.format("Can't create file %s", targetFile), e);
 			}
 		}
 	}
