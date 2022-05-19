@@ -35,7 +35,7 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 	private static final String ASCIIDOC_SOURCE_DIR = "asciidoc.source.dir";
 	private File sourceDir;
 
-	@Inject public void setDocumentsFolder(@ConfigProperty(name=ASCIIDOC_SOURCE_DIR, defaultValue = "asciidoc.source.dir") File sourceDir) {
+	@Inject public void setDocumentsFolder(@ConfigProperty(name=ASCIIDOC_SOURCE_DIR, defaultValue = "./src/docs/asciidoc") File sourceDir) {
 		if(sourceDir==null) {
 			throw new CantCreateImplicitInclude(
 					String.format("To have implicit includes working, you have to define the system property %s", 
