@@ -35,7 +35,7 @@ import com.structurizr.view.ViewSet;
 public class ArchitectureEnhancer {
 	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;
 	@Inject Logger logger;
-	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
+	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements", defaultValue = "/target/structurizr/enhancements") File enhancementsBase;
 
 	private OutputBuilder outputBuilder;
 	
