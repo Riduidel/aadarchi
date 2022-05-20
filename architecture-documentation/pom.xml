@@ -38,7 +38,7 @@
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-revealjs -->
 		<version.asciidoctor.revealjs>4.1.0</version.asciidoctor.revealjs>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
-		<version.asciidoctor.kroki>0.4.0</version.asciidoctor.kroki>
+		<version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
 		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
 		<version.jruby>9.2.9.0</version.jruby>
 		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
@@ -49,11 +49,12 @@
 		<url>${issues.url}</url>
 	</issueManagement>
 
-	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs -->
+	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
+	See https://github.com/Riduidel/agile-architecture-documentation-system/issues/159 for the weird protocol -->
 	<repositories>
 		<repository>
-			<id>rubygems-releases</id>
-			<url>http://rubygems-proxy.torquebox.org/releases</url>
+			<id>mavengems</id>
+			<url>mavengem:https://rubygems.org</url>
 		</repository>
 	</repositories>
 
@@ -191,11 +192,19 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<extensions>
+			<extension>
+				<!-- this allows us to download gems -->
+				<groupId>org.torquebox.mojo</groupId>
+				<artifactId>mavengem-wagon</artifactId>
+				<version>1.0.3</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>de.saumya.mojo</groupId>
 				<artifactId>gem-maven-plugin</artifactId>
-				<version>1.1.8</version>
+				<version>2.0.1</version>
 				<configuration>
 					<jrubyVersion>${version.jruby}</jrubyVersion>
 					<gemHome>${project.build.directory}/gems</gemHome>
@@ -492,7 +501,7 @@
 					<plugin>
 						<groupId>com.googlecode.maven-download-plugin</groupId>
 						<artifactId>download-maven-plugin</artifactId>
-						<version>1.5.0</version>
+						<version>1.6.8</version>
 						<executions>
 							<execution>
 								<id>install-revealjs</id>

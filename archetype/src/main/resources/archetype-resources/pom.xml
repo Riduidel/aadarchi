@@ -51,11 +51,12 @@
 		<url>${issues.url}</url>
 	</issueManagement>
 
-	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs -->
+	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
+	See https://github.com/Riduidel/agile-architecture-documentation-system/issues/159 for the weird protocol -->
 	<repositories>
 		<repository>
-			<id>rubygems-releases</id>
-			<url>http://rubygems-proxy.torquebox.org/releases</url>
+			<id>mavengems</id>
+			<url>mavengem:https://rubygems.org</url>
 		</repository>
 	</repositories>
 
@@ -203,6 +204,14 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<extensions>
+			<extension>
+				<!-- this allows us to download gems -->
+				<groupId>org.torquebox.mojo</groupId>
+				<artifactId>mavengem-wagon</artifactId>
+				<version>1.0.3</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>de.saumya.mojo</groupId>
