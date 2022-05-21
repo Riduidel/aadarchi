@@ -90,6 +90,20 @@ workspace "agile-architecture-documentation-system" {
 				color #ffffff
 			}
 		}
+        systemContext Agile_architecture_documentation_3 "SystemContext" {
+            include *
+            autoLayout
+        }
+
+        container Agile_architecture_documentation_3 "SystemContainers"  {
+            include *
+            autoLayout
+        }
+		
+		component base_10 "baseComponents" {
+            include *
+            autoLayout
+        }
 	}
 
 }

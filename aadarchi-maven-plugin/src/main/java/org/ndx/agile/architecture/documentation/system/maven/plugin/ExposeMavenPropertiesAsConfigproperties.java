@@ -60,7 +60,11 @@ public class ExposeMavenPropertiesAsConfigproperties implements ConfigSource {
 			if(!key.contains("${")) {
 				key = "${"+key+"}";
 			}
-			return evaluator.evaluate(key).toString();
+			Object value = evaluator.evaluate(key);
+			// I'm sorry, but Maven expression evaluator return null when evaluation fails. This is unfortunate.
+			if(value==null)
+				return null;
+			return value.toString();
 		} catch (Exception e) {
 			logger.log(Level.FINE, String.format("Unable to evaluate property %s", key), e);
 			return null;

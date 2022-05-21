@@ -9,13 +9,16 @@
 
 	<artifactId>aadarchi-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
+	<name>Agile Architecture Documentation System : Maven plugin</name>
 
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/com.itemis.maven.plugins/cdi-plugin-utils -->
 		<dependency>
-			<groupId>com.itemis.maven.plugins</groupId>
-			<artifactId>cdi-plugin-utils</artifactId>
-			<version>3.4.0</version>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se-core</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.maven/maven-core -->
 		<dependency>

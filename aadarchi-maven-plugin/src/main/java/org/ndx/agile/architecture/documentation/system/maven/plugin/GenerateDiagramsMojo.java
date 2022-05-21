@@ -1,26 +1,18 @@
 package org.ndx.agile.architecture.documentation.system.maven.plugin;
 
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.ndx.agile.architecture.documentation.system.maven.plugin.cdi.AbstractCDIStarterMojo;
 
-import com.itemis.maven.plugins.cdi.AbstractCDIMojo;
-import com.itemis.maven.plugins.cdi.annotations.MojoProduces;
+@Mojo(name = "generate-model", 
+	defaultPhase = LifecyclePhase.PREPARE_PACKAGE,
+	requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
+public class GenerateDiagramsMojo extends AbstractCDIStarterMojo {
 
-@Mojo(name = "generate-model", defaultPhase = LifecyclePhase.PROCESS_RESOURCES)
-public class GenerateDiagramsMojo extends AbstractCDIMojo {
+	@Override
+	protected Class<? extends Runnable> getCDIEnabledRunnableClass() {
+		return GenerateDiagramsRunnable.class;
+	}
 
-	@Component
-	@MojoProduces
-	private MavenProject project;
-
-	@Component
-	@MojoProduces
-	private MavenSession session;
-	
-	@Component
-	@MojoProduces private MojoExecution mojoExecution;
 }
