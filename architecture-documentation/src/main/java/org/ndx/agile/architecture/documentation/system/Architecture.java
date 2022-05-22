@@ -5,6 +5,7 @@ import java.net.URLClassLoader;
 import java.util.Arrays;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 
 import org.ndx.agile.architecture.base.ArchitectureModelProvider;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
@@ -85,7 +86,7 @@ public class Architecture implements ArchitectureModelProvider {
 		} catch (Exception e) {
 			throw new RuntimeException("Unable to locate components in ", e);
 		}
-        model.addImplicitRelationships();
+//        model.addImplicitRelationships();
         // Damn, structurizr-annotations doesn't understand CDI. Let's supplement it!
         base.getComponentWithName("ArchitectureEnhancer").uses(base.getComponentWithName("DocumentsCollector"), "Collects documents in source folder");
         base.getComponentWithName("ArchitectureEnhancer").uses(base.getComponentWithName("SCMLinkGenerator"), "Generates links to SCM sources");

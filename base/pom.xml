@@ -26,6 +26,7 @@
 			<groupId>com.structurizr</groupId>
 			<artifactId>structurizr-client</artifactId>
 			<exclusions>
+				<!-- Jackson-annotation is excluded because github-api requires a more recent one -->
 				<exclusion>
 					<groupId>com.fasterxml.jackson.core</groupId>
 					<artifactId>jackson-annotations</artifactId>

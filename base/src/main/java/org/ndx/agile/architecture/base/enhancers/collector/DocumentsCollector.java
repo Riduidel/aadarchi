@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -41,7 +42,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	/**
 	 * Injecting enhancements base to have a folder where to put our documents.
 	 */
-	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements") File enhancementsBase;
+	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements", defaultValue = "${basedir}/target/structurizr/enhancements") File enhancementsBase;
 	/**
 	 * Map that contains all elements that should be automagically included.
 	 * First level keys are the enums.
@@ -170,9 +171,9 @@ public class DocumentsCollector implements ModelEnhancer {
 			File sectionFolderFor = builder.outputDirectoryFor(section, element);
 			File[] filesArray = sectionFolderFor.listFiles((dir, name) -> name.toLowerCase().endsWith(".adoc"));
 			if(filesArray!=null && filesArray.length>0) {
-				Set<File> files = new TreeSet<>( 
-						Arrays.asList(
-								filesArray));
+				Set<File> files = Stream.of(filesArray)
+						.map(file -> file.getAbsoluteFile())
+						.collect(Collectors.toCollection(() -> new TreeSet<File>()));
 				hierarchy.get(section).put(element, files);
 			}
 		}

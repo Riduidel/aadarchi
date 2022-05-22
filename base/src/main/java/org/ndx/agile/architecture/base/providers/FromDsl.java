@@ -2,8 +2,10 @@ package org.ndx.agile.architecture.base.providers;
 
 import java.io.File;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.ArchitectureModelProvider;
@@ -13,12 +15,13 @@ import com.structurizr.Workspace;
 import com.structurizr.dsl.StructurizrDslParser;
 import com.structurizr.dsl.StructurizrDslParserException;
 
-@Alternative
+@ApplicationScoped
+@Named("Using workspace.dsl")
 public class FromDsl implements ArchitectureModelProvider {
 
 	private static final String WORKSPACE_DSL = ModelElementKeys.PREFIX + "dsl";
 	@Inject
-	@ConfigProperty(name = WORKSPACE_DSL, defaultValue = "src/architecture/resources/workspace.dsl") File workspace;
+	@ConfigProperty(name = WORKSPACE_DSL, defaultValue = "${basedir}/src/architecture/resources/workspace.dsl") File workspace;
 
 	@Override
 	public Workspace describeArchitecture() {

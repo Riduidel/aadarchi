@@ -202,6 +202,18 @@
 		</extensions>
 		<plugins>
 			<plugin>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>aadarchi-maven-plugin</artifactId>
+				<version>${project.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate-model</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>de.saumya.mojo</groupId>
 				<artifactId>gem-maven-plugin</artifactId>
 				<version>2.0.1</version>
@@ -258,48 +270,6 @@
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.22.2</version>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
-				<executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<configuration>
-							<mainClass>${agile.architecture.main.class}</mainClass>
-							<systemProperties>
-								<systemProperty>
-									<key>maven.source.dir</key>
-									<value>${project.build.sourceDirectory}</value>
-								</systemProperty>
-								<ystemProperty>
-									<key>asciidoc.source.dir</key>
-									<value>${asciidoc.source.docs.directory}</value>
-								</ystemProperty>
-								<systemProperty>
-									<key>agile.architecture.diagrams</key>
-									<value>${agile.architecture.output.diagrams}</value>
-								</systemProperty>
-								<systemProperty>
-									<key>agile.architecture.enhancements</key>
-									<value>${agile.architecture.output.enhancements}</value>
-								</systemProperty>
-								<systemProperty>
-									<key>agile.architecture.github.token</key>
-									<value>${agile.architecture.github.token}</value>
-								</systemProperty>
-								<systemProperty>
-									<key>force</key>
-									<value>${force}</value>
-								</systemProperty>
-							</systemProperties>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
