@@ -42,7 +42,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	/**
 	 * Injecting enhancements base to have a folder where to put our documents.
 	 */
-	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements", defaultValue = "${basedir}/target/structurizr/enhancements") File enhancementsBase;
+	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements", defaultValue = "target/structurizr/enhancements") File enhancementsBase;
 	/**
 	 * Map that contains all elements that should be automagically included.
 	 * First level keys are the enums.

@@ -35,7 +35,7 @@ import com.structurizr.view.ViewSet;
 public class GraphEmitter implements ViewEnhancer {
 	@Inject Logger logger;
 	@Inject 
-	@ConfigProperty(name = ModelElementKeys.AGILE_ARCHITECTURE_DIAGRAMS_PATH, defaultValue = "${basedir}/target/structurizr/diagrams")
+	@ConfigProperty(name = ModelElementKeys.AGILE_ARCHITECTURE_DIAGRAMS_PATH, defaultValue = "target/structurizr/diagrams")
 	File destination;
 	@Inject @ConfigProperty(name = "force", defaultValue = "false") boolean force;
 

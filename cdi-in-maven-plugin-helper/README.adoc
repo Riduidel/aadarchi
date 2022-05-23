@@ -1,0 +1,50 @@
+= CDI In maven plugin Helper
+
+This small library, heavily borrowing from the defunct https://github.com/shillner/maven-cdi-plugin-utils[itemis maven-cdi-plugin-utils] allows a maven mojo to simply use CDI injection.
+
+== Requirements
+
+Write a Mojo which inherits from `AbstractCDIStarterMojo`.
+
+In that Mojo, simply overwrite the `Class<? extends Runnable> getCDIEnabledRunnableClass()` method, which gets called when Weld has been bootstrapped with all dependencies.
+
+== Example
+
+[code, java]
+----
+@Mojo(name = "generate-model", 
+	defaultPhase = LifecyclePhase.PREPARE_PACKAGE,
+	requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)
+public class GenerateDiagramsMojo extends AbstractCDIStarterMojo {
+
+	@Override
+	protected Class<? extends Runnable> getCDIEnabledRunnableClass() {
+		return GenerateDiagramsRunnable.class;
+	}
+
+}
+----
+
+This class bootstraps the CDI environment for running the `GenerateDiagramsRunnable`
+
+[code, java]
+----
+public class GenerateDiagramsRunnable implements Runnable {
+
+	@Inject Logger logger;
+
+    @Inject ArchitectureDocumentationBuilder builder;
+
+	@Override
+	public void run() {
+		try {
+			builder.run();
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to generate architecture documentation elements", e);
+		}
+	}
+
+}
+----
+
+This class is invoked in maven build with all CDI configured.

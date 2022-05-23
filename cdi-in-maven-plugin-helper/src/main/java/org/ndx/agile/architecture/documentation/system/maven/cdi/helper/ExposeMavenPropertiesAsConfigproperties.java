@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.documentation.system.maven.plugin;
+package org.ndx.agile.architecture.documentation.system.maven.cdi.helper;
 
 import java.util.HashMap;
 import java.util.Map;

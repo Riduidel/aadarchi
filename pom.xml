@@ -79,7 +79,8 @@
 		<module>archetype</module>
 		<module>markdown-to-asciidoc</module>
         <module>aadarchi-maven-plugin</module>
-    </modules>
+        <module>cdi-in-maven-plugin-helper</module>
+	</modules>
 
 	<dependencyManagement>
 		<dependencies>

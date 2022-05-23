@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.documentation.system.maven.plugin;
+package org.ndx.agile.architecture.documentation.system.maven.cdi.helper.log;
 
 import org.apache.maven.plugin.logging.Log;
 
