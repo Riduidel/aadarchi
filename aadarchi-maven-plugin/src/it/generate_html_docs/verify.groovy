@@ -1,0 +1,1 @@
+assert new File(basedir, "target/asciidoc/html/index.html").exists()
