@@ -6,6 +6,13 @@
         <version>0.0.12-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
 
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>mavengems</id>-->
+<!--            <url>mavengem:https://rubygems.org</url>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+
     <artifactId>simple</artifactId>
     <build>
         <plugins>
