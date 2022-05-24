@@ -55,7 +55,7 @@ public class ExposeMavenPropertiesAsConfigProperties implements ConfigSource {
 				key = "${"+key+"}";
 			}
 			Object value = evaluator.evaluate(key);
-			logger.info(String.format("Evaluated %s to %s", key, value));
+			logger.finer(String.format("Evaluated %s to %s", key, value));
 			// I'm sorry, but Maven expression evaluator return null when evaluation fails. This is unfortunate.
 			if(value==null)
 				return null;
