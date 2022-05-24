@@ -39,10 +39,13 @@ import com.structurizr.model.SoftwareSystem;
  */
 @com.structurizr.annotation.Component(technology = "Java/CDI")
 public class DocumentsCollector implements ModelEnhancer {
+	private File enhancementsBase;
 	/**
 	 * Injecting enhancements base to have a folder where to put our documents.
 	 */
-	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements", defaultValue = "target/structurizr/enhancements") File enhancementsBase;
+	@Inject public void setEnhancementsBase(@ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements", defaultValue = "${basedir}/target/structurizr/enhancements") File enhancementsBase) {
+		this.enhancementsBase = enhancementsBase.getAbsoluteFile();
+	}
 	/**
 	 * Map that contains all elements that should be automagically included.
 	 * First level keys are the enums.

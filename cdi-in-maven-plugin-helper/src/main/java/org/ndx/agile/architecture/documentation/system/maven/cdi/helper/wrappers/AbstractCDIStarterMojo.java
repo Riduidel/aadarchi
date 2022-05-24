@@ -159,6 +159,7 @@ public abstract class AbstractCDIStarterMojo extends AbstractMojo implements Ext
 				ClassRealm realm = pluginDescriptor.getClassRealm();
 				try {
 					realm.addURL(file.toURI().toURL());
+					getLog().info("Adding dependency "+file.getAbsolutePath()+" to CLASSPATH");
 				} catch (MalformedURLException e) {
 					throw new MojoExecutionException("Unable to parse file path as url", e);
 				}
@@ -175,6 +176,7 @@ public abstract class AbstractCDIStarterMojo extends AbstractMojo implements Ext
 			ClassRealm realm = pluginDescriptor.getClassRealm();
 			try {
 				realm.addURL(file.toURI().toURL());
+				getLog().info("Adding artifact "+file.getAbsolutePath()+" to CLASSPATH");
 			} catch (MalformedURLException e) {
 				throw new MojoExecutionException("Unable to parse file path as url", e);
 			}

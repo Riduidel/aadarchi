@@ -35,14 +35,14 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 	private static final String ASCIIDOC_SOURCE_DIR = "asciidoc.source.dir";
 	private File sourceDir;
 
-	@Inject public void setDocumentsFolder(@ConfigProperty(name=ASCIIDOC_SOURCE_DIR, defaultValue = "src/docs/asciidoc") File sourceDir) {
+	@Inject public void setDocumentsFolder(@ConfigProperty(name=ASCIIDOC_SOURCE_DIR, defaultValue = "${basedir}/src/docs/asciidoc") File sourceDir) {
 		if(sourceDir==null) {
 			throw new CantCreateImplicitInclude(
 					String.format("To have implicit includes working, you have to define the system property %s", 
 							ASCIIDOC_SOURCE_DIR)
 					);
 		}
-		this.sourceDir = sourceDir;
+		this.sourceDir = sourceDir.getAbsoluteFile();
 	}
 	/**
 	 * We set it at first element to have those text before all enhancers
