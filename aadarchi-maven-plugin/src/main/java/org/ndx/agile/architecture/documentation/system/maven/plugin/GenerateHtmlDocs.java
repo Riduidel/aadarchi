@@ -52,7 +52,7 @@ public class GenerateHtmlDocs extends AbstractMojo {
 			    goal("process-asciidoc"),
 			    configuration(
 						element(name("gemPath"), "${project.build.directory}/gems"),
-						element(name("attrributes"),
+						element(name("attributes"),
 							element(name("allow-uri-read")),
 							element(name("kroki-server-url"), "TODO create variable")
 								),
