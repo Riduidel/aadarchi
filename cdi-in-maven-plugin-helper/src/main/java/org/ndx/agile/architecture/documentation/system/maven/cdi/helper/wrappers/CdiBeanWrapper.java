@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.documentation.system.maven.plugin.cdi;
+package org.ndx.agile.architecture.documentation.system.maven.cdi.helper.wrappers;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;

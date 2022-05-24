@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.documentation.system.maven.plugin.cdi;
+package org.ndx.agile.architecture.documentation.system.maven.cdi.helper.wrappers;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -33,7 +33,7 @@ import org.eclipse.aether.impl.ArtifactResolver;
 import org.jboss.weld.config.ConfigurationKey;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
-import org.ndx.agile.architecture.documentation.system.maven.plugin.BindJULToMaven;
+import org.ndx.agile.architecture.documentation.system.maven.cdi.helper.log.BindJULToMaven;
 
 /**
  * A base class bootstraping Weld in maven context and ensuring all Maven
@@ -159,6 +159,7 @@ public abstract class AbstractCDIStarterMojo extends AbstractMojo implements Ext
 				ClassRealm realm = pluginDescriptor.getClassRealm();
 				try {
 					realm.addURL(file.toURI().toURL());
+					getLog().info("Adding dependency "+file.getAbsolutePath()+" to CLASSPATH");
 				} catch (MalformedURLException e) {
 					throw new MojoExecutionException("Unable to parse file path as url", e);
 				}
@@ -175,6 +176,7 @@ public abstract class AbstractCDIStarterMojo extends AbstractMojo implements Ext
 			ClassRealm realm = pluginDescriptor.getClassRealm();
 			try {
 				realm.addURL(file.toURI().toURL());
+				getLog().info("Adding artifact "+file.getAbsolutePath()+" to CLASSPATH");
 			} catch (MalformedURLException e) {
 				throw new MojoExecutionException("Unable to parse file path as url", e);
 			}

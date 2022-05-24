@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.documentation.system.maven.plugin.cdi;
+package org.ndx.agile.architecture.documentation.system.maven.cdi.helper.wrappers;
 
 import java.io.File;
 import java.util.List;
