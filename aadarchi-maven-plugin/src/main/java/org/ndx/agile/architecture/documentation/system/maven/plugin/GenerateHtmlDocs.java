@@ -36,6 +36,9 @@ public class GenerateHtmlDocs extends AbstractMojo {
 	@Parameter(name = "asciidoctorj-version", defaultValue = "2.4.3")
 	private String asciidoctorjVersion;
 
+	@Parameter(name = "kroki-server-url", defaultValue = "${kroki.server.url}")
+	private String krokiServerUrl;
+
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		executeMojo(
@@ -53,9 +56,31 @@ public class GenerateHtmlDocs extends AbstractMojo {
 			    configuration(
 						element(name("gemPath"), "${project.build.directory}/gems"),
 						element(name("attributes"),
-							element(name("allow-uri-read")),
-							element(name("kroki-server-url"), "TODO create variable")
-								),
+								element(name("allow-uri-read")), // allow to include distant content in the created document
+								element(name("kroki-server-url"), krokiServerUrl),
+
+								element(name("structurizrdir"), "${agile.architecture.output.diagrams}"),
+								element(name("imagesdir"), "./images"),
+								element(name("toc"), "left"), // put the table of content on the left side of the window
+								element(name("icons"), "font"), // allow to use icons from "fonticones"
+								element(name("sectanchors"), "true"), // sections behave like anchors/links to move around the document
+								element(name("idseparator"), "-"), // put a separator between identifiers pieces
+								element(name("hideBugReport"), "${asciidoc.documents.hide.bug.report}"), // add link to allow users to report some bugs
+
+								element(name("sectnums"), "true"), // display section number in the summary
+								element(name("revnumber"), "${project.version}"), // add project version in the footer
+								element(name("revdate"), "${maven.build.timestamp}"), // add the date in the footer
+
+								element(name("project-group-id"), "${project.groupId}"),
+								element(name("project-artifact-id"), "${project.artifactId}"),
+								element(name("project-name"), "${project.name}"),
+								element(name("project-version"), "${project.version}"),
+								element(name("project-build-timestamp"), "${maven.build.timestamp}"),
+								element(name("project-pom-path"), "../../../pom.xml"),
+								element(name("project-issues-on-github"), "${issues.url}"),
+								element(name("organization"), "${project.organization.name}"),
+								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}")
+						),
 						element(name("outputDirectory"), "${project.build.directory}/foo")
 			    ),
 			    executionEnvironment(
