@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        <groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+        <version>0.0.12-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>simple</artifactId>
+    <name>Agile Architecture Documentation System : System documentation generator</name>
+    <description>Using agile architecture documentation system to document agile archiecture documentation system</description>
+    <properties>
+        <kroki.server.url>https://kroki.io</kroki.server.url>
+        <version.java>11</version.java>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <asciidoctor.highlighter>highlightjs</asciidoctor.highlighter>
+        <asciidoc.source.docs.directory>src/docs/asciidoc</asciidoc.source.docs.directory>
+        <asciidoc.source.slides.directory>src/slides/asciidoc</asciidoc.source.slides.directory>
+        <asciidoc.target.base.directory>${project.build.directory}/asciidoc</asciidoc.target.base.directory>
+        <asciidoc.target.docs.directory>${asciidoc.target.base.directory}/docs</asciidoc.target.docs.directory>
+        <asciidoc.target.slides.directory>${asciidoc.target.base.directory}/slides</asciidoc.target.slides.directory>
+        <agile.architecture.main.class>org.ndx.agile.architecture.base.ArchitectureDocumentationBuilder</agile.architecture.main.class>
+        <agile.architecture.output.dir>${project.build.directory}/structurizr</agile.architecture.output.dir>
+        <agile.architecture.output.diagrams>${agile.architecture.output.dir}/diagrams</agile.architecture.output.diagrams>
+        <agile.architecture.output.enhancements>${agile.architecture.output.dir}/enhancements</agile.architecture.output.enhancements>
+
+        <!-- tag::issues-url[] -->
+        <!-- TODO set a valid value to have doc improvement enabled -->
+        <issues.url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</issues.url>
+        <!-- end::issues-url[] -->
+
+        <!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctor-maven-plugin -->
+        <version.asciidoctor.maven.plugin>2.1.0</version.asciidoctor.maven.plugin>
+        <!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-pdf -->
+        <version.asciidoctorj.pdf>1.5.4</version.asciidoctorj.pdf>
+        <!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj -->
+        <version.asciidoctorj>2.4.3</version.asciidoctorj>
+        <!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-revealjs -->
+        <version.asciidoctor.revealjs>4.1.0</version.asciidoctor.revealjs>
+        <!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
+        <version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
+        <!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
+        <version.jruby>9.2.9.0</version.jruby>
+        <!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
+        <version.revealjs>3.9.2</version.revealjs>
+    </properties>
+
+    <issueManagement>
+        <url>${issues.url}</url>
+    </issueManagement>
+
+    <!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
+	See https://github.com/Riduidel/agile-architecture-documentation-system/issues/159 for the weird protocol -->
+    <repositories>
+        <repository>
+            <id>mavengems</id>
+            <url>mavengem:https://rubygems.org</url>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>@project.groupId@</groupId>
+                <artifactId>aadarchi-maven-plugin</artifactId>
+                <version>@project.version@</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate-pdf-docs</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
