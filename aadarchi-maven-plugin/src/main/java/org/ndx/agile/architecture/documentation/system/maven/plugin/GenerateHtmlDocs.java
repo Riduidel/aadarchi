@@ -71,17 +71,17 @@ public class GenerateHtmlDocs extends AbstractMojo {
 								element(name("revnumber"), "${project.version}"), // add project version in the footer
 								element(name("revdate"), "${maven.build.timestamp}"), // add the date in the footer
 
-								element(name("project-group-id"), "${project.groupId}"),
-								element(name("project-artifact-id"), "${project.artifactId}"),
-								element(name("project-name"), "${project.name}"),
-								element(name("project-version"), "${project.version}"),
-								element(name("project-build-timestamp"), "${maven.build.timestamp}"),
-								element(name("project-pom-path"), "../../../pom.xml"),
-								element(name("project-issues-on-github"), "${issues.url}"),
-								element(name("organization"), "${project.organization.name}"),
-								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}")
+								element(name("project-group-id"), "${project.groupId}"), // catch the groupId defined in the pom.xml file
+								element(name("project-artifact-id"), "${project.artifactId}"), // catch the artifactId defined in the pom.xml file
+								element(name("project-name"), "${project.name}"), // catch the project name defined in the pom.xml file
+								element(name("project-version"), "${project.version}"), // catch the project version defined in the pom.xml file
+								element(name("project-build-timestamp"), "${maven.build.timestamp}"), // catch the timestamp defined when maven build
+								element(name("project-pom-path"), "../../../pom.xml"), // catch pom.xml file path
+								element(name("project-issues-on-github"), "${issues.url}"), // catch the issue url defined in the pom.xml file
+								element(name("organization"), "${project.organization.name}"), // catch the organization name defined in the pom.xml file
+								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}") // catch the path to the enhancements directory defined in the pom.xml file
 						),
-						element(name("outputDirectory"), "${project.build.directory}/foo")
+						element(name("outputDirectory"), "${project.build.directory}/foo") // define the path where the html files will get created
 			    ),
 			    executionEnvironment(
 			        mavenProject,
