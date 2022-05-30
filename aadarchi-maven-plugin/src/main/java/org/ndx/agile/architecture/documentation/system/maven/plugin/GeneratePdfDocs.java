@@ -59,17 +59,14 @@ public class GeneratePdfDocs extends AbstractMojo {
 								element(name("allow-uri-read")), // allow to include distant content in the created document
 								element(name("kroki-server-url"), krokiServerUrl),
 
+								element(name("plantumldir"), "${asciidoc.target.docs.directory}"),
 								element(name("structurizrdir"), "${agile.architecture.output.diagrams}"),
 								element(name("imagesdir"), "./images"),
-								element(name("toc"), "left"), // put the table of content on the left side of the window
+								element(name("toc")), // put the table of content on the left side of the window
 								element(name("icons"), "font"), // allow to use icons from "fonticones"
-								element(name("sectanchors"), "true"), // sections behave like anchors/links to move around the document
+								element(name("pagenums")),
 								element(name("idseparator"), "-"), // put a separator between identifiers pieces
 								element(name("hideBugReport"), "${asciidoc.documents.hide.bug.report}"), // add link to allow users to report some bugs
-
-								element(name("sectnums"), "true"), // display section number in the summary
-								element(name("revnumber"), "${project.version}"), // add project version in the footer
-								element(name("revdate"), "${maven.build.timestamp}"), // add the date in the footer
 
 								element(name("project-group-id"), "${project.groupId}"), // catch the groupId defined in the pom.xml file
 								element(name("project-artifact-id"), "${project.artifactId}"), // catch the artifactId defined in the pom.xml file
@@ -81,7 +78,8 @@ public class GeneratePdfDocs extends AbstractMojo {
 								element(name("organization"), "${project.organization.name}"), // catch the organization name defined in the pom.xml file
 								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}") // catch the path to the enhancements directory defined in the pom.xml file
 						),
-						element(name("outputDirectory"), "${project.build.directory}/foo") // define the path where the html files will get created
+						element(name("backend"), "pdf"),
+						element(name("outputDirectory"), "${project.build.directory}/poo") // define the path where the html files will get created
 				),
 				executionEnvironment(
 						mavenProject,
