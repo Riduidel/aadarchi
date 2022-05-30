@@ -63,10 +63,9 @@ public class GenerateHtmlSlides extends AbstractMojo {
 								element(name("structurizrdir"), "${agile.architecture.output.diagrams}"),
 								element(name("imagesdir"), "."),
 								element(name("revealjsdir"), "reveal.js-${version.revealjs}"),
-								element(name("toc"), "left"), // put the table of content on the left side of the window
-								element(name("icons"), "font"), // allow to use icons from "fonticones"
-								element(name("sectanchors"), "true"), // sections behave like anchors/links to move around the document
-								element(name("idseparator"), "-"), // put a separator between identifiers pieces
+								element(name("sourcedir"), "${basedir}/src/main/java"),
+								element(name("revealjs_theme"), "solarized"),
+								element(name("stylesheet")),
 								element(name("hideBugReport"), "${asciidoc.documents.hide.bug.report}"), // add link to allow users to report some bugs
 
 								element(name("sectnums"), "true"), // display section number in the summary
@@ -83,6 +82,8 @@ public class GenerateHtmlSlides extends AbstractMojo {
 								element(name("organization"), "${project.organization.name}"), // catch the organization name defined in the pom.xml file
 								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}") // catch the path to the enhancements directory defined in the pom.xml file
 						),
+						element(name("sourceDirectory"), "${asciidoc.source.slides.directory}"),
+						element(name("backend"), "revealjs"),
 						element(name("outputDirectory"), "${project.build.directory}/soo") // define the path where the html files will get created
 			    ),
 			    executionEnvironment(
