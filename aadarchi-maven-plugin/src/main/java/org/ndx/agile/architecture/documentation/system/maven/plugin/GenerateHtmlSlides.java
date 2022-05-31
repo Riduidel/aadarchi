@@ -82,8 +82,9 @@ public class GenerateHtmlSlides extends AbstractMojo {
 								element(name("organization"), "${project.organization.name}"), // catch the organization name defined in the pom.xml file
 								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}") // catch the path to the enhancements directory defined in the pom.xml file
 						),
-						element(name("sourceDirectory"), "${asciidoc.source.slides.directory}"),
-						element(name("backend"), "revealjs"),
+//						element(name("backend"), "revealjs"),
+//						element(name("templateDir"), "${project.build.directory}/asciidoctor-reveal.js-${version.asciidoctor.revealjs}/templates/slim"),
+//						element(name("sourceHighlighter"), "${asciidoctor.highlighter}"),
 						element(name("outputDirectory"), "${project.build.directory}/soo") // define the path where the html files will get created
 			    ),
 			    executionEnvironment(
