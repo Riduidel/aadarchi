@@ -54,6 +54,9 @@ public class GenerateHtmlDocs extends AbstractMojo {
 			    ),
 			    goal("process-asciidoc"),
 			    configuration(
+			    		// TODO conditionalize that invocation : add all gems dependencies here
+			    		element(name("requires"),
+			    				element(name("require"), "asciidoctor-kroki")),
 						element(name("gemPath"), "${project.build.directory}/gems"),
 						element(name("attributes"),
 								element(name("allow-uri-read")), // allow to include distant content in the created document
