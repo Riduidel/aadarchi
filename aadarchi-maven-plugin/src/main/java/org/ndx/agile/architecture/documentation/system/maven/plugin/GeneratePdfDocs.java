@@ -54,6 +54,9 @@ public class GeneratePdfDocs extends AbstractMojo {
 				),
 				goal("process-asciidoc"),
 				configuration(
+			    		// TODO conditionalize that invocation : add all gems dependencies here
+			    		element(name("requires"),
+			    				element(name("require"), "asciidoctor-kroki")),
 						element(name("gemPath"), "${project.build.directory}/gems"),
 						element(name("attributes"),
 								element(name("allow-uri-read")), // allow to include distant content in the created document
@@ -77,7 +80,7 @@ public class GeneratePdfDocs extends AbstractMojo {
 								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}") // catch the path to the enhancements directory defined in the pom.xml file
 						),
 						element(name("backend"), "pdf"), // tell that we want to generate pdf file instead of html
-						element(name("outputDirectory"), "${project.build.directory}/poo") // define the path where the html files will get created
+						element(name("outputDirectory"), "${project.build.directory}/docs/pdf") // define the path where the html files will get created
 				),
 				executionEnvironment(
 						mavenProject,

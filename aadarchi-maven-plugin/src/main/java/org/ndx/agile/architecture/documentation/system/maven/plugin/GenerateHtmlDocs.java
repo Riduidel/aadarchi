@@ -84,7 +84,7 @@ public class GenerateHtmlDocs extends AbstractMojo {
 								element(name("organization"), "${project.organization.name}"), // catch the organization name defined in the pom.xml file
 								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}") // catch the path to the enhancements directory defined in the pom.xml file
 						),
-						element(name("outputDirectory"), "${project.build.directory}/foo") // define the path where the html files will get created
+						element(name("outputDirectory"), "${project.build.directory}/docs/html") // define the path where the html files will get created
 			    ),
 			    executionEnvironment(
 			        mavenProject,
