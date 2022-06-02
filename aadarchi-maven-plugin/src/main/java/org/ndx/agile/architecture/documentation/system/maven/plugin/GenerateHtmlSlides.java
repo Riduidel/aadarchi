@@ -35,9 +35,10 @@ public class GenerateHtmlSlides extends AbstractMojo {
 
 	@Parameter(name = "asciidoctorj-version", defaultValue = "2.4.3")
 	private String asciidoctorjVersion;
-
+	
 	@Parameter(name = "kroki-server-url", defaultValue = "${kroki.server.url}")
 	private String krokiServerUrl;
+
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -49,13 +50,15 @@ public class GenerateHtmlSlides extends AbstractMojo {
 			        dependencies(
 							dependency("org.asciidoctor", "asciidoctorj-pdf", asciidoctorjPdfVersion),
 							dependency("org.jruby", "jruby-complete", jrubyVersion),
-							dependency("org.asciidoctor", "asciidoctorj", asciidoctorjVersion)
+							dependency("org.asciidoctor", "asciidoctorj", asciidoctorjVersion),
+							dependency("org.asciidoctor", "asciidoctorj-revealjs", "5.0.0.rc1")
 					)
 			    ),
 			    goal("process-asciidoc"),
 			    configuration(
 			    		// TODO conditionalize that invocation : add all gems dependencies here
 			    		element(name("requires"),
+			    				element(name("require"), "asciidoctor-revealjs"),
 			    				element(name("require"), "asciidoctor-kroki")),
 						element(name("gemPath"), "${project.build.directory}/gems"),
 						element(name("attributes"),
@@ -85,9 +88,7 @@ public class GenerateHtmlSlides extends AbstractMojo {
 								element(name("organization"), "${project.organization.name}"), // catch the organization name defined in the pom.xml file
 								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}") // catch the path to the enhancements directory defined in the pom.xml file
 						),
-//						element(name("backend"), "revealjs"),
-//						element(name("templateDir"), "${project.build.directory}/asciidoctor-reveal.js-${version.asciidoctor.revealjs}/templates/slim"),
-//						element(name("sourceHighlighter"), "${asciidoctor.highlighter}"),
+						element(name("backend"), "revealjs"),
 						element(name("sourceDirectory"), "${asciidoc.source.slides.directory}"), // define the path where the html files will get created
 						element(name("outputDirectory"), "${asciidoc.target.slides.directory}") // define the path where the html files will get created
 			    ),
