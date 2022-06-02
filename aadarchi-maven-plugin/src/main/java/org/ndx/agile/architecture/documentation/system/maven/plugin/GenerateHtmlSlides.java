@@ -54,6 +54,9 @@ public class GenerateHtmlSlides extends AbstractMojo {
 			    ),
 			    goal("process-asciidoc"),
 			    configuration(
+			    		// TODO conditionalize that invocation : add all gems dependencies here
+			    		element(name("requires"),
+			    				element(name("require"), "asciidoctor-kroki")),
 						element(name("gemPath"), "${project.build.directory}/gems"),
 						element(name("attributes"),
 								element(name("allow-uri-read")), // allow to include distant content in the created document
@@ -85,7 +88,8 @@ public class GenerateHtmlSlides extends AbstractMojo {
 //						element(name("backend"), "revealjs"),
 //						element(name("templateDir"), "${project.build.directory}/asciidoctor-reveal.js-${version.asciidoctor.revealjs}/templates/slim"),
 //						element(name("sourceHighlighter"), "${asciidoctor.highlighter}"),
-						element(name("outputDirectory"), "${project.build.directory}/soo") // define the path where the html files will get created
+						element(name("sourceDirectory"), "${asciidoc.source.slides.directory}"), // define the path where the html files will get created
+						element(name("outputDirectory"), "${asciidoc.target.slides.directory}") // define the path where the html files will get created
 			    ),
 			    executionEnvironment(
 			        mavenProject,
