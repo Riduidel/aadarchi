@@ -1,4 +1,4 @@
-package org.ndx.agile.architecture.documentation.system.maven.plugin;
+package org.ndx.agile.architecture.documentation.system.maven.cdi.helper.log;
 
 import java.util.Arrays;
 import java.util.logging.Logger;

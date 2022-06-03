@@ -42,7 +42,7 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 							ASCIIDOC_SOURCE_DIR)
 					);
 		}
-		this.sourceDir = sourceDir;
+		this.sourceDir = sourceDir.getAbsoluteFile();
 	}
 	/**
 	 * We set it at first element to have those text before all enhancers

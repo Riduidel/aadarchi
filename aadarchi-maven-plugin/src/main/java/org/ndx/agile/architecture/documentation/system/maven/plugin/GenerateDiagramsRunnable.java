@@ -3,10 +3,12 @@ package org.ndx.agile.architecture.documentation.system.maven.plugin;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.ndx.agile.architecture.base.ArchitectureDocumentationBuilder;
 
+@ApplicationScoped
 public class GenerateDiagramsRunnable implements Runnable {
 
 	@Inject Logger logger;
