@@ -57,6 +57,7 @@
 				<artifactId>maven-invoker-plugin</artifactId>
 				<version>1.10</version>
 				<configuration>
+					<debug>true</debug>
 					<scriptVariables>
 						<pluginVersion>${project.version}</pluginVersion>
 					</scriptVariables>

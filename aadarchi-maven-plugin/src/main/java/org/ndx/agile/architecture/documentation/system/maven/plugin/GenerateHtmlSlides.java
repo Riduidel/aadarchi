@@ -1,6 +1,7 @@
 package org.ndx.agile.architecture.documentation.system.maven.plugin;
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -10,34 +11,34 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.ndx.agile.architecture.documentation.system.maven.plugin.asciidoctor.AbstractAsciidoctorCallingMojo;
+import org.twdata.maven.mojoexecutor.MojoExecutor;
 
 import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 
+import java.util.List;
+
 @Mojo(name = "generate-html-slides", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
-public class GenerateHtmlSlides extends AbstractMojo {
-	@Component
-	private MavenProject mavenProject;
+public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
 
-	@Component
-	private MavenSession mavenSession;
-
-	@Component
-	private BuildPluginManager pluginManager;
-
-	@Parameter(name = "asciidoctor-maven-plugin-version", defaultValue = "2.1.0")
-	private String asciidoctorMavenPluginVersion;
-
-	@Parameter(name = "asciidoctorj-pdf-version", defaultValue = "1.5.4")
-	private String asciidoctorjPdfVersion;
-
-	@Parameter(name = "jruby-version", defaultValue = "9.2.9.0")
-	private String jrubyVersion;
-
-	@Parameter(name = "asciidoctorj-version", defaultValue = "2.4.3")
-	private String asciidoctorjVersion;
+	/**
+	 * Used version of asciidoctorj-revealjs embedder
+	 * @see https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-revealjs
+	 */
+//	@Parameter(name = "asciidoctorj-revealjs-version", defaultValue = "4.1.0", property="version.asciidoctorj.revealjs")
+//	private String asciidoctorRevealVersion;
 	
 	@Parameter(name = "kroki-server-url", defaultValue = "${kroki.server.url}")
 	private String krokiServerUrl;
+	
+	@Override
+	protected List<Dependency> dependencies() {
+		return MojoExecutor.dependencies(
+				dependencyJRuby(),
+				dependencyAsciidoctor(),
+				dependency("org.asciidoctor", "asciidoctorj-revealjs", "5.0.0.rc1")
+				);
+	}
 
 
 	@Override
@@ -54,24 +55,10 @@ public class GenerateHtmlSlides extends AbstractMojo {
 						element(name("unpack"), "true"),
 						element(name("outputFileName"), "reveal.js-${version.revealjs}.zip"),
 						element(name("outputDirectory"), "${asciidoc.target.slides.directory}")), 
-				executionEnvironment(
-				        mavenProject,
-				        mavenSession,
-				        pluginManager
-				    ));
+				executionEnvironment());
 		getLog().debug("Generating slides");
 		executeMojo(
-			    plugin(
-			        groupId("org.asciidoctor"),
-			        artifactId("asciidoctor-maven-plugin"),
-			        version(asciidoctorMavenPluginVersion),
-			        dependencies(
-							dependency("org.asciidoctor", "asciidoctorj-pdf", asciidoctorjPdfVersion),
-							dependency("org.jruby", "jruby-complete", jrubyVersion),
-							dependency("org.asciidoctor", "asciidoctorj", asciidoctorjVersion),
-							dependency("org.asciidoctor", "asciidoctorj-revealjs", "5.0.0.rc1")
-					)
-			    ),
+				asciidoctorMavenPlugin(),
 			    goal("process-asciidoc"),
 			    configuration(
 			    		// TODO conditionalize that invocation : add all gems dependencies here
@@ -110,11 +97,7 @@ public class GenerateHtmlSlides extends AbstractMojo {
 						element(name("sourceDirectory"), "${asciidoc.source.slides.directory}"), // define the path where the html files will get created
 						element(name("outputDirectory"), "${asciidoc.target.slides.directory}") // define the path where the html files will get created
 			    ),
-			    executionEnvironment(
-			        mavenProject,
-			        mavenSession,
-			        pluginManager
-			    )
+			    executionEnvironment()
 			);
 	}
 }
