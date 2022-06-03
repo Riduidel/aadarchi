@@ -91,8 +91,8 @@ public class ArchitectureEnhancer {
 	private void enhancerVisitViews(ViewEnhancer enhancer, ViewSet viewset) {
 		if(enhancer.startVisit(viewset)) {
 			Stream<View> views = viewset.getViews().stream();
-//			if(enhancer.isParallel())
-//				views = views.parallel();
+			if(enhancer.isParallel())
+				views = views.parallel();
 			views.filter(s -> enhancer.startVisit(s))
 				.forEach(s -> enhancer.endVisit(s, outputBuilder));
 			enhancer.endVisit(viewset, outputBuilder);
@@ -102,8 +102,8 @@ public class ArchitectureEnhancer {
 	private void enhancerVisitModel(ModelEnhancer enhancer, Model model) {
 		if(enhancer.startVisit(model)) {
 			Stream<SoftwareSystem> systems = model.getSoftwareSystems().stream();
-//			if(enhancer.isParallel())
-//				systems = systems.parallel();
+			if(enhancer.isParallel())
+				systems = systems.parallel();
 			systems.filter(s -> enhancer.startVisit(s))
 				.peek(s -> enhancerVisitSystem(enhancer, s))
 				.forEach(s -> enhancer.endVisit(s, outputBuilder));
@@ -114,8 +114,8 @@ public class ArchitectureEnhancer {
 
 	private void enhancerVisitSystem(ModelEnhancer enhancer, SoftwareSystem system) {
 		Stream<Container> containers = system.getContainers().stream();
-//		if(enhancer.isParallel())
-//			containers = containers.parallel();
+		if(enhancer.isParallel())
+			containers = containers.parallel();
 		containers.filter(c -> enhancer.startVisit(c))
 			.peek(c -> enhancerVisitContainer(enhancer, c))
 			.forEach(c -> enhancer.endVisit(c, outputBuilder));
@@ -124,8 +124,8 @@ public class ArchitectureEnhancer {
 
 	private void enhancerVisitContainer(ModelEnhancer enhancer, Container container) {
 		Stream<Component> systems = container.getComponents().stream();
-//		if(enhancer.isParallel())
-//			systems = systems.parallel();
+		if(enhancer.isParallel())
+			systems = systems.parallel();
 		systems.filter(c -> enhancer.startVisit(c))
 			.forEach(c -> enhancer.endVisit(c, outputBuilder));
 	}
