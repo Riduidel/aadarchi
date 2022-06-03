@@ -1,0 +1,128 @@
+= Quality Attributes
+:chapter: Quality%20Attributes
+include::_notify-bug-admonition.adoc[]
+
+The documentation build should be fast enough to allow architect to write its documentation
+and have it reloaded in "human real time".
+In other words, we expect 
+a simple documentation to generate in less than 10 seconds
+and
+a complex documentation (involving reading configuration from remote systems and so on) to generate in less than 1 minute.
+**TODO**
+////
+With the link:/help/documentation/functional-overview[functional
+overview section] summarising the functionality, it's also worth
+including a separate section to summarise the quality attributes (also
+referred to as "non-functional requirements").
+
+== Intent
+
+This section is about summarising the key quality attributes and should
+answer the following types of questions:
+
+* Is there a clear understanding of the quality attributes that the
+architecture must satisfy?
+* Are the quality attributes SMART (specific, measurable, achievable,
+relevant and timely)?
+* Have quality attributes that are usually taken for granted been
+explicitly marked as out of scope if they are not needed? (e.g. "user
+interface elements will only be presented in English" to indicate that
+multi-language support is not explicitly catered for)
+* Are any of the quality attributes unrealistic? (e.g. true 24x7
+availability is typically very costly to implement inside many
+organisations)
+
+In addition, if any of the quality attributes are deemed as
+"architecturally significant" and therefore influence the architecture,
+why not make a note of them so that you can refer back to them later in
+the documentation.
+
+== Structure
+
+Simply listing out each of the quality attributes is a good starting
+point. Examples include:
+
+Performance (e.g. latency and throughput)::
+TODO
+
+Scalability (e.g. data and traffic volumes)::
+TODO
+
+Availability (e.g. uptime, downtime, scheduled maintenance, 24x7, 99.9%, etc)::
+TODO
+
+Security (e.g. authentication, authorisation, data confidentiality, etc)::
+TODO
+
+Extensibility::
+TODO
+
+Flexibility::
+TODO
+
+Auditing::
+TODO
+
+Monitoring and management::
+TODO
+
+Reliability::
+TODO
+
+Failover/disaster recovery targets (e.g. manual vs automatic, how long will this take?)::
+TODO
+
+Business continuity::
+TODO
+
+Interoperability::
+TODO
+
+Legal, compliance and regulatory requirements (e.g. data protection act)::
+TODO
+
+Internationalisation (i18n) and localisation (L10n)::
+TODO
+
+Accessibility::
+TODO
+
+Usability::
+TODO
+
+== ...
+
+Each quality attribute should be precise, leaving no interpretation to
+the reader. Examples where this isn't the case include:
+
+* "the request must be serviced quickly"
+* "there should be no overhead"
+* "as fast as possible"
+* "as small as possible"
+* "as many customers as possible"
+* ...
+
+== Motivation
+
+If you've proactively considered the quality attributes and let them
+influence the software architecture, why not write them down too?
+Typically, quality attributes are not given to you on a plate and an
+amount of exploration and refinement is usually needed to come up with a
+list of them. Put simply, writing down the quality attributes removes
+any ambiguity both now and during maintenance/enhancement work in the
+future.
+
+== Audience
+
+Since quality attributes are mostly technical in nature, this section is
+really targeted at technical people in the software development team.
+
+== Required
+
+Yes, all technical software documentation should include a summary of
+the quality attributes/non-functional requirements as they usually shape
+the resulting software architecture in some way.
+////
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_03-quality_attributes.adoc[leveloffset=+1]
