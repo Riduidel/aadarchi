@@ -1,0 +1,57 @@
+= Operation and Support
+:chapter: Operation%20and%20Support
+include::_notify-bug-admonition.adoc[]
+
+**TODO**
+////
+The operations and support section allows you to describe how people
+will run, monitor and manage your software.
+
+== Intent
+
+Most systems will be subject to support and operational requirements,
+particularly around how they are monitored, managed and administered.
+Including a dedicated section in the software guidebook lets you be
+explicit about how your software will or does support those
+requirements. This section should address the following types of
+questions:
+
+* Is it clear how the software provides the ability for
+operation/support teams to monitor and manage the system?
+* How is this achieved across all tiers of the architecture?
+* How can operational staff diagnose problems?
+* Where are errors and information logged? (e.g. log files, Windows
+Event Log, SMNP, JMX, WMI, custom diagnostics, etc)
+* Do configuration changes require a restart?
+* Are there any manual housekeeping tasks that need to be performed on a
+regular basis?
+* Does old data need to be periodically archived?
+
+== Structure
+
+This section is usually fairly narrative in nature, with a heading for
+each related set of information (e.g. monitoring, diagnostics,
+configuration, etc).
+
+== Motivation
+
+Times change and team members move on, so recording this information can
+help prevent those situations in the future where nobody understands how
+to operate the software. It also helps to quickly answer basic questions
+such as, "where are the log files?".
+
+== Audience
+
+The audience for this section is predominantly the technical people in
+the software development team along with others that may help deploy,
+support and operate the software system.
+
+== Required
+
+Yes, an operations and support section should be included in all
+technical software documentation, unless you like throwing software into
+a black hole and hoping for the best.
+////
+
+// This include allows enhancers to have their content include "automagically". Don't remove it!
+include::{enhancements-dir}/_12-operation_and_support.adoc[leveloffset=+1]

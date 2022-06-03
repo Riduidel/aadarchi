@@ -1,0 +1,1 @@
+assert new File(basedir, "target/docs/pdf/index.pdf").exists()

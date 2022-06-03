@@ -13,8 +13,8 @@ import org.apache.maven.project.MavenProject;
 
 import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 
-@Mojo(name = "generate-html-docs", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
-public class GenerateHtmlDocs extends AbstractMojo {
+@Mojo(name = "generate-pdf-docs", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
+public class GeneratePdfDocs extends AbstractMojo {
 	@Component
 	private MavenProject mavenProject;
 
@@ -42,18 +42,18 @@ public class GenerateHtmlDocs extends AbstractMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		executeMojo(
-			    plugin(
-			        groupId("org.asciidoctor"),
-			        artifactId("asciidoctor-maven-plugin"),
-			        version(asciidoctorMavenPluginVersion),
-			        dependencies(
-							dependency("org.asciidoctor", "asciidoctorj-pdf", asciidoctorjPdfVersion),
-							dependency("org.jruby", "jruby-complete", jrubyVersion),
-							dependency("org.asciidoctor", "asciidoctorj", asciidoctorjVersion)
-					)
-			    ),
-			    goal("process-asciidoc"),
-			    configuration(
+				plugin(
+						groupId("org.asciidoctor"),
+						artifactId("asciidoctor-maven-plugin"),
+						version(asciidoctorMavenPluginVersion),
+						dependencies(
+								dependency("org.asciidoctor", "asciidoctorj-pdf", asciidoctorjPdfVersion),
+								dependency("org.jruby", "jruby-complete", jrubyVersion),
+								dependency("org.asciidoctor", "asciidoctorj", asciidoctorjVersion)
+						)
+				),
+				goal("process-asciidoc"),
+				configuration(
 			    		// TODO conditionalize that invocation : add all gems dependencies here
 			    		element(name("requires"),
 			    				element(name("require"), "asciidoctor-kroki")),
@@ -62,17 +62,12 @@ public class GenerateHtmlDocs extends AbstractMojo {
 								element(name("allow-uri-read")), // allow to include distant content in the created document
 								element(name("kroki-server-url"), krokiServerUrl),
 
+								element(name("plantumldir"), "${asciidoc.target.docs.directory}"),
 								element(name("structurizrdir"), "${agile.architecture.output.diagrams}"),
 								element(name("imagesdir"), "./images"),
-								element(name("toc"), "left"), // put the table of content on the left side of the window
 								element(name("icons"), "font"), // allow to use icons from "fonticones"
-								element(name("sectanchors"), "true"), // sections behave like anchors/links to move around the document
 								element(name("idseparator"), "-"), // put a separator between identifiers pieces
 								element(name("hideBugReport"), "${asciidoc.documents.hide.bug.report}"), // add link to allow users to report some bugs
-
-								element(name("sectnums"), "true"), // display section number in the summary
-								element(name("revnumber"), "${project.version}"), // add project version in the footer
-								element(name("revdate"), "${maven.build.timestamp}"), // add the date in the footer
 
 								element(name("project-group-id"), "${project.groupId}"), // catch the groupId defined in the pom.xml file
 								element(name("project-artifact-id"), "${project.artifactId}"), // catch the artifactId defined in the pom.xml file
@@ -84,13 +79,14 @@ public class GenerateHtmlDocs extends AbstractMojo {
 								element(name("organization"), "${project.organization.name}"), // catch the organization name defined in the pom.xml file
 								element(name("enhancements-dir"), "${agile.architecture.output.enhancements}") // catch the path to the enhancements directory defined in the pom.xml file
 						),
-						element(name("outputDirectory"), "${project.build.directory}/docs/html") // define the path where the html files will get created
-			    ),
-			    executionEnvironment(
-			        mavenProject,
-			        mavenSession,
-			        pluginManager
-			    )
-			);
+						element(name("backend"), "pdf"), // tell that we want to generate pdf file instead of html
+						element(name("outputDirectory"), "${project.build.directory}/docs/pdf") // define the path where the html files will get created
+				),
+				executionEnvironment(
+						mavenProject,
+						mavenSession,
+						pluginManager
+				)
+		);
 	}
 }
