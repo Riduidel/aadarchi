@@ -42,26 +42,24 @@ public class GenerateHtmlSlides extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		/*
-		 * 						<groupId>com.googlecode.maven-download-plugin</groupId>
-						<artifactId>download-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>install-revealjs</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>wget</goal>
-								</goals>
-								<configuration>
-									<url>https://github.com/hakimel/reveal.js/archive/${version.revealjs}.zip</url>
-									<unpack>true</unpack>
-									<outputFileName>reveal.js-${version.revealjs}.zip</outputFileName>
-									<outputDirectory>${asciidoc.target.slides.directory}</outputDirectory>
-								</configuration>
-							</execution>
-						</executions>
-
-		 */
+		getLog().debug("Downloading revealjs");
+		executeMojo(
+				plugin(
+					groupId("com.googlecode.maven-download-plugin"),
+					artifactId("download-maven-plugin"),
+					version("1.6.8")),
+				goal("wget"), 
+				configuration(
+						element(name("uri"), "https://github.com/hakimel/reveal.js/archive/${version.revealjs}.zip"),
+						element(name("unpack"), "true"),
+						element(name("outputFileName"), "reveal.js-${version.revealjs}.zip"),
+						element(name("outputDirectory"), "${asciidoc.target.slides.directory}")), 
+				executionEnvironment(
+				        mavenProject,
+				        mavenSession,
+				        pluginManager
+				    ));
+		getLog().debug("Generating slides");
 		executeMojo(
 			    plugin(
 			        groupId("org.asciidoctor"),
