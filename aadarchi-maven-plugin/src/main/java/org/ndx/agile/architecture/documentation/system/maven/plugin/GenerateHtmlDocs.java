@@ -18,7 +18,7 @@ import java.util.List;
 
 @Mojo(name = "generate-html-docs", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
 public class GenerateHtmlDocs extends AbstractAsciidoctorCallingMojo {
-	@Parameter(name="html-docs-source-dir", defaultValue="${project.build.directory}/src/docs/asciidoc", property = "asciidoc.source.docs.directory")
+	@Parameter(name="html-docs-source-dir", defaultValue="${project.basedir}/src/docs/asciidoc", property = "asciidoc.source.docs.directory")
 	private File htmlDocsSourceDir;
 	@Parameter(name="html-docs-output-dir", defaultValue="${project.build.directory}/asciidoc/docs/html", property = "asciidoc.target.html.docs.directory")
 	private File htmlDocsOutputDir;

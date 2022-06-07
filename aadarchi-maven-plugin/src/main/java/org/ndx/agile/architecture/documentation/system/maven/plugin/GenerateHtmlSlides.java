@@ -22,10 +22,12 @@ import java.util.List;
 
 @Mojo(name = "generate-html-slides", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
 public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
-	@Parameter(name="html-slides-source-dir", defaultValue="${project.build.directory}/src/slides/asciidoc", property = "asciidoc.source.slides.directory")
+	@Parameter(name="html-slides-source-dir", defaultValue="${project.basedir}/src/slides/asciidoc", property = "asciidoc.source.slides.directory")
 	private File htmlSlidesSourceDir;
 	@Parameter(name="html-slides-output-dir", defaultValue="${project.build.directory}/asciidoc/slides/html", property = "asciidoc.target.html.slides.directory")
 	private File htmlSlidesOutputDir;
+	@Parameter(name="revealjs-version", defaultValue="4.3.1", property="version.revealjs")
+	private String revealjsVersion;
 
 	/**
 	 * Used version of asciidoctorj-revealjs embedder
@@ -54,9 +56,9 @@ public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
 					version("1.6.8")),
 				goal("wget"), 
 				MojoExecutor.configuration(
-						element(name("uri"), "https://github.com/hakimel/reveal.js/archive/${version.revealjs}.zip"),
+						element(name("uri"), String.format("https://github.com/hakimel/reveal.js/archive/%s.zip", revealjsVersion)),
 						element(name("unpack"), "true"),
-						element(name("outputFileName"), "reveal.js-${version.revealjs}.zip"),
+						element(name("outputFileName"), String.format("reveal.js-${version.revealjs}.zip", revealjsVersion)),
 						element(name("outputDirectory"), "${asciidoc.target.slides.directory}")), 
 				executionEnvironment());
 		getLog().debug("Generating slides");

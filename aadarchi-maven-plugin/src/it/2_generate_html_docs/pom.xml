@@ -10,19 +10,10 @@
     <name>Agile Architecture Documentation System : System documentation generator</name>
     <description>Using agile architecture documentation system to document agile archiecture documentation system</description>
     <properties>
-        <kroki.server.url>https://kroki.io</kroki.server.url>
         <version.java>11</version.java>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <agile.architecture.main.class>org.ndx.agile.architecture.base.ArchitectureDocumentationBuilder</agile.architecture.main.class>
-        <agile.architecture.output.dir>${project.build.directory}/structurizr</agile.architecture.output.dir>
-        <agile.architecture.output.diagrams>${agile.architecture.output.dir}/diagrams</agile.architecture.output.diagrams>
-        <agile.architecture.output.enhancements>${agile.architecture.output.dir}/enhancements</agile.architecture.output.enhancements>
-
-        <!-- tag::issues-url[] -->
-        <!-- TODO set a valid value to have doc improvement enabled -->
-        <issues.url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</issues.url>
-        <!-- end::issues-url[] -->
 
         <!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
         <version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>

@@ -28,7 +28,7 @@ public class GeneratePdfDocs extends AbstractAsciidoctorCallingMojo {
 	 */
 	@Parameter(name = "asciidoctorj-pdf-version", defaultValue = "1.5.4", property = "version.asciidoctorj.pdf")
 	private String asciidoctorjPdfVersion;
-	@Parameter(name="pdf-docs-source-dir", defaultValue="${project.build.directory}/src/docs/asciidoc", property = "asciidoc.source.docs.directory")
+	@Parameter(name="pdf-docs-source-dir", defaultValue="${project.basedir}/src/docs/asciidoc", property = "asciidoc.source.docs.directory")
 	private File pdfDocsSourceDir;
 	@Parameter(name="pdf-docs-target-dir", defaultValue="${project.build.directory}/asciidoc/docs/pdf", property = "asciidoc.target.pdf.docs.directory")
 	private File pdfDocsTargetDir;

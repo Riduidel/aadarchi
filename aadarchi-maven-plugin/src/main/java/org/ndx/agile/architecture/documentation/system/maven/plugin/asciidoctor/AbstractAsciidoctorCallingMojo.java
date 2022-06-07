@@ -67,6 +67,14 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 	@Parameter(name = "kroki-server-url", defaultValue = "http://kroki.io", property = "kroki.server.url")
 	public String krokiServerUrl;
 	
+	@Parameter(name = "enhancements-dir", defaultValue = "${project.build.directory}/structurizr/enhancements", property = "agile.architecture.output.enhancements")
+	public String enhancementsDir;
+	@Parameter(name = "hide-bug-report", defaultValue="false", property = "asciidoc.documents.hide.bug.report")
+	private String hideBugReport;
+	@Parameter(name="gems-path", defaultValue="${project.build.directory}/gems")
+	private String gemsPath;
+	@Parameter(name="issues-url", defaultValue="${issuesManagement.url}")
+	private String issuesUrl;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -117,6 +125,7 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 				element(name("attributes"),
 						configurationAttributes().toArray(new Element[] {})
 				),
+				configurationBackend(),
 				configurationSourceDirectory(),
 				configurationOutputDirectory()
 		);
@@ -144,15 +153,16 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 	}
 
 	protected Element attributesEnhancementsDir() {
-		return element(name("enhancements-dir"), "${agile.architecture.output.enhancements}");
+		return element(name("enhancements-dir"), enhancementsDir);
 	}
 
+	// Depends upon the used SCM, should not be an absolute value!
 	protected Element attributeIssuesUrl() {
-		return element(name("project-issues-on-github"), "${issues.url}");
+		return element(name("project-issues-on-github"), issuesUrl);
 	}
 
 	protected Element attributeHideBugReport() {
-		return element(name("hideBugReport"), "${asciidoc.documents.hide.bug.report}");
+		return element(name("hideBugReport"), hideBugReport);
 	}
 
 	protected Element attributeImagesDir() {
@@ -168,7 +178,7 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 	}
 
 	private Element gemsPath() {
-		return element(name("gemPath"), "${project.build.directory}/gems");
+		return element(name("gemPath"), gemsPath);
 	}
 
 	protected Element requiredGems() {

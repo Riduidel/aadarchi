@@ -1,1 +1,1 @@
-assert new File(basedir, "target/docs/html/index.html").exists()
+assert new File(basedir, "target/asciidoc/docs/html/index.html").exists()
