@@ -6,50 +6,31 @@
 	<artifactId>${artifactId}</artifactId>
 	<version>${version}</version>
 	<properties>
-		<!-- If you want to use another kroki server, it is possible by deploying 
-			the kroki docker image -->
-		<kroki.server.url>https://kroki.io</kroki.server.url>
 		<version.java>11</version.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<asciidoctor.highlighter>highlightjs</asciidoctor.highlighter>
-		<asciidoc.source.docs.directory>src/docs/asciidoc</asciidoc.source.docs.directory>
-		<asciidoc.source.slides.directory>src/slides/asciidoc</asciidoc.source.slides.directory>
-		<asciidoc.target.base.directory>${project.build.directory}/asciidoc</asciidoc.target.base.directory>
-		<asciidoc.target.docs.directory>${asciidoc.target.base.directory}/docs</asciidoc.target.docs.directory>
-		<asciidoc.target.slides.directory>${asciidoc.target.base.directory}/slides</asciidoc.target.slides.directory>
+
 		<agile.architecture.main.class>org.ndx.agile.architecture.base.ArchitectureDocumentationBuilder</agile.architecture.main.class>
-		<agile.architecture.output.dir>${project.build.directory}/structurizr</agile.architecture.output.dir>
-		<agile.architecture.output.diagrams>${agile.architecture.output.dir}/diagrams</agile.architecture.output.diagrams>
-		<agile.architecture.output.enhancements>${agile.architecture.output.dir}/enhancements</agile.architecture.output.enhancements>
 
 		<!-- Defining a version that doesn't suck -->
 		<agile-architecture-version>${agile-architecture-version}</agile-architecture-version>
 
-		<!-- tag::issues-url[] -->
-		<!-- TODO set a valid value to have doc improvement enabled -->
-		<issues.url>TODO: define a url</issues.url>
-		<!-- end::issues-url[] -->
-
-		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctor-maven-plugin -->
-		<version.asciidoctor.maven.plugin>2.1.0</version.asciidoctor.maven.plugin>
-		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-pdf -->
-		<version.asciidoctorj.pdf>1.5.4</version.asciidoctorj.pdf>
-		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj -->
-		<version.asciidoctorj>2.4.3</version.asciidoctorj>
-		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-revealjs -->
-		<version.asciidoctor.revealjs>4.1.0</version.asciidoctor.revealjs>
+		<!-- If you want to use another kroki server, it is possible by deploying 
+			the kroki docker image -->
+		<kroki.server.url>https://kroki.io</kroki.server.url>
 		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
-		<version.asciidoctor.kroki>0.4.0</version.asciidoctor.kroki>
+		<version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
 		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
 		<version.jruby>9.2.9.0</version.jruby>
 		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
-		<version.revealjs>3.9.2</version.revealjs>
+		<version.revealjs>4.3.0</version.revealjs>
 	</properties>
 
+	<!-- tag::issues-url[] -->
 	<issueManagement>
 		<url>${issues.url}</url>
 	</issueManagement>
+	<!-- end::issues-url[] -->
 
 	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
 	See https://github.com/Riduidel/agile-architecture-documentation-system/issues/159 for the weird protocol -->
@@ -153,46 +134,6 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<groupId>org.asciidoctor</groupId>
-					<artifactId>asciidoctor-maven-plugin</artifactId>
-					<version>${version.asciidoctor.maven.plugin}</version>
-					<inherited>true</inherited>
-					<dependencies>
-						<dependency>
-							<groupId>org.asciidoctor</groupId>
-							<artifactId>asciidoctorj-pdf</artifactId>
-							<version>${version.asciidoctorj.pdf}</version>
-						</dependency>
-						<!-- Comment this section to use the default jruby artifact provided 
-							by the plugin -->
-						<dependency>
-							<groupId>org.jruby</groupId>
-							<artifactId>jruby-complete</artifactId>
-							<version>${version.jruby}</version>
-						</dependency>
-						<!-- Comment this section to use the default AsciidoctorJ artifact 
-							provided by the plugin -->
-						<dependency>
-							<groupId>org.asciidoctor</groupId>
-							<artifactId>asciidoctorj</artifactId>
-							<version>${version.asciidoctorj}</version>
-						</dependency>
-					</dependencies>
-					<configuration>
-						<gemPath>${project.build.directory}/gems</gemPath>
-						<attributes>
-							<allow-uri-read />
-							<kroki-server-url>${kroki.server.url}</kroki-server-url>
-						</attributes>
-						<logHandler>
-							<outputToConsole>true</outputToConsole>
-							<failIf>
-								<severity>ERROR</severity>
-							</failIf>
-						</logHandler>
-					</configuration>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
 					<version>3.0.0-M1</version>
@@ -213,6 +154,18 @@
 			</extension>
 		</extensions>
 		<plugins>
+			<plugin>
+				<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+				<artifactId>aadarchi-maven-plugin</artifactId>
+				<version>${agile-architecture-version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate-model</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>de.saumya.mojo</groupId>
 				<artifactId>gem-maven-plugin</artifactId>
@@ -271,53 +224,6 @@
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.22.2</version>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
-				<executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-						<configuration>
-							<mainClass>${agile.architecture.main.class}</mainClass>
-							<!-- As this goal is to be invoked repetedly, it is good to have it 
-								as fast as possible. And we have enhancers that run in parallel in fork-join 
-								thread pool. As this pool is not easily closeable (it depends upon the caller 
-								JVM), it pushes maven to wait for those threads until a timeout is reached. 
-								TO avoid that, we set that to false and ignore daemon threads. Obviously, 
-								this imply some care on synchronization ... (see https://github.com/Riduidel/agile-architecture-documentation-system/issues/50 
-								for discussion) -->
-							<cleanupDaemonThreads>false</cleanupDaemonThreads>
-							<systemProperties>
-								<systemProperty>
-									<key>maven.source.dir</key>
-									<value>${project.build.sourceDirectory}</value>
-								</systemProperty>
-								<ystemProperty>
-									<key>asciidoc.source.dir</key>
-									<value>${asciidoc.source.docs.directory}</value>
-								</ystemProperty>
-								<systemProperty>
-									<key>agile.architecture.diagrams</key>
-									<value>${agile.architecture.output.diagrams}</value>
-								</systemProperty>
-								<systemProperty>
-									<key>agile.architecture.enhancements</key>
-									<value>${agile.architecture.output.enhancements}</value>
-								</systemProperty>
-								<!-- Force rebuild architecture by removing all cached files -->
-								<systemProperty>
-									<key>force</key>
-									<value>${force}</value>
-								</systemProperty>
-							</systemProperties>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -326,127 +232,30 @@
 			<id>generate-docs</id>
 			<activation>
 				<file>
-					<exists>${asciidoc.source.docs.directory}</exists>
+					<exists>src/docs/asciidoc</exists>
 				</file>
 			</activation>
-			<properties>
-				<asciidoc.target.docs.directory>${project.build.directory}/asciidoc/docs</asciidoc.target.docs.directory>
-				<asciidoc.documents.hide.bug.report>false</asciidoc.documents.hide.bug.report>
-			</properties>
-
 			<build>
 				<defaultGoal>package</defaultGoal>
 				<plugins>
 					<plugin>
-						<groupId>org.asciidoctor</groupId>
-						<artifactId>asciidoctor-maven-plugin</artifactId>
-						<version>${version.asciidoctor.maven.plugin}</version>
-						<dependencies>
-							<dependency>
-								<groupId>org.asciidoctor</groupId>
-								<artifactId>asciidoctorj-pdf</artifactId>
-								<version>${version.asciidoctorj.pdf}</version>
-							</dependency>
-							<!-- Comment this section to use the default jruby artifact provided 
-								by the plugin -->
-							<dependency>
-								<groupId>org.jruby</groupId>
-								<artifactId>jruby-complete</artifactId>
-								<version>${version.jruby}</version>
-							</dependency>
-							<!-- Comment this section to use the default AsciidoctorJ artifact 
-								provided by the plugin -->
-							<dependency>
-								<groupId>org.asciidoctor</groupId>
-								<artifactId>asciidoctorj</artifactId>
-								<version>${version.asciidoctorj}</version>
-							</dependency>
-						</dependencies>
-						<configuration>
-							<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
-							<preserveDirectories>true</preserveDirectories>
-							<relativeBaseDir>true</relativeBaseDir>
-							<requires>
-								<require>asciidoctor-kroki</require>
-							</requires>
-							<attributes>
-								<!-- Example below shows how to specify in this pom instead of System's 
-									PATH, the location of dot command of Graphviz, required by PlantUML libraries -->
-								<!-- Windows: <graphvizdot>C:\Program Files (x86)\Graphviz2.38\bin\dot.exe</graphvizdot> -->
-								<!-- *nix : <graphvizdot>/usr/local/bin/dot</graphvizdot> -->
-								<sectnums>true</sectnums>
-								<project-group-id>${project.groupId}</project-group-id>
-								<project-artifact-id>${project.artifactId}</project-artifact-id>
-								<project-name>${project.name}</project-name>
-								<project-version>${project.version}</project-version>
-								<project-build-timestamp>${maven.build.timestamp}</project-build-timestamp>
-								<!-- This path is relative to src/docs/asciidoc -->
-								<project-pom-path>../../../pom.xml</project-pom-path>
-								<!-- tag::bug-tracking-define[] -->
-								<!-- TODO Remove this value to remove warning -->
-								<project-issues-not-defined>${issues.url}</project-issues-not-defined>
-								<!-- TODO Uncomment this line if you use GitHub issues -->
-								<!-- <project-issues-on-github>${issues.url}</project-issues-on-github> -->
-								<!-- TODO Uncomment this line if you use GitLab issues -->
-								<!-- <project-issues-on-gitlab>${issues.url}</project-issues-on-gitlab> -->
-								<!-- end::bug-tracking-define[] -->
-								<!-- These properties generate a footer with revision number and 
-									date -->
-								<revnumber>${project.version}</revnumber>
-								<revdate>${maven.build.timestamp}</revdate>
-								<organization>${project.organization.name}</organization>
-								<enhancements-dir>${agile.architecture.output.enhancements}</enhancements-dir>
-							</attributes>
-						</configuration>
+						<groupId>${project.groupId}</groupId>
+						<artifactId>aadarchi-maven-plugin</artifactId>
+						<version>${project.version}</version>
 						<executions>
 							<execution>
 								<id>generate-html-doc</id>
 								<phase>package</phase>
 								<goals>
-									<goal>process-asciidoc</goal>
+									<goal>generate-html-docs</goal>
 								</goals>
-								<configuration>
-									<sourceDirectory>${asciidoc.source.docs.directory}</sourceDirectory>
-									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
-									<backend>html5</backend>
-									<outputDirectory>${asciidoc.target.docs.directory}/html</outputDirectory>
-									<attributes>
-										<plantumldir></plantumldir>
-										<structurizrdir>${agile.architecture.output.diagrams}</structurizrdir>
-										<imagesdir>./images</imagesdir>
-										<toc>left</toc>
-										<icons>font</icons>
-										<sectanchors>true</sectanchors>
-										<idprefix />
-										<idseparator>-</idseparator>
-										<hideBugReport>${asciidoc.documents.hide.bug.report}</hideBugReport>
-									</attributes>
-								</configuration>
 							</execution>
-							<!-- doesn't work in docker !!! -->
 							<execution>
 								<id>generate-pdf-doc</id>
 								<phase>package</phase>
 								<goals>
-									<goal>process-asciidoc</goal>
+									<goal>generate-pdf-docs</goal>
 								</goals>
-								<configuration>
-									<sourceDirectory>${asciidoc.source.docs.directory}</sourceDirectory>
-									<backend>pdf</backend>
-									<outputDirectory>${asciidoc.target.docs.directory}/pdf</outputDirectory>
-									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
-									<attributes>
-										<plantumldir>${asciidoc.target.docs.directory}</plantumldir>
-										<structurizrdir>${agile.architecture.output.diagrams}</structurizrdir>
-										<imagesdir>./images</imagesdir>
-										<icons>font</icons>
-										<pagenums />
-										<toc />
-										<idprefix />
-										<idseparator>-</idseparator>
-										<hideBugReport>${asciidoc.documents.hide.bug.report}</hideBugReport>
-									</attributes>
-								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -463,7 +272,7 @@
 									<directory>${project.basedir}/src/main/resources</directory>
 								</watch>
 								<watch>
-									<directory>${asciidoc.source.docs.directory}</directory>
+									<directory>${project.basedir}/src/docs/asciidoc</directory>
 								</watch>
 							</watches>
 							<goals>
@@ -486,7 +295,7 @@
 								<configuration>
 									<artifacts>
 										<artifact>
-											<file>${asciidoc.target.docs.directory}/pdf/index.pdf</file>
+											<file>${project.build.directory}/asciidoc/docs/pdf/index.pdf</file>
 											<type>pdf</type>
 											<classifier>documentation</classifier>
 										</artifact>
@@ -512,12 +321,9 @@
 			<id>generate-slides</id>
 			<activation>
 				<file>
-					<exists>${asciidoc.source.slides.directory}</exists>
+					<exists>src/slides/asciidoc</exists>
 				</file>
 			</activation>
-			<properties>
-				<asciidoc.documents.hide.bug.report>false</asciidoc.documents.hide.bug.report>
-			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>rubygems</groupId>
@@ -544,89 +350,16 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>com.googlecode.maven-download-plugin</groupId>
-						<artifactId>download-maven-plugin</artifactId>
-						<version>1.5.0</version>
+						<groupId>${project.groupId}</groupId>
+						<artifactId>aadarchi-maven-plugin</artifactId>
+						<version>${project.version}</version>
 						<executions>
 							<execution>
-								<id>install-revealjs</id>
-								<phase>generate-resources</phase>
-								<goals>
-									<goal>wget</goal>
-								</goals>
-								<configuration>
-									<url>https://github.com/hakimel/reveal.js/archive/${version.revealjs}.zip</url>
-									<unpack>true</unpack>
-									<outputFileName>reveal.js-${version.revealjs}.zip</outputFileName>
-									<outputDirectory>${asciidoc.target.slides.directory}</outputDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.asciidoctor</groupId>
-						<artifactId>asciidoctor-maven-plugin</artifactId>
-						<version>${version.asciidoctor.maven.plugin}</version>
-						<dependencies>
-							<!-- Comment this section to use the default jruby artifact provided 
-								by the plugin -->
-							<dependency>
-								<groupId>org.jruby</groupId>
-								<artifactId>jruby-complete</artifactId>
-								<version>${version.jruby}</version>
-							</dependency>
-							<!-- Comment this section to use the default AsciidoctorJ artifact 
-								provided by the plugin -->
-							<dependency>
-								<groupId>org.asciidoctor</groupId>
-								<artifactId>asciidoctorj</artifactId>
-								<version>${version.asciidoctorj}</version>
-							</dependency>
-						</dependencies>
-						<configuration>
-							<preserveDirectories>true</preserveDirectories>
-							<relativeBaseDir>true</relativeBaseDir>
-						</configuration>
-						<executions>
-							<execution>
-								<id>generate-slides</id>
+								<id>generate-html-slides</id>
 								<phase>package</phase>
 								<goals>
-									<goal>process-asciidoc</goal>
+									<goal>generate-html-slides</goal>
 								</goals>
-								<configuration>
-									<requires>
-										<require>asciidoctor-kroki</require>
-										<require>asciidoctor-revealjs</require>
-									</requires>
-									<sourceDirectory>${asciidoc.source.slides.directory}</sourceDirectory>
-									<outputDirectory>${asciidoc.target.slides.directory}</outputDirectory>
-									<backend>revealjs</backend>
-									<templateDir>${project.build.directory}/asciidoctor-reveal.js-${version.asciidoctor.revealjs}/templates/slim</templateDir>
-									<sourceHighlighter>${asciidoctor.highlighter}</sourceHighlighter>
-									<attributes>
-										<plantumldir>images/</plantumldir>
-										<structurizrdir>${agile.architecture.output.diagrams}</structurizrdir>
-										<imagesdir>.</imagesdir>
-										<!-- As we are downloading reveal.js in runtime, it sits in a nonstandard 
-											folder `reveal.js-${version.revealjs}` -->
-										<revealjsdir>reveal.js-${version.revealjs}</revealjsdir>
-										<!-- put here the reveal.js specific attributes -->
-										<sourcedir>${basedir}/src/main/java</sourcedir>
-										<revealjs_theme>solarized</revealjs_theme>
-										<project-group-id>${project.groupId}</project-group-id>
-										<project-artifact-id>${project.artifactId}</project-artifact-id>
-										<project-name>${project.name}</project-name>
-										<project-version>${project.version}</project-version>
-										<project-build-timestamp>${maven.build.timestamp}</project-build-timestamp>
-										<!-- These properties generate a footer with revision number and 
-											date -->
-										<revnumber>${project.version}</revnumber>
-										<revdate>${maven.build.timestamp}</revdate>
-										<stylesheet></stylesheet>
-										<hideBugReport>${asciidoc.documents.hide.bug.report}</hideBugReport>
-									</attributes>
-								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -643,7 +376,7 @@
 									<directory>${project.basedir}/src/main/resources</directory>
 								</watch>
 								<watch>
-									<directory>${asciidoc.source.slides.directory}</directory>
+									<directory>${project.basedir}/src/slides/asciidoc</directory>
 								</watch>
 							</watches>
 							<goals>
