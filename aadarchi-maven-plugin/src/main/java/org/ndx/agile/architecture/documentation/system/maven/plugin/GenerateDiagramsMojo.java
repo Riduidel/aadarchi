@@ -1,5 +1,7 @@
 package org.ndx.agile.architecture.documentation.system.maven.plugin;
 
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -33,6 +35,12 @@ public class GenerateDiagramsMojo extends AbstractCDIStarterMojo {
 	@MojoProduces
 	@Parameter(name="agile-architecture-output-diagrams", defaultValue = "${project.build.directory}/structurizr/diagrams", property="agile.architecture.output.diagrams")
 	public String agileArchitectureOutputDiagrams;
+	
+	@Override
+	public void execute() throws MojoExecutionException, MojoFailureException {
+		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+		super.execute();
+	}
 
 	@Override
 	protected Class<? extends Runnable> getCDIEnabledRunnableClass() {
