@@ -29,6 +29,7 @@ import com.structurizr.annotation.UsesComponent;
 public class ArchitectureDocumentationBuilder {
 
 	public static void main(String[] args) throws Throwable {
+		Thread.currentThread().setContextClassLoader(ArchitectureDocumentationBuilder.class.getClassLoader());
 		// TODO Disable weld INFO logging, cause it outputs too much things of no interest
 		// Disable the Weld thread pool (unless it is defined on command-line)
 		System.setProperty(ConfigurationKey.EXECUTOR_THREAD_POOL_TYPE.get(), "NONE");

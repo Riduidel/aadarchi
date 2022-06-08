@@ -38,6 +38,9 @@ public class GenerateDiagramsMojo extends AbstractCDIStarterMojo {
 	
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		// Mind you, Deltaspike relies upon the presence of a context classloader to choose which
+		// property loaders are available, which sometimes prevent the
+		// github token to be injected
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
 		super.execute();
 	}

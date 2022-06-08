@@ -2,6 +2,7 @@ package org.ndx.agile.architecture.base;
 
 import java.io.File;
 import java.util.Comparator;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,12 +39,35 @@ public class ArchitectureEnhancer {
 	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"output.enhancements", defaultValue = "${project.basedir}/target/structurizr/enhancements") File enhancementsBase;
 
 	private OutputBuilder outputBuilder;
+	/**
+	 * We memorize the used context classloader in order for parallel streams to be able to use it.
+	 */
+	private ClassLoader classloader;
+
+	/**
+	 * Force the context class loader of current thread to a given one prior to running the given runnable
+	 * @param runnable
+	 */
+	private void withClassLoader(Runnable runnable) {
+		Thread.currentThread().setContextClassLoader(classloader);
+		runnable.run();
+	}
+
+	/**
+	 * Force the context class loader of current thread to a given one prior to running the given supplier
+	 * @param runnable
+	 */
+	private <Type> Type withClassLoader(Supplier<Type> supplier) {
+		Thread.currentThread().setContextClassLoader(classloader);
+		return supplier.get();
+	}
 	
 	@PostConstruct public void loadOutputBuilder() {
 		outputBuilder = new SimpleOutputBuilder(enhancementsBase);
 	}
 
 	public void enhance(Workspace workspace) {
+		classloader = Thread.currentThread().getContextClassLoader();
 		logger.info(() -> String.format("Enhancers applied to this architecture are\n%s",  
 			enhancers.stream()
 				.sorted(Comparator.comparingInt(e -> e.priority()))
@@ -93,8 +117,8 @@ public class ArchitectureEnhancer {
 			Stream<View> views = viewset.getViews().stream();
 			if(enhancer.isParallel())
 				views = views.parallel();
-			views.filter(s -> enhancer.startVisit(s))
-				.forEach(s -> enhancer.endVisit(s, outputBuilder));
+			views.filter(s -> withClassLoader(() -> enhancer.startVisit(s)))
+				.forEach(s -> withClassLoader(() -> enhancer.endVisit(s, outputBuilder)));
 			enhancer.endVisit(viewset, outputBuilder);
 		}
 	}
@@ -104,9 +128,9 @@ public class ArchitectureEnhancer {
 			Stream<SoftwareSystem> systems = model.getSoftwareSystems().stream();
 			if(enhancer.isParallel())
 				systems = systems.parallel();
-			systems.filter(s -> enhancer.startVisit(s))
-				.peek(s -> enhancerVisitSystem(enhancer, s))
-				.forEach(s -> enhancer.endVisit(s, outputBuilder));
+			systems.filter(s -> withClassLoader(() -> enhancer.startVisit(s)))
+				.peek(s -> withClassLoader(() -> enhancerVisitSystem(enhancer, s)))
+				.forEach(s -> withClassLoader(() -> enhancer.endVisit(s, outputBuilder)));
 			enhancer.endVisit(model, outputBuilder);
 		}
 	}
@@ -116,9 +140,9 @@ public class ArchitectureEnhancer {
 		Stream<Container> containers = system.getContainers().stream();
 		if(enhancer.isParallel())
 			containers = containers.parallel();
-		containers.filter(c -> enhancer.startVisit(c))
-			.peek(c -> enhancerVisitContainer(enhancer, c))
-			.forEach(c -> enhancer.endVisit(c, outputBuilder));
+		containers.filter(c -> withClassLoader(() -> enhancer.startVisit(c)))
+			.peek(c -> withClassLoader(() -> enhancerVisitContainer(enhancer, c)))
+			.forEach(c -> withClassLoader(() -> enhancer.endVisit(c, outputBuilder)));
 	}
 
 
@@ -126,8 +150,8 @@ public class ArchitectureEnhancer {
 		Stream<Component> systems = container.getComponents().stream();
 		if(enhancer.isParallel())
 			systems = systems.parallel();
-		systems.filter(c -> enhancer.startVisit(c))
-			.forEach(c -> enhancer.endVisit(c, outputBuilder));
+		systems.filter(c -> withClassLoader(() -> enhancer.startVisit(c)))
+			.forEach(c -> withClassLoader(() -> enhancer.endVisit(c, outputBuilder)));
 	}
 
 }
