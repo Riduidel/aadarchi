@@ -2,12 +2,12 @@
 :chapter: Software%20Architecture
 include::_notify-bug-admonition.adoc[]
 
-[plantuml, {plantumldir}SystemContainers, svg, opts="interactive"]     
+[plantuml, {plantumldir}SystemContainers, svg, opts="inline"]     
 ----
 include::{structurizrdir}/SystemContainers.plantuml[]
 ----
 
-[plantuml, {plantumldir}baseComponents, svg, opts="interactive"]     
+[plantuml, {plantumldir}baseComponents, svg, opts="inline"]     
 ----
 include::{structurizrdir}/baseComponents.plantuml[]
 ----

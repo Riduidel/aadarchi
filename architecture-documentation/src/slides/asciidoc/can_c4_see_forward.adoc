@@ -114,7 +114,7 @@ As a consequence, I've chosen to use this very project as an example of what can
 
 === Context
 
-[plantuml, {plantumldir}SystemContext, svg, opts="interactive"]     
+[plantuml, {plantumldir}SystemContext, svg, opts="inline"]     
 ----
 include::{structurizrdir}/SystemContext.plantuml[]
 ----
@@ -131,7 +131,7 @@ Notice that colors can be freely chosen by team, provided the legend is explicit
 [%notitle]
 === Containers
 
-[plantuml, {plantumldir}agile.architecture.containers, svg, opts="interactive", style="max-width:90%"]
+[plantuml, {plantumldir}agile.architecture.containers, svg, opts="inline", style="max-width:90%"]
 ----
 include::{structurizrdir}/agile.architecture.containers.plantuml[]
 ----
@@ -150,7 +150,7 @@ include::{structurizrdir}/agile.architecture.containers.plantuml[]
 [%notitle]
 === Components
 
-[plantuml, {plantumldir}agile.architecture.base.components, svg, opts="interactive", style="max-height:90%"]
+[plantuml, {plantumldir}agile.architecture.base.components, svg, opts="inline", style="max-height:90%"]
 ----
 include::{structurizrdir}/agile.architecture.base.components.plantuml[]
 ----

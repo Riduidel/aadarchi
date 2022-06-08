@@ -2,12 +2,12 @@
 :chapter: Software%20Architecture
 include::_notify-bug-admonition.adoc[]
 
-[plantuml, {plantumldir}agile.architecture.containers, svg, opts="interactive"]     
+[plantuml, {plantumldir}agile.architecture.containers, svg, opts="inline"]     
 ----
 include::{structurizrdir}/agile.architecture.containers.plantuml[]
 ----
 
-[plantuml, {plantumldir}agile.architecture.base.components, svg, opts="interactive"]     
+[plantuml, {plantumldir}agile.architecture.base.components, svg, opts="inline"]     
 ----
 include::{structurizrdir}/agile.architecture.base.components.plantuml[]
 ----
