@@ -24,6 +24,7 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.ndx.agile.architecture.documentation.system.maven.plugin.GenerateDiagramsMojo;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
 import org.twdata.maven.mojoexecutor.MojoExecutor.ExecutionEnvironment;
@@ -90,10 +91,10 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 	 * This parameter allow sending bug report to architecture documentation writers when documentation
 	 * is not correct.
 	 */
-	@Parameter(name="issues-url", defaultValue="${issuesManagement.url}")
+	@Parameter(name="issues-url", defaultValue="${issueManagement.url}")
 	private String issuesUrl;
 	/**
-	 * Value of this parameter will be guessed automatically from {@link #issuesUrl} value.
+	 * Value of this parameter will be guessed automatically from {@link #getIssuesUrl()} value.
 	 * Supported values are
 	 * <ul>
 	 * <li>project-issues-on-github</li>
@@ -102,6 +103,13 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 	 */
 	@Parameter(name="project-issues")
 	private String projectIssues;
+	
+	/**
+	 * Folder where the structurizr data is to be stored
+	 * @see GenerateDiagramsMojo#agileArchitectureOutputDiagrams
+	 */
+	@Parameter(name="structurizr-dir", defaultValue = "${project.build.directory}/structurizr/diagrams", property="agile.architecture.output.diagrams")
+	private String structurizrDir;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -111,6 +119,15 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 				configuration(),
 				executionEnvironment()
 		);
+	}
+	
+	public String getIssuesUrl() {
+		if(issuesUrl==null) {
+			if(mavenProject.getIssueManagement()!=null) {
+				issuesUrl = mavenProject.getIssueManagement().getUrl();
+			}
+		}
+		return issuesUrl;
 	}
 
 	protected ExecutionEnvironment executionEnvironment() {
@@ -189,20 +206,20 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 			return element(name("project-issues-ignored"), "due to hide-bug-report being true, no need to auto-guess project-issues");
 		} else {
 			if(projectIssues==null) {
-				if(issuesUrl==null) {
-					return element(name("project-issues-undefined"), issuesUrl);
+				if(getIssuesUrl()==null) {
+					return element(name("project-issues-undefined"), getIssuesUrl());
 				} else {
-					if(issuesUrl.contains("github.com")) {
-						return element(name("project-issues-on-github"), issuesUrl);
-					} else if(issuesUrl.contains("gitlab")) {
-						return element(name("project-issues-on-github"), issuesUrl);
+					if(getIssuesUrl().contains("github.com")) {
+						return element(name("project-issues-on-github"), getIssuesUrl());
+					} else if(getIssuesUrl().contains("gitlab")) {
+						return element(name("project-issues-on-github"), getIssuesUrl());
 					} else {
-						return element(name("project-issues-undefined"), issuesUrl);
+						return element(name("project-issues-undefined"), getIssuesUrl());
 					}
 				}
 			} else {
 				if(projectIssues.startsWith("project-issues")) {
-					return element(name(projectIssues), issuesUrl);
+					return element(name(projectIssues), getIssuesUrl());
 				} else {
 					throw new UnsupportedOperationException(
 							String.format("All project issues templates start with \"project-issues\". "
@@ -225,7 +242,7 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 	}
 
 	protected Element attributeStructurizrDir() {
-		return element(name("structurizrdir"), "${agile.architecture.output.diagrams}");
+		return element(name("structurizrdir"), structurizrDir);
 	}
 
 	protected Element attributeKrokiServerUri() {
@@ -245,6 +262,7 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 
 	public List<Element> configurationAttributes() {
 		return Arrays.asList(
+			element(name("plantumldir"), "."),
 			element(name("allow-uri-read")), // allow to include distant content in the created document
 			element(name("toc"), "left"), // put the table of content on the left side of the window
 			element(name("icons"), "font"), // allow to use icons from "fonticones"
