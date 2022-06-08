@@ -85,8 +85,23 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 	 */
 	@Parameter(name="gems-path", defaultValue="${project.build.directory}/gems")
 	private String gemsPath;
+	/**
+	 * Used bug tracker for architecture project.
+	 * This parameter allow sending bug report to architecture documentation writers when documentation
+	 * is not correct.
+	 */
 	@Parameter(name="issues-url", defaultValue="${issuesManagement.url}")
 	private String issuesUrl;
+	/**
+	 * Value of this parameter will be guessed automatically from {@link #issuesUrl} value.
+	 * Supported values are
+	 * <ul>
+	 * <li>project-issues-on-github</li>
+	 * <li>project-issues-on-gitlab</li>
+	 * </ul>
+	 */
+	@Parameter(name="project-issues")
+	private String projectIssues;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -170,7 +185,31 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 
 	// Depends upon the used SCM, should not be an absolute value!
 	protected Element attributeIssuesUrl() {
-		return element(name("project-issues-on-github"), issuesUrl);
+		if(Boolean.valueOf(hideBugReport)) {
+			return element(name("project-issues-ignored"), "due to hide-bug-report being true, no need to auto-guess project-issues");
+		} else {
+			if(projectIssues==null) {
+				if(issuesUrl.contains("github.com")) {
+					return element(name("project-issues-on-github"), issuesUrl);
+				} else if(issuesUrl.contains("gitlab")) {
+					return element(name("project-issues-on-github"), issuesUrl);
+				} else {
+					return element(name("project-issues-undefined"), issuesUrl);
+				}
+			} else {
+				if(projectIssues.startsWith("project-issues")) {
+					return element(name(projectIssues), issuesUrl);
+				} else {
+					throw new UnsupportedOperationException(
+							String.format("All project issues templates start with \"project-issues\". "
+									+ "But you used the string `%s`, which doesn't. "
+									+ "If your SCM isn't supported, you can either\n"
+									+ "1. Set \"hide-bug-report\" to true\n"
+									+ "2. Implement your own SCM provider\n"
+									+ "3. Ask the team how to go through that bug by filling a bug report", projectIssues));
+				}
+			}
+		}
 	}
 
 	protected Element attributeHideBugReport() {
