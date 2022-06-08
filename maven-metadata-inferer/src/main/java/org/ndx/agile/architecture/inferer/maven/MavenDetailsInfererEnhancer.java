@@ -490,7 +490,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 					// We're not in our project, but in some parent. To go back to our project, we must add to that url
 					// all the children paths
 					url = url + children.stream().map(p -> p.getArtifactId()).collect(Collectors.joining("/"));
-					element.addProperty(ModelElementKeys.SCM_PROJECT, url);
+					element.addProperty(org.ndx.agile.architecture.base.enhancers.ModelElementKeys.Scm.PROJECT, url);
 					return false;
 				}
 			}

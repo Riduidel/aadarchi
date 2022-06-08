@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
 import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
 
 import com.structurizr.Workspace;
@@ -36,7 +37,7 @@ import com.structurizr.view.ViewSet;
 public class ArchitectureEnhancer {
 	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;
 	@Inject Logger logger;
-	@Inject @ConfigProperty(name=ModelElementKeys.PREFIX+"output.enhancements", defaultValue = "${project.basedir}/target/structurizr/enhancements") File enhancementsBase;
+	@Inject @ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE) File enhancementsBase;
 
 	private OutputBuilder outputBuilder;
 	/**

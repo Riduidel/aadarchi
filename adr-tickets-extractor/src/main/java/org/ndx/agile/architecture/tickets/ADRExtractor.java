@@ -23,6 +23,7 @@ import org.ndx.agile.architecture.base.Enhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.Force;
 import org.ndx.agile.architecture.base.enhancers.tickets.Ticket;
 import org.ndx.agile.architecture.base.enhancers.tickets.TicketStatus;
 import org.ndx.agile.architecture.base.enhancers.tickets.TicketsHandler;
@@ -60,7 +61,7 @@ public class ADRExtractor
 	public static final String AGILE_ARCHITECTURE_TICKETS_ADR_LABEL = ModelElementKeys.PREFIX+"tickets.adr.label";
 	public static final String AGILE_ARCHITECTURE_TICKETS_PROJECT = ModelElementKeys.PREFIX+"tickets.project";
 	@Inject
-	@ConfigProperty(name = "force", defaultValue="false")
+	@ConfigProperty(name = Force.NAME, defaultValue=Force.VALUE)
 	boolean force;
 	@Inject
 	Instance<TicketsHandler> ticketsHandlers;

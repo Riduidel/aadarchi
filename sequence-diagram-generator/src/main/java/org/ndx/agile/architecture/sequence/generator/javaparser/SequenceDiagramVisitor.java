@@ -26,6 +26,7 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.DiagramsDir;
 import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 import org.ndx.agile.architecture.sequence.generator.SequenceGenerator;
 import org.ndx.agile.architecture.sequence.generator.javaparser.adapter.CallGraphModel;
@@ -43,7 +44,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	@Inject Logger logger;
 
 	@Inject 
-	@ConfigProperty(name = "agile.architecture.diagrams", defaultValue = "target/structurizr/architecture")
+	@ConfigProperty(name = DiagramsDir.NAME, defaultValue = DiagramsDir.VALUE)
 	File destination;
 
 	/**

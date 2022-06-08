@@ -9,6 +9,7 @@ import javax.enterprise.inject.Default;
 
 import org.ndx.agile.architecture.base.ArchitectureModelProvider;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.Scm;
 import org.ndx.agile.architecture.inferer.maven.MavenEnhancer;
 import org.ndx.agile.architecture.tickets.ADRExtractor;
 
@@ -66,7 +67,7 @@ public class Architecture implements ArchitectureModelProvider {
 
 		Container base = agileArchitecture.addContainer(CONTAINERS_BASE, "Architecture base", "Java executable");
 		base.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("base/pom.xml"));
-		base.addProperty(ModelElementKeys.SCM_PATH, base.getName());
+		base.addProperty(Scm.PATH, base.getName());
 		// end::structurizr-example-containers[]
 		
 		// tag::structurizr-example-components[]
@@ -98,31 +99,31 @@ public class Architecture implements ArchitectureModelProvider {
 		
 		Component gitHub = base.addComponent("github-scm-handler", "GitHub SCM Handler", "java");
 		gitHub.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("github-scm-handler/pom.xml"));
-		gitHub.addProperty(ModelElementKeys.SCM_PATH, gitHub.getName());
+		gitHub.addProperty(Scm.PATH, gitHub.getName());
 		base.getComponentWithName("SCMLinkGenerator").uses(gitHub, "Get project source link");
 		base.getComponentWithName("SCMReadmeReader").uses(gitHub, "Get project readme");
 
 		Component gitLab = base.addComponent("gitlab-scm-handler", "GitLab SCM Handler", "java");
 		gitLab.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("gitlab-scm-handler/pom.xml"));
-		gitLab.addProperty(ModelElementKeys.SCM_PATH, gitLab.getName());
+		gitLab.addProperty(Scm.PATH, gitLab.getName());
 		base.getComponentWithName("SCMLinkGenerator").uses(gitLab, "Get project source link");
 		base.getComponentWithName("SCMReadmeReader").uses(gitLab, "Get project readme");
 
 		Component adrTicketsExtractor = base.addComponent("adr-tickets-extractor", "enhanced by maven");
 		adrTicketsExtractor.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("adr-tickets-extractor/pom.xml"));
-		adrTicketsExtractor.addProperty(ModelElementKeys.SCM_PATH, adrTicketsExtractor.getName());
+		adrTicketsExtractor.addProperty(Scm.PATH, adrTicketsExtractor.getName());
 		adrTicketsExtractor.uses(gitLab, "Read tickets from Gitlab if configured so");
 		adrTicketsExtractor.uses(gitHub, "Read tickets from GitHub if configured so");
 		base.getComponentWithName("ArchitectureEnhancer").uses(adrTicketsExtractor, "Produces ADR reporting");
 
 		Component cdiConfigExtension = base.addComponent("cdi-config-extension", "CDI Config extensions", "java");
 		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("cdi-config-extension/pom.xml"));
-		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, cdiConfigExtension.getName());
+		cdiConfigExtension.addProperty(Scm.PATH, cdiConfigExtension.getName());
 		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(cdiConfigExtension, "Eases out some CDI code");
 
 		Component mavenEnhancer = base.addComponent("maven-metadata-inferer", "Enhanced by Maven");
 		cdiConfigExtension.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM, locate("maven-metadata-inferer/pom.xml"));
-		cdiConfigExtension.addProperty(ModelElementKeys.SCM_PATH, mavenEnhancer.getName());
+		cdiConfigExtension.addProperty(Scm.PATH, mavenEnhancer.getName());
 		base.getComponentWithName("ArchitectureDocumentationBuilder").uses(mavenEnhancer, "Infer most of element details from Maven infos");
 
 		Container asciidoc = agileArchitecture.addContainer("asciidoc", "Asciidoc tooling", "Maven plugin");

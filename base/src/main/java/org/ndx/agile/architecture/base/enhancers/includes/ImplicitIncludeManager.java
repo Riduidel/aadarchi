@@ -11,6 +11,7 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.AsciidocSourceDir;
 import org.ndx.agile.architecture.base.utils.SimpleOutputBuilder;
 import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 
@@ -32,14 +33,13 @@ import com.structurizr.model.StaticStructureElement;
 @Component(technology = "Java/CDI")
 public class ImplicitIncludeManager extends ModelElementAdapter {
 	
-	private static final String ASCIIDOC_SOURCE_DIR = "asciidoc.source.docs.directory";
 	private File sourceDir;
 
-	@Inject public void setDocumentsFolder(@ConfigProperty(name=ASCIIDOC_SOURCE_DIR, defaultValue = "${project.basedir}/src/docs/asciidoc") File sourceDir) {
+	@Inject public void setDocumentsFolder(@ConfigProperty(name=AsciidocSourceDir.NAME, defaultValue = AsciidocSourceDir.VALUE) File sourceDir) {
 		if(sourceDir==null) {
 			throw new CantCreateImplicitInclude(
 					String.format("To have implicit includes working, you have to define the system property %s", 
-							ASCIIDOC_SOURCE_DIR)
+							AsciidocSourceDir.NAME)
 					);
 		}
 		this.sourceDir = sourceDir.getAbsoluteFile();

@@ -20,7 +20,7 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
-import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
 import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 
 import com.structurizr.Workspace;
@@ -43,7 +43,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	/**
 	 * Injecting enhancements base to have a folder where to put our documents.
 	 */
-	@Inject public void setEnhancementsBase(@ConfigProperty(name=ModelElementKeys.PREFIX+"enhancements", defaultValue = "${basedir}/target/structurizr/enhancements") File enhancementsBase) {
+	@Inject public void setEnhancementsBase(@ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE) File enhancementsBase) {
 		this.enhancementsBase = enhancementsBase.getAbsoluteFile();
 	}
 	/**
