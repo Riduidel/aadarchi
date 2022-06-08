@@ -189,12 +189,16 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 			return element(name("project-issues-ignored"), "due to hide-bug-report being true, no need to auto-guess project-issues");
 		} else {
 			if(projectIssues==null) {
-				if(issuesUrl.contains("github.com")) {
-					return element(name("project-issues-on-github"), issuesUrl);
-				} else if(issuesUrl.contains("gitlab")) {
-					return element(name("project-issues-on-github"), issuesUrl);
-				} else {
+				if(issuesUrl==null) {
 					return element(name("project-issues-undefined"), issuesUrl);
+				} else {
+					if(issuesUrl.contains("github.com")) {
+						return element(name("project-issues-on-github"), issuesUrl);
+					} else if(issuesUrl.contains("gitlab")) {
+						return element(name("project-issues-on-github"), issuesUrl);
+					} else {
+						return element(name("project-issues-undefined"), issuesUrl);
+					}
 				}
 			} else {
 				if(projectIssues.startsWith("project-issues")) {
