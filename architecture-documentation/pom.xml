@@ -212,12 +212,11 @@
 			<id>generate-docs</id>
 			<activation>
 				<file>
-					<exists>${asciidoc.source.docs.directory}</exists>
+					<exists>src/docs/asciidoc</exists>
 				</file>
 			</activation>
 			<properties>
 				<asciidoc.target.docs.directory>${project.build.directory}/asciidoc/docs</asciidoc.target.docs.directory>
-				<asciidoc.documents.hide.bug.report>false</asciidoc.documents.hide.bug.report>
 			</properties>
 
 			<build>
@@ -257,7 +256,7 @@
 								<configuration>
 									<artifacts>
 										<artifact>
-											<file>${asciidoc.target.docs.directory}/pdf/index.pdf</file>
+											<file>${project.build.directory}/asciidoc/docs/pdf/index.pdf</file>
 											<type>pdf</type>
 											<classifier>documentation</classifier>
 										</artifact>
@@ -283,12 +282,9 @@
 			<id>generate-slides</id>
 			<activation>
 				<file>
-					<exists>${asciidoc.source.slides.directory}</exists>
+					<exists>src/slides/asciidoc</exists>
 				</file>
 			</activation>
-			<properties>
-				<asciidoc.documents.hide.bug.report>false</asciidoc.documents.hide.bug.report>
-			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -382,10 +378,10 @@
 											<directory>${project.basedir}/src/main/resources</directory>
 										</watch>
 										<watch>
-											<directory>${asciidoc.source.docs.directory}</directory>
+											<directory>${project.basedir}/src/docs/asciidoc</directory>
 										</watch>
 										<watch>
-											<directory>${asciidoc.source.slides.directory}</directory>
+											<directory>${project.basedir}/src/slides/asciidoc</directory>
 										</watch>
 									</watches>
 									<goals>
