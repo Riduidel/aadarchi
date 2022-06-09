@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;

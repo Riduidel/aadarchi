@@ -12,6 +12,7 @@ import javax.enterprise.inject.se.SeContainerInitializer;
 import javax.inject.Inject;
 
 import org.jboss.weld.config.ConfigurationKey;
+import org.ndx.agile.architecture.base.providers.FromDsl;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.Component;
@@ -43,6 +44,7 @@ public class ArchitectureDocumentationBuilder {
 	@Inject Logger logger;
 	@Inject @UsesComponent(description = "Adds information to initial architecture description") ArchitectureEnhancer enhancer;
 	@Inject @UsesComponent(description = "Generates initial architecture description") @Any Instance<ArchitectureModelProvider> availableProviders;
+	@Inject @UsesComponent(description = "Read architecture description from workspace.dsl file") FromDsl fromDsl;
 
 	/**
 	 * Run method that will allow the description to be invoked and augmentations to be performed
@@ -57,13 +59,23 @@ public class ArchitectureDocumentationBuilder {
 
 	private Workspace getArchitecture() {
 		for(ArchitectureModelProvider provider : availableProviders) {
-			try {
-				return provider.describeArchitecture();
-			} catch(Throwable e) {
-				logger.log(Level.WARNING, 
-						String.format("model provider %s failed to load any workspace", provider.getClass().getName()), 
-						e);
+			// I don't yet know how to ensure fromDsl is used as last injected value
+			if(!fromDsl.equals(provider)) {
+				try {
+					return provider.describeArchitecture();
+				} catch(Throwable e) {
+					logger.log(Level.WARNING, 
+							String.format("model provider %s failed to load any workspace", provider.getClass().getName()), 
+							e);
+				}
 			}
+		}
+		try {
+			return fromDsl.describeArchitecture();
+		} catch(Throwable t) {
+			logger.log(Level.WARNING, 
+					String.format("model provider %s failed to load any workspace", fromDsl.getClass().getName()), 
+					t);
 		}
 		throw new UnsupportedOperationException("There is no instance of ArchitectureModelProvider defined in project, and no workspace.dsl file to parse");
 	}
