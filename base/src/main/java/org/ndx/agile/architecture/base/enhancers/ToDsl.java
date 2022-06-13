@@ -96,7 +96,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 			return "";
 		String tabs = StringUtils.repeat('\t', indentCount);
 		return properties.entrySet().stream()
-				.map(entry -> String.format("%s%s %s", tabs+"\t", entry.getKey(), entry.getValue()))
+				.map(entry -> String.format("%s\"%s\" \"%s\"", tabs+"\t", entry.getKey(), entry.getValue()))
 				.collect(Collectors.joining("\n", "\n"+tabs+"properties {\n", "\n"+tabs+"}\n"));
 	}
 
@@ -245,7 +245,33 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 
 	@Override
 	public void endVisit(View s, OutputBuilder builder) {
-		logger.warning(String.format("View to DSL isn't yet supported, so view %s is ignored", s));
+		String PLACEHOLDER = "\t\t\tWARNING: Include and autolayout can't be infered from static view content, so you'll have to set that yourself\n\t\t}\n";
+		if(s instanceof ComponentView) {
+			ComponentView c = (ComponentView) s;
+			architecture += String.format("\t\tcomponent \"%s\" \"%s\" \"%s\" {\n"+PLACEHOLDER, 
+					asVariableName(c.getContainer()),
+					c.getKey(),
+					c.getDescription());
+		} else if(s instanceof ContainerView) {
+			ContainerView c = (ContainerView) s;
+			architecture += String.format("\t\tcontainer \"%s\" \"%s\" \"%s\" {\n"+PLACEHOLDER, 
+					asVariableName(c.getSoftwareSystem()),
+					c.getKey(),
+					c.getDescription());
+		} else if(s instanceof SystemContextView) {
+			SystemContextView c = (SystemContextView) s;
+			architecture += String.format("\t\tsystemContext \"%s\" \"%s\" \"%s\" {\n"+PLACEHOLDER, 
+					asVariableName(c.getSoftwareSystem()),
+					c.getKey(),
+					c.getDescription());
+		} else if(s instanceof SystemLandscapeView) {
+			SystemLandscapeView c = (SystemLandscapeView) s;
+			architecture += String.format("\t\tsystemLandscape \"%s\" \"%s\" {\n"+PLACEHOLDER, 
+					c.getKey(),
+					c.getDescription());
+		} else {
+			logger.warning(String.format("View to DSL isn't yet supported for given view, so view %s is ignored", s));
+		}
 	}
 
 	@Override
