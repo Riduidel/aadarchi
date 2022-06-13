@@ -77,15 +77,6 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 		return Integer.MAX_VALUE - 1;
 	}
 
-	@Override
-	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
-		if (toDslEnabled) {
-			architecture = String.format("workspace \"%s\" {", workspace.getName());
-			architecture+= propertiesToDsl(1, workspace.getProperties());
-		}
-		return toDslEnabled;
-	}
-
 	/**
 	 * Convert this set of properties into Structurizr DSL properties
 	 * @param indentCount
@@ -98,6 +89,15 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 		return properties.entrySet().stream()
 				.map(entry -> String.format("%s\"%s\" \"%s\"", tabs+"\t", entry.getKey(), entry.getValue()))
 				.collect(Collectors.joining("\n", "\n"+tabs+"properties {\n", "\n"+tabs+"}\n"));
+	}
+
+	@Override
+	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
+		if (toDslEnabled) {
+			architecture = String.format("workspace \"%s\" {\n", workspace.getName());
+			architecture+= propertiesToDsl(1, workspace.getProperties());
+		}
+		return toDslEnabled;
 	}
 
 	@Override
@@ -168,6 +168,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 	@Override
 	public void endVisit(Workspace workspace, OutputBuilder outputBuilder) {
 		if (toDslEnabled) {
+			architecture += "}";
 			try {
 				StringBuilder builder = new StringBuilder(architecture);
 				dslTargetFile.getParentFile().mkdirs();
@@ -229,7 +230,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 			try {
 				String viewsDeclaration = IOUtils.toString(getClass().getResourceAsStream("ToDSL.default.views.dsl"),
 						"UTF-8");
-				architecture += "\t\tviews {\n";
+				architecture += "\tviews {\n";
 				architecture += viewsDeclaration;
 			} catch (IOException e) {
 				throw new UnableToBuildDslException("Unable to read pseudo-standard view header file", e);

@@ -380,6 +380,9 @@
 											<directory>${project.basedir}/src/main/java</directory>
 										</watch>
 										<watch>
+											<directory>${project.basedir}/src/architecture/resources</directory>
+										</watch>
+										<watch>
 											<directory>${project.basedir}/src/main/resources</directory>
 										</watch>
 										<watch>
