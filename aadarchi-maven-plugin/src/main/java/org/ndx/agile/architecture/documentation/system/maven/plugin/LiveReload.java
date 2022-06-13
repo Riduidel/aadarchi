@@ -11,13 +11,15 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.util.concurrent.Executors;
+
 import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
+import net_alchim31_livereload.LRServer; //#from net.alchim31:livereload-jvm:0.2.0
 
 @Mojo(name = "livereload", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
 public class LiveReload extends AbstractMojo {
-
-	@Parameter(name = "kroki-server-url", defaultValue = "${kroki.server.url}")
-	private String krokiServerUrl;
 
 	@Component
 	private MavenProject mavenProject;
@@ -30,36 +32,45 @@ public class LiveReload extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		int port = 35729;
+
+		Path docroot = FileSystems.getDefault().getPath(mavenProject.getBuild().getOutputDirectory());
+		Executors.newSingleThreadExecutor().execute(() -> {
+			try {
+				new LRServer(port, docroot).run(); // == start() + join()
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+
 		executeMojo(
 				plugin(
-						groupId("org.codehaus.mojo"),
-						artifactId("exec-maven-plugin"),
-						version(""),
-						dependencies(
-								dependency("net.alchim31", "livereload-jvm", "0.2.0")
-						)
+						groupId("com.fizzed"),
+						artifactId("fizzed-watcher-maven-plugin"),
+						version("1.0.6")
 				),
-				goal("exec"),
+				goal("run"),
 				configuration(
-						element(name("executable"), "java"),
-						element(name("arguments"),
-								element(name("argument"), "-classpath"),
-								element(name("classpath"),
-										element(name("dependency"), "net.alchim31:livereload-jvm"),
-										element(name("dependency"), "org.eclipse.jetty:jetty-util"),
-										element(name("dependency"), "org.eclipse.jetty:jetty-io"),
-										element(name("dependency"), "org.eclipse.jetty.orbit:javax.servlet:jar"),
-										element(name("dependency"), "org.eclipse.jetty:jetty-continuation"),
-										element(name("dependency"), "org.eclipse.jetty:jetty-server"),
-										element(name("dependency"), "org.eclipse.jetty.orbit:javax.servlet"),
-										element(name("dependency"), "org.eclipse.jetty:jetty-http"),
-										element(name("dependency"), "com.googlecode.json-simple:json-simple"),
-										element(name("dependency"), "org.eclipse.jetty:jetty-websocket")),
-								element(name("argument"), "net_alchim31_livereload.Main"),
-								element(name("argument"), "-"),
-								element(name("argument"), "${asciidoc.target.base.directory}")),
-						element(name("async"), "true"),
-						element(name("asyncDestroyOnShutdown"), "true")
+						element(name("touchFile"), "target/watcher.touchfile"),
+						element(name("watches"),
+								element(name("watch"),
+										element(name("directory"), "${project.basedir}/src/main/java")
+								),
+								element(name("watch"),
+										element(name("directory"), "${project.basedir}/src/main/resources")
+								),
+								element(name("watch"),
+										element(name("directory"), "${asciidoc.source.docs.directory}")
+								),
+								element(name("watch"),
+										element(name("directory"), "${asciidoc.source.slides.directory}")
+								)
+						),
+						element(name("goals"),
+								element(name("goal"), "prepare-package"),
+								element(name("goal"), "org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc@generate-slides"),
+								element(name("goal"), "org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc@generate-html-doc")
+						)
 				),
 				executionEnvironment(
 						mavenProject,
@@ -67,5 +78,6 @@ public class LiveReload extends AbstractMojo {
 						pluginManager
 				)
 		);
+
 	}
 }
