@@ -100,6 +100,20 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 		return toDslEnabled;
 	}
 
+	/**
+	 * Convert this set of properties into Structurizr DSL properties
+	 * @param indentCount
+	 * @param properties
+	 */
+	private String propertiesToDsl(int indentCount, Map<String, String> properties) {
+		if(properties.isEmpty())
+			return "";
+		String tabs = StringUtils.repeat('\t', indentCount);
+		return properties.entrySet().stream()
+				.map(entry -> String.format("%s%s %s", tabs+"\t", entry.getKey(), entry.getValue()))
+				.collect(Collectors.joining("\n", "\n"+tabs+"properties {\n", "\n"+tabs+"}\n"));
+	}
+
 	@Override
 	public boolean startVisit(Model model) {
 		architecture = architecture + "\tmodel {\n";
