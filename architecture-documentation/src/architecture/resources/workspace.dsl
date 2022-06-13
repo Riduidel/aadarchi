@@ -11,9 +11,9 @@ workspace "agile-architecture-documentation-system" {
 			maven = container "maven" "The maven build engine" "Java, maven"
 			aadarchi_base = container "base" "" "Java" {
 				properties {
-					"agile.architecture.java.source" "file:../base/src/main/java/"
+					"agile.architecture.java.source" "../base/src/main/java/"
 					"agile.architecture.scm.path" "base"
-					"agile.architecture.maven.pom" "file:../base/pom.xml"
+					"agile.architecture.maven.pom" "../base/pom.xml"
 					"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
 					"agile.architecture.issue.manager" "${issues.url}"
 					"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:base"
@@ -21,9 +21,9 @@ workspace "agile-architecture-documentation-system" {
 				ArchitectureEnhancer = component "ArchitectureEnhancer" "Invokes all enhancers with respect for their respective priorities" "Java, CDI"
 				gitlab_scm_handler = component "gitlab-scm-handler" "" "Java, gitlab"{
 					properties {
-						"agile.architecture.java.source" "file:../gitlab-scm-handler/src/main/java/"
+						"agile.architecture.java.source" "../gitlab-scm-handler/src/main/java/"
 						"agile.architecture.scm.path" "gitlab-scm-handler"
-						"agile.architecture.maven.pom" "file:../gitlab-scm-handler/pom.xml"
+						"agile.architecture.maven.pom" "../gitlab-scm-handler/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
 						"agile.architecture.issue.manager" "${issues.url}"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:gitlab-scm-handler"
@@ -32,9 +32,9 @@ workspace "agile-architecture-documentation-system" {
 				GraphEmitter = component "GraphEmitter" "Generates all graph output in the destination folder" "Java, CDI"
 				cdi_config_extension_35 = component "cdi-config-extension" {
 					properties {
-						"agile.architecture.java.source" "file:../cdi-config-extension/src/main/java/"
+						"agile.architecture.java.source" "../cdi-config-extension/src/main/java/"
 						"agile.architecture.scm.path" "maven-metadata-inferer"
-						"agile.architecture.maven.pom" "file:../cdi-config-extension/pom.xml"
+						"agile.architecture.maven.pom" "../cdi-config-extension/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
 						"agile.architecture.issue.manager" "${issues.url}"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:cdi-config-extension"
@@ -42,9 +42,9 @@ workspace "agile-architecture-documentation-system" {
 				}
 				maven_metadata_inferer_37 = component "maven-metadata-inferer" {
 					properties {
-						"agile.architecture.java.source" "file:../maven-metadata-inferer/src/main/java/"
+						"agile.architecture.java.source" "../maven-metadata-inferer/src/main/java/"
 						"agile.architecture.scm.path" "maven-metadata-inferer"
-						"agile.architecture.maven.pom" "file:../maven-metadata-inferer/pom.xml"
+						"agile.architecture.maven.pom" "../maven-metadata-inferer/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
 						"agile.architecture.issue.manager" "${issues.url}"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:maven-metadata-inferer"
@@ -56,9 +56,9 @@ workspace "agile-architecture-documentation-system" {
 				ImplicitIncludeManager_17 = component "ImplicitIncludeManager" "" "Java"
 				github_scm_handler_25 = component "github-scm-handler" {
 					properties {
-						"agile.architecture.java.source" "file:../github-scm-handler/src/main/java/"
+						"agile.architecture.java.source" "../github-scm-handler/src/main/java/"
 						"agile.architecture.scm.path" "github-scm-handler"
-						"agile.architecture.maven.pom" "file:../github-scm-handler/pom.xml"
+						"agile.architecture.maven.pom" "../github-scm-handler/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
 						"agile.architecture.issue.manager" "${issues.url}"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:github-scm-handler"
@@ -67,9 +67,9 @@ workspace "agile-architecture-documentation-system" {
 				DocumentsCollector = component "DocumentsCollector" "" "Java"
 				adr_tickets_extractor_31 = component "adr-tickets-extractor" {
 					properties {
-						"agile.architecture.java.source" "file:../adr-tickets-extractor/src/main/java/"
+						"agile.architecture.java.source" "../adr-tickets-extractor/src/main/java/"
 						"agile.architecture.scm.path" "adr-tickets-extractor"
-						"agile.architecture.maven.pom" "file:../adr-tickets-extractor/pom.xml"
+						"agile.architecture.maven.pom" "../adr-tickets-extractor/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
 						"agile.architecture.issue.manager" "${issues.url}"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:adr-tickets-extractor"
@@ -82,7 +82,7 @@ workspace "agile-architecture-documentation-system" {
 					"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
 					"agile.architecture.scm.path" "archetype"
 					"agile.architecture.issue.manager" "${issues.url}"
-					"agile.architecture.maven.pom" "file:../archetype/pom.xml"
+					"agile.architecture.maven.pom" "../archetype/pom.xml"
 					"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:archetype"
 				}
 			}
