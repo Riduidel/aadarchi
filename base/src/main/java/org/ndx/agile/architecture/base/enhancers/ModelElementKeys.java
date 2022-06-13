@@ -51,10 +51,16 @@ public interface ModelElementKeys {
 			String VALUE = "${basedir}/target/structurizr/diagrams";
 		}
 		public static interface Force {
-
 			String NAME = "force";
 			String VALUE = "false";
-			
+		}
+		public static interface BasePath {
+			String VALUE = "${basedir}";
+			/**
+			 * The base path is the reference from which all paths are set.
+			 * IT IS NOT TO BE DEFINED by user code. Instead, it is aadarchi which take care of setting a "good" value.
+			 */
+			String NAME = ModelElementKeys.PREFIX+"base.path";
 		}
 	}
 	public static interface Scm {
@@ -105,6 +111,7 @@ public interface ModelElementKeys {
 	 * Those external dependencies should be separated by ";"
 	 */
 	String EXTERNAL_DEPENDENCIES = PREFIX+"depends.on";
+	
 	/**
 	 * When set, this property contains a description used for {@link #EXTERNAL_DEPENDENCIES}
 	 * generated links

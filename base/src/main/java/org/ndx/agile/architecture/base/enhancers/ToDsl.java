@@ -77,15 +77,6 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 		return Integer.MAX_VALUE - 1;
 	}
 
-	@Override
-	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
-		if (toDslEnabled) {
-			architecture = String.format("workspace \"%s\" {", workspace.getName());
-			architecture+= propertiesToDsl(1, workspace.getProperties());
-		}
-		return toDslEnabled;
-	}
-
 	/**
 	 * Convert this set of properties into Structurizr DSL properties
 	 * @param indentCount
@@ -96,8 +87,17 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 			return "";
 		String tabs = StringUtils.repeat('\t', indentCount);
 		return properties.entrySet().stream()
-				.map(entry -> String.format("%s%s %s", tabs+"\t", entry.getKey(), entry.getValue()))
+				.map(entry -> String.format("%s\"%s\" \"%s\"", tabs+"\t", entry.getKey(), entry.getValue()))
 				.collect(Collectors.joining("\n", "\n"+tabs+"properties {\n", "\n"+tabs+"}\n"));
+	}
+
+	@Override
+	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
+		if (toDslEnabled) {
+			architecture = String.format("workspace \"%s\" {\n", workspace.getName());
+			architecture+= propertiesToDsl(1, workspace.getProperties());
+		}
+		return toDslEnabled;
 	}
 
 	@Override
@@ -168,6 +168,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 	@Override
 	public void endVisit(Workspace workspace, OutputBuilder outputBuilder) {
 		if (toDslEnabled) {
+			architecture += "}";
 			try {
 				StringBuilder builder = new StringBuilder(architecture);
 				dslTargetFile.getParentFile().mkdirs();
@@ -229,7 +230,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 			try {
 				String viewsDeclaration = IOUtils.toString(getClass().getResourceAsStream("ToDSL.default.views.dsl"),
 						"UTF-8");
-				architecture += "\t\tviews {\n";
+				architecture += "\tviews {\n";
 				architecture += viewsDeclaration;
 			} catch (IOException e) {
 				throw new UnableToBuildDslException("Unable to read pseudo-standard view header file", e);
@@ -245,7 +246,33 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 
 	@Override
 	public void endVisit(View s, OutputBuilder builder) {
-		logger.warning(String.format("View to DSL isn't yet supported, so view %s is ignored", s));
+		String PLACEHOLDER = "\t\t\tWARNING: Include and autolayout can't be infered from static view content, so you'll have to set that yourself\n\t\t}\n";
+		if(s instanceof ComponentView) {
+			ComponentView c = (ComponentView) s;
+			architecture += String.format("\t\tcomponent \"%s\" \"%s\" \"%s\" {\n"+PLACEHOLDER, 
+					asVariableName(c.getContainer()),
+					c.getKey(),
+					c.getDescription());
+		} else if(s instanceof ContainerView) {
+			ContainerView c = (ContainerView) s;
+			architecture += String.format("\t\tcontainer \"%s\" \"%s\" \"%s\" {\n"+PLACEHOLDER, 
+					asVariableName(c.getSoftwareSystem()),
+					c.getKey(),
+					c.getDescription());
+		} else if(s instanceof SystemContextView) {
+			SystemContextView c = (SystemContextView) s;
+			architecture += String.format("\t\tsystemContext \"%s\" \"%s\" \"%s\" {\n"+PLACEHOLDER, 
+					asVariableName(c.getSoftwareSystem()),
+					c.getKey(),
+					c.getDescription());
+		} else if(s instanceof SystemLandscapeView) {
+			SystemLandscapeView c = (SystemLandscapeView) s;
+			architecture += String.format("\t\tsystemLandscape \"%s\" \"%s\" {\n"+PLACEHOLDER, 
+					c.getKey(),
+					c.getDescription());
+		} else {
+			logger.warning(String.format("View to DSL isn't yet supported for given view, so view %s is ignored", s));
+		}
 	}
 
 	@Override
