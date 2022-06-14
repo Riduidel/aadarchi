@@ -45,11 +45,6 @@ public class ExposeMavenPropertiesAsConfigProperties implements ConfigSource {
 	@Override
 	public String getPropertyValue(String key) {
 		try {
-			// Property key may contain a suffix containing the DeltaSpike ProjectStage value.
-			// If so, remove it prior to evaluation
-			if(key.endsWith(projectStage.toString())) {
-				key = key.substring(0, key.indexOf("."+projectStage.toString()));
-			}
 			// Seems like evaluator wants the "${" maven uses to detect variables, so let's add it (if not already present)
 			if(!key.contains("${")) {
 				key = "${"+key+"}";

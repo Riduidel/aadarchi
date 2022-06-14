@@ -14,6 +14,8 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.ViewEnhancer;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.DiagramsDir;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.Force;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.Component;
@@ -35,10 +37,10 @@ import com.structurizr.view.ViewSet;
 public class GraphEmitter implements ViewEnhancer {
 	@Inject Logger logger;
 	File destination;
-	@Inject public void setDestination(@ConfigProperty(name = ModelElementKeys.AGILE_ARCHITECTURE_DIAGRAMS_PATH, defaultValue = "${basedir}/target/structurizr/diagrams") File destination) {
+	@Inject public void setDestination(@ConfigProperty(name = DiagramsDir.NAME, defaultValue = DiagramsDir.VALUE) File destination) {
 		this.destination = destination.getAbsoluteFile();
 	}
-	@Inject @ConfigProperty(name = "force", defaultValue = "false") boolean force;
+	@Inject @ConfigProperty(name = Force.NAME, defaultValue = Force.VALUE) boolean force;
 
 	@Inject 
 	@ConfigProperty(name = ModelElementKeys.PREFIX+"diagrams.layout", defaultValue = "LAYOUT_WITH_LEGEND")

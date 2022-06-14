@@ -1,1 +1,1 @@
-assert new File(basedir, "target/docs/pdf/index.pdf").exists()
+assert new File(basedir, "target/asciidoc/docs/pdf/index.pdf").exists()

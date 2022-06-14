@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -29,9 +31,9 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.IssueManagement;
-import org.apache.maven.model.Parent;
 import org.apache.maven.model.Profile;
 import org.apache.maven.model.Scm;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -41,6 +43,7 @@ import org.ndx.agile.architecture.base.ModelEnhancer;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
 import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
 
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
@@ -278,6 +281,8 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 
 	@Inject
 	Logger logger;
+	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) File basePath;
+
 	
 	/**
 	 * The maven reader used to read all poms
@@ -490,7 +495,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 					// We're not in our project, but in some parent. To go back to our project, we must add to that url
 					// all the children paths
 					url = url + children.stream().map(p -> p.getArtifactId()).collect(Collectors.joining("/"));
-					element.addProperty(ModelElementKeys.SCM_PROJECT, url);
+					element.addProperty(org.ndx.agile.architecture.base.enhancers.ModelElementKeys.Scm.PROJECT, url);
 					return false;
 				}
 			}
@@ -535,37 +540,57 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		return Optional.of(mavenProject);
 	}
 
+	/**
+	 * Tries to resolve path to something that can be an url.
+	 * In other words, when user enters a relative file path, tries to resolve that path to an existing
+	 * file then covnert that file to an url.
+	 * Otherwise, if input can be successfully parsed to an url 
+	 * @see #readMavenProject(String, URL)
+	 */
 	MavenProject readMavenProject(String pomPath) {
 		try {
 			URL url = new URL(pomPath);
-			try (InputStream input = url.openStream()) {
-				MavenProject mavenProject = new MavenProject(reader.read(input));
-				if(url.toString().startsWith("file:")) {
-					File file = FileUtils.toFile(url);
-					File parentDir = file.getParentFile().getParentFile();
-					// If returned pom declares a parent
-					if(mavenProject.getModel().getParent()!=null) {
-						// And we have a pom in parent directory
-						File parentPom = new File(parentDir, "pom.xml");
-						if(parentPom.exists()) {
-							// Load that pom
-							MavenProject parent = readMavenProject(parentPom.toURI().toString());
-							// And if artifactId matches, use it!
-							if(parent.getArtifactId().equals(mavenProject.getModel().getParent().getArtifactId())) {
-								mavenProject.setParent(parent);
-							}
-							// Obviously, we should use standard maven loading mechanism, but it won't be available until we become a maven plugin
+			return readMavenProject(pomPath, url);
+		} catch(MalformedURLException e) {
+			// Maybe it's a file, relative to this basePath
+			File potential = new File(basePath, pomPath);
+			if(potential.exists()) {
+				try {
+					return readMavenProject(pomPath, potential.toURL());
+				} catch (MalformedURLException e1) {
+					// No need to catch that one, because the parent catch clause will handle it
+				}
+			}
+			throw new MavenDetailsInfererException(String.format("Unable to read URL %s", pomPath), e);
+		}
+	}
+
+	private MavenProject readMavenProject(String pomPath, URL url) {
+		try (InputStream input = url.openStream()) {
+			MavenProject mavenProject = new MavenProject(reader.read(input));
+			if(url.toString().startsWith("file:")) {
+				File file = FileUtils.toFile(url);
+				File parentDir = file.getParentFile().getParentFile();
+				// If returned pom declares a parent
+				if(mavenProject.getModel().getParent()!=null) {
+					// And we have a pom in parent directory
+					File parentPom = new File(parentDir, "pom.xml");
+					if(parentPom.exists()) {
+						// Load that pom
+						MavenProject parent = readMavenProject(parentPom.toURI().toString());
+						// And if artifactId matches, use it!
+						if(parent.getArtifactId().equals(mavenProject.getModel().getParent().getArtifactId())) {
+							mavenProject.setParent(parent);
 						}
+						// Obviously, we should use standard maven loading mechanism, but it won't be available until we become a maven plugin
 					}
 				}
-				mavenProject.getProperties().put(MAVEN_POM_URL, pomPath);
-				mavenProject.getProperties().put(MAVEN_MODULE_DIR, pomPath.substring(0, pomPath.lastIndexOf('/') + 1));
-				return mavenProject;
-			} catch (XmlPullParserException | IOException e) {
-				throw new MavenDetailsInfererException(String.format("Unable to read stream from URL %s", pomPath), e);
 			}
-		} catch(MalformedURLException e) {
-			throw new MavenDetailsInfererException(String.format("Unable to read URL %s", pomPath), e);
+			mavenProject.getProperties().put(MAVEN_POM_URL, pomPath);
+			mavenProject.getProperties().put(MAVEN_MODULE_DIR, pomPath.substring(0, pomPath.lastIndexOf('/') + 1));
+			return mavenProject;
+		} catch (XmlPullParserException | IOException e) {
+			throw new MavenDetailsInfererException(String.format("Unable to read stream from URL %s", pomPath), e);
 		}
 	}
 

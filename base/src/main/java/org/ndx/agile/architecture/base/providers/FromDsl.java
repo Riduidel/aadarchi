@@ -21,7 +21,7 @@ public class FromDsl implements ArchitectureModelProvider {
 
 	private static final String WORKSPACE_DSL = ModelElementKeys.PREFIX + "dsl";
 	@Inject
-	@ConfigProperty(name = WORKSPACE_DSL, defaultValue = "src/architecture/resources/workspace.dsl") File workspace;
+	@ConfigProperty(name = WORKSPACE_DSL, defaultValue = "${project.basedir}/src/architecture/resources/workspace.dsl") File workspace;
 
 	@Override
 	public Workspace describeArchitecture() {

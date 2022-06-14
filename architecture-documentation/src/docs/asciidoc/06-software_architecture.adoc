@@ -2,14 +2,14 @@
 :chapter: Software%20Architecture
 include::_notify-bug-admonition.adoc[]
 
-[plantuml, {plantumldir}agile.architecture.containers, svg, opts="interactive"]     
+[plantuml, {plantumldir}system_containers, svg, opts="inline"]     
 ----
-include::{structurizrdir}/agile.architecture.containers.plantuml[]
+include::{structurizrdir}/system_containers.plantuml[]
 ----
 
-[plantuml, {plantumldir}agile.architecture.base.components, svg, opts="interactive"]     
+[plantuml, {plantumldir}base_components, svg, opts="inline"]     
 ----
-include::{structurizrdir}/agile.architecture.base.components.plantuml[]
+include::{structurizrdir}/base_components.plantuml[]
 ----
 
 **TODO**

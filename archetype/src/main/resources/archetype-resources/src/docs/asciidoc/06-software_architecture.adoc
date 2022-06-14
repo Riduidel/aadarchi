@@ -2,7 +2,7 @@
 :chapter: Software%20Architecture
 include::_notify-bug-admonition.adoc[]
 
-[plantuml, {plantumldir}software.system.containers, svg, opts="interactive"]     
+[plantuml, {plantumldir}software.system.containers, svg, opts="inline"]     
 ----
 include::{structurizrdir}/software.system.containers.plantuml[]
 ----

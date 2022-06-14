@@ -14,7 +14,7 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.AgileArchitectureSection;
 import org.ndx.agile.architecture.base.OutputBuilder;
 import org.ndx.agile.architecture.base.enhancers.ModelElementAdapter;
-import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.Scm;
 import org.ndx.agile.architecture.base.utils.StructurizrUtils;
 
 import com.structurizr.annotation.Component;
@@ -53,9 +53,9 @@ public class SCMLinkGenerator extends ModelElementAdapter {
 	 * @param builder
 	 */
 	void writeLinkFor(Element element, OutputBuilder builder) {
-		if(element.getProperties().containsKey(ModelElementKeys.SCM_PROJECT)) {
-			String elementProject = element.getProperties().get(ModelElementKeys.SCM_PROJECT);
-			String elementPath = element.getProperties().getOrDefault(ModelElementKeys.SCM_PATH, "");
+		if(element.getProperties().containsKey(Scm.PROJECT)) {
+			String elementProject = element.getProperties().get(Scm.PROJECT);
+			String elementPath = element.getProperties().getOrDefault(Scm.PATH, "");
 			Optional<SCMHandler> usableHandler = scmHandlers.stream()
 				.filter(handler -> handler.canHandle(elementProject))
 				.findFirst()

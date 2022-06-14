@@ -83,7 +83,7 @@ J'aurais pu prendre un projet externe, mais ça n'aurait pas été drôle. J'ai 
 
 === Contexte
 
-[plantuml, {plantumldir}SystemContext, svg, opts="interactive"]     
+[plantuml, {plantumldir}SystemContext, svg, opts="inline"]     
 ----
 include::{structurizrdir}/SystemContext.plantuml[]
 ----
@@ -100,7 +100,7 @@ Et si j'utilise les mêmes couleurs que celles que présente Simon Brown, ça n'
 [%notitle]
 === Conteneurs
 
-[plantuml, {plantumldir}agile.architecture.containers, svg, opts="interactive", style="max-width:90%"]
+[plantuml, {plantumldir}agile.architecture.containers, svg, opts="inline", style="max-width:90%"]
 ----
 include::{structurizrdir}/agile.architecture.containers.plantuml[]
 ----
@@ -119,7 +119,7 @@ include::{structurizrdir}/agile.architecture.containers.plantuml[]
 [%notitle]
 === Composants
 
-[plantuml, {plantumldir}agile.architecture.base.components, svg, opts="interactive", style="max-height:90%"]
+[plantuml, {plantumldir}agile.architecture.base.components, svg, opts="inline", style="max-height:90%"]
 ----
 include::{structurizrdir}/agile.architecture.base.components.plantuml[]
 ----
