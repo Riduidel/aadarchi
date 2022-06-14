@@ -12,6 +12,8 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.plugin;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.version;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -66,6 +68,19 @@ public class LiveReload extends AbstractMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		int port = 35729;
+		ServerSocket test = null;
+
+		try {
+			test = new ServerSocket(port);
+		}catch(Exception e) {
+			System.out.println("port not available");
+		}
+		try {
+			assert test != null;
+			test.close();
+		}
+        catch (IOException ignored) {
+		}
 
 		Path docroot = FileSystems.getDefault().getPath(mavenProject.getBuild().getDirectory());
 		Executors.newSingleThreadExecutor().execute(() -> {
@@ -113,12 +128,17 @@ public class LiveReload extends AbstractMojo {
 		// TODO add resources
 		mavenProject.getResources().stream()
 			.map(resource -> null);
-		
-		List<Element> elements = files.stream()
-		.filter(File::exists)
-		.map(File::getAbsolutePath)
-		.map(text -> element(name("watch"), element(name("directory"), text)))
-		.collect(Collectors.toList());
-		return elements.toArray(new Element[elements.size()]);
+
+		return files.stream()
+				.filter(File::exists)
+				.map(File::getAbsolutePath)
+				.map(text -> element(name("watch"), element(name("directory"), text))).toArray(Element[]::new);
+
+//		List<Element> elements = files.stream()
+//				.filter(File::exists)
+//				.map(File::getAbsolutePath)
+//				.map(text -> element(name("watch"), element(name("directory"), text)))
+//				.collect(Collectors.toList());
+//		return elements.toArray(new Element[elements.size()]);
 	}
 }
