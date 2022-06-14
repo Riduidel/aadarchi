@@ -1,5 +1,24 @@
 package org.ndx.agile.architecture.documentation.system.maven.plugin;
 
+import static org.twdata.maven.mojoexecutor.MojoExecutor.artifactId;
+import static org.twdata.maven.mojoexecutor.MojoExecutor.configuration;
+import static org.twdata.maven.mojoexecutor.MojoExecutor.element;
+import static org.twdata.maven.mojoexecutor.MojoExecutor.executeMojo;
+import static org.twdata.maven.mojoexecutor.MojoExecutor.executionEnvironment;
+import static org.twdata.maven.mojoexecutor.MojoExecutor.goal;
+import static org.twdata.maven.mojoexecutor.MojoExecutor.groupId;
+import static org.twdata.maven.mojoexecutor.MojoExecutor.name;
+import static org.twdata.maven.mojoexecutor.MojoExecutor.plugin;
+import static org.twdata.maven.mojoexecutor.MojoExecutor.version;
+
+import java.io.File;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
@@ -10,12 +29,9 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.WorkspaceDsl;
+import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
 
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.util.concurrent.Executors;
-
-import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 import net_alchim31_livereload.LRServer; //#from net.alchim31:livereload-jvm:0.2.0
 
 @Mojo(name = "livereload", defaultPhase = LifecyclePhase.PACKAGE)
@@ -29,12 +45,29 @@ public class LiveReload extends AbstractMojo {
 
 	@Component
 	private BuildPluginManager pluginManager;
+	/**
+	 * Input folder where asciidoc files are stored.
+	 */
+	@Parameter(name="html-docs-source-dir", defaultValue="${project.basedir}/src/docs/asciidoc", property = "asciidoc.source.docs.directory")
+	private File htmlDocsSourceDir;
+	/**
+	 * Input folder where asciidoc files for slides are stored
+	 */
+	@Parameter(name="html-slides-source-dir", defaultValue="${project.basedir}/src/slides/asciidoc", property = "asciidoc.source.slides.directory")
+	private File htmlSlidesSourceDir;
+	/**
+	 * Input workspace.dsl file
+	 */
+	@Parameter(name="architecture-dsl", defaultValue=WorkspaceDsl.VALUE, property = WorkspaceDsl.NAME)
+	private File architectureDsl;
+	@Parameter(defaultValue="${project.build.sourceDirectory}", readonly = true, required = true)
+	private File javaSourcesDir;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		int port = 35729;
 
-		Path docroot = FileSystems.getDefault().getPath(mavenProject.getBuild().getOutputDirectory());
+		Path docroot = FileSystems.getDefault().getPath(mavenProject.getBuild().getDirectory());
 		Executors.newSingleThreadExecutor().execute(() -> {
 			try {
 				new LRServer(port, docroot).run(); // == start() + join()
@@ -71,22 +104,21 @@ public class LiveReload extends AbstractMojo {
 	}
 
 	private Element[] watches() {
-		Element[] watch = Element.asList;
-				element(name("watch"),
-				element(name("directory"), "${project.basedir}/src/architecture/resources")
-		),
-		element(name("watch"),
-				element(name("directory"), "${project.basedir}/src/main/java")
-		),
-		element(name("watch"), 
-				element(name("directory"), "${project.basedir}/src/main/resources")
-		),
-		element(name("watch"),
-				element(name("directory"), "${asciidoc.source.docs.directory}")
-		),
-		element(name("watch"),
-				element(name("directory"), "${asciidoc.source.slides.directory}")
-		)];
-				return watch;
+		List<File> files = Arrays.asList(
+			javaSourcesDir,
+			htmlDocsSourceDir,
+			htmlSlidesSourceDir,
+			architectureDsl.getParentFile()
+			);
+		// TODO add resources
+		mavenProject.getResources().stream()
+			.map(resource -> null);
+		
+		List<Element> elements = files.stream()
+		.filter(File::exists)
+		.map(File::getAbsolutePath)
+		.map(text -> element(name("watch"), element(name("directory"), text)))
+		.collect(Collectors.toList());
+		return elements.toArray(new Element[elements.size()]);
 	}
 }
