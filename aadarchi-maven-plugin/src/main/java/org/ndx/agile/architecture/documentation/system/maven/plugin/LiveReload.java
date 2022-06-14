@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 import net_alchim31_livereload.LRServer; //#from net.alchim31:livereload-jvm:0.2.0
 
-@Mojo(name = "livereload", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
+@Mojo(name = "livereload", defaultPhase = LifecyclePhase.PACKAGE)
 public class LiveReload extends AbstractMojo {
 
 	@Component
@@ -53,18 +53,7 @@ public class LiveReload extends AbstractMojo {
 				configuration(
 						element(name("touchFile"), "target/watcher.touchfile"),
 						element(name("watches"),
-								element(name("watch"),
-										element(name("directory"), "${project.basedir}/src/main/java")
-								),
-								element(name("watch"),
-										element(name("directory"), "${project.basedir}/src/main/resources")
-								),
-								element(name("watch"),
-										element(name("directory"), "${asciidoc.source.docs.directory}")
-								),
-								element(name("watch"),
-										element(name("directory"), "${asciidoc.source.slides.directory}")
-								)
+								watches()
 						),
 						element(name("goals"),
 								element(name("goal"), "prepare-package"),
@@ -79,5 +68,25 @@ public class LiveReload extends AbstractMojo {
 				)
 		);
 
+	}
+
+	private Element[] watches() {
+		Element[] watch = Element.asList;
+				element(name("watch"),
+				element(name("directory"), "${project.basedir}/src/architecture/resources")
+		),
+		element(name("watch"),
+				element(name("directory"), "${project.basedir}/src/main/java")
+		),
+		element(name("watch"), 
+				element(name("directory"), "${project.basedir}/src/main/resources")
+		),
+		element(name("watch"),
+				element(name("directory"), "${asciidoc.source.docs.directory}")
+		),
+		element(name("watch"),
+				element(name("directory"), "${asciidoc.source.slides.directory}")
+		)];
+				return watch;
 	}
 }
