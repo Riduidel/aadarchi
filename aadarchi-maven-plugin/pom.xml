@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>system</artifactId>
 		<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
-		<version>0.1.0</version>
+		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
