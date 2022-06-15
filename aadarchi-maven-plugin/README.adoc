@@ -17,6 +17,10 @@ As a consequence, this maven plugin provides mojos for each steps of documentati
 == Available mojos
 
 * `generate-model` invokes the `ArchitectureDocumentationBuilder` class with elements from CLASSPATH added for easier introspection.
+* `generate-html-docs` invokes the asciidoctor-maven-plugin with a valid configuration for generating HTML documentation from documents
+* `generate-pdf-docs` invokes the asciidoctor-maven-plugin with a valid configuration for generating PDF documentation from documents
+* `generate-html-slides` invokes the asciidoctor-maven-plugin with a valid configuration for generating HTML documentation from slides
+* `livereload` packages both a livereload server and the fizzed-watcher-maven-plugin to be able to livereload generated files
 
 == Developing
 
