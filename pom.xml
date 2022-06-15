@@ -16,7 +16,6 @@
 		<maven.compiler.release>11</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<issues.url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</issues.url>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-client -->
 		<version.structurizr.client>1.12.1</version.structurizr.client>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-plantuml -->
@@ -32,7 +31,7 @@
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
-		<url>${issues.url}</url>
+		<url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</url>
 	</issueManagement>
 
 	<developers>

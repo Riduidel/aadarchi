@@ -21,7 +21,7 @@
     </properties>
 
     <issueManagement>
-        <url>${issues.url}</url>
+        <url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</url>
     </issueManagement>
 
     <!-- We need the rubygems releases to use Kroki and asciidoc-revealjs

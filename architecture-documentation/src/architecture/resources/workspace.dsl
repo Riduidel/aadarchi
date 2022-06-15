@@ -15,7 +15,7 @@ workspace "agile-architecture-documentation-system" {
 					"agile.architecture.scm.path" "base"
 					"agile.architecture.maven.pom" "../base/pom.xml"
 					"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
-					"agile.architecture.issue.manager" "${issues.url}"
+					"agile.architecture.issue.manager" "https://github.com/Riduidel/agile-architecture-documentation-system/issues"
 					"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:base"
 				}
 				ArchitectureEnhancer = component "ArchitectureEnhancer" "Invokes all enhancers with respect for their respective priorities" "Java, CDI"
@@ -25,7 +25,7 @@ workspace "agile-architecture-documentation-system" {
 						"agile.architecture.scm.path" "gitlab-scm-handler"
 						"agile.architecture.maven.pom" "../gitlab-scm-handler/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
-						"agile.architecture.issue.manager" "${issues.url}"
+						"agile.architecture.issue.manager" "https://github.com/Riduidel/agile-architecture-documentation-system/issues"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:gitlab-scm-handler"
 					}
 				}
@@ -36,7 +36,7 @@ workspace "agile-architecture-documentation-system" {
 						"agile.architecture.scm.path" "maven-metadata-inferer"
 						"agile.architecture.maven.pom" "../cdi-config-extension/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
-						"agile.architecture.issue.manager" "${issues.url}"
+						"agile.architecture.issue.manager" "https://github.com/Riduidel/agile-architecture-documentation-system/issues"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:cdi-config-extension"
 					}
 				}
@@ -46,7 +46,7 @@ workspace "agile-architecture-documentation-system" {
 						"agile.architecture.scm.path" "maven-metadata-inferer"
 						"agile.architecture.maven.pom" "../maven-metadata-inferer/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
-						"agile.architecture.issue.manager" "${issues.url}"
+						"agile.architecture.issue.manager" "https://github.com/Riduidel/agile-architecture-documentation-system/issues"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:maven-metadata-inferer"
 					}
 				}
@@ -60,7 +60,7 @@ workspace "agile-architecture-documentation-system" {
 						"agile.architecture.scm.path" "github-scm-handler"
 						"agile.architecture.maven.pom" "../github-scm-handler/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
-						"agile.architecture.issue.manager" "${issues.url}"
+						"agile.architecture.issue.manager" "https://github.com/Riduidel/agile-architecture-documentation-system/issues"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:github-scm-handler"
 					}
 				}
@@ -71,7 +71,7 @@ workspace "agile-architecture-documentation-system" {
 						"agile.architecture.scm.path" "adr-tickets-extractor"
 						"agile.architecture.maven.pom" "../adr-tickets-extractor/pom.xml"
 						"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
-						"agile.architecture.issue.manager" "${issues.url}"
+						"agile.architecture.issue.manager" "https://github.com/Riduidel/agile-architecture-documentation-system/issues"
 						"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:adr-tickets-extractor"
 					}
 				}
@@ -81,7 +81,7 @@ workspace "agile-architecture-documentation-system" {
 				properties {
 					"agile.architecture.scm.project" "https://github.com/Riduidel/agile-architecture-documentation-system.git"
 					"agile.architecture.scm.path" "archetype"
-					"agile.architecture.issue.manager" "${issues.url}"
+					"agile.architecture.issue.manager" "https://github.com/Riduidel/agile-architecture-documentation-system/issues"
 					"agile.architecture.maven.pom" "../archetype/pom.xml"
 					"agile.architecture.maven.coordinates" "io.github.Riduidel.agile-architecture-documentation-system:archetype"
 				}
