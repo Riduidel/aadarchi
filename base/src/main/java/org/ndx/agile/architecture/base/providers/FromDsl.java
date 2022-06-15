@@ -9,7 +9,7 @@ import javax.inject.Named;
 
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.agile.architecture.base.ArchitectureModelProvider;
-import org.ndx.agile.architecture.base.enhancers.ModelElementKeys;
+import org.ndx.agile.architecture.base.enhancers.ModelElementKeys.ConfigProperties.WorkspaceDsl;
 
 import com.structurizr.Workspace;
 import com.structurizr.dsl.StructurizrDslParser;
@@ -19,9 +19,8 @@ import com.structurizr.dsl.StructurizrDslParserException;
 @Named("Using workspace.dsl")
 public class FromDsl implements ArchitectureModelProvider {
 
-	private static final String WORKSPACE_DSL = ModelElementKeys.PREFIX + "dsl";
 	@Inject
-	@ConfigProperty(name = WORKSPACE_DSL, defaultValue = "${project.basedir}/src/architecture/resources/workspace.dsl") File workspace;
+	@ConfigProperty(name = WorkspaceDsl.NAME, defaultValue = WorkspaceDsl.VALUE) File workspace;
 
 	@Override
 	public Workspace describeArchitecture() {
@@ -31,7 +30,7 @@ public class FromDsl implements ArchitectureModelProvider {
 					+ "We tried to read file %s but there was nothing.\n"
 					+ "Please either move that file into that location or set the property %s",
 					workspace.getAbsolutePath(),
-					WORKSPACE_DSL));
+					WorkspaceDsl.NAME));
 		}
 		StructurizrDslParser parser = new StructurizrDslParser();
 		try {

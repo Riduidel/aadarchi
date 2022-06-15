@@ -34,6 +34,10 @@ public interface ModelElementKeys {
 	 *
 	 */
 	public static interface ConfigProperties {
+		public static interface WorkspaceDsl {
+			public String NAME = ModelElementKeys.PREFIX + "dsl";
+			public String VALUE = "${project.basedir}/src/architecture/resources/workspace.dsl";
+		}
 		public static interface AsciidocSourceDir {
 			public String NAME = "asciidoc.source.docs.directory";
 			public String VALUE = "${project.basedir}/src/docs/asciidoc";

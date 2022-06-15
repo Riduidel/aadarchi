@@ -12,7 +12,7 @@
 	<name>Agile Architecture Documentation System : Maven plugin</name>
 
 	<dependencies>
-	<!-- used to invoke asciidoctor-maven-plugin in a controlled way -->
+		<!-- used to invoke asciidoctor-maven-plugin in a controlled way -->
 		<dependency>
 			<groupId>org.twdata.maven</groupId>
 			<artifactId>mojo-executor</artifactId>
@@ -39,6 +39,11 @@
 			<artifactId>base</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>net.alchim31</groupId>
+			<artifactId>livereload-jvm</artifactId>
+			<version>0.2.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -51,40 +56,52 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-invoker-plugin</artifactId>
-				<version>1.10</version>
-				<configuration>
-					<debug>true</debug>
-					<scriptVariables>
-						<pluginVersion>${project.version}</pluginVersion>
-					</scriptVariables>
-					<projectsDirectory>src/it</projectsDirectory>
-					<pomIncludes>
-						<pomInclude>**/pom.xml</pomInclude>
-					</pomIncludes>
-					<!-- Without this configuration, projects are run directly from src, which means no interpolation is done -->
-					<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-					<!-- Local repository used for tests -->
-					<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-					<!-- The settings file will fasten build download according to https://maven.apache.org/plugins/maven-invoker-plugin/examples/fast-use.html -->
-					<settingsFile>src/it/settings.xml</settingsFile>
-					<postBuildHookScript>verify.groovy</postBuildHookScript>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<!-- Invoking install prior to running tests will make sure this artifact is correctly copied
-                            (see https://maven.apache.org/plugins/maven-invoker-plugin/examples/install-artifacts.html) -->
-							<goal>install</goal>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>integration-tests</id>
+			<activation>
+				<property>
+					<name>!skip_integration</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-invoker-plugin</artifactId>
+						<version>1.10</version>
+						<configuration>
+							<debug>true</debug>
+							<scriptVariables>
+								<pluginVersion>${project.version}</pluginVersion>
+							</scriptVariables>
+							<projectsDirectory>src/it</projectsDirectory>
+							<pomIncludes>
+								<pomInclude>**/pom.xml</pomInclude>
+							</pomIncludes>
+							<!-- Without this configuration, projects are run directly from src, which means no interpolation is done -->
+							<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+							<!-- Local repository used for tests -->
+							<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+							<!-- The settings file will fasten build download according to https://maven.apache.org/plugins/maven-invoker-plugin/examples/fast-use.html -->
+							<settingsFile>src/it/settings.xml</settingsFile>
+							<postBuildHookScript>verify.groovy</postBuildHookScript>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<!-- Invoking install prior to running tests will make sure this artifact is correctly copied
+                            (see https://maven.apache.org/plugins/maven-invoker-plugin/examples/install-artifacts.html) -->
+									<goal>install</goal>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 
+		</profile>
+	</profiles>
 </project>
