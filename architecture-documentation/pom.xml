@@ -106,14 +106,8 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>com.fizzed</groupId>
-					<artifactId>fizzed-watcher-maven-plugin</artifactId>
-					<version>1.0.6</version>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.6.1</version>
 					<configuration>
 						<release>${maven.compiler.release}</release>
 					</configuration>
@@ -121,11 +115,11 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>3.0.0-M1</version>
 					<configuration>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
 						<localCheckout>true</localCheckout>
 						<arguments>-Dasciidoc.documents.hide.bug.report=true</arguments>
+						<releaseProfiles>settings-agile-architecture,release</releaseProfiles>
 					</configuration>
 				</plugin>
 			</plugins>
