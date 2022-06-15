@@ -7,7 +7,7 @@ how to document architecture of a software system with the minimal effort and th
 As a consequence, this product tries to help the architect in all possible ways.
 
 == Context diagram
-// This is an example diagram to show how to include a structurizr-generated diagram
+
 [plantuml, {plantumldir}SystemContext, svg, opts="inline"]
 ----
 include::{structurizrdir}/SystemContext.plantuml[]
