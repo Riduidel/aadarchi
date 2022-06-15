@@ -16,12 +16,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -138,15 +139,16 @@ public class LiveReload extends AbstractMojo {
 	}
 
 	private Element[] watches() {
-		List<File> files = Arrays.asList(
+		List<File> files = new ArrayList<File>(Arrays.asList(
 			javaSourcesDir,
 			htmlDocsSourceDir,
 			htmlSlidesSourceDir,
 			architectureDsl.getParentFile()
-			);
-		// TODO add resources
-		mavenProject.getResources().stream()
-			.map(resource -> null);
+			));
+		
+		for(Resource r : mavenProject.getResources()) {
+			files.add(new File(r.getDirectory()));
+		}
 
 		return files.stream()
 				.filter(File::exists)
