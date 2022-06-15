@@ -65,23 +65,24 @@ public class LiveReload extends AbstractMojo {
 	@Parameter(defaultValue="${project.build.sourceDirectory}", readonly = true, required = true)
 	private File javaSourcesDir;
 
+	/**
+	 * Port used for livereload of generated documentation
+	 */
 	@Parameter(name="livereload-port", defaultValue="35729")
-	private int LivereloadPort;
+	private int livereloadPort;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		int port = LivereloadPort;
-
-		try (ServerSocket test = new ServerSocket(port)){
-			getLog().debug(String.format("port %d can be used", port));
+		try (ServerSocket test = new ServerSocket(livereloadPort)){
+			getLog().debug(String.format("port %d can be used", livereloadPort));
 		} catch (IOException e) {
-			throw new MojoFailureException(String.format("port %d not available", port));
+			throw new MojoFailureException(String.format("port %d not available", livereloadPort));
 		}
 
 		Path docroot = FileSystems.getDefault().getPath(mavenProject.getBuild().getDirectory());
 		Executors.newSingleThreadExecutor().execute(() -> {
 			try {
-				new LRServer(port, docroot).run(); // == start() + join()
+				new LRServer(livereloadPort, docroot).run(); // == start() + join()
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
