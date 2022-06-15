@@ -340,7 +340,7 @@
 							<!-- This profile MUST be defined in settings.xml and contains the 
 								various tokens (GitHub, GitLab and so on) -->
 							<releaseProfiles>settings-agile-architecture,release</releaseProfiles>
-							<arguments>-Dagile.archiecture.github.token=${agile.archiecture.github.token}</arguments>
+							<arguments>-Dagile.architecture.github.token=${agile.archiecture.github.token}</arguments>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<localCheckout>true</localCheckout>
 							<goals>deploy</goals>
