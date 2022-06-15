@@ -21,7 +21,7 @@ import com.structurizr.annotation.UsesComponent;
 /**
  * Main class of agile architecture documentation system.
  * This will start a CDI container and, in this CDI container, instanciate this object.
- * THis instanciation will load {@link #provider} and {@link #enhancer} to generate all asciidoc required content.
+ * THis instanciation will load {@link #enhancer} to generate all asciidoc required content.
  * @author nicolas-delsaux
  *
  */

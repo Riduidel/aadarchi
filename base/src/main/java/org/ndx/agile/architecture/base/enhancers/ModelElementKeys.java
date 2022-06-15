@@ -27,8 +27,8 @@ public interface ModelElementKeys {
 	 * 
 	 * Each contained interface should define exactly two static strings
 	 * <ul>
-	 * <li>NAME</li> is the config property name
-	 * <li>VALUE</li> is the config property default value
+	 * <li>NAME is the config property name
+	 * <li>VALUE is the config property default value
 	 * </ul>
 	 * @author nicolas-delsaux
 	 *
