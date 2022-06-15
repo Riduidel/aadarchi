@@ -313,13 +313,6 @@
 			<!-- This profile should be invoked at the process-resources phase to 
 				correctly trigger the remaining ones ! -->
 			<id>livereload</id>
-			<dependencies>
-				<dependency>
-					<groupId>net.alchim31</groupId>
-					<artifactId>livereload-jvm</artifactId>
-					<version>0.2.0</version>
-				</dependency>
-			</dependencies>
 			<build>
 				<defaultGoal>package</defaultGoal>
 				<plugins>
