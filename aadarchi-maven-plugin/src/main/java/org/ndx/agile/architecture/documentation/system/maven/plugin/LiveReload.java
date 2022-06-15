@@ -70,6 +70,24 @@ public class LiveReload extends AbstractMojo {
 	 */
 	@Parameter(name="livereload-port", defaultValue="35729")
 	private int livereloadPort;
+	
+	/**
+	 * List of goals to execute after live-reload.
+	 * As it is a list, the default value is not provided in a way compatible with maven annotation.
+	 * 
+	 * The default value for that goal is
+	 * 
+	 * <ul>
+	 * <li>prepare-package</li>
+	 * <li>"io.github.Riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-docs"</li>
+	 * <li>"io.github.Riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-slides"</li>
+	 * </ul>
+	 */
+	@Parameter(name="goals-to-execute")
+	private List<String> goalsToExecute = Arrays.asList("prepare-package",
+			"io.github.Riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-docs",
+			"io.github.Riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-slides"
+			);
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -101,9 +119,7 @@ public class LiveReload extends AbstractMojo {
 								watches()
 						),
 						element(name("goals"),
-								element(name("goal"), "prepare-package"),
-								element(name("goal"), "org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc@generate-slides"),
-								element(name("goal"), "org.asciidoctor:asciidoctor-maven-plugin:process-asciidoc@generate-html-doc")
+								goals()
 						)
 				),
 				executionEnvironment(
@@ -112,7 +128,13 @@ public class LiveReload extends AbstractMojo {
 						pluginManager
 				)
 		);
-
+	}
+	
+	private Element[] goals() {
+		// First, get our artifact name
+		return goalsToExecute.stream()
+				.map(text -> element(name("goal"), text))
+				.toArray(Element[]::new);
 	}
 
 	private Element[] watches() {
