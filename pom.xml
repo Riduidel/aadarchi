@@ -341,7 +341,7 @@
 							<releaseProfiles>settings-agile-architecture,release</releaseProfiles>
 							<arguments>-Dagile.architecture.github.token=${agile.architecture.github.token}</arguments>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
-							<localCheckout>true</localCheckout>
+							<localCheckout>false</localCheckout>
 							<goals>deploy</goals>
 						</configuration>
 					</plugin>
