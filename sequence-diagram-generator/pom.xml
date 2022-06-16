@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>sequence-diagram-generator</artifactId>
-	<name>Agile Architecture Documentation System : Sequence diagram generator</name>
+	<name>Aadarchi : Sequence diagram generator</name>
 	<description>Generates sequence diagrams for components in the containers opting in for it. Model elements in those sequence diagrams should also be indicated by containers.</description>
 	<dependencies>
 		<dependency>
-			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>base</artifactId>
 			<version>${project.version}</version>
 		</dependency>

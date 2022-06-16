@@ -2,19 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        <groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+        <groupId>io.github.Riduidel.aadarchi</groupId>
         <version>0.0.12-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>simple</artifactId>
-    <name>Agile Architecture Documentation System : System documentation generator</name>
-    <description>Using agile architecture documentation system to document agile archiecture documentation system</description>
+    <name>Aadarchi : System documentation generator</name>
+    <description>Using Aadarchi to document agile archiecture documentation system</description>
     <properties>
         <version.java>11</version.java>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <asciidoctor.highlighter>highlightjs</asciidoctor.highlighter>
-        <agile.architecture.main.class>org.ndx.agile.architecture.base.ArchitectureDocumentationBuilder</agile.architecture.main.class>
+        <aadarchi.main.class>org.ndx.aadarchi.base.ArchitectureDocumentationBuilder</aadarchi.main.class>
         <!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
         <version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
         <!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
@@ -22,11 +22,11 @@
     </properties>
 
     <issueManagement>
-        <url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</url>
+        <url>https://github.com/Riduidel/aadarchi/issues</url>
     </issueManagement>
 
     <!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
-	See https://github.com/Riduidel/agile-architecture-documentation-system/issues/159 for the weird protocol -->
+	See https://github.com/Riduidel/aadarchi/issues/159 for the weird protocol -->
     <repositories>
         <repository>
             <id>mavengems</id>

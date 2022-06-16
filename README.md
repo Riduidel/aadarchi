@@ -1,9 +1,9 @@
-<h1 align="center">Welcome to Agile architecture documentation archetype 👋</h1>
+<h1 align="center">Welcome to Aadarchi 👋</h1>
 <p>
-	<a href="https://github.com/Riduidel/agile-architecture-documentation-system/actions?query=workflow%3A%22Java+CI+with+Maven%22">
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/Riduidel/agile-architecture-documentation-system/Java CI with Maven">
+	<a href="https://github.com/Riduidel/aadarchi/actions?query=workflow%3A%22Java+CI+with+Maven%22">
+<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/aadarchi/Java CI with Maven">
 	</a>
-  <a href="https://github.com/Riduidel/agile-architecture-documentation-system/releases" target="_blank"><img src="https://badge.fury.io/gh/Riduidel%2Fagile-architecture-documentation-system.svg" alt="GitHub version"></a>
+  <a href="https://github.com/Riduidel/aadarchi/releases" target="_blank"><img src="https://badge.fury.io/gh/Riduidel%2Faadarchi.svg" alt="GitHub version"></a>
   <a href="https://twitter.com/Riduidel" target="_blank">
     <img alt="Twitter: Riduidel" src="https://img.shields.io/twitter/follow/Riduidel.svg?style=social" />
   </a>
@@ -14,14 +14,19 @@
 ## Install
 
 You can use the archetype by running this maven-friendly 😅command.
-Don't forget to replace `${VERSION}` by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Fagile-architecture-documentation-system.svg)
+Don't forget to replace `${VERSION}` by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)
+
+```sh
+mvn archetype:generate -DarchetypeGroupId=io.github.Riduidel.aadarchi -DarchetypeArtifactId=archetype -DarchetypeVersion=${VERSION}
+```
+or, if you want to use version 0.1.0 or any older version
 
 ```sh
 mvn archetype:generate -DarchetypeGroupId=io.github.Riduidel.agile-architecture-documentation-system -DarchetypeArtifactId=archetype -DarchetypeVersion=${VERSION}
 ```
 
 This will ask you a few questions and generate the project.
-Finally, don't forget to replace the value of `agile-architecture-version` maven property by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Fagile-architecture-documentation-system.svg)
+Finally, don't forget to replace the value of `aadarchi-version` maven property by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)
 
 ## Usage
 
@@ -87,7 +92,7 @@ Can be performed only on a machine having Nicolas Delsaux GPG key allowing to si
 Don't forget to activate the `-Prelease` profile, which enable all the good things (Sonatype staging, signing, ...)
 
 ## Architecture
-Way more details are available in the [architecture documentation (which uses this system, obviously)](https://riduidel.github.io/agile-architecture-documentation-system/).
+Way more details are available in the [architecture documentation (which uses this system, obviously)](https://riduidel.github.io/aadarchi/).
 
 ## Author
 
@@ -98,7 +103,7 @@ Way more details are available in the [architecture documentation (which uses th
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Riduidel/agile-architecture-documentation-system/issues).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/Riduidel/aadarchi/issues).
 
 ## Show your support
 

@@ -2,20 +2,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>archetype</artifactId>
 	<packaging>maven-archetype</packaging>
 	
-	<name>Agile Architecture Documentation System : Archetype</name>
+	<name>Aadarchi : Archetype</name>
 	<description>Easily create configuration to document your project with this archetype</description>
 
 	<dependencies>
 		<!-- This dependency ensures the build order is the one we want (in other words it allows base to build before archetype) -->
 		<dependency>
-			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>base</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
@@ -38,7 +38,7 @@
 				<configuration>
 					<properties>
 						<!-- Used in integration test to generate the pom -->
-						<agile-architecture-version>${project.version}</agile-architecture-version>
+						<aadarchi-version>${project.version}</aadarchi-version>
 					</properties>
 				</configuration>
 			</plugin>

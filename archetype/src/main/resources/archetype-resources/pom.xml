@@ -10,10 +10,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<agile.architecture.main.class>org.ndx.agile.architecture.base.ArchitectureDocumentationBuilder</agile.architecture.main.class>
+		<aadarchi.main.class>org.ndx.aadarchi.base.ArchitectureDocumentationBuilder</aadarchi.main.class>
 
 		<!-- Defining a version that doesn't suck -->
-		<agile-architecture-version>${agile-architecture-version}</agile-architecture-version>
+		<aadarchi-version>${aadarchi-version}</aadarchi-version>
 
 		<!-- If you want to use another kroki server, it is possible by deploying 
 			the kroki docker image -->
@@ -28,12 +28,12 @@
 
 	<!-- tag::issues-url[] -->
 	<issueManagement>
-		<url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</url>
+		<url>https://github.com/Riduidel/aadarchi/issues</url>
 	</issueManagement>
 	<!-- end::issues-url[] -->
 
 	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
-	See https://github.com/Riduidel/agile-architecture-documentation-system/issues/159 for the weird protocol -->
+	See https://github.com/Riduidel/aadarchi/issues/159 for the weird protocol -->
 	<repositories>
 		<repository>
 			<id>mavengems</id>
@@ -54,24 +54,24 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>base</artifactId>
-			<version>${agile-architecture-version}</version>
+			<version>${aadarchi-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>github-scm-handler</artifactId>
-			<version>${agile-architecture-version}</version>
+			<version>${aadarchi-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>adr-tickets-extractor</artifactId>
-			<version>${agile-architecture-version}</version>
+			<version>${aadarchi-version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>maven-metadata-inferer</artifactId>
-			<version>${agile-architecture-version}</version>
+			<version>${aadarchi-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -155,9 +155,9 @@
 		</extensions>
 		<plugins>
 			<plugin>
-				<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+				<groupId>io.github.Riduidel.aadarchi</groupId>
 				<artifactId>aadarchi-maven-plugin</artifactId>
-				<version>${agile-architecture-version}</version>
+				<version>${aadarchi-version}</version>
 				<executions>
 					<execution>
 						<goals>

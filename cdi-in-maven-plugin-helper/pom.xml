@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>cdi-in-maven-plugin-helper</artifactId>
-	<name>Agile Architecture Documentation System : CDI in Maven helper</name>
+	<name>Aadarchi : CDI in Maven helper</name>
 	<description>This small java library provides a simple way to have a maven Mojo use CDI for bean injection</description>
 	<dependencies>
 		<dependency>

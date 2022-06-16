@@ -2,7 +2,7 @@
 :chapter: Context
 include::_notify-bug-admonition.adoc[]
 
-agile-architecture-documentation-system tries to provide a solution to a rather usual, but not so well solved, problem: 
+aadarchi-documentation-system tries to provide a solution to a rather usual, but not so well solved, problem: 
 how to document architecture of a software system with the minimal effort and the maximal result.
 As a consequence, this product tries to help the architect in all possible ways.
 

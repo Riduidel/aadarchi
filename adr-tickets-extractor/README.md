@@ -7,7 +7,7 @@ As a consequence, it is way more efficient to use issue trackers
 and have the issue tracker content emitted as documentation.
 
 # How to use
-This is exposed in [agile architecture documentation example](https://github.com/Riduidel/agile-architecture-documentation-example/).
+This is exposed in [agile architecture documentation example](https://github.com/Riduidel/aadarchi-documentation-example/).
 
 This obviously requires a valid SCM handler.
 
@@ -15,9 +15,9 @@ This obviously requires a valid SCM handler.
 
 ```xml
 		<dependency>
-			<groupId>com.github.Riduidel.agile-architecture-documentation-system</groupId>
+			<groupId>com.github.Riduidel.aadarchi-documentation-system</groupId>
 			<artifactId>adr-tickets-extractor</artifactId>
-			<version>${version.agile-architecture}</version>
+			<version>${version.aadarchi}</version>
 		</dependency>
 
 ```
@@ -26,7 +26,7 @@ This obviously requires a valid SCM handler.
 
 ```
 		SoftwareSystem kafkatrain = model.addSoftwareSystem("kafkatrain", "Crowd-sourced transport timetable prediction system");
-		kafkatrain.addProperty(ModelElementKeys.ISSUE_MANAGER, "https://github.com/Riduidel/agile-architecture-documentation-example/");
+		kafkatrain.addProperty(ModelElementKeys.ISSUE_MANAGER, "https://github.com/Riduidel/aadarchi-documentation-example/");
 ```
 
-And that's all! The `ImplicitIncludeManager` of agile-architecture-documentation-system will make sure the tickets are included, so the only thing you have to do is to go into the decision-log section to add a decision indicating your desire to switch to decisions stored in an issue tracker.
+And that's all! The `ImplicitIncludeManager` of aadarchi-documentation-system will make sure the tickets are included, so the only thing you have to do is to go into the decision-log section to add a decision indicating your desire to switch to decisions stored in an issue tracker.

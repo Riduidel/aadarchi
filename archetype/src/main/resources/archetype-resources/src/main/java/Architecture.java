@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.ndx.agile.architecture.base.ArchitectureModelProvider;
+import org.ndx.aadarchi.base.ArchitectureModelProvider;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Container;
