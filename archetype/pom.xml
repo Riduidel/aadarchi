@@ -9,7 +9,7 @@
 	<artifactId>archetype</artifactId>
 	<packaging>maven-archetype</packaging>
 	
-	<name>Agile Architecture Documentation System : Archetype</name>
+	<name>Aadarchi : Archetype</name>
 	<description>Easily create configuration to document your project with this archetype</description>
 
 	<dependencies>

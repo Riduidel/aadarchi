@@ -6,7 +6,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>sequence-diagram-generator</artifactId>
-	<name>Agile Architecture Documentation System : Sequence diagram generator</name>
+	<name>Aadarchi : Sequence diagram generator</name>
 	<description>Generates sequence diagrams for components in the containers opting in for it. Model elements in those sequence diagrams should also be indicated by containers.</description>
 	<dependencies>
 		<dependency>

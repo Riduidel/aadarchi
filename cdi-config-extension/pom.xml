@@ -6,7 +6,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>cdi-config-extension</artifactId>
-	<name>Agile Architecture Documentation System : CDI Config extension</name>
+	<name>Aadarchi : CDI Config extension</name>
 	<description>Some CDI extensions</description>
 	<dependencies>
 		<dependency>

@@ -6,7 +6,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>github-scm-handler</artifactId>
-	<name>Agile Architecture Documentation System : GitHub SCM handler</name>
+	<name>Aadarchi : GitHub SCM handler</name>
 	<description>Allow github infos to be included in project documentation</description>
 	<dependencies>
 		<dependency>

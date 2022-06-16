@@ -6,8 +6,8 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>architecture-documentation</artifactId>
-	<name>Agile Architecture Documentation System : System documentation generator</name>
-	<description>Using agile architecture documentation system to document agile archiecture documentation system</description>
+	<name>Aadarchi : System documentation generator</name>
+	<description>Using Aadarchi to document agile archiecture documentation system</description>
 	<properties>
 		<version.java>11</version.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

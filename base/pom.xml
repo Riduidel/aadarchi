@@ -6,7 +6,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>base</artifactId>
-	<name>Agile Architecture Documentation System : Base module</name>
+	<name>Aadarchi : Base module</name>
 	<description>Base module defining the various used interfaces, and some very useful implementations</description>
 	<packaging>jar</packaging>
 	<dependencies>

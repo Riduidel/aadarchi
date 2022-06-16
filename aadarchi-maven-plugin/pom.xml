@@ -9,7 +9,7 @@
 
 	<artifactId>aadarchi-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<name>Agile Architecture Documentation System : Maven plugin</name>
+	<name>Aadarchi : Maven plugin</name>
 
 	<dependencies>
 		<!-- used to invoke asciidoctor-maven-plugin in a controlled way -->

@@ -6,7 +6,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>cdi-in-maven-plugin-helper</artifactId>
-	<name>Agile Architecture Documentation System : CDI in Maven helper</name>
+	<name>Aadarchi : CDI in Maven helper</name>
 	<description>This small java library provides a simple way to have a maven Mojo use CDI for bean injection</description>
 	<dependencies>
 		<dependency>

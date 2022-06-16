@@ -6,7 +6,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gitlab-scm-handler</artifactId>
-	<name>Agile Architecture Documentation System : Gitlab SCM Handler</name>
+	<name>Aadarchi : Gitlab SCM Handler</name>
 	<description>Allow gitlab infos to be included in project documentation</description>
 	<dependencies>
 		<dependency>

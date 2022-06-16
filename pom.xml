@@ -9,7 +9,7 @@
 
 	<description>Base module of a set of tools created to allow easy architecture documentation based upon Simon Brown work.</description>
 
-	<name>Agile Architecture Documentation System : root POM</name>
+	<name>Aadarchi : root POM</name>
 	<url>https://riduidel.github.io/aadarchi/</url>
 
 	<properties>

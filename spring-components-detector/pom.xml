@@ -6,7 +6,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>spring-components-detector</artifactId>
-	<name>Agile Architecture Documentation System : Spring components detector</name>
+	<name>Aadarchi : Spring components detector</name>
 	<description>Component allowing detection of Spring components in a Spring technology based container.</description>
 	<dependencies>
 		<dependency>
