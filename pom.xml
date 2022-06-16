@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+	<groupId>io.github.Riduidel.aadarchi</groupId>
 	<artifactId>system</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -10,7 +10,7 @@
 	<description>Base module of a set of tools created to allow easy architecture documentation based upon Simon Brown work.</description>
 
 	<name>Agile Architecture Documentation System : root POM</name>
-	<url>https://riduidel.github.io/agile-architecture-documentation-system/</url>
+	<url>https://riduidel.github.io/aadarchi/</url>
 
 	<properties>
 		<maven.compiler.release>11</maven.compiler.release>
@@ -24,14 +24,14 @@
 		<version.structurizr.annotations>1.3.5</version.structurizr.annotations>
 	</properties>
 	<scm>
-		<connection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-system.git</connection>
-		<developerConnection>scm:git:git@github.com:Riduidel/agile-architecture-documentation-system.git</developerConnection>
-		<url>https://github.com/Riduidel/agile-architecture-documentation-system.git</url>
+		<connection>scm:git:git@github.com:Riduidel/aadarchi.git</connection>
+		<developerConnection>scm:git:git@github.com:Riduidel/aadarchi.git</developerConnection>
+		<url>https://github.com/Riduidel/aadarchi.git</url>
 		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</url>
+		<url>https://github.com/Riduidel/aadarchi/issues</url>
 	</issueManagement>
 
 	<developers>
@@ -338,7 +338,7 @@
 							<tagNameFormat>@{version}</tagNameFormat>
 							<!-- This profile MUST be defined in settings.xml and contains the 
 								various tokens (GitHub, GitLab and so on) -->
-							<releaseProfiles>settings-agile-architecture,release</releaseProfiles>
+							<releaseProfiles>settings-aadarchi,release</releaseProfiles>
 							<arguments>-Dagile.architecture.github.token=${agile.architecture.github.token}</arguments>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<localCheckout>false</localCheckout>

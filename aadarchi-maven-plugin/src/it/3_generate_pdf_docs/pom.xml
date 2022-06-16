@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        <groupId>io.github.Riduidel.agile-architecture-documentation-system</groupId>
+        <groupId>io.github.Riduidel.aadarchi</groupId>
         <version>0.0.12-SNAPSHOT</version>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,11 +21,11 @@
     </properties>
 
     <issueManagement>
-        <url>https://github.com/Riduidel/agile-architecture-documentation-system/issues</url>
+        <url>https://github.com/Riduidel/aadarchi/issues</url>
     </issueManagement>
 
     <!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
-	See https://github.com/Riduidel/agile-architecture-documentation-system/issues/159 for the weird protocol -->
+	See https://github.com/Riduidel/aadarchi/issues/159 for the weird protocol -->
     <repositories>
         <repository>
             <id>mavengems</id>
