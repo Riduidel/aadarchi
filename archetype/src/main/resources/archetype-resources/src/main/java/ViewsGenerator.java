@@ -6,9 +6,9 @@ import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.ndx.agile.architecture.base.ArchitectureModelProvider;
-import org.ndx.agile.architecture.base.Enhancer;
-import org.ndx.agile.architecture.base.OutputBuilder;
+import org.ndx.aadarchi.base.ArchitectureModelProvider;
+import org.ndx.aadarchi.base.Enhancer;
+import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.myCompany.mySystem.architecture.Architecture;
 
 import com.structurizr.Workspace;

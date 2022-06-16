@@ -104,7 +104,7 @@ Model start from system context to end with code going through some detail level
 
 === An example ?
 
-icon:github[set=fab] https://github.com/Riduidel/agile-architecture-documentation-system[agile-architecture-documentation-system]
+icon:github[set=fab] https://github.com/Riduidel/aadarchi-documentation-system[aadarchi-documentation-system]
 
 [NOTE.speaker]
 --
@@ -131,9 +131,9 @@ Notice that colors can be freely chosen by team, provided the legend is explicit
 [%notitle]
 === Containers
 
-[plantuml, {plantumldir}agile.architecture.containers, svg, opts="inline", style="max-width:90%"]
+[plantuml, {plantumldir}aadarchi.containers, svg, opts="inline", style="max-width:90%"]
 ----
-include::{structurizrdir}/agile.architecture.containers.plantuml[]
+include::{structurizrdir}/aadarchi.containers.plantuml[]
 ----
 
 [NOTE.speaker]
@@ -150,9 +150,9 @@ include::{structurizrdir}/agile.architecture.containers.plantuml[]
 [%notitle]
 === Components
 
-[plantuml, {plantumldir}agile.architecture.base.components, svg, opts="inline", style="max-height:90%"]
+[plantuml, {plantumldir}aadarchi.base.components, svg, opts="inline", style="max-height:90%"]
 ----
-include::{structurizrdir}/agile.architecture.base.components.plantuml[]
+include::{structurizrdir}/aadarchi.base.components.plantuml[]
 ----
 
 === Components - to note
@@ -235,7 +235,7 @@ image::https://media.giphy.com/media/YoWYbUDeJK6Telrvzs/giphy.gif[]
 
 [%notitle]
 === With a good layout
-image::images/agile-architecture-documentation.png[background, size=cover]
+image::images/aadarchi-documentation.png[background, size=cover]
 
 [NOTE.speaker]
 --
@@ -268,7 +268,7 @@ image::https://media.giphy.com/media/fatcd1PnHPTDW/giphy.gif[]
 * We do CI/CD on products way more complex than documentation
 * We already have advanced code industrialization
 
-[%notitle,background-iframe="https://riduidel.github.io/agile-architecture-documentation-system/"]
+[%notitle,background-iframe="https://riduidel.github.io/aadarchi-documentation-system/"]
 === architecture-as-code
 
 === With that, everything is possible !

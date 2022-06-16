@@ -28,7 +28,7 @@ class SequenceDiagramVisitorTest {
 		// Given all those elements
 		Workspace workspace = new Workspace("test workspace", "test workspace");
 		Model model = workspace.getModel();
-		SoftwareSystem system = model.addSoftwareSystem("agile-architecture-documentation-system");
+		SoftwareSystem system = model.addSoftwareSystem("aadarchi-documentation-system");
 		Container sequenceGenerator = system.addContainer("sequence-generator", "generator", "Java/Maven");
 		sequenceGenerator.addProperty(SequenceGenerator.GENERATES_WITH, StructurizrUtils.getCanonicalPath(sequenceGenerator));
 		sequenceGenerator.addProperty(ModelElementKeys.JAVA_SOURCES, new File("src/main/java").toURI().toString());

@@ -256,7 +256,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 						if(classesOfComponent.getFirst().isInterface()) {
 							logger.severe(String.format("Congratulations! You found a bug in that code!\n"
 									+ "The bug being the inhability of this sequence diagram generator to understand what to do when a component is defined by more than one interface."
-									+ "To help that tool grow, please enter your case as a ticket in https://github.com/Riduidel.agile-architecture-system/issues."
+									+ "To help that tool grow, please enter your case as a ticket in https://github.com/Riduidel.aadarchi-system/issues."
 									+ "Offending component is %s which has as linked code elements %s", component,
 									component.getCode().stream().map(code -> code.getType()).collect(Collectors.joining(";"))));
 						}

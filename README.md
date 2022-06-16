@@ -21,7 +21,7 @@ mvn archetype:generate -DarchetypeGroupId=io.github.Riduidel.aadarchi -Darchetyp
 ```
 
 This will ask you a few questions and generate the project.
-Finally, don't forget to replace the value of `agile-architecture-version` maven property by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)
+Finally, don't forget to replace the value of `aadarchi-version` maven property by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)
 
 ## Usage
 

@@ -12,6 +12,6 @@ public interface SequenceGenerator {
 	 * The canonical name should be obtained by a call to {@link StructurizrUtils#getCanonicalPath(com.structurizr.model.Element)}
 	 * and not structurizr method.
 	 */
-	String GENERATES_WITH = "agile.architecture.sequence.generator.with";
+	String GENERATES_WITH = "aadarchi.sequence.generator.with";
 
 }

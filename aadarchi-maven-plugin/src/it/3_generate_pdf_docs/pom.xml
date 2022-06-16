@@ -13,7 +13,7 @@
         <version.java>11</version.java>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <agile.architecture.main.class>org.ndx.agile.architecture.base.ArchitectureDocumentationBuilder</agile.architecture.main.class>
+        <aadarchi.main.class>org.ndx.aadarchi.base.ArchitectureDocumentationBuilder</aadarchi.main.class>
         <!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
         <version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
         <!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->

@@ -5,7 +5,7 @@ include::_notify-bug-admonition.adoc[]
 This software helps the architect writing a coherent, complete and readable software architecture documentation.
 Usage of this software is quite simple (for a developer).
 
-The first step is to initiate a documentation (which is documented in https://github.com/Riduidel/agile-architecture-documentation-system#install[README.md]).
+The first step is to initiate a documentation (which is documented in https://github.com/Riduidel/aadarchi-documentation-system#install[README.md]).
 
 Then, architect has to write content in all `.adoc` files generated in `src/docs/asciidoc`.
 Notice writing those files will be eased out by using the `Architecture` java class to generate diagrams,

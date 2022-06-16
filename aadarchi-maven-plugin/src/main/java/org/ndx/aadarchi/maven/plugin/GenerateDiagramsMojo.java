@@ -33,7 +33,7 @@ public class GenerateDiagramsMojo extends AbstractCDIStarterMojo {
 	 * Output directory for the generated diagrams
 	 */
 	@MojoProduces
-	@Parameter(name="agile-architecture-output-diagrams", defaultValue = "${project.build.directory}/structurizr/diagrams", property="agile.architecture.output.diagrams")
+	@Parameter(name="agile-architecture-output-diagrams", defaultValue = "${project.build.directory}/structurizr/diagrams", property="aadarchi.output.diagrams")
 	public String agileArchitectureOutputDiagrams;
 	
 	@Override

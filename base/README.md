@@ -21,7 +21,7 @@ This configuration mode is to be used for each element requiring specific config
 
 ## `ArchitectureEnhancer`
 This class will run all model and views enhancers, and is used to define the folder in which data is stored.
-This storage folder (referenced in this document as `${ENHANCEMENTS_DIR}`) is configured by the `agile.architecture.enhancements` which uses DeltaSpike configuration loading mechanism and has no default value in code, but one is set in pom generated from archetype (value is `${agile.architecture.output.enhancements}` maven property, which resolves to `target/structurizr/enhancements`).
+This storage folder (referenced in this document as `${ENHANCEMENTS_DIR}`) is configured by the `aadarchi.enhancements` which uses DeltaSpike configuration loading mechanism and has no default value in code, but one is set in pom generated from archetype (value is `${aadarchi.output.enhancements}` maven property, which resolves to `target/structurizr/enhancements`).
 
 When available, all components configuration properties are mentionned in this document.
 
@@ -57,12 +57,12 @@ This component will generate a link to the SCM repository containing the structu
 The component can be forced to rewrite the generated file by the common `force` flag.
 
 ##### Model element configuration
-This component is activated only for model element having a value for the `agile.architecture.scm.project` property.
-additionally, path to element in repository can be configured with the `agile.architecture.scm.path` property, also to define in Architure class.
+This component is activated only for model element having a value for the `aadarchi.scm.project` property.
+additionally, path to element in repository can be configured with the `aadarchi.scm.path` property, also to define in Architure class.
 
 ### `SCMReadmeReader`
 
-This component will include the Readme of any model element for which the `agile.architecture.scm.project` property is defined.
+This component will include the Readme of any model element for which the `aadarchi.scm.project` property is defined.
 
 If readme is a markdown file, it will be converted to asciidoc before to be included.
 
@@ -74,9 +74,9 @@ Notice that links will not be rewritten, so avoid relative links.
 The component can be forced to rewrite the generated file by the common `force` flag.
 
 ##### Model element configuration
-This component is activated only for model element having a value for the `agile.architecture.scm.project` property.
-Additionally, path to element in repository can be configured with the `agile.architecture.scm.path` property, also to define in Architure class.
-And readme name can be configured by setting the `agile.architecture.scm.readme.path` which will be concatenated to `agile.architecture.scm.path`.
+This component is activated only for model element having a value for the `aadarchi.scm.project` property.
+Additionally, path to element in repository can be configured with the `aadarchi.scm.path` property, also to define in Architure class.
+And readme name can be configured by setting the `aadarchi.scm.readme.path` which will be concatenated to `aadarchi.scm.path`.
 
 ### `DocumentsCollector`
 This component is an internal none, that will collect all files in `${ENHANCEMENTS_DIR}` and includes them in the good sections.
@@ -89,4 +89,4 @@ This component generates all the diagrams defined in Architecture class.
 ##### System properties
 The component can be forced to rewrite the generated files by the common `force` flag.
 
-Diagrams will be generated in `agile.architecture.diagrams` folder, which defaults in Java code to `target/structurizr/diagrams`.
+Diagrams will be generated in `aadarchi.diagrams` folder, which defaults in Java code to `target/structurizr/diagrams`.

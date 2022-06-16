@@ -38,7 +38,7 @@
 				<configuration>
 					<properties>
 						<!-- Used in integration test to generate the pom -->
-						<agile-architecture-version>${project.version}</agile-architecture-version>
+						<aadarchi-version>${project.version}</aadarchi-version>
 					</properties>
 				</configuration>
 			</plugin>

@@ -393,7 +393,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			break;
 		default:
 			logger.warning(String.format(
-					"Maven component %s uses packaging %s which we don't know. Please submit a bug to agile-architecture-documentation-system to have this particular packaging correctly handled",
+					"Maven component %s uses packaging %s which we don't know. Please submit a bug to aadarchi-documentation-system to have this particular packaging correctly handled",
 					project, project.getPackaging()));
 		}
 		return technologies;

@@ -22,7 +22,7 @@ include::{structurizrdir}/SystemContext.plantuml[]
 [%notitle]
 === Containers
 
-[plantuml, {plantumldir}agile.architecture.containers, svg, opts="inline", style="max-width:90%"]
+[plantuml, {plantumldir}aadarchi.containers, svg, opts="inline", style="max-width:90%"]
 ----
 include::{structurizrdir}/SystemContainers.plantuml[]
 ----
@@ -30,7 +30,7 @@ include::{structurizrdir}/SystemContainers.plantuml[]
 [%notitle]
 === Components
 
-[plantuml, {plantumldir}agile.architecture.base.components, svg, opts="inline", style="max-height:90%"]
+[plantuml, {plantumldir}aadarchi.base.components, svg, opts="inline", style="max-height:90%"]
 ----
 include::{structurizrdir}/baseComponents.plantuml[]
 ----

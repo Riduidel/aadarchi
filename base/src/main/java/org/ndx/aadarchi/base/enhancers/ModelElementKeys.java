@@ -90,7 +90,7 @@ public interface ModelElementKeys {
 	/**
 	 * All properties defined for agile architecture **must** start with that prefix.
 	 */
-	String PREFIX = "agile.architecture.";
+	String PREFIX = "aadarchi.";
 	/**
 	 * Issue manager key should contain the url of the, well, issue manager system used by an element
 	 */
