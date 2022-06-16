@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>system</artifactId>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
-		<version>0.1.1</version>
+		<version>0.1.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>architecture-documentation</artifactId>
 	<name>Aadarchi : System documentation generator</name>
