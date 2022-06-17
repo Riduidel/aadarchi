@@ -4,6 +4,7 @@
 <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/Riduidel/aadarchi/Java%20CI%20with%20Maven">
 	</a>
   <a href="https://github.com/Riduidel/aadarchi/releases" target="_blank"><img src="https://badge.fury.io/gh/Riduidel%2Faadarchi.svg" alt="GitHub version"></a>
+<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Riduidel/aadarchi">
   <a href="https://twitter.com/Riduidel" target="_blank">
     <img alt="Twitter: Riduidel" src="https://img.shields.io/twitter/follow/Riduidel.svg?style=social" />
   </a>
