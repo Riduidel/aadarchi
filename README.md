@@ -1,7 +1,7 @@
 <h1 align="center">Welcome to Aadarchi 👋</h1>
 <p>
 	<a href="https://github.com/Riduidel/aadarchi/actions?query=workflow%3A%22Java+CI+with+Maven%22">
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/aadarchi/Java CI with Maven">
+<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/Riduidel/aadarchi/Java%20CI%20with%20Maven">
 	</a>
   <a href="https://github.com/Riduidel/aadarchi/releases" target="_blank"><img src="https://badge.fury.io/gh/Riduidel%2Faadarchi.svg" alt="GitHub version"></a>
   <a href="https://twitter.com/Riduidel" target="_blank">
