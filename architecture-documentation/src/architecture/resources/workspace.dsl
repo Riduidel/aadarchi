@@ -11,6 +11,7 @@ workspace "aadarchi-documentation-system" {
 			maven = container "maven" "The maven build engine" "Java, maven"
 			aadarchi_base = container "base" "" "Java" {
 				properties {
+					"aadarchi.sequence.generator.with" "true"
 					"aadarchi.java.source" "../base/src/main/java/"
 					"aadarchi.scm.path" "base"
 					"aadarchi.maven.pom" "../base/pom.xml"
