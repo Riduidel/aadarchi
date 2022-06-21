@@ -4,11 +4,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.base.utils.FileResolver;
 import org.ndx.aadarchi.sequence.generator.SequenceGeneratorException;
 
 import com.github.javaparser.ParserConfiguration;
@@ -24,8 +23,10 @@ import com.structurizr.model.Container;
 public class ProjectRootBuilder {
 	private static final Logger logger = Logger.getLogger(ProjectRootBuilder.class.getName());
 	private List<String> files;
+	private FileResolver fileResolver;
 
-	public ProjectRootBuilder(Map<String, Container> pathsToContainers) {
+	public ProjectRootBuilder(FileResolver fileResolver, Map<String, Container> pathsToContainers) {
+		this.fileResolver = fileResolver;
 		this.files = new ArrayList<>(pathsToContainers.keySet());
 	}
 
@@ -35,7 +36,7 @@ public class ProjectRootBuilder {
 			throw new SequenceGeneratorException(String.format("Unable to parse source for %s, as it is linked to no source path", container));
 		}
 		List<Path> paths = files.stream()
-				.map(ThrowingFunction.unchecked(file -> ModelElementKeys.fileAsUrltoPath(file)))
+				.map(ThrowingFunction.unchecked(file -> fileResolver.fileAsUrltoPath(file)))
 				.collect(Collectors.toList());
 		
 		Path initialPath = paths.get(0);
