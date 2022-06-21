@@ -133,6 +133,10 @@ public interface ModelElementKeys {
 	}
 
 	static Path fileAsUrltoPath(String fileUrl) throws MalformedURLException, URISyntaxException {
-		return Paths.get(new URL(fileUrl).toURI());
+		if(fileUrl.startsWith("file:")) {
+			return Paths.get(new URL(fileUrl).toURI());
+		} else {
+			return new File(fileUrl).toPath();
+		}
 	}
 }
