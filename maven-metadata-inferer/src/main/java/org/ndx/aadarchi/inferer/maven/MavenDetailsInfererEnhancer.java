@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -44,6 +42,7 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
+import org.ndx.aadarchi.base.utils.FileResolver;
 
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
@@ -283,7 +282,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	Logger logger;
 	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) File basePath;
 
-	
+	@Inject FileResolver fileResolver;
 	/**
 	 * The maven reader used to read all poms
 	 */
@@ -413,6 +412,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		decorateScmUrl(element, mavenProject);
 		decorateIssueManager(element, mavenProject);
 		decorateJavaSource(element, mavenProject);
+		decorateJavaPackage(element, mavenProject);
 		decorateMavenProperties(element, mavenProject);
 		Optional.ofNullable(mavenProject.getDescription()).stream()
 				.forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
@@ -463,6 +463,55 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 				}).collect(Collectors.joining(";"));
 		if (!sourcePaths.isEmpty())
 			element.addProperty(ModelElementKeys.JAVA_SOURCES, sourcePaths);
+	}
+
+	private void decorateJavaPackage(Element element, MavenProject mavenProject) {
+		if(!element.getProperties().containsKey(ModelElementKeys.JAVA_PACKAGES)) {
+			if(element.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES)) {
+				String paths = element.getProperties().get(ModelElementKeys.JAVA_SOURCES);
+				String packages = Arrays.asList(paths.split(";")).stream()
+					.map(fileResolver::fileAsUrltoPath)
+					.filter(path -> path.toFile().exists())
+					.map(this::findPackagesInPath)
+					.flatMap(Collection::stream)
+					.collect(Collectors.joining(";"));
+				if(!packages.isEmpty())
+					element.addProperty(ModelElementKeys.JAVA_PACKAGES, packages);
+			}
+		}
+	}
+	
+	/**
+	 * Explore the given path looking for the first folder containing more than one subfolder
+	 * @param path
+	 * @return a collection of java packages string corresponding to the given path
+	 */
+	private Collection<String> findPackagesInPath(Path path) {
+		return findPackagesInPath(path.toFile()).stream()
+				.map(packagePath -> path.relativize(packagePath))
+				.map(Path::toString)
+				.map(packageString -> packageString.replace(File.separatorChar, '.'))
+				.collect(Collectors.toList());
+	}
+
+	private Collection<Path> findPackagesInPath(File current) {
+		File[] childrenArray = current.listFiles();
+		if(childrenArray==null)
+			// There are no children here, so consider this file as terminal
+			return Arrays.asList(current.toPath());
+		List<File> childrenList = Arrays.asList(childrenArray);
+		// If all elements are folders, then we can consider they're all packages and continue exploration
+		// Otherwise, this folder is a terminal package and we can return it "safely"
+		if(childrenList.stream().allMatch(File::isDirectory)) {
+			return childrenList.stream()
+					.map(file -> findPackagesInPath(file))
+					.flatMap(descendantList -> descendantList.stream())
+					.collect(Collectors.toList());
+		} else {
+			// There is at least one non-file in package (or list is empty)
+			// So this folder is terminal
+			return Arrays.asList(current.toPath());
+		}
 	}
 
 	private void decorateCoordinates(Element element, MavenProject mavenProject) {
