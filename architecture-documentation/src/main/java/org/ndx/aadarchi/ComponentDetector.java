@@ -53,7 +53,9 @@ public class ComponentDetector extends ModelElementAdapter {
 					URLClassLoader urlClassLoader = (URLClassLoader) contextClassLoader;
 					componentFinder.setUrlClassLoader(urlClassLoader);
 				}
+				logger.info(String.format("Detecting components of %s. It can be long ...", container.getName()));
 				componentFinder.findComponents();
+				logger.info(String.format("Detected %d components of %s.", container.getComponents().size(), container.getName()));
 			} catch (Exception e) {
 				logger.log(Level.WARNING,
 						String.format("Unable to detect components in %s", container));
