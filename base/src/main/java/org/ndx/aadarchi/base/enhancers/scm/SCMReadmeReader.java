@@ -32,7 +32,7 @@ import nl.jworks.markdown_to_asciidoc.Converter;
  * @author nicolas-delsaux
  *
  */
-@Component(technology = "Java/CDI")
+@Component(technology = "Java, CDI")
 public class SCMReadmeReader extends ModelElementAdapter {
 	@Inject @ConfigProperty(name="force", defaultValue="false") boolean force;
 	

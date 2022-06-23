@@ -11,6 +11,9 @@ import org.ndx.aadarchi.base.ArchitectureModelProvider;
 import org.ndx.aadarchi.maven.cdi.helper.wrappers.AbstractCDIStarterMojo;
 import org.ndx.aadarchi.maven.cdi.helper.wrappers.MojoProduces;
 
+import com.structurizr.annotation.Component;
+import com.structurizr.annotation.UsesComponent;
+
 /**
  * Generates the various model diagrams and elements by processing the architecture description
  * made either in a workspace.dsl file or through an {@link ArchitectureModelProvider} implementing class.
@@ -24,6 +27,7 @@ import org.ndx.aadarchi.maven.cdi.helper.wrappers.MojoProduces;
  * @author nicolas-delsaux
  *
  */
+@Component(technology = "Java, maven")
 @Mojo(name = "generate-model", 
 	defaultPhase = LifecyclePhase.PREPARE_PACKAGE,
 	requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME)

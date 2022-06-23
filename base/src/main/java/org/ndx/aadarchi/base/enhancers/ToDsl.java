@@ -45,7 +45,7 @@ import com.structurizr.view.ViewSet;
  * @author jason-sycz feat nicolas-delsaux
  *
  */
-
+@com.structurizr.annotation.Component(technology = "Java, CDI")
 public class ToDsl implements ModelEnhancer, ViewEnhancer {
 	public static class UnableToBuildDslException extends AgileArchitectureException {
 

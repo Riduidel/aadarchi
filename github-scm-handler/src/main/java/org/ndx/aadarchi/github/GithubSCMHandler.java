@@ -16,6 +16,9 @@ import org.kohsuke.github.GitHub;
 import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 
+import com.structurizr.annotation.Component;
+
+@Component
 @ApplicationScoped
 public class GithubSCMHandler implements SCMHandler {
 	@Inject Logger logger;

@@ -28,6 +28,7 @@ import org.ndx.aadarchi.base.enhancers.tickets.Ticket;
 import org.ndx.aadarchi.base.enhancers.tickets.TicketStatus;
 import org.ndx.aadarchi.base.enhancers.tickets.TicketsHandler;
 
+import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
 import com.structurizr.model.StaticStructureElement;
 
@@ -40,6 +41,7 @@ import freemarker.template.TemplateException;
  * @author nicolas-delsaux
  *
  */
+@Component
 @ApplicationScoped
 public class ADRExtractor 
 	extends ModelElementAdapter 

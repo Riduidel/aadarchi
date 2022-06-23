@@ -56,6 +56,7 @@ import com.structurizr.model.StaticStructureElement;
  * @author nicolas-delsaux
  *
  */
+@com.structurizr.annotation.Component
 public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements ModelEnhancer {
 	private abstract class ModelElementMavenEnhancer<Enhanced extends StaticStructureElement> {
 

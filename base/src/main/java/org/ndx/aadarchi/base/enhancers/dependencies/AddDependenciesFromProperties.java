@@ -11,6 +11,7 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
+import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
 import com.structurizr.model.InteractionStyle;
 import com.structurizr.model.StaticStructureElement;
@@ -24,6 +25,7 @@ import com.structurizr.model.StaticStructureElement;
  * @author Nicolas
  *
  */
+@Component(technology = "Java, CDI")
 public class AddDependenciesFromProperties extends ModelElementAdapter {
 	@Inject
 	Logger logger;

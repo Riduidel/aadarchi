@@ -16,6 +16,9 @@ import org.kohsuke.github.GitHub;
 import org.ndx.aadarchi.base.enhancers.tickets.Ticket;
 import org.ndx.aadarchi.base.enhancers.tickets.TicketsHandler;
 
+import com.structurizr.annotation.Component;
+
+@Component
 public class GitHubTicketsHandler implements TicketsHandler {
 	@Inject Logger logger;
 	@Inject GitHub github;

@@ -16,7 +16,9 @@ import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 
 import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.exception.WrappedException;
+import com.structurizr.annotation.Component;
 
+@Component
 public class GitlabSCMHandler implements SCMHandler {
 	private @Inject GitLabContainer gitlab;
 

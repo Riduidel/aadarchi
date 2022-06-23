@@ -8,11 +8,15 @@ import javax.inject.Inject;
 
 import org.ndx.aadarchi.base.ArchitectureDocumentationBuilder;
 
+import com.structurizr.annotation.Component;
+import com.structurizr.annotation.UsesComponent;
+@Component(technology = "Java, CDI")
 @ApplicationScoped
 public class GenerateDiagramsRunnable implements Runnable {
 
 	@Inject Logger logger;
 
+	@UsesComponent(description = "generates architecture documentation")
     @Inject ArchitectureDocumentationBuilder builder;
 
 	@Override

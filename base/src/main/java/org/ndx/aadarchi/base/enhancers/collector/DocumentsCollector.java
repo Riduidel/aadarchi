@@ -37,7 +37,7 @@ import com.structurizr.model.SoftwareSystem;
  * @author nicolas-delsaux
  *
  */
-@com.structurizr.annotation.Component(technology = "Java/CDI")
+@com.structurizr.annotation.Component(technology = "Java, CDI")
 public class DocumentsCollector implements ModelEnhancer {
 	private File enhancementsBase;
 	/**
