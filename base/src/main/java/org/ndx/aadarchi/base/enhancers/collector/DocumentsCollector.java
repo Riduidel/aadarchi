@@ -154,7 +154,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	    // http://docs.oracle.com/javase/6/docs/api/java/util/regex/Pattern.html
 	    elementId = elementId.replaceAll("[\\p{InCombiningDiacriticalMarks}\\p{Cntrl}]", "");
 	    String refText = String.format("%s %s", key.getName(), section.name());
-		return String.format("[[#%s, reftext=%s]]\n%s %s",
+		return String.format("[#%s, reftext=\"%s\"]\n%s %s",
 				elementId,
 				refText,
 				StringUtils.repeat('=', deeepness),
