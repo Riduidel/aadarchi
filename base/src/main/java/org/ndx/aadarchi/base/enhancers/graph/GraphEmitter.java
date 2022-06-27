@@ -32,7 +32,7 @@ import com.structurizr.view.ViewSet;
  * @author nicolas-delsaux
  *
  */
-@Component(technology = "Java/CDI")
+@Component(technology = "Java, CDI")
 @ApplicationScoped
 public class GraphEmitter implements ViewEnhancer {
 	@Inject Logger logger;

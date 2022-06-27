@@ -33,7 +33,7 @@ import com.structurizr.view.ViewSet;
  * @author nicolas-delsaux
  *
  */
-@com.structurizr.annotation.Component(technology = "Java/CDI")
+@com.structurizr.annotation.Component(technology = "Java, CDI")
 @ApplicationScoped
 public class ArchitectureEnhancer {
 	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;

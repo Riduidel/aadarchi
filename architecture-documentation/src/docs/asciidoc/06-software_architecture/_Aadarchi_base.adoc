@@ -1,0 +1,13 @@
+== base components
+
+[plantuml, {plantumldir}base_components, svg, opts="inline"]     
+----
+include::{structurizrdir}/base_components.plantuml[]
+----
+
+== base interface
+
+Notice this container also defines two fundamental interfaces
+
+. `ModelEnhancer` which allows easy extension of documentation content from model elements
+. `ViewEnhancer` which provides the same service for views

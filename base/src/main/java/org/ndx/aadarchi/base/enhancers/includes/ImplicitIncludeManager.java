@@ -30,7 +30,7 @@ import com.structurizr.model.StaticStructureElement;
  * @author nicolas-delsaux
  *
  */
-@Component(technology = "Java/CDI")
+@Component(technology = "Java, CDI")
 public class ImplicitIncludeManager extends ModelElementAdapter {
 	
 	private File sourceDir;

@@ -7,11 +7,6 @@ include::_notify-bug-admonition.adoc[]
 include::{structurizrdir}/system_containers.plantuml[]
 ----
 
-[plantuml, {plantumldir}base_components, svg, opts="inline"]     
-----
-include::{structurizrdir}/base_components.plantuml[]
-----
-
 **TODO**
 ////
 The software architecture section is your "big picture" view and allows

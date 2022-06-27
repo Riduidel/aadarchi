@@ -27,7 +27,7 @@ import com.structurizr.model.StaticStructureElement;
  * @author nicolas-delsaux
  *
  */
-@Component(technology = "Java/CDI")
+@Component(technology = "Java, CDI")
 @ApplicationScoped
 public class SCMLinkGenerator extends ModelElementAdapter {
 	@Inject @ConfigProperty(name="force", defaultValue="false") boolean force;

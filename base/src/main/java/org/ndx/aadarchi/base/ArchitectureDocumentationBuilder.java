@@ -25,7 +25,7 @@ import com.structurizr.annotation.UsesComponent;
  * @author nicolas-delsaux
  *
  */
-@Component(technology = "Java/CDI")
+@Component(technology = "Java, CDI")
 @ApplicationScoped
 public class ArchitectureDocumentationBuilder {
 

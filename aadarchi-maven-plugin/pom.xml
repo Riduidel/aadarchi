@@ -10,6 +10,7 @@
 	<artifactId>aadarchi-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<name>Aadarchi : Maven plugin</name>
+	<description>This maven plugin allows integration of our documentation system into maven builds by providing a set of useful mojos</description>
 
 	<dependencies>
 		<!-- used to invoke asciidoctor-maven-plugin in a controlled way -->

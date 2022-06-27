@@ -56,6 +56,7 @@ import com.structurizr.model.StaticStructureElement;
  * @author nicolas-delsaux
  *
  */
+@com.structurizr.annotation.Component
 public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements ModelEnhancer {
 	private abstract class ModelElementMavenEnhancer<Enhanced extends StaticStructureElement> {
 
@@ -141,10 +142,13 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 				linked = addContainedElementWithKey(module, key);
 			}
 			// Now we know container is loaded. Can we do anything more ?
+			// Of course! We can add some useful properties
 			if (!linked.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM)) {
 				linked.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM,
 						module.getProperties().getProperty(MAVEN_POM_URL));
 			}
+			linked.addProperty(ModelElementKeys.Scm.PATH, 
+					module.getProperties().getProperty(ModelElementKeys.Scm.PATH));
 		}
 
 		private Contained getContainedElementWithName(MavenProject module) {
@@ -152,7 +156,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		}
 
 		private String getContainedElementKey(MavenProject module) {
-			return module.getModel().getName() == null ? module.getArtifactId() : module.getName();
+			return module.getArtifactId();
 		}
 
 		protected abstract Contained addContainedElementWithKey(MavenProject module, String key);
@@ -169,6 +173,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		@SuppressWarnings("unchecked")
 		private Stream<MavenProject> loadAllSubElements(MavenProject mavenProject) {
 			String pomPath = mavenProject.getProperties().getProperty(MAVEN_POM_URL);
+			String parentScmDir = mavenProject.getProperties().getProperty(ModelElementKeys.Scm.PATH, "");
 			final String pomDir = pomPath.substring(0, pomPath.lastIndexOf("/pom.xml"));
 			List<String> modules = new ArrayList<>();
 			modules.addAll(((List<String>) mavenProject.getModules()));
@@ -190,9 +195,14 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 							"Maven module %s profile %s declares the modules %s, which will not be handled here. Is it normal?\n"
 									+ "If it is not normal, add the profile in the maven property \"AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES\"",
 							mavenProject, profile.getId(), profile.getModules())));
-			return modules.stream().map(module -> readMavenProject(String.format("%s/%s/pom.xml", pomDir, module)))
-					.flatMap(module -> module.getPackaging().equals("pom") ? loadAllSubElements(module)
-							: Optional.of(module).stream());
+			return modules.stream().map(module -> {
+					MavenProject modulePom = readMavenProject(String.format("%s/%s/pom.xml", pomDir, module));
+					modulePom.getProperties().put(ModelElementKeys.Scm.PATH, 
+							parentScmDir.isBlank() ? module : parentScmDir + "/" + module);
+					return modulePom;
+				})
+				.flatMap(module -> module.getPackaging().equals("pom") ? loadAllSubElements(module)
+						: Optional.of(module).stream());
 		}
 
 		private Optional<Profile> getProfileNamed(MavenProject project, String profileName) {
@@ -379,11 +389,21 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			technologies.add("java");
 			for (Dependency dependency : (List<Dependency>) project.getDependencies()) {
 				switch (dependency.getGroupId()) {
+				case "org.apache.maven":
+					if("maven-plugin-api".equals(dependency.getArtifactId())) {
+					technologies.add("maven-plugin");
+					}
+					break;
 				case "org.springframework":
 					technologies.add("Spring");
 					break;
 				case "com.google.gwt":
 					technologies.add("GWT");
+					break;
+				case "javax.enterprise":
+					if("cdi-api".equals(dependency.getArtifactId())) {
+						technologies.add("CDI");
+					}
 					break;
 				}
 			}
@@ -619,6 +639,8 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			MavenProject mavenProject = new MavenProject(reader.read(input));
 			if(url.toString().startsWith("file:")) {
 				File file = FileUtils.toFile(url);
+				file = file.getCanonicalFile();
+				url = file.toURI().toURL();
 				File parentDir = file.getParentFile().getParentFile();
 				// If returned pom declares a parent
 				if(mavenProject.getModel().getParent()!=null) {
@@ -636,6 +658,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 				}
 			}
 			mavenProject.getProperties().put(MAVEN_POM_URL, pomPath);
+			// We do not use the parent file method, because the pom may be read from elsewhere
 			mavenProject.getProperties().put(MAVEN_MODULE_DIR, pomPath.substring(0, pomPath.lastIndexOf('/') + 1));
 			return mavenProject;
 		} catch (XmlPullParserException | IOException e) {
