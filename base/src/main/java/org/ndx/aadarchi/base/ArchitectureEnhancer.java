@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Comparator;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -90,6 +91,9 @@ public class ArchitectureEnhancer {
 		stopwatch.start();
 		try {
 			called.run();
+		} catch(RuntimeException e) {
+			logger.log(Level.SEVERE, "Something wrong happened", e);
+			throw e;
 		} finally {
 			stopwatch.stop();
 			logger.info(String.format(format, stopwatch.toString()));

@@ -121,18 +121,4 @@ public interface ModelElementKeys {
 	 * generated links
 	 */
 	String EXTERNAL_DEPENDENCY_DESCRIPTION = PREFIX+".depends.description";
-	static List<File> getJavaSourcesFor(Element container) {
-		return Stream.of(container.getProperties().get(ModelElementKeys.JAVA_SOURCES).split(";"))
-			.map(ThrowingFunction.unchecked(ModelElementKeys::fileAsUrltoFile))
-			.filter(file -> file.exists())
-			.collect(Collectors.toList());
-	}
-	
-	static File fileAsUrltoFile(String fileUrl) throws MalformedURLException, URISyntaxException {
-		return Paths.get(new URL(fileUrl).toURI()).toFile();
-	}
-
-	static Path fileAsUrltoPath(String fileUrl) throws MalformedURLException, URISyntaxException {
-		return Paths.get(new URL(fileUrl).toURI());
-	}
 }

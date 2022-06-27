@@ -27,6 +27,7 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.DiagramsDir;
+import org.ndx.aadarchi.base.utils.FileResolver;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 import org.ndx.aadarchi.sequence.generator.SequenceGenerator;
 import org.ndx.aadarchi.sequence.generator.javaparser.adapter.CallGraphModel;
@@ -46,6 +47,8 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	@Inject 
 	@ConfigProperty(name = DiagramsDir.NAME, defaultValue = DiagramsDir.VALUE)
 	File destination;
+	
+	@Inject FileResolver fileResolver;
 
 	/**
 	 * Map container canonical name to the container object.
@@ -107,7 +110,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	 */
 	private ProjectRoot createProjectRootFor(Container container) {
 		mapPathsToContainers(getAssociatedContainersOf(container));
-		ProjectRoot projectRoot = new ProjectRootBuilder(pathsToContainers)
+		ProjectRoot projectRoot = new ProjectRootBuilder(fileResolver, pathsToContainers)
 				.build(container);
 		return projectRoot;
 	}
@@ -270,6 +273,10 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 			}
 		}
 		// Now get all declared methods of first class, cause that's the ones we want!
+		if(classesOfComponent.isEmpty()) {
+			throw new UnsupportedOperationException(
+					String.format("C4 component %s is declared withouth any code element found. Is it a mistake?", component));
+		}
 		return classesOfComponent.getFirst();
 	}
 	
@@ -282,12 +289,17 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	 */
 	@Override
 	public void endVisit(Component component, OutputBuilder builder) {
-		// First step is to detect if we have an interface code element
-		// which case we can expose only its methods
-		Class<?> analyzed = detectPublicCodeElementOf(component);
-		Collection<Method> toAnalyze = getMethodsToAnalyzeIn(analyzed);
-		// We should have read all source code, so we can use the sequence navigator to generate all the sequence diagrams
-		callGraphModel.generatePlantUMLDiagramFor(component, destination);
+		// If component has no code associated, AND we want to use that mechanism
+		// there is a probblem, and probably something to change in config
+		// TODO Jason, can you please think about that
+		if(!component.getCode().isEmpty()) {
+			// First step is to detect if we have an interface code element
+			// which case we can expose only its methods
+			Class<?> analyzed = detectPublicCodeElementOf(component);
+			Collection<Method> toAnalyze = getMethodsToAnalyzeIn(analyzed);
+			// We should have read all source code, so we can use the sequence navigator to generate all the sequence diagrams
+			callGraphModel.generatePlantUMLDiagramFor(component, destination);
+		}
 	}
 
 	@Override
