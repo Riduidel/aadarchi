@@ -25,11 +25,12 @@ workspace "aadarchi-documentation-system" {
 				aadarchi_maven_plugin -> this
 			}
 			archetype_6 = container "archetype" "" "maven"
+			architecture_documentation = container "architecture-documentation" "" "java, maven, structurizr, asciidoc"
 		}
-		person_architect -> aadarchi "Writes" ""
-		person_stakeholder -> aadarchi "Read" ""
 		person_architect -> archetype_6 "Bootstrap a valid project"
 		person_architect -> maven "Generates documentation"
+		person_stakeholder -> architecture_documentation "Read generated documentation"
+		archetype_6 -> architecture_documentation "Generates documentation project"
 	}
 	views {
 		styles {
