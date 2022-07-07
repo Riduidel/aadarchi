@@ -99,7 +99,7 @@ public class Utils {
 			return resolved.qualifiedName();
 		} else {
 			throw new SequenceGeneratorException(String.format("We don't know yet how to transform a %s type into a valid signature element."
-							+ "Pleae report a bug at https://github.com/Riduidel/aadarchi-documentation-system/issues", 
+							+ "Please report a bug at https://github.com/Riduidel/aadarchi-documentation-system/issues",
 							type.getClass().getName()));
 		}
 	}

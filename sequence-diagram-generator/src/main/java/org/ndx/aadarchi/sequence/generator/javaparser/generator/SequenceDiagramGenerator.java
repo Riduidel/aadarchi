@@ -33,8 +33,7 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 	private final Map<String, Component> classesToComponents;
 	private CallGraphModel callGraphModel;
 
-	public SequenceDiagramGenerator(File outputFolder, Map<String, Component> classesToComponents,
-			CallGraphModel callGraphModel) {
+	public SequenceDiagramGenerator(File outputFolder, Map<String, Component> classesToComponents, CallGraphModel callGraphModel) {
 		this.outputFolder = outputFolder;
 		this.classesToComponents = classesToComponents;
 		this.callGraphModel = callGraphModel;

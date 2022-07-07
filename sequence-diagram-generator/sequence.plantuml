@@ -1,0 +1,46 @@
+@startuml
+
+boundary SequenceDiagramGenerator
+SequenceDiagramGenerator -> startVisit
+activate startVisit
+
+startVisit -> getSoftwareSystems: get containers
+
+startVisit -> getSoftwareSystems: get components
+
+startVisit -> createProjectRootFor: get relative containers and components
+activate createProjectRootFor
+
+createProjectRootFor -> getAssociatedContainersOf: get relative containers
+createProjectRootFor -> getComponentsToScanFor: get relative components
+createProjectRootFor -> startVisit
+deactivate createProjectRootFor
+
+startVisit -> parseAllSources: get sources path
+
+startVisit -> analyzeCalls: get graph model
+activate analyzeCalls
+
+
+boundary JavaParserVisitorForBuildingCallGraph
+analyzeCalls -> JavaParserVisitorForBuildingCallGraph: parse Java
+activate JavaParserVisitorForBuildingCallGraph
+
+JavaParserVisitorForBuildingCallGraph -> analyzeCalls: parsed Java
+deactivate JavaParserVisitorForBuildingCallGraph
+
+analyzeCalls -> startVisit: Graph model
+deactivate analyzeCalls
+
+startVisit -> SequenceDiagramGenerator
+deactivate startVisit
+
+SequenceDiagramGenerator -> endVisit
+activate endVisit
+
+endVisit -> generatePlantUMLDiagramFor: generate UML files
+
+endVisit -> SequenceDiagramGenerator
+deactivate endVisit
+
+@enduml
