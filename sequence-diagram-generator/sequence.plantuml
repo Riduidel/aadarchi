@@ -4,19 +4,36 @@ boundary SequenceDiagramGenerator
 SequenceDiagramGenerator -> startVisit
 activate startVisit
 
-startVisit -> getSoftwareSystems: get containers
+startVisit -> startVisit: getSoftwareSystems
+note left
+  get containers
+end note
 
-startVisit -> getSoftwareSystems: get components
+startVisit -> startVisit: getSoftwareSystems
+note left
+  get components
+end note
 
 startVisit -> createProjectRootFor: get relative containers and components
 activate createProjectRootFor
 
-createProjectRootFor -> getAssociatedContainersOf: get relative containers
-createProjectRootFor -> getComponentsToScanFor: get relative components
+createProjectRootFor -> createProjectRootFor: getAssociatedContainersOf
+note left
+  get relative containers
+end note
+
+createProjectRootFor -> createProjectRootFor: getComponentsToScanFor
+note left
+  get relative components
+end note
+
 createProjectRootFor -> startVisit
 deactivate createProjectRootFor
 
-startVisit -> parseAllSources: get sources path
+startVisit -> startVisit: parseAllSources
+note left
+  get sources path
+end note
 
 startVisit -> analyzeCalls: get graph model
 activate analyzeCalls
