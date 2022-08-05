@@ -2,6 +2,7 @@ package org.ndx.aadarchi.base.enhancers;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -29,9 +30,6 @@ import com.structurizr.model.Relationship;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.view.ComponentView;
 import com.structurizr.view.ContainerView;
-import com.structurizr.view.CustomView;
-import com.structurizr.view.DeploymentView;
-import com.structurizr.view.DynamicView;
 import com.structurizr.view.SystemContextView;
 import com.structurizr.view.SystemLandscapeView;
 import com.structurizr.view.View;
@@ -88,7 +86,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 		String tabs = StringUtils.repeat('\t', indentCount);
 		return properties.entrySet().stream()
 				.map(entry -> String.format("%s\"%s\" \"%s\"", tabs+"\t", entry.getKey(), entry.getValue()))
-				.collect(Collectors.joining("\n", "\n"+tabs+"properties {\n", "\n"+tabs+"}\n"));
+				.collect(Collectors.joining("\n", tabs+"properties {\n", "\n"+tabs+"}\n"));
 	}
 
 	@Override
@@ -114,7 +112,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 
 	@Override
 	public boolean startVisit(SoftwareSystem softwareSystem) {
-		architecture += String.format("\t\t%s = softwareSystem \"%s\" {", asVariableName(softwareSystem),
+		architecture += String.format("\t\t%s = softwareSystem \"%s\" {\n", asVariableName(softwareSystem),
 				softwareSystem.getName());
 		architecture += propertiesToDsl(3, softwareSystem.getProperties());
 		if (!softwareSystem.getRelationships().isEmpty()) {
@@ -125,7 +123,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 
 	@Override
 	public boolean startVisit(Container container) {
-		architecture += String.format("\t\t\t%s = container \"%s\" {", asVariableName(container),
+		architecture += String.format("\t\t\t%s = container \"%s\" {\n", asVariableName(container),
 				container.getName());
 		architecture += propertiesToDsl(4, container.getProperties());
 		if (!container.getRelationships().isEmpty()) {
@@ -136,7 +134,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 
 	@Override
 	public boolean startVisit(Component component) {
-		architecture += String.format("\t\t\t\t%s = component \"%s\" {", asVariableName(component),
+		architecture += String.format("\t\t\t\t%s = component \"%s\" {\n", asVariableName(component),
 				component.getName());
 		architecture += propertiesToDsl(5, component.getProperties());
 		if (!component.getRelationships().isEmpty()) {
@@ -277,6 +275,6 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 
 	@Override
 	public void endVisit(ViewSet viewset, OutputBuilder builder) {
-		architecture += "\t\t}\n";
+		architecture += "\n";
 	}
 }
