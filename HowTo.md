@@ -39,7 +39,7 @@ Don't forget to replace the value of `version` maven property by ![GitHub versio
 First of all, you must be aware that Aadarchi is used when the project build. Therefore you can deduct that your project need to be abble to build.
 
 Then, Aadarchi need a file named "workspace.dsl" to run.
-This file is an architecture description of your project in structurizr's language. To learn more about how this DSL works, you can find any usefull information there :
+This file is an architecture description of your project in structurizr's domain-specific language. To learn more about how this DSL works, you can find all usefull informations there :
 https://github.com/structurizr/dsl/blob/master/docs/language-reference.md
 
 This "workspace.dsl" should be located in `src/architecture/resources/` (we will see later how to change this default path).
@@ -62,7 +62,7 @@ workspace "Project-Name" {
 ```
 You should now be able to run `mvn install` to build your project and use Aadarchi. 
 
-If the build success, it should have created a "structurizr" file in target/`
+If the build success, it should have created a "structurizr" file in `target/`
 
 ## Go further
 
@@ -74,7 +74,7 @@ To do so, you must enable the dsl generation when running the build. One of the 
 
 ### ConfigProperties
 
-Some properties can be modified ...
+Some properties can be modified ... where ? how ? only god knows...
 
 ## Author
 
