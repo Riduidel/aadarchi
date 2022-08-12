@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.ndx.aadarchi.sequence.generator.SequenceGeneratorException;
 
+import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.declarations.ResolvedParameterDeclaration;
 import com.github.javaparser.resolution.types.ResolvedArrayType;
@@ -14,6 +15,7 @@ import com.github.javaparser.resolution.types.ResolvedPrimitiveType;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.resolution.types.ResolvedTypeVariable;
+import com.github.javaparser.symbolsolver.javaparsermodel.declarations.JavaParserParameterDeclaration;
 
 public class Utils {
 
@@ -48,7 +50,18 @@ public class Utils {
 		StringBuilder returned = new StringBuilder();
 		for (int i = 0; i < resolved.getNumberOfParams(); i++) {
 			if(i>0) returned.append("_");
-			String fullType = tryToResolveType(resolved.getParam(i).getType());
+			ResolvedParameterDeclaration param = resolved.getParam(i);
+			String fullType;
+			try {
+				fullType = tryToResolveType(param.getType());
+			} catch(UnsolvedSymbolException e) {
+				if (param instanceof JavaParserParameterDeclaration) {
+					JavaParserParameterDeclaration javaParserParameter = (JavaParserParameterDeclaration) param;
+					fullType = javaParserParameter.getWrappedNode().getTypeAsString();
+				} else {
+					throw e;
+				}
+			}
 			if(!fullType.contains("<")) {
 				fullType = fullType.substring(fullType.lastIndexOf('.')+1);
 			} else {
@@ -75,8 +88,18 @@ public class Utils {
 			if(index>0) {
 				returned.append(", ");
 			}
-			ResolvedType type = parameter.getType();
-			returned.append(Utils.tryToResolveType(type));
+			try {
+				ResolvedType type = parameter.getType();
+				returned.append(Utils.tryToResolveType(type));
+			} catch(UnsolvedSymbolException e) {
+				if (parameter instanceof JavaParserParameterDeclaration) {
+					JavaParserParameterDeclaration javaParserParameter = (JavaParserParameterDeclaration) parameter;
+					// We already know type can't be resolved, so come back to raw parameter type
+					returned.append(javaParserParameter.getWrappedNode().getTypeAsString());
+				} else {
+					throw e;
+				}
+			}
 		}
 		returned.append(')');
 		return returned.toString();
