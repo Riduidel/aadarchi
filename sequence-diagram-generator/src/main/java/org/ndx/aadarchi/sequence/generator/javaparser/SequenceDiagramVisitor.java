@@ -41,6 +41,13 @@ import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Model;
 
+/**
+ * This enhancer will browse the various containers/components to generate sequence diagrams 
+ * for all methods of all classes recognized as C4 components.
+ * Elements of these diagrams will contain only method calls to other components.
+ * @author nicolas-delsaux
+ *
+ */
 public class SequenceDiagramVisitor extends ModelElementAdapter {
 	@Inject Logger logger;
 
@@ -127,6 +134,12 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		}
 		return pathsToContainers;
 	}
+	
+	/**
+	 * Get the list of all the containers that will be used in rendered diagrams.
+	 * @param container
+	 * @return the set of containers used to generate the sequence diagrams
+	 */
 	private Set<Container> getAssociatedContainersOf(Container container) {
 		String containerNames = container.getProperties().get(SequenceGenerator.GENERATES_WITH);
 		Set<Container> returned = new HashSet<Container>();
@@ -205,7 +218,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 		}
 		Map<String, CompilationUnit> namesToSources = new TreeMap<String, CompilationUnit>();
 		// Now they're parsed, let's try to map them to public classes or interfaces contained
-		allParsed.stream().parallel().forEach(cu ->
+		allParsed.stream().forEach(cu ->
 			// Source files for which no primary type exists are ignored (they're useless in our case)
 			cu.getPrimaryTypeName().ifPresent(name -> 
 				cu.getPrimaryType().ifPresent(primaryType ->

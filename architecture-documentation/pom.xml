@@ -149,6 +149,13 @@
 						</goals>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>${project.groupId}</groupId>
+						<artifactId>sequence-diagram-generator</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>de.saumya.mojo</groupId>

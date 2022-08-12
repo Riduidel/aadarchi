@@ -41,7 +41,7 @@ public class TypeRepresentation extends AbstractCodeRepresentation {
 	}
 
 	public MethodDeclarationRepresentation getMethodFor(MethodCallRepresentation methodCallRepresentation) {
-		return signaturesToMethods.get(methodCallRepresentation.calledSignature);
+		return signaturesToMethods.get(methodCallRepresentation.methodSignature);
 	}
 
 	@Override

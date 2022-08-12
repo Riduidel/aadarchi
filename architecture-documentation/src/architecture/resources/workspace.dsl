@@ -25,6 +25,11 @@ workspace "aadarchi-documentation-system" {
 				aadarchi_maven_plugin -> this
 			}
 			archetype_6 = container "archetype" "" "maven"
+			aadarchi_sequence_generator = container "sequence-generator" "" "Java, CDI, JavaParser" {
+				properties {
+					"aadarchi.sequence.generator.with" "true"
+				}
+			}
 		}
 		person_architect -> aadarchi "Writes" ""
 		person_stakeholder -> aadarchi "Read" ""

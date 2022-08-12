@@ -6,16 +6,16 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 
 public class MethodCallRepresentation extends AbstractCodeRepresentation {
 
-	public final String calledName;
-	public final String calledSignature;
-	public final String calledTypeName;
+	public final String methodName;
+	public final String methodSignature;
+	public final String methodTypeName;
 
-	public MethodCallRepresentation(CodeRepresentation parent, String calledName,
-			String calledSignature, String calledTypeName) {
+	public MethodCallRepresentation(CodeRepresentation parent, String methodName,
+			String methodSignature, String methodTypeName) {
 		super(parent);
-		this.calledName = calledName;
-		this.calledSignature = calledSignature;
-		this.calledTypeName = calledTypeName;
+		this.methodName = methodName;
+		this.methodSignature = methodSignature;
+		this.methodTypeName = methodTypeName;
 	}
 
 	@Override

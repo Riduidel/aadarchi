@@ -120,7 +120,7 @@ public class SequenceDiagramConstructionKit {
 				.stream()
 				.map(declaration -> declaration.className)
 				.findFirst().orElse("[");
-		String toType = methodCallRepresentation.calledTypeName;
+		String toType = methodCallRepresentation.methodTypeName;
 		if(classesToComponents.containsKey(toType)) {
 			Component toComponent = classesToComponents.get(toType);
 			components.add(toComponent);
@@ -133,7 +133,7 @@ public class SequenceDiagramConstructionKit {
 			methodCalls.append("->")
 					.append(componentId(toComponent))
 					.append(':')
-					.append(StringUtils.abbreviate(methodCallRepresentation.calledSignature, "...", SIGNATURE_WISTH))
+					.append(StringUtils.abbreviate(methodCallRepresentation.methodSignature, "...", SIGNATURE_WISTH))
 					.append('\n');
 			methodCalls.append("activate ").append(componentId(toComponent)).append('\n');
 			meaningful = true;
@@ -144,7 +144,7 @@ public class SequenceDiagramConstructionKit {
 	}
 
 	public void deactivateMethodCall(MethodCallRepresentation methodCallRepresentation) {
-		String toType = methodCallRepresentation.calledTypeName;
+		String toType = methodCallRepresentation.methodTypeName;
 		if(classesToComponents.containsKey(toType)) {
 			methodCalls.append("deactivate ").append(componentId(classesToComponents.get(toType))).append('\n');
 		}

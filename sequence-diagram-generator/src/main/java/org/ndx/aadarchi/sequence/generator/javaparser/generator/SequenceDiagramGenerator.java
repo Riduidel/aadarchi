@@ -109,7 +109,7 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 	}
 
 	private MethodDeclarationRepresentation findImplementationOf(MethodCallRepresentation methodCallRepresentation) {
-		Component component = classesToComponents.get(methodCallRepresentation.calledTypeName);
+		Component component = classesToComponents.get(methodCallRepresentation.methodTypeName);
 		MethodDeclarationRepresentation representation = null;
 		for (CodeElement code : component.getCode()) {
 			representation = callGraphModel.getClassFor(code.getType()).getMethodFor(methodCallRepresentation);
