@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.maven.plugin;
 
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import javax.enterprise.inject.Instance;
 import javax.enterprise.util.AnnotationLiteral;
@@ -121,19 +122,23 @@ public class AvailablePropertiesMojo extends AbstractCDIStarterMojo {
 
         }
 
+        @Inject
+        Logger logger;
+
         /**
          * Here we inject the most generic possible CDI instance object
          * Because we will use programmatic injection later on
          * @see somewhere in https://docs.jboss.org/weld/reference/latest/en-US/html_single/
          */
         @Inject
-        public Instance<?> configPropeties;
+        public Instance<Object> configPropeties;
 
         @Override
         public void run() {
             Instance<?> injected = configPropeties.select(new ConfigPropertyLiteral());
             // TODO convert to InjectionPoint
             // TODO output list
+            logger.info("We're in");
         }
 
     }
