@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.maven.plugin;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -35,109 +36,19 @@ import com.structurizr.annotation.Component;
 public class AvailablePropertiesMojo extends AbstractCDIStarterMojo {
 
     public static class ListAvailableProperties implements Runnable {
-        public static class ConfigPropertyLiteral extends AnnotationLiteral<ConfigProperty> implements ConfigProperty {
-
-            private String name;
-            private String defaultValue;
-            private boolean projectStageAware;
-            private String parameterizedBy;
-            private boolean evaluateVariables;
-            private Class<? extends Converter> converter;
-            private long cacheFor;
-            private TimeUnit cacheUnit;
-
-            public ConfigPropertyLiteral() {
-                super();
-                this.name = ConfigProperty.NULL;
-            }
-
-            public ConfigPropertyLiteral name(String name) {
-                this.name = name;
-                return this;
-            }
-
-            @Override
-            public String name() {
-                return name;
-            }
-
-            public ConfigPropertyLiteral defaultValue(String defaultValue) {
-                this.defaultValue = defaultValue;
-                return this;
-            }
-
-            @Override
-            public String defaultValue() {
-                return defaultValue;
-            }
-
-            public ConfigPropertyLiteral projectStageAware(boolean projectStageAware) {
-                this.projectStageAware = projectStageAware;
-                return this;
-            }
-
-            @Override
-            public boolean projectStageAware() {
-                return projectStageAware;
-            }
-
-            public ConfigPropertyLiteral parameterizedBy(String parameterizedBy) {
-                this.parameterizedBy = parameterizedBy;
-                return this;
-            }
-
-            @Override
-            public String parameterizedBy() {
-                return parameterizedBy;
-            }
-
-            public ConfigPropertyLiteral evaluateVariables(boolean evaluateVariables) {
-                this.evaluateVariables = evaluateVariables;
-                return this;
-            }
-
-            @Override
-            public boolean evaluateVariables() {
-                return evaluateVariables;
-            }
-
-            public ConfigPropertyLiteral converter(Class<? extends Converter> converter) {
-                this.converter = converter;
-                return this;
-            }
-
-            @Override
-            public Class<? extends Converter> converter() {
-                return converter;
-            }
-
-            public ConfigPropertyLiteral cacheFor(long cacheFor) {
-                this.cacheFor = cacheFor;
-                return this;
-            }
-
-            @Override
-            public long cacheFor() {
-                return cacheFor;
-            }
-
-            public ConfigPropertyLiteral cacheUnit(TimeUnit cacheUnit) {
-                this.cacheUnit = cacheUnit;
-                return this;
-            }
-
-            @Override
-            public TimeUnit cacheUnit() {
-                return cacheUnit;
-            }
-
-        }
-        
         @Inject Logger logger;
         
         @Inject BeanManager manager;
         
-        Set<String> filteredPackages = new TreeSet<>(Arrays.asList("org.apache.deltaspike"));
+        /**
+         * Beans in these packages won't be analyzed.
+         * @see #isInFilteredPackage(String)
+         * @see #isNotInFilteredPackages(Bean)
+         */
+        Set<String> filteredPackages = new TreeSet<>(Arrays.asList(
+        		"org.jboss.weld",
+        		"javax.enterprise.inject",
+        		"org.apache.deltaspike"));
         
         private boolean isInFilteredPackage(String packageName) {
         	for(int index=1; index<=packageName.length() && index>=0; index = packageName.indexOf('.', index+1)) {
@@ -149,47 +60,89 @@ public class AvailablePropertiesMojo extends AbstractCDIStarterMojo {
         	return false;
         }
         
+        /**
+         * Test if the Bean object corresponds to a class which is not in a filtered package
+         * @see #isInFilteredPackage(String)
+         */
         private boolean isNotInFilteredPackages(Bean bean) {
         	return !isInFilteredPackage(bean.getBeanClass().getPackageName());
         }
         
-        private Stream<Entry<InjectionPoint, Bean>> beanToInjectionPointEntries(Bean<?> bean) {
+        /**
+         * Build a stream of entries where keys are injection points and values are beans
+         */
+        private Stream<Entry<InjectionPoint, Bean<?>>> beanToInjectionPointEntries(Bean<?> bean) {
         	return bean.getInjectionPoints().stream()
         			.map(injectionPoint -> Map.entry(injectionPoint, bean));
         }
-        
-        private boolean filterInjectionPoints(Map.Entry<InjectionPoint, Bean> entry) {
+
+        /**
+         * Keep only injection points annotated with @ConfigProperty annotation
+         */
+        private boolean filterInjectionPointsHavingConfigPropertyAnnotation(Map.Entry<InjectionPoint, Bean<?>> entry) {
         	InjectionPoint injectionPoint = entry.getKey();
         	return injectionPoint.getAnnotated().getAnnotation(ConfigProperty.class)!=null;
         }
         
-        private String injectionPointEntryToString(Map.Entry<InjectionPoint, Bean<?>> entry) {
-        	InjectionPoint injectionPoint = entry.getKey();
-			ConfigProperty configProperty = injectionPoint.getAnnotated().getAnnotation(ConfigProperty.class);
-        	return String.format("%s of type %s (default value: \"%s\", used in %s)", 
-        			configProperty.name(), 
-        			injectionPoint.getAnnotated().getBaseType().getTypeName(), 
-        			configProperty.defaultValue(), 
-        			entry.getValue().getBeanClass().getName());
+        private Map.Entry<ConfigProperty, Map.Entry<InjectionPoint, Bean<?>>>
+        	remapToConfigPropertyKey(Map.Entry<InjectionPoint, Bean<?>> initialEntry) {
+        	InjectionPoint injectionPoint = initialEntry.getKey();
+        	ConfigProperty key = injectionPoint.getAnnotated().getAnnotation(ConfigProperty.class);
+        	return Map.entry(key, initialEntry);
         }
         
         @Override
         public void run() {
         	// Get all the beans
         	Set<Bean<?>> allBeans = manager.getBeans(Object.class);
-        	Map<InjectionPoint, Bean<?>> configPropertiesInjectionPoints = allBeans.stream()
+        	Map<String, Map<String, Map<String, Set<String>>>> configPropertiesTree = allBeans.stream()
         			.filter(this::isNotInFilteredPackages)
         			.flatMap(this::beanToInjectionPointEntries)
-        			.filter(this::filterInjectionPoints)
-        			.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+        			.filter(this::filterInjectionPointsHavingConfigPropertyAnnotation)
+        			.map(this::remapToConfigPropertyKey)
+        			/* returns Stream<Entry<ConfigProperty, Entry<InjectionPoint, Bean<?>>> */
+        			.collect(Collectors.groupingBy(
+        					// First level of grouping is ConfigProperty name
+        					entry -> entry.getKey().name(),
+        					Collectors.groupingBy(
+        							// Second level of grouping is by default value
+        							entry -> entry.getValue().getKey().getAnnotated().getBaseType().getTypeName(),
+        							Collectors.groupingBy(entry -> entry.getKey().defaultValue(),
+        									Collectors.mapping(entry -> entry.getValue().getValue().getBeanClass().getName(), Collectors.toSet()))
+	        							)
+	        					)
+        					)
+        			;
+        			
+        			
         	
-        	String text = configPropertiesInjectionPoints.entrySet().stream()
-        			.map(this::injectionPointEntryToString)
-        			.sorted()
-        			.collect(Collectors.joining("\n"));
         	// Now we have all places where Configproperty annotation is used, let's map that to our objects
-        	logger.info(String.format("%d config properties loaded\n%s", configPropertiesInjectionPoints.size(), text));
+        	logger.info("available config properties are\n"+configPropertiesTreeToString(configPropertiesTree));
         }
+
+		private String configPropertiesTreeToString(Map<String, Map<String, Map<String, Set<String>>>> values) {
+			return values.entrySet().stream()
+					.map(entry -> String.format("* %s\n%s", entry.getKey(), 
+							configPropertyValuesToString(entry.getValue())))
+					.collect(Collectors.joining("\n"));
+		}
+
+		/**
+		 * 
+		 * @param value maps types to default values and bean classes
+		 * @return
+		 */
+		private String configPropertyValuesToString(Map<String, Map<String, Set<String>>> value) {
+			return value.entrySet().stream()
+					.map(entry -> String.format("\t%s\n%s", entry.getKey(), defaultValuesToString(entry.getValue())))
+					.collect(Collectors.joining("\n"));
+		}
+
+		private String defaultValuesToString(Map<String, Set<String>> value) {
+			return value.entrySet().stream()
+					.map(entry -> String.format("\t\tdefault value \"%s\"\n%s", entry.getKey(), entry.getValue().stream().map(text -> "\t\t\t"+text).collect(Collectors.joining("\n"))))
+					.collect(Collectors.joining("\n"));
+		}
 
     }
 
