@@ -1,8 +1,19 @@
 package org.ndx.aadarchi.maven.plugin;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 
@@ -37,6 +48,7 @@ public class AvailablePropertiesMojo extends AbstractCDIStarterMojo {
 
             public ConfigPropertyLiteral() {
                 super();
+                this.name = ConfigProperty.NULL;
             }
 
             public ConfigPropertyLiteral name(String name) {
@@ -120,20 +132,63 @@ public class AvailablePropertiesMojo extends AbstractCDIStarterMojo {
             }
 
         }
-
-        /**
-         * Here we inject the most generic possible CDI instance object
-         * Because we will use programmatic injection later on
-         * @see somewhere in https://docs.jboss.org/weld/reference/latest/en-US/html_single/
-         */
-        @Inject
-        public Instance<?> configPropeties;
-
+        
+        @Inject Logger logger;
+        
+        @Inject BeanManager manager;
+        
+        Set<String> filteredPackages = new TreeSet<>(Arrays.asList("org.apache.deltaspike"));
+        
+        private boolean isInFilteredPackage(String packageName) {
+        	for(int index=1; index<=packageName.length() && index>=0; index = packageName.indexOf('.', index+1)) {
+        		String packagePrefix = packageName.substring(0, index);
+        		if(filteredPackages.contains(packagePrefix)) {
+        			return true;
+        		}
+        	}
+        	return false;
+        }
+        
+        private boolean isNotInFilteredPackages(Bean bean) {
+        	return !isInFilteredPackage(bean.getBeanClass().getPackageName());
+        }
+        
+        private Stream<Entry<InjectionPoint, Bean>> beanToInjectionPointEntries(Bean<?> bean) {
+        	return bean.getInjectionPoints().stream()
+        			.map(injectionPoint -> Map.entry(injectionPoint, bean));
+        }
+        
+        private boolean filterInjectionPoints(Map.Entry<InjectionPoint, Bean> entry) {
+        	InjectionPoint injectionPoint = entry.getKey();
+        	return injectionPoint.getAnnotated().getAnnotation(ConfigProperty.class)!=null;
+        }
+        
+        private String injectionPointEntryToString(Map.Entry<InjectionPoint, Bean<?>> entry) {
+        	InjectionPoint injectionPoint = entry.getKey();
+			ConfigProperty configProperty = injectionPoint.getAnnotated().getAnnotation(ConfigProperty.class);
+        	return String.format("%s of type %s (default value: \"%s\", used in %s)", 
+        			configProperty.name(), 
+        			injectionPoint.getAnnotated().getBaseType().getTypeName(), 
+        			configProperty.defaultValue(), 
+        			entry.getValue().getBeanClass().getName());
+        }
+        
         @Override
         public void run() {
-            Instance<?> injected = configPropeties.select(new ConfigPropertyLiteral());
-            // TODO convert to InjectionPoint
-            // TODO output list
+        	// Get all the beans
+        	Set<Bean<?>> allBeans = manager.getBeans(Object.class);
+        	Map<InjectionPoint, Bean<?>> configPropertiesInjectionPoints = allBeans.stream()
+        			.filter(this::isNotInFilteredPackages)
+        			.flatMap(this::beanToInjectionPointEntries)
+        			.filter(this::filterInjectionPoints)
+        			.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+        	
+        	String text = configPropertiesInjectionPoints.entrySet().stream()
+        			.map(this::injectionPointEntryToString)
+        			.sorted()
+        			.collect(Collectors.joining("\n"));
+        	// Now we have all places where Configproperty annotation is used, let's map that to our objects
+        	logger.info(String.format("%d config properties loaded\n%s", configPropertiesInjectionPoints.size(), text));
         }
 
     }
