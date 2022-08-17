@@ -122,7 +122,7 @@ public class AvailablePropertiesMojo extends AbstractCDIStarterMojo {
 
 		private String configPropertiesTreeToString(Map<String, Map<String, Map<String, Set<String>>>> values) {
 			return values.entrySet().stream()
-					.map(entry -> String.format("* %s\n%s", entry.getKey(), 
+					.map(entry -> String.format("* \"%s\"\n%s", entry.getKey(), 
 							configPropertyValuesToString(entry.getValue())))
 					.collect(Collectors.joining("\n"));
 		}
@@ -134,13 +134,13 @@ public class AvailablePropertiesMojo extends AbstractCDIStarterMojo {
 		 */
 		private String configPropertyValuesToString(Map<String, Map<String, Set<String>>> value) {
 			return value.entrySet().stream()
-					.map(entry -> String.format("\t%s\n%s", entry.getKey(), defaultValuesToString(entry.getValue())))
+					.map(entry -> String.format("\tof type \"%s\"\n%s", entry.getKey(), defaultValuesToString(entry.getValue())))
 					.collect(Collectors.joining("\n"));
 		}
 
 		private String defaultValuesToString(Map<String, Set<String>> value) {
 			return value.entrySet().stream()
-					.map(entry -> String.format("\t\tdefault value \"%s\"\n%s", entry.getKey(), entry.getValue().stream().map(text -> "\t\t\t"+text).collect(Collectors.joining("\n"))))
+					.map(entry -> String.format("\t\twith default value \"%s\". Defined in types\n%s", entry.getKey(), entry.getValue().stream().map(text -> "\t\t\t"+text).collect(Collectors.joining("\n"))))
 					.collect(Collectors.joining("\n"));
 		}
 
