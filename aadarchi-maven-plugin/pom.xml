@@ -11,6 +11,22 @@
 	<packaging>maven-plugin</packaging>
 	<name>Aadarchi : Maven plugin</name>
 	<description>This maven plugin allows integration of our documentation system into maven builds by providing a set of useful mojos</description>
+	
+	<properties>
+		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
+		<version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
+		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
+		<version.jruby>9.2.9.0</version.jruby>
+	</properties>
+
+	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
+	See https://github.com/Riduidel/aadarchi/issues/159 for the weird protocol -->
+	<repositories>
+		<repository>
+			<id>mavengems</id>
+			<url>mavengem:https://rubygems.org</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 		<!-- used to invoke asciidoctor-maven-plugin in a controlled way -->
@@ -45,9 +61,62 @@
 			<artifactId>livereload-jvm</artifactId>
 			<version>0.2.0</version>
 		</dependency>
+		<!-- asciidoctor-kroki is added as POM dependency to make sure gem maven 
+			plugin downloads it -->
+		<dependency>
+			<groupId>rubygems</groupId>
+			<artifactId>asciidoctor-kroki</artifactId>
+			<version>${version.asciidoctor.kroki}</version>
+			<type>gem</type>
+			<!-- Avoid downloading gems included in AsciidoctorJ -->
+			<exclusions>
+				<exclusion>
+					<groupId>rubygems</groupId>
+					<artifactId>asciidoctor</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>rubygems</groupId>
+					<artifactId>thread_safe</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>rubygems</groupId>
+					<artifactId>concurrent-ruby</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 
 	<build>
+		<extensions>
+			<extension>
+				<!-- this allows us to download gems -->
+				<groupId>org.torquebox.mojo</groupId>
+				<artifactId>mavengem-wagon</artifactId>
+				<version>1.0.3</version>
+			</extension>
+		</extensions>
+		<plugins>
+			<plugin>
+				<groupId>de.saumya.mojo</groupId>
+				<artifactId>gem-maven-plugin</artifactId>
+				<version>2.0.1</version>
+				<configuration>
+					<jrubyVersion>${version.jruby}</jrubyVersion>
+					<gemHome>${project.build.directory}/gems</gemHome>
+					<gemPath>${project.build.directory}/gems</gemPath>
+				</configuration>
+				<executions>
+					<!-- Install required gems in target directory -->
+					<execution>
+						<id>install-gems</id>
+						<goals>
+							<goal>initialize</goal>
+						</goals>
+						<phase>initialize</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>
