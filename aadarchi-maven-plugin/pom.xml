@@ -56,6 +56,13 @@
 			<artifactId>base</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- Since we're in a maven plugin, we can supposethe user project is also a maven project
+		so automate the boing parts -->
+		<dependency>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<artifactId>maven-metadata-inferer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>net.alchim31</groupId>
 			<artifactId>livereload-jvm</artifactId>
