@@ -29,12 +29,13 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.structurizr</groupId>
-			<artifactId>structurizr-analysis</artifactId>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<artifactId>base</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
-			<artifactId>base</artifactId>
+			<artifactId>structurizr-components-detector</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

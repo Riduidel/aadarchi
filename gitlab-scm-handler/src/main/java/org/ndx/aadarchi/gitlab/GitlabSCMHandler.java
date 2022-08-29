@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.gitlab;
 
 
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -28,7 +29,7 @@ public class GitlabSCMHandler implements SCMHandler {
 	}
 
 	@Override
-	public Collection<SCMFile> find(String project, String path, Predicate<SCMFile> filter) {
+	public Collection<SCMFile> find(String project, String path, Predicate<SCMFile> filter) throws FileNotFoundException {
 		try {
 			List<TreeItem> items = gitlab.getApi().getRepositoryApi().getTree(project, path, null);
 			return items.stream()

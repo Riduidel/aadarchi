@@ -79,6 +79,7 @@
 		<module>markdown-to-asciidoc</module>
         <module>aadarchi-maven-plugin</module>
         <module>cdi-in-maven-plugin-helper</module>
+        <module>structurizr-components-detector</module>
 	</modules>
 
 	<dependencyManagement>

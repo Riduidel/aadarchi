@@ -1,5 +1,6 @@
 package org.ndx.aadarchi.base.enhancers.scm;
 
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.function.Predicate;
 
@@ -21,9 +22,11 @@ public interface SCMHandler {
 	 * @param project
 	 * @param path
 	 * @param filter
-	 * @return
+	 * @return collection of files matching given path and predicate
+	 * @throws FileNotFoundException if provider couldn't return any matching file and throwed any exception
+	 * because of that
 	 */
-	Collection<SCMFile> find(String project, String path, Predicate<SCMFile> filter);
+	Collection<SCMFile> find(String project, String path, Predicate<SCMFile> filter) throws FileNotFoundException;
 
 	String linkTo(String project, String path);
 

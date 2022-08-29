@@ -1,5 +1,6 @@
 package org.ndx.aadarchi.github;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -41,9 +42,9 @@ public class GithubSCMHandler implements SCMHandler {
 				.filter(content -> filter.test(content))
 				.collect(Collectors.toList());
 		} catch (IOException e) {
-			throw new GitHubHandlerException(
+			throw new FileNotFoundException(
 					String.format("Unable to find file in %s/%s", project, path)
-					,e);
+					);
 		}
 	}
 
