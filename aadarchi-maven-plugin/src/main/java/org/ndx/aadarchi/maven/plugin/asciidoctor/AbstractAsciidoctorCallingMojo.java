@@ -3,7 +3,6 @@ package org.ndx.aadarchi.maven.plugin.asciidoctor;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.artifactId;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.dependency;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.element;
-import static org.twdata.maven.mojoexecutor.MojoExecutor.executeMojo;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.goal;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.groupId;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.name;
@@ -13,21 +12,14 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.version;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.BuildPluginManager;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.ndx.aadarchi.maven.plugin.GenerateDiagramsMojo;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
-import org.twdata.maven.mojoexecutor.MojoExecutor.ExecutionEnvironment;
 
 /**
  * Base class for all mojos invoking asciidoctor-maven-plugin.
@@ -35,14 +27,8 @@ import org.twdata.maven.mojoexecutor.MojoExecutor.ExecutionEnvironment;
  * @author nicolas-delsaux
  *
  */
-public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
+public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojoExecutorMojo {
 
-	@Component
-	private MavenProject mavenProject;
-	@Component
-	private MavenSession mavenSession;
-	@Component
-	private BuildPluginManager pluginManager;
 	/**
 	 * Version of the asciidoctor-maven-plugin
 	 * @see https://mvnrepository.com/artifact/org.asciidoctor/asciidoctor-maven-plugin
@@ -111,14 +97,8 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 	@Parameter(name="structurizr-dir", defaultValue = "${project.build.directory}/structurizr/diagrams", property="aadarchi.output.diagrams")
 	private String structurizrDir;
 
-	@Override
-	public void execute() throws MojoExecutionException, MojoFailureException {
-		executeMojo(
-				asciidoctorMavenPlugin(),
-				goal("process-asciidoc"),
-				configuration(),
-				executionEnvironment()
-		);
+	protected String executedMojo() {
+		return goal("process-asciidoc");
 	}
 	
 	public String getIssuesUrl() {
@@ -130,15 +110,7 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojo {
 		return issuesUrl;
 	}
 
-	protected ExecutionEnvironment executionEnvironment() {
-		return MojoExecutor.executionEnvironment(
-		    mavenProject,
-		    mavenSession,
-		    pluginManager
-		);
-	}
-
-	protected Plugin asciidoctorMavenPlugin() {
+	protected Plugin executedMavenPlugin() {
 		return plugin(
 				groupId("org.asciidoctor"),
 				artifactId("asciidoctor-maven-plugin"),
