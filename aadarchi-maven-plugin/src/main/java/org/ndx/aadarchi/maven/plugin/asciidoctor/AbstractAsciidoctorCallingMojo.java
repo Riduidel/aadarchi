@@ -39,9 +39,6 @@ import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
  *
  */
 public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojoExecutorMojo {
-	private static FileSystemManager fsManager;
-
-	private static Map<String, FileObject> bundledGems;
 	/**
 	 * Version of the asciidoctor-maven-plugin
 	 * 
@@ -115,6 +112,7 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojoExecuto
 	 */
 	@Parameter(name = "structurizr-dir", defaultValue = "${project.build.directory}/structurizr/diagrams", property = "aadarchi.output.diagrams")
 	private String structurizrDir;
+	private static GemExtractor gemExtractor;
 
 	protected String executedMojo() {
 		return goal("process-asciidoc");
@@ -151,8 +149,7 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojoExecuto
 	}
 
 	protected Xpp3Dom configuration() {
-		Element requiredGems = requiredGems();
-		processContainedGems(requiredGems);
+		Element requiredGems = getGemExtractor().processContainedGems(requiredGems());
 		return MojoExecutor.configuration(
 				// TODO conditionalize that invocation : add all gems dependencies here
 				requiredGems, gemsPath(),
@@ -160,102 +157,11 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojoExecuto
 				configurationBackend(), configurationSourceDirectory(), configurationOutputDirectory());
 	}
 
-	/**
-	 * Scan the list of contained gems looking for the ones which are bundled with
-	 * this plugin. Each bundled element that is not present in effective folder
-	 * will be copied
-	 * 
-	 * @param requiredGems
-	 * @see #requiredGems()
-	 */
-	private void processContainedGems(Element requires) {
-		for (Xpp3Dom dependency : requires.toDom().getChildren("require")) {
-			String gemName = dependency.getValue();
-			if (getBundledGems().containsKey(gemName)) {
-				copyContainedGem(gemName, getBundledGems().get(gemName));
-			}
+	private GemExtractor getGemExtractor() {
+		if(gemExtractor==null) {
+			gemExtractor = new GemExtractor(gemsPath, getLog());
 		}
-	}
-
-	protected static Map<String, FileObject> getBundledGems() {
-		if (bundledGems == null) {
-			bundledGems = loadBundledGems();
-		}
-		return bundledGems;
-	}
-
-	/**
-	 * Bundled gems should be sub-elements of META-INF/gems
-	 * @return
-	 */
-	private static Map<String, FileObject> loadBundledGems() {
-		try {
-			Map<String, FileObject> returned = new TreeMap<>();
-			FileObject gemsFolder = getThisJarAsVFS().getChild("META-INF").getChild("gems").getChild("gems");
-			for(FileObject gem : gemsFolder.getChildren()) {
-				if(gem.isFolder()) {
-					String gemVersionnedName = gem.getName().getBaseName();
-					String gemName = gemVersionnedName.substring(0, gemVersionnedName.lastIndexOf('-'));
-					returned.put(gemName, gem);
-				}
-			}
-			return returned;
-		} catch (FileSystemException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private static FileObject getThisJarAsVFS() {
-		URI currentJarUri;
-		try {
-			currentJarUri = AbstractAsciidoctorCallingMojo.class
-			    .getProtectionDomain()
-			    .getCodeSource()
-			    .getLocation()
-			    .toURI();
-		} catch (URISyntaxException e) {
-			throw new RuntimeException("Interestingly, we can't resolve the path of the current jar...");
-		}
-		String currentJarPath = currentJarUri.getPath();
-		String commonsVfsPath = "jar:"+currentJarPath+"!";
-		try {
-			return getFileSystemManager().resolveFile(commonsVfsPath);
-		} catch (FileSystemException e) {
-			throw new RuntimeException("Unable to resolve path to current jar (uri was "+commonsVfsPath+")", e);
-		}
-	}
-
-	private static FileSystemManager getFileSystemManager() {
-		if (fsManager == null) {
-			try {
-				fsManager = VFS.getManager();
-			} catch (FileSystemException e) {
-				throw new RuntimeException("Unable to get a Commons-VFS file system manager. THings are really in a bad state");
-			}
-		}
-		return fsManager;
-	}
-
-	private void copyContainedGem(String value, FileObject sourceGem) {
-		try {
-			FileObject gems = getGemsFolder();
-			FileObject target = gems.resolveFile(sourceGem.getName().getBaseName());
-			target.copyFrom(sourceGem, new AllFileSelector());
-		} catch (FileSystemException e) {
-			throw new RuntimeException(String.format("Unable to copy gem %s due to", value, e));
-		}
-	}
-
-	private FileObject getGemsFolder() throws FileSystemException {
-		FileObject destination = getFileSystemManager().resolveFile("file:"+gemsPath);
-		if(!destination.exists()) {
-			destination.createFolder();
-		}
-		FileObject gems = destination.resolveFile("gems");
-		if(!gems.exists()) {
-			gems.createFolder();
-		}
-		return gems;
+		return gemExtractor;
 	}
 
 	public Element configurationSourceDirectory() {
