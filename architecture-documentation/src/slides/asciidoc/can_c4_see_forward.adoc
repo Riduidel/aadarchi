@@ -3,6 +3,7 @@
 :revealjs_previewLinks: true
 :revealjs_mouseWheel: true
 :revealjs_history: true
+:revealjs_theme: solarized
 ////
 :revealjs_plugins: {slidesdir}/plugins.js
 :revealjs_plugins_configuration: {slidesdir}/configs.js
