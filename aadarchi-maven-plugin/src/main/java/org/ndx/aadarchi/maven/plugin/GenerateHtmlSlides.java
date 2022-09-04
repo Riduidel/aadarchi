@@ -11,6 +11,7 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.plugin;
 import static org.twdata.maven.mojoexecutor.MojoExecutor.version;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
@@ -19,6 +20,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.ndx.aadarchi.maven.plugin.asciidoctor.AbstractAsciidoctorCallingMojo;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
@@ -61,7 +63,8 @@ public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		getLog().debug("Downloading revealjs");
+		String outputPath = htmlSlidesOutputDir.getAbsolutePath();
+		getLog().info("Downloading revealjs into "+outputPath);
 		executeMojo(
 				plugin(
 					groupId("com.googlecode.maven-download-plugin"),
@@ -72,9 +75,9 @@ public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
 						element(name("uri"), String.format("https://github.com/hakimel/reveal.js/archive/%s.zip", revealjsVersion)),
 						element(name("unpack"), "true"),
 						element(name("outputFileName"), String.format("reveal.js-${version.revealjs}.zip", revealjsVersion)),
-						element(name("outputDirectory"), "${asciidoc.target.slides.directory}")), 
+						element(name("outputDirectory"), outputPath)), 
 				executionEnvironment());
-		getLog().debug("Generating slides");
+		getLog().info("Generating slides");
 		super.execute();
 	}
 
@@ -101,5 +104,21 @@ public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
 	@Override
 	protected Element configurationBackend() {
 		return element(name("backend"), "revealjs");
+	}
+	
+	@Override
+	protected Xpp3Dom configuration() {
+		Xpp3Dom returned = super.configuration();
+		returned.addChild(element(name("templateDirs"), 
+				String.format("%s/reveal.js-%s/templates/slim", htmlSlidesOutputDir.getAbsolutePath(), revealjsVersion)
+					).toDom());
+		return returned;
+	}
+	
+	@Override
+	public List<Element> configurationAttributes() {
+		List<Element> returned = new ArrayList<>(super.configurationAttributes());
+		returned.add(element(name("revealjsdir"), String.format("reveal.js-%s", revealjsVersion)));
+		return returned;
 	}
 }
