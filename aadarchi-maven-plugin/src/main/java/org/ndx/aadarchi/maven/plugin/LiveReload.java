@@ -39,7 +39,10 @@ import net_alchim31_livereload.LRServer; //#from net.alchim31:livereload-jvm:0.2
 
 @Mojo(name = "livereload", defaultPhase = LifecyclePhase.PACKAGE)
 public class LiveReload extends AbstractMojo {
-
+	@Parameter(defaultValue = "${mojo.groupId}")
+	private String mojoGroupId;
+	@Parameter(defaultValue = "${mojo.artifactId}")
+	private String mojoArtifactId;
 	@Component
 	private MavenProject mavenProject;
 
@@ -86,9 +89,14 @@ public class LiveReload extends AbstractMojo {
 	 */
 	@Parameter(name="goals-to-execute")
 	private List<String> goalsToExecute = Arrays.asList("prepare-package",
-			"io.github.Riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-docs",
-			"io.github.Riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-slides"
+			String.format("%s:%s@generate-html-docs",mojoGroupId, mojoArtifactId, getMojoNameOf(GenerateHtmlDocs.class)),
+			String.format("%s:%s@generate-html-slides",mojoGroupId, mojoArtifactId, getMojoNameOf(GenerateHtmlSlides.class))
 			);
+	
+	private static String getMojoNameOf(Class<? extends AbstractMojo> mojoClass) {
+		Mojo mojo = mojoClass.getDeclaredAnnotation(Mojo.class);
+		return mojo.name();
+	}
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -130,7 +138,7 @@ public class LiveReload extends AbstractMojo {
 				)
 		);
 	}
-	
+
 	private Element[] goals() {
 		// First, get our artifact name
 		return goalsToExecute.stream()
