@@ -25,6 +25,12 @@ import org.ndx.aadarchi.maven.plugin.asciidoctor.AbstractAsciidoctorCallingMojo;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
 
+/**
+ * Generates html slide with a "correct" set of parameters. 
+ * Those parameters specifically allow usage of revealjs.
+ * @author nicolas-delsaux
+ *
+ */
 @Mojo(name = "generate-html-slides", defaultPhase = LifecyclePhase.PREPARE_PACKAGE)
 public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
 	/**
