@@ -150,11 +150,14 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojoExecuto
 
 	protected Xpp3Dom configuration() {
 		Element requiredGems = getGemExtractor().processContainedGems(requiredGems());
-		return MojoExecutor.configuration(
+		Xpp3Dom returned = MojoExecutor.configuration(
 				// TODO conditionalize that invocation : add all gems dependencies here
 				requiredGems, gemsPath(),
 				element(name("attributes"), configurationAttributes().toArray(new Element[] {})),
 				configurationBackend(), configurationSourceDirectory(), configurationOutputDirectory());
+		getLog().debug("Using mojo configuration");
+		getLog().debug(returned.toString());
+		return returned;
 	}
 
 	private GemExtractor getGemExtractor() {
