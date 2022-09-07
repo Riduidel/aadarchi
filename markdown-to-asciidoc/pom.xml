@@ -8,7 +8,7 @@
 	<artifactId>markdown-to-asciidoc</artifactId>
 	<name>Markdown to Asciidoc converter</name>
 	<description>This project is a fork of https://github.com/bodiam/markdown-to-asciidoc to avoid depending upon Jitpack (which prevents usage in legacy companies)</description>
-	
+
 	<properties>
 		<cucumber.version>7.2.3</cucumber.version>
 	</properties>
@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
-			<version>1.14.2</version>
+			<version>${version.jsoup}</version>
 		</dependency>
 
 		<dependency>

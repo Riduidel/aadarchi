@@ -22,6 +22,7 @@
 		<version.structurizr.plantuml>1.6.3</version.structurizr.plantuml>
 		<version.structurizr.analysis>1.3.5</version.structurizr.analysis>
 		<version.structurizr.annotations>1.3.5</version.structurizr.annotations>
+		<version.jsoup>1.15.3</version.jsoup>
 	</properties>
 	<scm>
 		<connection>scm:git:git@github.com:Riduidel/aadarchi.git</connection>
