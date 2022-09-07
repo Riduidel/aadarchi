@@ -30,7 +30,7 @@ public class GithubSCMHandler implements SCMHandler {
 	}
 
 	@Override
-	public Collection<SCMFile> find(String project, String path, Predicate<SCMFile> filter) {
+	public Collection<SCMFile> find(String project, String path, Predicate<SCMFile> filter) throws FileNotFoundException {
 		if(Constants.isGitHubProject(project)) {
 			project = Constants.getGitHubProjectName(project);
 		}
