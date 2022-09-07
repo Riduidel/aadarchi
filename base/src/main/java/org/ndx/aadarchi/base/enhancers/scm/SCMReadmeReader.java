@@ -1,9 +1,11 @@
 package org.ndx.aadarchi.base.enhancers.scm;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -85,37 +87,43 @@ public class SCMReadmeReader extends ModelElementAdapter {
 		} else {
 			filter = (file) -> file.name().equals(elementReadme);
 		}
-		Collection<SCMFile> file = handler.find(elementProject, elementPath, filter);
-		if(file.isEmpty()) {
-			logger.severe(String.format("Couldn't find any Readme for element %s"
-					+ "(project is %s, path %s and readme should be %s)", 
-					StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
-		} else if(file.size()>1) {
-			logger.severe(String.format("There are more than one valid Readme for element %s"
-					+ "(project is %s, path %s and readme should be %s)", 
-					StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
-		} else {
-			SCMFile readme = file.iterator().next();
-			File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, Format.adoc);
-			if(force) {
-				outputFor.delete();
+		try {
+			Collection<SCMFile> file = handler.find(elementProject, elementPath, filter);
+			if(file.isEmpty()) {
+				logger.severe(String.format("Couldn't find any Readme for element %s"
+						+ "(project is %s, path %s and readme should be %s)", 
+						StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
+			} else if(file.size()>1) {
+				logger.severe(String.format("There are more than one valid Readme for element %s"
+						+ "(project is %s, path %s and readme should be %s)", 
+						StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
 			} else {
-				if(readme.lastModified()<outputFor.lastModified())
-					return;
-			}
-			try {
-				// Now we have content as asciidoc, so let's write it to the conventional location
-				String readmeText = IOUtils.toString(readme.content(), "UTF-8");
-				if(readme.name().toLowerCase().endsWith(".md")) {
-					readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
+				SCMFile readme = file.iterator().next();
+				File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, Format.adoc);
+				if(force) {
+					outputFor.delete();
+				} else {
+					if(readme.lastModified()<outputFor.lastModified())
+						return;
 				}
-				builder.writeToOutput(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
-			} catch (Throwable e) {
-				throw new CantExtractReadme(String.format(
-						"Can't extract readme of container %s using SCM project %s, path %s, readme %s", 
-						StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme), 
-						e);
+				try {
+					// Now we have content as asciidoc, so let's write it to the conventional location
+					String readmeText = IOUtils.toString(readme.content(), "UTF-8");
+					if(readme.name().toLowerCase().endsWith(".md")) {
+						readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
+					}
+					builder.writeToOutput(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
+				} catch (Throwable e) {
+					throw new CantExtractReadme(String.format(
+							"Can't extract readme of container %s using SCM project %s, path %s, readme %s", 
+							StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme), 
+							e);
+				}
 			}
+		} catch(FileNotFoundException e) {
+			logger.log(Level.SEVERE, String.format("Couldn't find any Readme for element %s"
+					+ "(project is %s, path %s and readme should be %s)", 
+					StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme), e);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package org.ndx.aadarchi;
+package org.ndx.aadarchi.structurizr.components.detector;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
