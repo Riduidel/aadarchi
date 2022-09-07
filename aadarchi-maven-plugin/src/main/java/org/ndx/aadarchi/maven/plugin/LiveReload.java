@@ -13,6 +13,7 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.version;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.net.ServerSocket;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -37,6 +38,11 @@ import org.twdata.maven.mojoexecutor.MojoExecutor.Element;
 
 import net_alchim31_livereload.LRServer; //#from net.alchim31:livereload-jvm:0.2.0
 
+/**
+ * Allow faster edit loop by rebuilding documentation and making it available through live-reload protocol.
+ * @author nicolas-delsaux
+ *
+ */
 @Mojo(name = "livereload", defaultPhase = LifecyclePhase.PACKAGE)
 public class LiveReload extends AbstractMojo {
 	@Parameter(defaultValue = "${mojo.groupId}")
@@ -88,15 +94,7 @@ public class LiveReload extends AbstractMojo {
 	 * </ul>
 	 */
 	@Parameter(name="goals-to-execute")
-	private List<String> goalsToExecute = Arrays.asList("prepare-package",
-			String.format("%s:%s@generate-html-docs",mojoGroupId, mojoArtifactId, getMojoNameOf(GenerateHtmlDocs.class)),
-			String.format("%s:%s@generate-html-slides",mojoGroupId, mojoArtifactId, getMojoNameOf(GenerateHtmlSlides.class))
-			);
-	
-	private static String getMojoNameOf(Class<? extends AbstractMojo> mojoClass) {
-		Mojo mojo = mojoClass.getDeclaredAnnotation(Mojo.class);
-		return mojo.name();
-	}
+	private List<String> goalsToExecute = null;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -140,6 +138,12 @@ public class LiveReload extends AbstractMojo {
 	}
 
 	private Element[] goals() {
+		if(goalsToExecute==null) {
+			goalsToExecute = Arrays.asList("prepare-package",
+					String.format("%s:%s:generate-html-docs",mojoGroupId, mojoArtifactId),
+					String.format("%s:%s:generate-html-slides",mojoGroupId, mojoArtifactId)
+					);
+		}
 		// First, get our artifact name
 		return goalsToExecute.stream()
 				.map(text -> element(name("goal"), text))
