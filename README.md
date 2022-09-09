@@ -10,7 +10,7 @@
   </a>
 </p>
 
-> A Maven archetype allowing you to easily create your agile architecture documentation using a mix of C4, Asciidoc and PlantUML. This archetype uses [Structurizr](https://github.com/structurizr/java/) to build the architecture model, and [Agile architecture documentation](http://www.codingthearchitecture.com/2016/05/31/agile_software_architecture_documentation.html) template, all by Simon Brown.
+> A Maven archetype allowing you to easily create your agile architecture documentation using a mix of C4, Asciidoc and PlantUML. This archetype uses [Structurizr](https://github.com/structurizr/java/) to build the architecture model, and [Agile architecture documentation](https://web.archive.org/web/20210518020154/http://www.codingthearchitecture.com/2016/05/31/agile_software_architecture_documentation.html) template, all by Simon Brown.
 
 ## Install
 
