@@ -27,7 +27,7 @@ jobs:
       - name: Configure maven
         uses: s4u/maven-settings-action@v2.6.0
         with:
-          mirrors: |
+          mirrors: >-
           [{
             "id": "rubygems-releases-http-unblocker", 
             "name": "rubygems-releases", 
