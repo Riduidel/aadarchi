@@ -27,14 +27,14 @@ jobs:
       - name: Configure maven
         uses: s4u/maven-settings-action@v2.6.0
         with:
-          mirrors: >-
-          [{
-            "id": "rubygems-releases-http-unblocker", 
-            "name": "rubygems-releases", 
-            "mirrorOf": "rubygems-releases", 
-            "url": "http://rubygems-proxy.torquebox.org/releases", 
-            "blocked": "false"
-          }]
+          mirrors: |
+            [{
+              "id": "rubygems-releases-http-unblocker", 
+              "name": "rubygems-releases", 
+              "mirrorOf": "rubygems-releases", 
+              "url": "http://rubygems-proxy.torquebox.org/releases", 
+              "blocked": "false"
+            }]
       - name: Build with Maven
         run: mvn -B install --file pom.xml -Daadarchi.github.token=$TOKEN_FOR_GITHUB  --settings .mvn/custom-settings.xml
         env:
