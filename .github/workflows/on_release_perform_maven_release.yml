@@ -44,7 +44,14 @@ jobs:
       - name: Do not forget to configure Maven Settings!
         uses: s4u/maven-settings-action@v2.6.0
         with:
+          githubServer: false
           override: false
+          servers: |
+            [{
+                "id": "github",
+                "username": "git",
+                "password": "${{ secrets.GITHUB_TOKEN  }}"
+            }]
       - name: Build with Maven
         run: mvn -B release:prepare release:perform -Prelease -DreleaseVersion=${{ github.event.inputs.releaseversion }} --file pom.xml -Daadarchi.github.token=$TOKEN_FOR_GITHUB
         env:
