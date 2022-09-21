@@ -32,18 +32,6 @@ jobs:
           distribution: adopt
           java-version: 11
           cache: 'maven'
-          server-id: ossrh
-          server-username: ${{ secrets.OSS_SONATYPE_USERNAME }}
-          server-password: ${{ secrets.OSS_SONATYPE_PASSWORD }}
-          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
-      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
-        with:
-          global: true
-          actor: git
-          name: On release perform GitHub action
-          email: on_release_perform_maven_release@example.com
-          token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Do not forget to configure Maven Settings!
         uses: s4u/maven-settings-action@v2.6.0
         with:
@@ -56,6 +44,19 @@ jobs:
                 "password": "${{ secrets.SONATYPE_PASSWORD }}"
             }
             ]
+      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
+        with:
+          global: true
+          actor: git
+          name: On release perform GitHub action
+          email: on_release_perform_maven_release@example.com
+          token: '${{ secrets.GITHUB_TOKEN }}'
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Build with Maven
         run: mvn -B release:prepare release:perform -Prelease -DreleaseVersion=${{ github.event.inputs.releaseversion }} --file pom.xml -Daadarchi.github.token=$TOKEN_FOR_GITHUB
         env:
