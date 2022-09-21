@@ -39,6 +39,10 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - uses: oleksiyrudenko/gha-git-credentials@v2-latest
         with:
+          global: true
+          actor: git
+          name: On release perform GitHub action
+          email: on_release_perform_maven_release@example.com
           token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Do not forget to configure Maven Settings!
         uses: s4u/maven-settings-action@v2.6.0
