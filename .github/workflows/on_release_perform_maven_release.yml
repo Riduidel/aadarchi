@@ -41,6 +41,8 @@ jobs:
           server-password: ${{ secrets.OSS_SONATYPE_PASSWORD }}
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Do not forget to configure Maven Settings!
+        uses: s4u/maven-settings-action@v2.6.0
       - name: Build with Maven
         run: mvn -B release:prepare release:perform -Prelease -DreleaseVersion=${{ github.event.inputs.releaseversion }} --file pom.xml -Daadarchi.github.token=$TOKEN_FOR_GITHUB
         env:
@@ -48,10 +50,3 @@ jobs:
           MAVEN_USERNAME: ${{ secrets.OSS_SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSS_SONATYPE_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-      - name: Temporary file for gh-pages
-        run: mkdir ./architecture-documentation/target/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/target/temp
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
-          publish_dir: ./architecture-documentation/target/temp
