@@ -26,10 +26,6 @@ jobs:
       - run: echo "Will perform a maven release with public version ${{ github.event.inputs.releaseversion }}"
 
       - uses: actions/checkout@v2
-      - name: Configure Git user
-        run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
@@ -40,18 +36,27 @@ jobs:
           server-username: ${{ secrets.OSS_SONATYPE_USERNAME }}
           server-password: ${{ secrets.OSS_SONATYPE_PASSWORD }}
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: Do not forget to configure Maven Settings!
         uses: s4u/maven-settings-action@v2.6.0
         with:
-          githubServer: false
           override: false
           servers: |
-            [{
-                "id": "github",
-                "username": "git",
-                "password": "${{ secrets.GITHUB_TOKEN  }}"
-            }]
+            [
+            {
+                "id": "ossrh",
+                "username": "${{ secrets.SONATYPE_USERNAME }}",
+                "password": "${{ secrets.SONATYPE_PASSWORD }}"
+            },
+            {
+                "id": "gpg.passphrase",
+                "username": "fake",
+                "passphrase": "${{ secrets.MAVEN_GPG_PASSPHRASE }}"
+            }
+            ]
+      - name: Configure Git user
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
       - name: Build with Maven
         run: mvn -B release:prepare release:perform -Prelease -DreleaseVersion=${{ github.event.inputs.releaseversion }} --file pom.xml -Daadarchi.github.token=$TOKEN_FOR_GITHUB
         env:
