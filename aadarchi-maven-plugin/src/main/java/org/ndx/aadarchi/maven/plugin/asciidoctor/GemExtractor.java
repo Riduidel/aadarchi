@@ -95,8 +95,8 @@ public class GemExtractor {
 	 * this plugin. Each bundled element that is not present in effective folder
 	 * will be copied
 	 * 
-	 * @param requiredGems
-	 * @see #requiredGems()
+	 * @param requires the requires XML element that is to contain the required gems
+	 * @see #copyContainedGem(GemInfo)
 	 */
 	public Element processContainedGems(Element requires) {
 			for (Xpp3Dom dependency : requires.toDom().getChildren("require")) {
