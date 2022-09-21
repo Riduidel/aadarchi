@@ -26,10 +26,3 @@ jobs:
         run: mvn -B install --file pom.xml -Daadarchi.github.token=$TOKEN_FOR_GITHUB
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
-      - name: Temporary file for gh-pages
-        run: mkdir ./architecture-documentation/target/temp && cp ./architecture-documentation/target/asciidoc/docs/html/index.html ./architecture-documentation/target/temp
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.TOKEN_FOR_GITHUB }}
-          publish_dir: ./architecture-documentation/target/temp
