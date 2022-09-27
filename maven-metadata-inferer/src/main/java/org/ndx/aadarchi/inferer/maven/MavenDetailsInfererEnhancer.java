@@ -248,6 +248,12 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		public ContainerEnhancer(Container container) {
 			super(container);
 		}
+		
+		@Override
+		protected void startEnhanceWithMavenProject(MavenProject mavenProject) {
+			enhanced.setTechnology(decorateTechnology(mavenProject));
+			super.startEnhanceWithMavenProject(mavenProject);
+		}
 
 		@Override
 		protected Component addContainedElementWithKey(MavenProject module, String key) {
@@ -383,33 +389,18 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		technologies.add("maven");
 		switch (project.getPackaging()) {
 		case "ear":
-			technologies.add("java");
+			technologies.add("Java");
 			technologies.add("ear");
 			break;
 		case "war":
-			technologies.add("java");
+			technologies.add("Java");
 			technologies.add("war");
 		case "jar":
-			technologies.add("java");
-			for (Dependency dependency : (List<Dependency>) project.getDependencies()) {
-				switch (dependency.getGroupId()) {
-				case "org.apache.maven":
-					if("maven-plugin-api".equals(dependency.getArtifactId())) {
-					technologies.add("maven-plugin");
-					}
-					break;
-				case "org.springframework":
-					technologies.add("Spring");
-					break;
-				case "com.google.gwt":
-					technologies.add("GWT");
-					break;
-				case "javax.enterprise":
-					if("cdi-api".equals(dependency.getArtifactId())) {
-						technologies.add("CDI");
-					}
-					break;
-				}
+			// If there is a java version property, use it to detect Java version
+			if(project.getProperties().contains("java.version")) {
+				technologies.add("Java "+project.getProperties().getProperty("java.version"));
+			} else {
+				technologies.add("Java");
 			}
 			break;
 		case "pom":
@@ -418,6 +409,29 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			logger.warning(String.format(
 					"Maven component %s uses packaging %s which we don't know. Please submit a bug to aadarchi-documentation-system to have this particular packaging correctly handled",
 					project, project.getPackaging()));
+		}
+		for (Dependency dependency : (List<Dependency>) project.getDependencies()) {
+			switch (dependency.getGroupId()) {
+			case "org.apache.maven":
+				if("maven-plugin-api".equals(dependency.getArtifactId())) {
+					technologies.add("maven-plugin");
+				}
+				break;
+			case "org.springframework":
+				technologies.add("Spring");
+				break;
+			case "org.springframework.boot":
+				technologies.add("Spring Boot");
+				break;
+			case "com.google.gwt":
+				technologies.add("GWT");
+				break;
+			case "javax.enterprise":
+				if("cdi-api".equals(dependency.getArtifactId())) {
+					technologies.add("CDI");
+				}
+				break;
+			}
 		}
 		return technologies;
 	}
