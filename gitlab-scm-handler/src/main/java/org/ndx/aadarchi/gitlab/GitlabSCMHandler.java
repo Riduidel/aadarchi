@@ -2,6 +2,9 @@ package org.ndx.aadarchi.gitlab;
 
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -56,6 +59,11 @@ public class GitlabSCMHandler implements SCMHandler {
 	@Override
 	public String asciidocText() {
 		return "icon:gitlab[set=fab] Gitlab";
+	}
+
+	@Override
+	public InputStream openStream(URL url) throws IOException {
+		throw new UnsupportedOperationException(String.format("SCMHandler#openStream(%s) is not yet implemented in GitlabSCMHandler. Sorry", url));
 	}
 
 }
