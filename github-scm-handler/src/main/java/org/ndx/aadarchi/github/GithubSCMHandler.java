@@ -42,7 +42,7 @@ public class GithubSCMHandler implements SCMHandler {
 			List<GHContent> dir = repository.getDirectoryContent(path);
 			return dir.stream()
 				.map(content -> new GitHubFile(logger, repository, content))
-				.filter(content -> filter.test(content))
+				.filter(content -> filter==null ? true : filter.test(content))
 				.collect(Collectors.toList());
 		} catch (IOException e) {
 			throw new FileNotFoundException(

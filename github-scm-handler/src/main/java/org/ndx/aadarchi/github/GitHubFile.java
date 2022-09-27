@@ -57,4 +57,13 @@ public class GitHubFile implements SCMFile {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return source.getHtmlUrl();
+	}
+
+	@Override
+	public String url() {
+		return source.getUrl();
+	}
 }
