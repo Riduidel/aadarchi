@@ -19,6 +19,7 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.OutputBuilder.Format;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.Scm;
+import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 
 import com.structurizr.annotation.Component;
@@ -37,6 +38,8 @@ import nl.jworks.markdown_to_asciidoc.Converter;
 @Component(technology = "Java, CDI")
 public class SCMReadmeReader extends ModelElementAdapter {
 	@Inject @ConfigProperty(name="force", defaultValue="false") boolean force;
+	
+	@Inject FileContentCache cache;
 	
 	@Inject Logger logger;
 	
@@ -108,7 +111,7 @@ public class SCMReadmeReader extends ModelElementAdapter {
 				}
 				try {
 					// Now we have content as asciidoc, so let's write it to the conventional location
-					String readmeText = IOUtils.toString(readme.content(), "UTF-8");
+					String readmeText = IOUtils.toString(cache.openStreamFor(readme), "UTF-8");
 					if(readme.name().toLowerCase().endsWith(".md")) {
 						readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
 					}
