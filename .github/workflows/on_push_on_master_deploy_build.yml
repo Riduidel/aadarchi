@@ -39,7 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@main
         with:
-          path: ./target/asciidoc/docs/html
+          path: ./architecture-documentation/target/asciidoc/docs/html
           retention-days: ${{ inputs.retention-days }}
 
   # Deployment job
