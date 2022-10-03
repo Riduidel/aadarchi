@@ -21,6 +21,12 @@ public interface Constants {
 		}
 		if(project.endsWith(".git")) {
 			project = project.substring(0, project.indexOf(".git"));
+		} else {
+			var firstSlash = project.indexOf('/');
+			var secondSlash = project.indexOf('/', firstSlash+1);
+			if(secondSlash>0) {
+				return project.substring(0, secondSlash);
+			}
 		}
 		return project;
 	}

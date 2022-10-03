@@ -2,6 +2,8 @@ package org.ndx.aadarchi.github;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.jboss.weld.exceptions.UnsupportedOperationException;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
@@ -56,6 +59,33 @@ public class GithubSCMHandler implements SCMHandler {
 	@Override
 	public String asciidocText() {
 		return "icon:github[set=fab] GitHub";
+	}
+
+	/**
+	 * We assume here the url to be the one given by navigating the GitHub web UI
+	 * @param url the url of a file in GitHub UI
+	 * @return an InputStrema to read that file content
+	 */
+	@Override
+	public InputStream openStream(URL url) throws IOException {
+		String urlText = url.toString();
+		if(Constants.isGitHubProject(urlText)) {
+			String project = Constants.getGitHubProjectName(urlText);
+			GHRepository repository = github.getRepository(project);
+			var blobIndex = urlText.indexOf("/blob/");
+			if(blobIndex>0) {
+				var inBlobPath = urlText.substring(blobIndex+6);
+				// I do hope people won't use branches with "/" in names, otherwise it'll be a mess
+				int firstSlashAfterBlob = inBlobPath.indexOf('/');
+				var branchName = inBlobPath.substring(0, firstSlashAfterBlob);
+				var path = inBlobPath.substring(firstSlashAfterBlob+1);
+				return new GitHubFile(logger, repository, repository.getFileContent(path)).content();
+			} else {
+				throw new UnsupportedOperationException(
+						String.format("We currently only support path below /blob, which is not the case of the url \"%s\"", urlText));
+			}
+		}
+		throw new UnsupportedOperationException(String.format("Can't read the file %s with GitHubSCMHandler", url));
 	}
 
 }

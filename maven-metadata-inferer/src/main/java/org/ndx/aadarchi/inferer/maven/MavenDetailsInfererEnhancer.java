@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
@@ -42,8 +43,10 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
+import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.base.utils.FileResolver;
 
+import com.pivovarit.function.ThrowingFunction;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Element;
@@ -293,6 +296,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) File basePath;
 
 	@Inject FileResolver fileResolver;
+	@Inject Instance<SCMHandler> scmHandler;
 	/**
 	 * The maven reader used to read all poms
 	 */
@@ -458,29 +462,11 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		List<String> mavenSourceRoots = Optional.ofNullable((List<String>) mavenProject.getCompileSourceRoots())
 				.stream().filter(list -> !list.isEmpty()).findAny().orElse(Arrays.asList("src/main/java"));
 		String sourcePaths = mavenSourceRoots.stream().map(relativeFolder -> mavenPomUrl + "/" + relativeFolder)
-				.map(relativeFolder -> {
-					if (relativeFolder.startsWith("file")) {
-						try {
-							Path file = Paths.get(new URL(relativeFolder).toURI()).normalize();
-							return file.toFile().toURI().toString();
-						} catch (Exception e) {
-							return relativeFolder;
-						}
-					} else {
-						return relativeFolder;
-					}
-				}).filter(sourceFolder -> {
-					if (sourceFolder.startsWith("file")) {
-						try {
-							Path file = Paths.get(new URL(sourceFolder).toURI()).normalize();
-							return file.toFile().exists();
-						} catch (Exception e) {
-							return false;
-						}
-					} else {
-						return true;
-					}
-				}).collect(Collectors.joining(";"));
+				.filter(relativeFolder -> relativeFolder.startsWith("file"))
+				.map(ThrowingFunction.unchecked(relativeFolder -> Paths.get(new URL(relativeFolder).toURI()).normalize()))
+				.filter(relativePath -> relativePath.toFile().exists())
+				.map(relativeFolder -> relativeFolder.toString())
+				.collect(Collectors.joining(";"));
 		if (!sourcePaths.isEmpty())
 			element.addProperty(ModelElementKeys.JAVA_SOURCES, sourcePaths);
 	}
@@ -635,7 +621,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	}
 
 	private MavenProject readMavenProject(String pomPath, URL url) {
-		try (InputStream input = url.openStream()) {
+		try (InputStream input = SCMHandler.openStream(scmHandler, url)) {
 			MavenProject mavenProject = new MavenProject(reader.read(input));
 			if(url.toString().startsWith("file:")) {
 				File file = FileUtils.toFile(url);
