@@ -1,0 +1,9 @@
+..
+.
+asciidoctor-kroki.gemspec
+Gemfile
+Gemfile.lock
+lib
+Rakefile
+spec
+tasks

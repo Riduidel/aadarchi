@@ -12,14 +12,10 @@
 	<name>Aadarchi : Maven plugin</name>
 	<description>This maven plugin allows integration of our documentation system into maven builds by providing a set of useful mojos</description>
 	<properties>
-		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
-		<version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
-		<version.asciidoctor.revealjs>4.1.0</version.asciidoctor.revealjs>
 		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
 		<version.jruby>9.2.9.0</version.jruby>
 		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
 		<version.revealjs>4.3.0</version.revealjs>
-		<gems.destination>${project.build.outputDirectory}/META-INF/gems</gems.destination>
 	</properties>
 
 	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
@@ -84,52 +80,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-
-		<!-- asciidoctor-kroki isadded as dependency, but will receive a VERY special treatment -->
-		<dependency>
-			<groupId>rubygems</groupId>
-			<artifactId>asciidoctor-kroki</artifactId>
-			<version>${version.asciidoctor.kroki}</version>
-			<type>gem</type>
-			<!-- Avoid downloading gems included in AsciidoctorJ -->
-			<exclusions>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>asciidoctor</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>thread_safe</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>concurrent-ruby</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>rubygems</groupId>
-			<artifactId>asciidoctor-revealjs</artifactId>
-			<version>${version.asciidoctor.revealjs}</version>
-			<type>gem</type>
-			<!-- Avoid downloading gems included in AsciidoctorJ -->
-			<exclusions>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>asciidoctor</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>thread_safe</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>concurrent-ruby</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -150,28 +100,6 @@
 				<version>1.0.3</version>
 			</extension>
 		</extensions>
-		<plugins>
-			<plugin>
-				<groupId>de.saumya.mojo</groupId>
-				<artifactId>gem-maven-plugin</artifactId>
-				<version>2.0.1</version>
-				<configuration>
-					<jrubyVersion>${version.jruby}</jrubyVersion>
-					<gemHome>${gems.destination}</gemHome>
-					<gemPath>${gems.destination}</gemPath>
-				</configuration>
-				<executions>
-					<!-- Install required gems in target directory -->
-					<execution>
-						<id>install-gems</id>
-						<goals>
-							<goal>initialize</goal>
-						</goals>
-						<phase>initialize</phase>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
 	</build>
 	<profiles>
 		<profile>
@@ -217,7 +145,88 @@
 					</plugin>
 				</plugins>
 			</build>
-
+		</profile>
+		<profile>
+			<id>Download rubgems in a scope where I can access that damned repository</id>
+			<activation>
+				<file>
+					<missing>${project.basedir}/src/main/resources/META-INF/gems</missing>
+				</file>
+			</activation>
+			<properties>
+				<version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
+				<version.asciidoctor.revealjs>4.1.0</version.asciidoctor.revealjs>
+				<gems.destination>${project.basedir}/src/main/resources/META-INF/gems</gems.destination>
+			</properties>
+			<dependencies>
+				<!-- asciidoctor-kroki isadded as dependency, but will receive a VERY special treatment -->
+				<dependency>
+					<groupId>rubygems</groupId>
+					<artifactId>asciidoctor-kroki</artifactId>
+					<version>${version.asciidoctor.kroki}</version>
+					<type>gem</type>
+					<!-- Avoid downloading gems included in AsciidoctorJ -->
+					<exclusions>
+						<exclusion>
+							<groupId>rubygems</groupId>
+							<artifactId>asciidoctor</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>rubygems</groupId>
+							<artifactId>thread_safe</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>rubygems</groupId>
+							<artifactId>concurrent-ruby</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+				<dependency>
+					<groupId>rubygems</groupId>
+					<artifactId>asciidoctor-revealjs</artifactId>
+					<version>${version.asciidoctor.revealjs}</version>
+					<type>gem</type>
+					<!-- Avoid downloading gems included in AsciidoctorJ -->
+					<exclusions>
+						<exclusion>
+							<groupId>rubygems</groupId>
+							<artifactId>asciidoctor</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>rubygems</groupId>
+							<artifactId>thread_safe</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>rubygems</groupId>
+							<artifactId>concurrent-ruby</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>de.saumya.mojo</groupId>
+						<artifactId>gem-maven-plugin</artifactId>
+						<version>2.0.1</version>
+						<configuration>
+							<jrubyVersion>${version.jruby}</jrubyVersion>
+							<gemHome>${gems.destination}</gemHome>
+							<gemPath>${gems.destination}</gemPath>
+						</configuration>
+						<executions>
+							<!-- Install required gems in target directory -->
+							<execution>
+								<id>install-gems</id>
+								<goals>
+									<goal>initialize</goal>
+								</goals>
+								<phase>initialize</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 </project>
