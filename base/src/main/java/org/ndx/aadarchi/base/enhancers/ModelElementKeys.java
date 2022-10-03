@@ -38,6 +38,10 @@ public interface ModelElementKeys {
 			public String NAME = ModelElementKeys.PREFIX + "dsl";
 			public String VALUE = "${project.basedir}/src/architecture/resources/workspace.dsl";
 		}
+		public static interface CacheDir {
+			public String NAME = ModelElementKeys.PREFIX + "cache.dir";
+			public String VALUE = "${project.basedir}/.cache";
+		}
 		public static interface AsciidocSourceDir {
 			public String NAME = "asciidoc.source.docs.directory";
 			public String VALUE = "${project.basedir}/src/docs/asciidoc";

@@ -42,7 +42,7 @@ public class GitHubFile implements SCMFile {
 	@Override
 	public long lastModified() {
 		try {
-			PagedIterable<GHCommit> commits = repository.queryCommits().path(source.getPath()).list();
+			PagedIterable<GHCommit> commits = repository.queryCommits().pageSize(1).path(source.getPath()).list();
 			return commits.toList().stream()
 				.findFirst()
 				.map(ThrowingFunction.unchecked(commit -> commit.getCommitDate().getTime()))
@@ -57,4 +57,13 @@ public class GitHubFile implements SCMFile {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return source.getHtmlUrl();
+	}
+
+	@Override
+	public String url() {
+		return source.getUrl();
+	}
 }
