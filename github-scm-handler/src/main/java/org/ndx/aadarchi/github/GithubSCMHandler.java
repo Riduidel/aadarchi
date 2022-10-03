@@ -19,7 +19,9 @@ import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
+import org.ndx.aadarchi.base.utils.FileContentCache;
 
+import com.pivovarit.function.ThrowingFunction;
 import com.structurizr.annotation.Component;
 
 @Component
@@ -27,6 +29,7 @@ import com.structurizr.annotation.Component;
 public class GithubSCMHandler implements SCMHandler {
 	@Inject Logger logger;
 	@Inject GitHub github;
+	@Inject FileContentCache fileCache;
 	@Override
 	public boolean canHandle(String project) {
 		return Constants.isGitHubProject(project);
@@ -68,6 +71,10 @@ public class GithubSCMHandler implements SCMHandler {
 	 */
 	@Override
 	public InputStream openStream(URL url) throws IOException {
+		return fileCache.openStreamFor(url, ThrowingFunction.unchecked(this::doOpenStream));
+	}
+
+	private InputStream doOpenStream(URL url) throws IOException {
 		String urlText = url.toString();
 		if(Constants.isGitHubProject(urlText)) {
 			String project = Constants.getGitHubProjectName(urlText);

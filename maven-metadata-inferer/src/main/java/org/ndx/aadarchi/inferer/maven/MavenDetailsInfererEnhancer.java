@@ -46,6 +46,7 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
 import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
+import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.FileResolver;
 
 import com.pivovarit.function.ThrowingFunction;
@@ -303,6 +304,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	Logger logger;
 	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) File basePath;
 
+	@Inject FileContentCache cache;
 	@Inject FileResolver fileResolver;
 	@Inject Instance<SCMHandler> scmHandler;
 	/**
@@ -597,7 +599,9 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 				try {
 					Collection<SCMFile> pomSCMFile = handler.find(project, "/", file -> "pom.xml".equals(file.name()));
 					for(SCMFile pom : pomSCMFile) {
-						return Optional.ofNullable(readMavenProject(pom.url(), new URL(pom.url()), pom.content()));
+						URL url = new URL(pom.url());
+						return Optional.ofNullable(readMavenProject(pom.url(), url, 
+								cache.openStreamFor(pom)));
 					}
 				} catch (IOException | XmlPullParserException e) {
 					logger.log(Level.FINER, String.format("There is no pom.xml in %s, maybe it's normal", project), e);
