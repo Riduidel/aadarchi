@@ -1,32 +1,40 @@
 package org.ndx.aadarchi.gitlab;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Date;
 
 import org.gitlab4j.api.models.RepositoryFile;
 import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
 
 public class GitlabFile implements SCMFile {
 
-	public GitlabFile(RepositoryFile file) {
-		// TODO Auto-generated constructor stub
+	private RepositoryFile file;
+	private long lastModified;
+
+	public GitlabFile(RepositoryFile file, Date date) {
+		this.file = file;
+		this.lastModified = date.getTime();
 	}
 
 	@Override
 	public String name() {
-		// TODO Auto-generated method stub
-		return null;
+		return file.getFileName();
 	}
 
 	@Override
 	public InputStream content() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ByteArrayInputStream(file.getContent().getBytes());
 	}
 
 	@Override
 	public long lastModified() {
-		// TODO Auto-generated method stub
-		return 0;
+		return lastModified;
+	}
+
+	@Override
+	public String url() {
+		return null;
 	}
 
 }

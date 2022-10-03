@@ -31,9 +31,9 @@ public interface SCMHandler {
 
 	/**
 	 * Get all the files matching the given filename filter
-	 * @param project
-	 * @param path
-	 * @param filter
+	 * @param project github url of the project in which we search elements
+	 * @param path the path in which we're searching for files
+	 * @param filter the filter allowing us to find the files
 	 * @return collection of files matching given path and predicate
 	 * @throws FileNotFoundException if provider couldn't return any matching file and throwed any exception
 	 * because of that

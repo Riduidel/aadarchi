@@ -12,8 +12,10 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.Pager;
+import org.gitlab4j.api.models.Blame;
+import org.gitlab4j.api.models.RepositoryFile;
 import org.gitlab4j.api.models.TreeItem;
 import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
@@ -34,10 +36,18 @@ public class GitlabSCMHandler implements SCMHandler {
 	@Override
 	public Collection<SCMFile> find(String project, String path, Predicate<SCMFile> filter) throws FileNotFoundException {
 		try {
+			var repositoryFileApi = gitlab.getApi().getRepositoryFileApi();
 			List<TreeItem> items = gitlab.getApi().getRepositoryApi().getTree(project, path, null);
 			return items.stream()
-					.map(ThrowingFunction.unchecked(item -> new GitlabFile(
-							gitlab.getApi().getRepositoryFileApi().getFile(project, item.getPath(), "master"))))
+					.map(ThrowingFunction.unchecked(item -> {
+						RepositoryFile gitlabFile = repositoryFileApi.getFile(project, item.getPath(), "master");
+						Pager<Blame> blame = repositoryFileApi.getBlame(project, item.getPath(), gitlabFile.getRef(), 1);
+						var commitDate = blame.first().get(0).getCommit().getCommittedDate();
+						return new GitlabFile(
+							gitlabFile,
+							commitDate
+							);
+					}))
 					.filter(file -> filter.test(file))
 					.collect(Collectors.toList());
 		} catch (WrappedException e) {

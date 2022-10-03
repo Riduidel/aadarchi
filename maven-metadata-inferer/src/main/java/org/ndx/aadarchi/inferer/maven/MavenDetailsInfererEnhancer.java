@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.inferer.maven;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -43,6 +44,7 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
+import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.base.utils.FileResolver;
 
@@ -248,6 +250,12 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		public ContainerEnhancer(Container container) {
 			super(container);
 		}
+		
+		@Override
+		protected void startEnhanceWithMavenProject(MavenProject mavenProject) {
+			enhanced.setTechnology(decorateTechnology(mavenProject));
+			super.startEnhanceWithMavenProject(mavenProject);
+		}
 
 		@Override
 		protected Component addContainedElementWithKey(MavenProject module, String key) {
@@ -383,33 +391,18 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		technologies.add("maven");
 		switch (project.getPackaging()) {
 		case "ear":
-			technologies.add("java");
+			technologies.add("Java");
 			technologies.add("ear");
 			break;
 		case "war":
-			technologies.add("java");
+			technologies.add("Java");
 			technologies.add("war");
 		case "jar":
-			technologies.add("java");
-			for (Dependency dependency : (List<Dependency>) project.getDependencies()) {
-				switch (dependency.getGroupId()) {
-				case "org.apache.maven":
-					if("maven-plugin-api".equals(dependency.getArtifactId())) {
-					technologies.add("maven-plugin");
-					}
-					break;
-				case "org.springframework":
-					technologies.add("Spring");
-					break;
-				case "com.google.gwt":
-					technologies.add("GWT");
-					break;
-				case "javax.enterprise":
-					if("cdi-api".equals(dependency.getArtifactId())) {
-						technologies.add("CDI");
-					}
-					break;
-				}
+			// If there is a java version property, use it to detect Java version
+			if(project.getProperties().contains("java.version")) {
+				technologies.add("Java "+project.getProperties().getProperty("java.version"));
+			} else {
+				technologies.add("Java");
 			}
 			break;
 		case "pom":
@@ -418,6 +411,29 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			logger.warning(String.format(
 					"Maven component %s uses packaging %s which we don't know. Please submit a bug to aadarchi-documentation-system to have this particular packaging correctly handled",
 					project, project.getPackaging()));
+		}
+		for (Dependency dependency : (List<Dependency>) project.getDependencies()) {
+			switch (dependency.getGroupId()) {
+			case "org.apache.maven":
+				if("maven-plugin-api".equals(dependency.getArtifactId())) {
+					technologies.add("maven-plugin");
+				}
+				break;
+			case "org.springframework":
+				technologies.add("Spring");
+				break;
+			case "org.springframework.boot":
+				technologies.add("Spring Boot");
+				break;
+			case "com.google.gwt":
+				technologies.add("GWT");
+				break;
+			case "javax.enterprise":
+				if("cdi-api".equals(dependency.getArtifactId())) {
+					technologies.add("CDI");
+				}
+				break;
+			}
 		}
 		return technologies;
 	}
@@ -573,6 +589,20 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		} else if (element.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM)) {
 			String pomPath = element.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM);
 			return processPomAtPath(element, pomPath);
+		} else if (element.getProperties().containsKey(ModelElementKeys.Scm.PROJECT)) {
+			// If there is some kind of SCM path, and a configured SCM provider,
+			// let's check if we can find some pom.xml
+			var project= element.getProperties().get(ModelElementKeys.Scm.PROJECT);
+			for(SCMHandler handler : scmHandler) {
+				try {
+					Collection<SCMFile> pomSCMFile = handler.find(project, "/", file -> "pom.xml".equals(file.name()));
+					for(SCMFile pom : pomSCMFile) {
+						return Optional.ofNullable(readMavenProject(pom.url(), new URL(pom.url()), pom.content()));
+					}
+				} catch (IOException | XmlPullParserException e) {
+					logger.log(Level.FINER, String.format("There is no pom.xml in %s, maybe it's normal", project), e);
+				}
+			}
 		}
 		return Optional.empty();
 	}
@@ -622,34 +652,39 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 
 	private MavenProject readMavenProject(String pomPath, URL url) {
 		try (InputStream input = SCMHandler.openStream(scmHandler, url)) {
-			MavenProject mavenProject = new MavenProject(reader.read(input));
-			if(url.toString().startsWith("file:")) {
-				File file = FileUtils.toFile(url);
-				file = file.getCanonicalFile();
-				url = file.toURI().toURL();
-				File parentDir = file.getParentFile().getParentFile();
-				// If returned pom declares a parent
-				if(mavenProject.getModel().getParent()!=null) {
-					// And we have a pom in parent directory
-					File parentPom = new File(parentDir, "pom.xml");
-					if(parentPom.exists()) {
-						// Load that pom
-						MavenProject parent = readMavenProject(parentPom.toURI().toString());
-						// And if artifactId matches, use it!
-						if(parent.getArtifactId().equals(mavenProject.getModel().getParent().getArtifactId())) {
-							mavenProject.setParent(parent);
-						}
-						// Obviously, we should use standard maven loading mechanism, but it won't be available until we become a maven plugin
-					}
-				}
-			}
-			mavenProject.getProperties().put(MAVEN_POM_URL, pomPath);
-			// We do not use the parent file method, because the pom may be read from elsewhere
-			mavenProject.getProperties().put(MAVEN_MODULE_DIR, pomPath.substring(0, pomPath.lastIndexOf('/') + 1));
-			return mavenProject;
+			return readMavenProject(pomPath, url, input);
 		} catch (XmlPullParserException | IOException e) {
 			throw new MavenDetailsInfererException(String.format("Unable to read stream from URL %s", pomPath), e);
 		}
+	}
+
+	private MavenProject readMavenProject(String pomPath, URL url, InputStream input)
+			throws IOException, XmlPullParserException, MalformedURLException {
+		MavenProject mavenProject = new MavenProject(reader.read(input));
+		if(url.toString().startsWith("file:")) {
+			File file = FileUtils.toFile(url);
+			file = file.getCanonicalFile();
+			url = file.toURI().toURL();
+			File parentDir = file.getParentFile().getParentFile();
+			// If returned pom declares a parent
+			if(mavenProject.getModel().getParent()!=null) {
+				// And we have a pom in parent directory
+				File parentPom = new File(parentDir, "pom.xml");
+				if(parentPom.exists()) {
+					// Load that pom
+					MavenProject parent = readMavenProject(parentPom.toURI().toString());
+					// And if artifactId matches, use it!
+					if(parent.getArtifactId().equals(mavenProject.getModel().getParent().getArtifactId())) {
+						mavenProject.setParent(parent);
+					}
+					// Obviously, we should use standard maven loading mechanism, but it won't be available until we become a maven plugin
+				}
+			}
+		}
+		mavenProject.getProperties().put(MAVEN_POM_URL, pomPath);
+		// We do not use the parent file method, because the pom may be read from elsewhere
+		mavenProject.getProperties().put(MAVEN_MODULE_DIR, pomPath.substring(0, pomPath.lastIndexOf('/') + 1));
+		return mavenProject;
 	}
 
 	/**
