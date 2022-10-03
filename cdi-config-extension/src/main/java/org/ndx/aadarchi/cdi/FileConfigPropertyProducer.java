@@ -16,8 +16,8 @@ public class FileConfigPropertyProducer extends BaseConfigPropertyProducer {
 	/**
 	 * When an injection point is declared with the @ConfigProperty annotation and has the File type,
 	 * this method creates a file using the configured value as name
-	 * @param injectionPoint
-	 * @return
+	 * @param injectionPoint place where a file should be injected
+	 * @return the file object we want in this injection point
 	 */
 	@Produces
 	@Dependent
