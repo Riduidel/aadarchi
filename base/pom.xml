@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>system</artifactId>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
-		<version>0.1.3</version>
+		<version>0.1.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>base</artifactId>
 	<name>Aadarchi : Base module</name>
