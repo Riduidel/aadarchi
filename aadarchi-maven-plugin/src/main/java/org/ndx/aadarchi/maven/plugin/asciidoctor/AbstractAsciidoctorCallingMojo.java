@@ -112,7 +112,6 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojoExecuto
 	 */
 	@Parameter(name = "structurizr-dir", defaultValue = "${project.build.directory}/structurizr/diagrams", property = "aadarchi.output.diagrams")
 	private String structurizrDir;
-	private static GemExtractor gemExtractor;
 
 	protected String executedMojo() {
 		return goal("process-asciidoc");
@@ -149,7 +148,7 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojoExecuto
 	}
 
 	protected Xpp3Dom configuration() {
-		Element requiredGems = getGemExtractor().processContainedGems(requiredGems());
+		Element requiredGems = new GemExtractor(gemsPath, getLog()).processContainedGems(requiredGems());
 		Xpp3Dom returned = MojoExecutor.configuration(
 				// TODO conditionalize that invocation : add all gems dependencies here
 				requiredGems, gemsPath(),
@@ -158,13 +157,6 @@ public abstract class AbstractAsciidoctorCallingMojo extends AbstractMojoExecuto
 		getLog().debug("Using mojo configuration");
 		getLog().debug(returned.toString());
 		return returned;
-	}
-
-	private GemExtractor getGemExtractor() {
-		if(gemExtractor==null) {
-			gemExtractor = new GemExtractor(gemsPath, getLog());
-		}
-		return gemExtractor;
 	}
 
 	public Element configurationSourceDirectory() {
