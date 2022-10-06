@@ -19,9 +19,7 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Force;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.Component;
-import com.structurizr.io.plantuml.C4PlantUMLWriter;
-import com.structurizr.io.plantuml.C4PlantUMLWriter.Layout;
-import com.structurizr.io.plantuml.PlantUMLWriter;
+import com.structurizr.export.plantuml.C4PlantUMLExporter;
 import com.structurizr.view.ComponentView;
 import com.structurizr.view.ContainerView;
 import com.structurizr.view.View;
@@ -72,15 +70,6 @@ public class GraphEmitter implements ViewEnhancer {
 	public void endVisit(View diagram, OutputBuilder builder) {
 		if(diagram instanceof ComponentView || diagram instanceof ContainerView) {
 			Path path = new File(destination, diagram.getKey()+".plantuml").toPath();
-			try {
-				String diagramText = Files.readString(path);
-				if(diagramText.contains(C4PlantUMLWriter.Layout.LAYOUT_WITH_LEGEND.name())) {
-					diagramText = diagramText.replace(C4PlantUMLWriter.Layout.LAYOUT_WITH_LEGEND.name()+"()", "");
-					Files.writeString(path, diagramText);
-				}
-			} catch(IOException e) {
-				// Nothing to do
-			}
 		}
 	}
 
@@ -100,15 +89,15 @@ public class GraphEmitter implements ViewEnhancer {
 	}
 
 	private void writeAllViews(Workspace workspace) {
-		Layout layout = C4PlantUMLWriter.Layout.valueOf(layoutMode);
-		PlantUMLWriter plantUMLWriter = new C4PlantUMLWriter(layout, plantumlPencils);
+		C4PlantUMLExporter plantUMLWriter = new C4PlantUMLExporter();
 		// Hints to have arrows more easily visible
 		plantUMLWriter.addSkinParam("pathHoverColor", "GreenYellow");
 		plantUMLWriter.addSkinParam("ArrowThickness", "3");
 		plantUMLWriter.addSkinParam("svgLinkTarget", "_parent");
 		
 		destination.mkdirs();
-		plantUMLWriter.toPlantUMLDiagrams(workspace).stream().parallel()
+		
+		plantUMLWriter.export(workspace).stream().parallel()
 			.forEach(diagram -> {
 				// Incredibly enough, that's not a view!
 				Path path = new File(destination, diagram.getKey()+".plantuml").toPath();

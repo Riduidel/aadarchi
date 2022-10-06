@@ -39,7 +39,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.structurizr</groupId>
-			<artifactId>structurizr-plantuml</artifactId>
+			<artifactId>structurizr-export</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
