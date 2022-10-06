@@ -390,7 +390,6 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 
 	private Set<String> doDecorateTechnology(MavenProject project) {
 		Set<String> technologies = new LinkedHashSet<String>();
-		technologies.add("maven");
 		switch (project.getPackaging()) {
 		case "ear":
 			technologies.add("Java");
