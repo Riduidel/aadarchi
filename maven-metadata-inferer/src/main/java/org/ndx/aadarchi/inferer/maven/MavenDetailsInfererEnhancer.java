@@ -387,6 +387,16 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		});
 		return technologies.stream().collect(Collectors.joining(","));
 	}
+	
+	private static String technologyWithVersionFromProperty(MavenProject mavenProject, String technology, String... propertyNames) {
+		return technology + Stream.of(propertyNames)
+				.filter(p -> mavenProject.getProperties().containsKey(p))
+				.map(p -> mavenProject.getProperties().get(p))
+				.map(text -> " "+text)
+				.findFirst()
+				.orElse("")
+				;
+	}
 
 	private Set<String> doDecorateTechnology(MavenProject project) {
 		Set<String> technologies = new LinkedHashSet<String>();
@@ -400,11 +410,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			technologies.add("war");
 		case "jar":
 			// If there is a java version property, use it to detect Java version
-			if(project.getProperties().contains("java.version")) {
-				technologies.add("Java "+project.getProperties().getProperty("java.version"));
-			} else {
-				technologies.add("Java");
-			}
+			technologies.add(technologyWithVersionFromProperty(project, "Java", "java.version", "maven.compiler.target"));
 			break;
 		case "pom":
 			break;
@@ -419,6 +425,9 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 				if("maven-plugin-api".equals(dependency.getArtifactId())) {
 					technologies.add("maven-plugin");
 				}
+				break;
+			case "io.quarkus":
+				technologies.add(technologyWithVersionFromProperty(project, "Quarkus", "quarkus.platform.version"));
 				break;
 			case "org.springframework":
 				technologies.add("Spring");
