@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.function.Function;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -57,7 +59,7 @@ public class FileContentCache {
 
 	private void refreshCache(File file, URL url, Function<URL, InputStream> cacheLoader) throws IOException {
 		file.getParentFile().mkdirs();
-		Files.copy(cacheLoader.apply(url), file.toPath());
+		Files.copy(cacheLoader.apply(url), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 	}
 
 	/**
