@@ -585,27 +585,34 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	 * @return an optional containing the possible model element
 	 */
 	protected Optional<MavenProject> processModelElement(Element element) {
+		Optional<MavenProject> returned = Optional.empty();
 		if (element.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS)) {
 			String className = element.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS);
-			return processPomOfClass(element, className);
+			returned = processPomOfClass(element, className);
 		} else if (element.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM)) {
 			String pomPath = element.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM);
-			return processPomAtPath(element, pomPath);
+			returned = processPomAtPath(element, pomPath);
 		} else if (element.getProperties().containsKey(ModelElementKeys.Scm.PROJECT)) {
 			// If there is some kind of SCM path, and a configured SCM provider,
 			// let's check if we can find some pom.xml
-			var project= element.getProperties().get(ModelElementKeys.Scm.PROJECT);
-			for(SCMHandler handler : scmHandler) {
-				try {
-					Collection<SCMFile> pomSCMFile = handler.find(project, "/", file -> "pom.xml".equals(file.name()));
-					for(SCMFile pom : pomSCMFile) {
-						URL url = new URL(pom.url());
-						return Optional.ofNullable(readMavenProject(pom.url(), url, 
-								cache.openStreamFor(pom)));
-					}
-				} catch (IOException | XmlPullParserException e) {
-					logger.log(Level.FINER, String.format("There is no pom.xml in %s, maybe it's normal", project), e);
+			returned = processPomAtSCM(element);
+		}
+		returned.ifPresent(mavenProject -> decorate(element, mavenProject));
+		return returned;
+	}
+
+	private Optional<MavenProject> processPomAtSCM(Element element) {
+		var project= element.getProperties().get(ModelElementKeys.Scm.PROJECT);
+		for(SCMHandler handler : scmHandler) {
+			try {
+				Collection<SCMFile> pomSCMFile = handler.find(project, "/", file -> "pom.xml".equals(file.name()));
+				for(SCMFile pom : pomSCMFile) {
+					URL url = new URL(pom.url());
+					return Optional.ofNullable(readMavenProject(pom.url(), url, 
+							cache.openStreamFor(pom)));
 				}
+			} catch (IOException | XmlPullParserException e) {
+				logger.log(Level.FINER, String.format("There is no pom.xml in %s, maybe it's normal", project), e);
 			}
 		}
 		return Optional.empty();
@@ -614,7 +621,6 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	Optional<MavenProject> processPomOfClass(Element element, String className) {
 		try {
 			MavenProject mavenProject = findMavenProjectOf(Class.forName(className));
-			decorate(element, mavenProject);
 			return Optional.of(mavenProject);
 		} catch (ClassNotFoundException e) {
 			throw new MavenDetailsInfererException(
@@ -625,7 +631,6 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 
 	Optional<MavenProject> processPomAtPath(Element element, String pomPath) {
 		MavenProject mavenProject = readMavenProject(pomPath);
-		decorate(element, mavenProject);
 		return Optional.of(mavenProject);
 	}
 
