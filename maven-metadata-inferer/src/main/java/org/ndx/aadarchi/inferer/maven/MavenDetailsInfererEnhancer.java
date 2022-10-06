@@ -1,7 +1,6 @@
 package org.ndx.aadarchi.inferer.maven;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -14,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -390,6 +390,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	
 	private static String technologyWithVersionFromProperty(MavenProject mavenProject, String technology, String... propertyNames) {
 		return technology + Stream.of(propertyNames)
+				.flatMap(p -> new HashSet(Arrays.asList(p, p.replace('.', '-'), p.replace('-', '.'))).stream())
 				.filter(p -> mavenProject.getProperties().containsKey(p))
 				.map(p -> mavenProject.getProperties().get(p))
 				.map(text -> " "+text)
@@ -431,6 +432,9 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 				break;
 			case "org.springframework":
 				technologies.add("Spring");
+				break;
+			case "org.apache.camel":
+				technologies.add(technologyWithVersionFromProperty(project, "Apache Camel", "camel.version"));
 				break;
 			case "org.springframework.boot":
 				technologies.add("Spring Boot");
