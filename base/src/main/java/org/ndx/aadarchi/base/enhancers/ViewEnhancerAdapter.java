@@ -1,4 +1,4 @@
-package org.ndx.aadarchi.base.ehancers;
+package org.ndx.aadarchi.base.enhancers;
 
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.ViewEnhancer;
