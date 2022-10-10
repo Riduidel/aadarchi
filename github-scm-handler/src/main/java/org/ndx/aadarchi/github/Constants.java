@@ -4,8 +4,10 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
 public interface Constants {
 
+	String CONFIG_GITHUB_LOGIN = ModelElementKeys.PREFIX+"github.login";
 	String CONFIG_GITHUB_TOKEN = ModelElementKeys.PREFIX+"github.token";
 	String GITHUB_DOMAIN = "github.com";
+	String CONFIG_GIT_BRANCHES_TO_CHECKOUT = ModelElementKeys.PREFIX+"git.branches.to.checkout";
 	static boolean isGitHubProject(String project) {
 		return project.contains(GITHUB_DOMAIN);
 	}

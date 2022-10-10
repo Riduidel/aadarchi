@@ -3,13 +3,10 @@ package org.ndx.aadarchi.base.enhancers.scm;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
@@ -23,7 +20,6 @@ import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 
 import com.structurizr.annotation.Component;
-import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.Element;
 import com.structurizr.model.StaticStructureElement;
 
@@ -36,15 +32,11 @@ import nl.jworks.markdown_to_asciidoc.Converter;
  *
  */
 @Component(technology = "Java, CDI")
-public class SCMReadmeReader extends ModelElementAdapter {
+public class SCMReadmeReader extends SCMModelElementAdapter {
 	@Inject @ConfigProperty(name="force", defaultValue="false") boolean force;
 	
 	@Inject FileContentCache cache;
 	
-	@Inject Logger logger;
-	
-	@Inject @UsesComponent(description = "Get SCM infos") Instance<SCMHandler> scmHandlers;
-
 	@Override
 	public int priority() {
 		return TOP_PRIORITY_FOR_INTERNAL_ENHANCERS+2;
@@ -64,20 +56,15 @@ public class SCMReadmeReader extends ModelElementAdapter {
 	void writeReadmeFor(Element element, OutputBuilder builder) {
 		if(element.getProperties().containsKey(Scm.PROJECT)) {
 			String elementProject = element.getProperties().get(Scm.PROJECT);
-			Optional<SCMHandler> usableHandler = scmHandlers.stream()
-				.filter(handler -> handler.canHandle(elementProject))
-				.findFirst()
-				;
-			if(usableHandler.isPresent()) {
-				SCMHandler handler = usableHandler.get();
-				writeReadmeFor(handler, element, elementProject, builder);
-			} else {
-				logger.warning(String.format("We have this set of handlers\n%s\nin which we couldn't find one for element %s associated project %s",
-						scmHandlers.stream().map(handler -> handler.toString()).collect(Collectors.joining()),
-						StructurizrUtils.getCanonicalPath(element),
-						elementProject
-						));
-			}
+			withHandlerFor(elementProject)
+				.ifPresentOrElse(handler -> writeReadmeFor(handler, element, elementProject, builder), 
+						() -> {
+							logger.warning(String.format("We have this set of handlers\n%s\nin which we couldn't find one for element %s associated project %s",
+									scmHandlers.stream().map(handler -> handler.toString()).collect(Collectors.joining()),
+									StructurizrUtils.getCanonicalPath(element),
+									elementProject
+									));
+						});
 		}
 	}
 

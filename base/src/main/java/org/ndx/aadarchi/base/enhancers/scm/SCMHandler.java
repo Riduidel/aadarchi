@@ -1,5 +1,6 @@
 package org.ndx.aadarchi.base.enhancers.scm;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,5 +55,13 @@ public interface SCMHandler {
 		}
 		return url.openStream();
 	}
+
+	/**
+	 * Checkout given SCM project into given checkout location
+	 * @param project project to checkout
+	 * @param checkoutLocation location where to checkout project
+	 * @throws IOException if checkout fails
+	 */
+	void checkout(String projectUrl, File checkoutLocation) throws IOException;
 
 }

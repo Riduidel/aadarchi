@@ -87,6 +87,31 @@ public interface ModelElementKeys {
 		 * Readme path in project. Defaults to "readme.md". This should be a subpath of scm path.
 		 */
 		String README = ModelElementKeys.PREFIX+"scm.readme.path";
+		/**
+		 * When property is set to true, we will check if model element has an associated SCM project value 
+		 * which can be checked out
+		 * @author Nicolas
+		 *
+		 */
+		public static interface CheckoutEnabled {
+
+			String NAME = ModelElementKeys.PREFIX + "scm.checkout.enabled";
+			/**
+			 * As a default, we don't check out projects
+			 */
+			String VALUE = "false";
+		}
+		/**
+		 * When property is set (and #PROJECT is also set), either from a maven property or from an element property,
+		 * the path will be used as base folder for project checkout (when a GitHub/GitLab project exists)
+		 *
+		 */
+		public static interface CheckoutLocation {
+
+			String NAME = ModelElementKeys.PREFIX + "scm.checkout.target";
+			String VALUE = "${project.basedir}/../";
+			
+		}
 		
 	}
 

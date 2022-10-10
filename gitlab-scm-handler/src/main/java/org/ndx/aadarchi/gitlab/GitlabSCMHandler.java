@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.gitlab;
 
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,4 +77,9 @@ public class GitlabSCMHandler implements SCMHandler {
 		throw new UnsupportedOperationException(String.format("SCMHandler#openStream(%s) is not yet implemented in GitlabSCMHandler. Sorry", url));
 	}
 
+
+	@Override
+	public void checkout(String projectUrl, File checkoutLocation) throws IOException {
+		throw new UnsupportedOperationException(String.format("SCMHandler#checkout(%s,%s) is not yet implemented in GitlabSCMHandler. Sorry", projectUrl, checkoutLocation.getAbsolutePath()));
+	}
 }

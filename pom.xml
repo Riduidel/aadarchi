@@ -79,9 +79,9 @@
 		<module>sequence-diagram-generator</module>
 		<module>archetype</module>
 		<module>markdown-to-asciidoc</module>
-        <module>aadarchi-maven-plugin</module>
-        <module>cdi-in-maven-plugin-helper</module>
-        <module>structurizr-components-detector</module>
+		<module>aadarchi-maven-plugin</module>
+		<module>cdi-in-maven-plugin-helper</module>
+		<module>structurizr-components-detector</module>
 	</modules>
 
 	<dependencyManagement>
@@ -149,9 +149,9 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>org.kohsuke</groupId>
-				<artifactId>github-api</artifactId>
-				<version>1.308</version>
+				<groupId>org.eclipse.jgit</groupId>
+				<artifactId>org.eclipse.jgit</artifactId>
+				<version>6.3.0.202209071007-r</version>
 			</dependency>
 			<dependency>
 				<groupId>com.pivovarit</groupId>
