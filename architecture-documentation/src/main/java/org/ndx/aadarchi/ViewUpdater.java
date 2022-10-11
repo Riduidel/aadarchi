@@ -5,14 +5,10 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import org.ndx.aadarchi.base.OutputBuilder;
-import org.ndx.aadarchi.base.ViewEnhancer;
 import org.ndx.aadarchi.base.enhancers.ViewEnhancerAdapter;
 
-import com.structurizr.Workspace;
 import com.structurizr.view.ComponentView;
 import com.structurizr.view.ContainerView;
-import com.structurizr.view.View;
-import com.structurizr.view.ViewSet;
 
 public class ViewUpdater extends ViewEnhancerAdapter {
 	@Inject Logger logger;
