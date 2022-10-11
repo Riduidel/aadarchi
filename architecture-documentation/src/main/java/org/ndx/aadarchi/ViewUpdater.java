@@ -6,7 +6,7 @@ import javax.inject.Inject;
 
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.ViewEnhancer;
-import org.ndx.aadarchi.base.ehancers.ViewEnhancerAdapter;
+import org.ndx.aadarchi.base.enhancers.ViewEnhancerAdapter;
 
 import com.structurizr.Workspace;
 import com.structurizr.view.ComponentView;
