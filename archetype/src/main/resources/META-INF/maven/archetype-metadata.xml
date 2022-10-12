@@ -10,7 +10,6 @@
 		<requiredProperty key="version">
 			<defaultValue>0.0.1-SNAPSHOT</defaultValue>
 		</requiredProperty>
-		<requiredProperty key="package"/>
 	</requiredProperties>
 	<fileSets>
 		<fileSet>
