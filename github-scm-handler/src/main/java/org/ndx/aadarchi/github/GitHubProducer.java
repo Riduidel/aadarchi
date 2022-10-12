@@ -3,6 +3,8 @@ package org.ndx.aadarchi.github;
 import static org.ndx.aadarchi.github.Constants.CONFIG_GITHUB_TOKEN;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
@@ -20,7 +22,9 @@ public class GitHubProducer {
 
 	public @Produces @ApplicationScoped GitHub initialize(@ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token) {
 		if(token==null || token.isBlank()) {
-			throw new GitHubHandlerException(String.format("Can't connect to GitHub if token %s isn't defined as system property", Constants.CONFIG_GITHUB_TOKEN));
+			throw new GitHubHandlerException(String.format("Can't connect to GitHub if token %s isn't defined as system property" +
+							"\nSee https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token for details",
+					Constants.CONFIG_GITHUB_TOKEN));
 		}
 		try {
 			return new GitHubBuilder().withOAuthToken(token).build();
