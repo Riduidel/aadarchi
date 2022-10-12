@@ -20,12 +20,11 @@ import org.kohsuke.github.GitHubBuilder;
  */
 public class GitHubProducer {
 
-	public @Produces @ApplicationScoped GitHub initialize(@ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token) throws MalformedURLException {
+	public @Produces @ApplicationScoped GitHub initialize(@ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token) {
 		if(token==null || token.isBlank()) {
-			URL githubTokenDoc = new URL("https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token%3F");
 			throw new GitHubHandlerException(String.format("Can't connect to GitHub if token %s isn't defined as system property" +
-							"\nSee %s for details",
-					Constants.CONFIG_GITHUB_TOKEN, githubTokenDoc));
+							"\nSee https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token for details",
+					Constants.CONFIG_GITHUB_TOKEN));
 		}
 		try {
 			return new GitHubBuilder().withOAuthToken(token).build();
