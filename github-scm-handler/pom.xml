@@ -19,9 +19,15 @@
 			<artifactId>markdown-to-asciidoc</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+			<dependency>
+				<groupId>org.kohsuke</groupId>
+				<artifactId>github-api</artifactId>
+				<version>1.308</version>
+			</dependency>
+		<!-- https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit -->
 		<dependency>
-			<groupId>org.kohsuke</groupId>
-			<artifactId>github-api</artifactId>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.pivovarit</groupId>
