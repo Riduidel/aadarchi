@@ -3,7 +3,6 @@ package org.ndx.aadarchi.base.providers;
 import java.io.File;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.inject.Named;
 

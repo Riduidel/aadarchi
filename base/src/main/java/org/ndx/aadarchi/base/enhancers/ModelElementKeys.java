@@ -1,18 +1,5 @@
 package org.ndx.aadarchi.base.enhancers;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.pivovarit.function.ThrowingFunction;
-import com.structurizr.model.Element;
-
 /**
  * This interface only contains a list of strings, each one providing some additionnal content 
  * for elements. Defining one of them could trigger additionnal enhancements, provided the 
@@ -24,7 +11,6 @@ public interface ModelElementKeys {
 	/**
 	 * A not to implement interface containing common properties names and default
 	 * values to avoid having to modify them everywhere
-	 * 
 	 * Each contained interface should define exactly two static strings
 	 * <ul>
 	 * <li>NAME is the config property name
@@ -33,37 +19,37 @@ public interface ModelElementKeys {
 	 * @author nicolas-delsaux
 	 *
 	 */
-	public static interface ConfigProperties {
-		public static interface WorkspaceDsl {
-			public String NAME = ModelElementKeys.PREFIX + "dsl";
-			public String VALUE = "${project.basedir}/src/architecture/resources/workspace.dsl";
+	interface ConfigProperties {
+		interface WorkspaceDsl {
+			String NAME = ModelElementKeys.PREFIX + "dsl";
+			String VALUE = "${project.basedir}/src/architecture/resources/workspace.dsl";
 		}
-		public static interface CacheDir {
-			public String NAME = ModelElementKeys.PREFIX + "cache.dir";
-			public String VALUE = "${project.basedir}/.cache";
+		interface CacheDir {
+			String NAME = ModelElementKeys.PREFIX + "cache.dir";
+			String VALUE = "${project.basedir}/.cache";
 		}
-		public static interface AsciidocSourceDir {
-			public String NAME = "asciidoc.source.docs.directory";
-			public String VALUE = "${project.basedir}/src/docs/asciidoc";
+		interface AsciidocSourceDir {
+			String NAME = "asciidoc.source.docs.directory";
+			String VALUE = "${project.basedir}/src/docs/asciidoc";
 		}
-		public static interface EnhancementsDir {
-			public String NAME = ModelElementKeys.PREFIX+"enhancements";
-			public String VALUE = "${basedir}/target/structurizr/enhancements";
+		interface EnhancementsDir {
+			String NAME = ModelElementKeys.PREFIX+"enhancements";
+			String VALUE = "${project.build.directory}/structurizr/enhancements";
 		}
-		public static interface DiagramsDir {
+		interface DiagramsDir {
 			/**
 			 * Path in which diagrams will be generated.
 			 * It should be aligned with what asciidoc wants, so don't play too much with that property :-D
 			 */
 			String NAME = ModelElementKeys.PREFIX+"diagrams";
-			String VALUE = "${basedir}/target/structurizr/diagrams";
+			String VALUE = "${project.build.directory}/structurizr/diagrams";
 		}
-		public static interface Force {
+		interface Force {
 			String NAME = "force";
 			String VALUE = "false";
 		}
-		public static interface BasePath {
-			String VALUE = "${basedir}";
+		interface BasePath {
+			String VALUE = "${project.basedir}";
 			/**
 			 * The base path is the reference from which all paths are set.
 			 * IT IS NOT TO BE DEFINED by user code. Instead, it is aadarchi which take care of setting a "good" value.
@@ -71,7 +57,7 @@ public interface ModelElementKeys {
 			String NAME = ModelElementKeys.PREFIX+"base.path";
 		}
 	}
-	public static interface Scm {
+	interface Scm {
 
 		/**
 		 * Should contain the full SCM url of project, including the domain!
