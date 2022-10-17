@@ -40,9 +40,9 @@
 			</includes>
 		</fileSet>
 		<fileSet filtered="true">
-			<directory>src/main/resources</directory>
+			<directory>src/architecture/resources</directory>
 			<includes>
-				<include>archetype-resources/src/architecture/resources/workspace.dsl</include>
+				<include>workspace.dsl</include>
 			</includes>
 		</fileSet>
 	</fileSets>
