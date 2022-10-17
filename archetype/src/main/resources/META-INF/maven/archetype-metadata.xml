@@ -39,5 +39,11 @@
 				<include>**/*.adoc</include>
 			</includes>
 		</fileSet>
+		<fileSet filtered="true">
+			<directory>src/architecture/resources</directory>
+			<includes>
+				<include>workspace.dsl</include>
+			</includes>
+		</fileSet>
 	</fileSets>
 </archetype-descriptor>
