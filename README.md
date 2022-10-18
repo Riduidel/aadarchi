@@ -20,11 +20,6 @@ Don't forget to replace `${VERSION}` by ![GitHub version](https://badge.fury.io/
 ```sh
 mvn archetype:generate -DarchetypeGroupId=io.github.Riduidel.aadarchi -DarchetypeArtifactId=archetype -DarchetypeVersion=${VERSION}
 ```
-or, if you want to use version 0.1.0 or any older version
-
-```sh
-mvn archetype:generate -DarchetypeGroupId=io.github.Riduidel.agile-architecture-documentation-system -DarchetypeArtifactId=archetype -DarchetypeVersion=${VERSION}
-```
 
 This will ask you a few questions and generate the project.
 Finally, don't forget to replace the value of `aadarchi-version` maven property by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)
