@@ -2,6 +2,7 @@ package org.ndx.aadarchi.base.enhancers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
@@ -62,7 +63,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 	@ConfigProperty(name = ModelElementKeys.PREFIX + "todsl.enabled", defaultValue = "false")
 	boolean toDslEnabled;
 	@Inject
-	@ConfigProperty(name = ModelElementKeys.PREFIX + "todsl.target", defaultValue = "${project.basedir}/target/structurizr/workspace.dsl")
+	@ConfigProperty(name = ModelElementKeys.PREFIX + "todsl.target", defaultValue = "${project.build.directory}/structurizr/workspace.dsl")
 	private File dslTargetFile;
 
 	@Override
@@ -77,8 +78,8 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 
 	/**
 	 * Convert this set of properties into Structurizr DSL properties
-	 * @param indentCount
-	 * @param properties
+	 * @param indentCount indent iteration
+	 * @param properties dsl properties to map
 	 */
 	private String propertiesToDsl(int indentCount, Map<String, String> properties) {
 		if(properties.isEmpty())
@@ -169,7 +170,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 			architecture += "}";
 			try {
 				StringBuilder builder = new StringBuilder(architecture);
-				dslTargetFile.getParentFile().mkdirs();
+				FileUtils.forceMkdir(dslTargetFile.getParentFile());
 				FileUtils.write(dslTargetFile, builder, "UTF-8");
 			} catch (IOException e) {
 				throw new UnableToBuildDslException(
@@ -226,8 +227,8 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 	public boolean startVisit(ViewSet viewset) {
 		if (toDslEnabled) {
 			try {
-				String viewsDeclaration = IOUtils.toString(getClass().getResourceAsStream("ToDSL.default.views.dsl"),
-						"UTF-8");
+				InputStream toDslDefaultView = Objects.requireNonNull(getClass().getResourceAsStream("ToDSL.default.views.dsl"));
+				String viewsDeclaration = IOUtils.toString(toDslDefaultView, StandardCharsets.UTF_8);
 				architecture += "\tviews {\n";
 				architecture += viewsDeclaration;
 			} catch (IOException e) {
