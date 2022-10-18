@@ -343,12 +343,25 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 
 	@Override
 	public boolean startVisit(Container container) {
+		stack.push(container.getComponents());
+		int componentsNumber = container.getComponents().size();
+		logger.fine("There are these components : " + container.getComponents());
+		logger.info("At the start, there are " + componentsNumber + " components." );
 		new ContainerEnhancer(container).startEnhance();
 		return super.startVisit(container);
 	}
 
 	@Override
 	public void endVisit(Container container, OutputBuilder builder) {
+		Set<? extends StaticStructureElement> initial = stack.pop();
+		int initialComponentsNumber = initial.size();
+		int actualComponentsNumber = container.getComponents().size();
+		int newComponentsNumber = actualComponentsNumber - initialComponentsNumber;
+		if( actualComponentsNumber > initialComponentsNumber) {
+			logger.info("There are " + actualComponentsNumber + "components, including " + newComponentsNumber + " new components.");
+			logger.fine("There are these components : " + container.getComponents());
+		} else
+			logger.info("There are no new components.");
 		new ContainerEnhancer(container).endEnhance();
 	}
 
