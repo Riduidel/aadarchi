@@ -10,17 +10,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -312,6 +302,8 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	 */
 	MavenXpp3Reader reader = new MavenXpp3Reader();
 
+	Stack<Set<? extends StaticStructureElement>> stack = new Stack<>();
+
 	@Override
 	public boolean isParallel() {
 		return true;
@@ -327,12 +319,27 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 
 	@Override
 	public boolean startVisit(SoftwareSystem softwareSystem) {
+		stack.push(softwareSystem.getContainers());
+		int containersNumber = stack.get(0).size();
+		logger.fine(String.format("At the start, there are these containers : %s ", softwareSystem.getContainers()));
+		logger.info(String.format("At the start, there are %d containers", containersNumber));
 		new SoftwareSystemEnhancer(softwareSystem).startEnhance();
 		return super.startVisit(softwareSystem);
 	}
 
 	@Override
 	public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {
+		Set<? extends StaticStructureElement> initial = stack.pop();
+		int initialContainersNumber = initial.size();
+		int actualContainersNumber = softwareSystem.getContainers().size();
+		int newContainersNumber = actualContainersNumber - initialContainersNumber;
+		Set<? extends StaticStructureElement> newContainers = softwareSystem.getContainers().stream().filter(element -> !initial.contains(element))
+				.collect(Collectors.toSet());
+		if( actualContainersNumber > initialContainersNumber) {
+			logger.info(String.format("At the end, there are %d containers, including %d new containers", actualContainersNumber, newContainersNumber));
+			logger.fine(String.format("At the end, there are these new containers : %s", newContainers ));
+		} else
+			logger.info("At the end, there are no new containers.");
 		new SoftwareSystemEnhancer(softwareSystem).endEnhance();
 	}
 
