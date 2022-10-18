@@ -321,8 +321,8 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	public boolean startVisit(SoftwareSystem softwareSystem) {
 		stack.push(softwareSystem.getContainers());
 		int containersNumber = stack.get(0).size();
-		logger.fine("There are these containers : " + softwareSystem.getContainers());
-		logger.info("At the start, there are " + containersNumber + " containers." );
+		logger.fine(String.format("At the start, there are these containers : %s ", softwareSystem.getContainers()));
+		logger.info(String.format("At the start, there are %d containers", containersNumber));
 		new SoftwareSystemEnhancer(softwareSystem).startEnhance();
 		return super.startVisit(softwareSystem);
 	}
@@ -333,35 +333,24 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		int initialContainersNumber = initial.size();
 		int actualContainersNumber = softwareSystem.getContainers().size();
 		int newContainersNumber = actualContainersNumber - initialContainersNumber;
+		Set<? extends StaticStructureElement> newContainers = softwareSystem.getContainers().stream().filter(element -> !initial.contains(element))
+				.collect(Collectors.toSet());
 		if( actualContainersNumber > initialContainersNumber) {
-			logger.info("There are " + actualContainersNumber + "containers, including " + newContainersNumber + " new containers.");
-			logger.fine("There are these containers : " + softwareSystem.getContainers());
+			logger.info(String.format("At the end, there are %d containers, including %d new containers", actualContainersNumber, newContainersNumber));
+			logger.fine(String.format("At the end, there are these new containers : %s", newContainers ));
 		} else
-			logger.info("there are no new containers.");
+			logger.info("At the end, there are no new containers.");
 		new SoftwareSystemEnhancer(softwareSystem).endEnhance();
 	}
 
 	@Override
 	public boolean startVisit(Container container) {
-		stack.push(container.getComponents());
-		int componentsNumber = container.getComponents().size();
-		logger.fine("There are these components : " + container.getComponents());
-		logger.info("At the start, there are " + componentsNumber + " components." );
 		new ContainerEnhancer(container).startEnhance();
 		return super.startVisit(container);
 	}
 
 	@Override
 	public void endVisit(Container container, OutputBuilder builder) {
-		Set<? extends StaticStructureElement> initial = stack.pop();
-		int initialComponentsNumber = initial.size();
-		int actualComponentsNumber = container.getComponents().size();
-		int newComponentsNumber = actualComponentsNumber - initialComponentsNumber;
-		if( actualComponentsNumber > initialComponentsNumber) {
-			logger.info("There are " + actualComponentsNumber + "components, including " + newComponentsNumber + " new components.");
-			logger.fine("There are these components : " + container.getComponents());
-		} else
-			logger.info("There are no new components.");
 		new ContainerEnhancer(container).endEnhance();
 	}
 
