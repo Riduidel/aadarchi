@@ -19,8 +19,10 @@ jobs:
         with:
           find: "[0-9]+.[0-9]+.[0-9]+"
           replace: "${{ github.event.inputs.tag }}"
+          include: 'README.md'
           regex: true
-      - name: Commit and push the file
-        uses: maxgfr/github-commit-push-file@main
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.6.0
         with:
-          commit_name: 'Updated README to use next release version'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
