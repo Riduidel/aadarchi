@@ -6,8 +6,6 @@ on:
         description: 'Tag'     
         required: true
         default: '0.1.4'
-      tags:
-        description: 'Let's make sure it work the way i think it does'  
 #  push:
 #    tags:
 #      - '[0-9]+.[0-9]+.[0-9]+'
