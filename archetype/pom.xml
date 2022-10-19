@@ -38,7 +38,7 @@
 				<configuration>
 					<properties>
 						<!-- Used in integration test to generate the pom -->
-						<aadarchi-version>${project.version}</aadarchi-version>
+						<aadarchi-used-version>${project.version}</aadarchi-used-version>
 					</properties>
 				</configuration>
 			</plugin>

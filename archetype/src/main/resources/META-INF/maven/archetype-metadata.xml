@@ -7,6 +7,9 @@
 	<requiredProperties>
 		<requiredProperty key="groupId" />
 		<requiredProperty key="artifactId" />
+		<requiredProperty key="aadarchi-version">
+			<defaultValue>UNDEFINED</defaultValue>
+		</requiredProperty>
 		<requiredProperty key="version">
 			<defaultValue>0.0.1-SNAPSHOT</defaultValue>
 		</requiredProperty>
@@ -21,12 +24,14 @@
 				<include>.github/**/*</include>
 			</includes>
 		</fileSet>
+<!-- 
 		<fileSet filtered="true" packaged="true">
 			<directory>src/main/java</directory>
 			<includes>
 				<include>**/*.java</include>
 			</includes>
 		</fileSet>
+-->
 		<fileSet filtered="true">
 			<directory>src/main/resources</directory>
 			<includes>
