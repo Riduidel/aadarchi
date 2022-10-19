@@ -14,22 +14,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-    - name: Modify version number in README
-      uses: mingjun97/file-regex-replace
-      with:
-        regex: '[0-9]+.[0-9]+.[0-9]+'
-        replacement: '${{ github.event.inputs.tag }}'
-        flags: "g"                  # Optional, defaults to "g"
-        include: 'README\.md'    # Optional, defaults to ".*"
-        exclude: '.^'               # Optional, defaults to '.^'
-        encoding: 'utf8'            # Optional, defaults to 'utf8'
-        path: '.'                   # Optional, defaults to '.'
-    - name: Commit the updated README
-      uses: devops-infra/action-commit-push@master
-      with:
-        github_token: "${{ secrets.GITHUB_TOKEN }}"
-        add_timestamp: true
-        commit_prefix: "[AUTO]"
-        commit_message: "Updated"
-        force: false
-        target_branch: master
+      - name: Modify version number in README
+        uses: mingjun97/file-regex-replace
+        with:
+          regex: '[0-9]+.[0-9]+.[0-9]+'
+          replacement: '${{ github.event.inputs.tag }}'
+          flags: "g"                  # Optional, defaults to "g"
+          include: 'README\.md'    # Optional, defaults to ".*"
+          exclude: '.^'               # Optional, defaults to '.^'
+          encoding: 'utf8'            # Optional, defaults to 'utf8'
+          path: '.'                   # Optional, defaults to '.'
+      - name: Commit the updated README
+        uses: devops-infra/action-commit-push@master
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          add_timestamp: true
+          commit_prefix: "[AUTO]"
+          commit_message: "Updated"
+          force: false
+          target_branch: master
