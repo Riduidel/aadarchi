@@ -1,0 +1,24 @@
+name: On tag update readme to have the correct version
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag'     
+        required: true
+        default: '0.1.4'
+      tags:
+        description: 'Let's make sure it work the way i think it does'  
+#  push:
+#    tags:
+#      - '[0-9]+.[0-9]+.[0-9]+'
+jobs:
+  replace_version_in_README:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Replace content in README
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: "[0-9]+.[0-9]+.[0-9]+"
+          replace: "${{ github.event.inputs.tag }}"
+          regex: true

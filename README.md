@@ -15,10 +15,10 @@
 ## Install
 
 You can use the archetype by running this maven-friendly 😅command.
-Don't forget to replace `${VERSION}` by ![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)
+Current version is ![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)
 
 ```sh
-mvn archetype:generate -DarchetypeGroupId=io.github.Riduidel.aadarchi -DarchetypeArtifactId=archetype -DarchetypeVersion=${VERSION} -Daadarchi-version=${VERSION}
+mvn archetype:generate -DarchetypeGroupId=io.github.Riduidel.aadarchi -DarchetypeArtifactId=archetype -DarchetypeVersion=0.0.1 -Daadarchi-version=0.0.1
 ```
 
 This will ask you a few questions and generate the project.
