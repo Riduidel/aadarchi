@@ -17,8 +17,8 @@ jobs:
       - name: Modify version number in README
         uses: mingjun97/file-regex-replace@master
         with:
-          regex: '[0-9]+\.[0-9]+\.[0-9]+'
-          replacement: '${{ github.event.inputs.tag }}'
+          regex: '=[0-9]+\.[0-9]+\.[0-9]+ '
+          replacement: '=${{ github.event.inputs.tag }} '
           include: '^README\.md'    # Optional, defaults to ".*"
       - name: Commit the updated README
         uses: devops-infra/action-commit-push@master
