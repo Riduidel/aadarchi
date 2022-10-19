@@ -20,3 +20,7 @@ jobs:
           find: "[0-9]+.[0-9]+.[0-9]+"
           replace: "${{ github.event.inputs.tag }}"
           regex: true
+      - name: Commit and push the file
+        uses: maxgfr/github-commit-push-file@main
+        with:
+          commit_name: 'Updated README to use next release version'
