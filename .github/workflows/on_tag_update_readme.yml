@@ -1,14 +1,8 @@
 name: On tag update readme to have the correct version
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Tag'     
-        required: true
-        default: '0.1.4'
-#  push:
-#    tags:
-#      - '[0-9]+.[0-9]+.[0-9]+'
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 jobs:
   replace_version_in_README:
     runs-on: ubuntu-latest
@@ -18,14 +12,14 @@ jobs:
         uses: mingjun97/file-regex-replace@master
         with:
           regex: '=[0-9]+\.[0-9]+\.[0-9]+ '
-          replacement: '=${{ github.event.inputs.tag }} '
+          replacement: '=${{ github.ref }} '
           include: '^README\.md'    # Optional, defaults to ".*"
-      - name: Commit the updated README
+      - name: Commit the updated README_name
         uses: devops-infra/action-commit-push@master
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           add_timestamp: true
           commit_prefix: "🤖"
-          commit_message: "Updated readme"
+          commit_message: "Updated readme to have version ${{ github.ref_name }} in"
           force: false
           target_branch: master
