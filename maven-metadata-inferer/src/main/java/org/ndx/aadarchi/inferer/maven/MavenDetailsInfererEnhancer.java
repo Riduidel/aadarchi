@@ -111,7 +111,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 					.map(text -> text.replace("${project.groupId}", module.getGroupId())).peek(text -> {
 						if (text.contains("${")) {
 							logger.warning(String.format(
-									"Container %s has one dependency expressed using Maven property, which we don't parse (excepted some hacks). Please remove that",
+									"Container %s has one dependency (%s) expressed using Maven property, which we don't parse (excepted some hacks). Please remove that",
 									contained, text));
 						}
 					}).flatMap(artifactKey -> findContainedWithArtifactKey(artifactKey))
