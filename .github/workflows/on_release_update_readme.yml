@@ -1,8 +1,8 @@
-name: On tag update readme to have the correct version
+name: On release update readme to have the correct version
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+  release:
+    types:
+      - published  # It seems that you can publish directly witout creating
 jobs:
   replace_version_in_README:
     runs-on: ubuntu-latest
@@ -12,7 +12,7 @@ jobs:
         uses: mingjun97/file-regex-replace@master
         with:
           regex: '=[0-9]+\.[0-9]+\.[0-9]+ '
-          replacement: '=${{ github.ref }} '
+          replacement: '=${{ github.event.release.tag_name }} '
           include: '^README\.md'    # Optional, defaults to ".*"
       - name: Commit the updated README_name
         uses: devops-infra/action-commit-push@master
@@ -20,6 +20,6 @@ jobs:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           add_timestamp: true
           commit_prefix: "🤖"
-          commit_message: "Updated readme to have version ${{ github.ref_name }} in"
+          commit_message: "Updated readme to have version ${{ github.event.release.tag_name }} in"
           force: false
           target_branch: master
