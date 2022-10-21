@@ -120,7 +120,7 @@ public class GemExtractor {
 				}
 			}
 		} catch (FileSystemException e) {
-			throw new RuntimeException(String.format("Unable to copy gem %s due to", gemInfo, e));
+			throw new RuntimeException(String.format("Unable to copy gem %s due to", gemInfo), e);
 		}
 	}
 

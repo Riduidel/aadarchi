@@ -82,7 +82,8 @@ public class GitHubTicket implements Ticket {
 				return source.getClosedAt();
 			default:
 				throw new GitHubHandlerException(String.format("How can an issue %s be in state %s?",
-						source.getHtmlUrl()
+						source.getHtmlUrl(),
+						getStatus()
 						));
 			}
 		} catch(IOException ioe) {

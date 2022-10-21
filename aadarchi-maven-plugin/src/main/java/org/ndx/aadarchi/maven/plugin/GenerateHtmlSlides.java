@@ -80,7 +80,7 @@ public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
 				MojoExecutor.configuration(
 						element(name("uri"), String.format("https://github.com/hakimel/reveal.js/archive/%s.zip", revealjsVersion)),
 						element(name("unpack"), "true"),
-						element(name("outputFileName"), String.format("reveal.js-${version.revealjs}.zip", revealjsVersion)),
+						element(name("outputFileName"), String.format("reveal.js-%s.zip", revealjsVersion)),
 						element(name("outputDirectory"), outputPath)), 
 				executionEnvironment());
 		getLog().info("Generating slides");
