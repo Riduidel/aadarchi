@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import com.structurizr.view.*;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.ViewEnhancer;
@@ -20,10 +21,6 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Force;
 import com.structurizr.Workspace;
 import com.structurizr.annotation.Component;
 import com.structurizr.export.plantuml.C4PlantUMLExporter;
-import com.structurizr.view.ComponentView;
-import com.structurizr.view.ContainerView;
-import com.structurizr.view.View;
-import com.structurizr.view.ViewSet;
 
 /**
  * Generates all graph and output them in the {@link #destination} folder
@@ -63,6 +60,9 @@ public class GraphEmitter implements ViewEnhancer {
 	@Override
 	public boolean startVisit(View s) { return true; }
 
+	@Override
+	public boolean startVisit(FilteredView filteredView) { return true; }
+
 	/**
 	 * At view end visit, we selectively remove the layout information if it is layout with legend
 	 */
@@ -75,6 +75,11 @@ public class GraphEmitter implements ViewEnhancer {
 
 	@Override
 	public void endVisit(ViewSet viewset, OutputBuilder builder) {
+		logger.info(String.format("All views should have been output to %s", destination.getAbsolutePath()));
+	}
+
+	@Override
+	public void endVisit(FilteredView filteredView, OutputBuilder builder) {
 		logger.info(String.format("All views should have been output to %s", destination.getAbsolutePath()));
 	}
 

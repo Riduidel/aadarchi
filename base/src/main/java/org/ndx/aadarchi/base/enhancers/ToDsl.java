@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import com.structurizr.view.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,12 +30,6 @@ import com.structurizr.model.Model;
 import com.structurizr.model.Person;
 import com.structurizr.model.Relationship;
 import com.structurizr.model.SoftwareSystem;
-import com.structurizr.view.ComponentView;
-import com.structurizr.view.ContainerView;
-import com.structurizr.view.SystemContextView;
-import com.structurizr.view.SystemLandscapeView;
-import com.structurizr.view.View;
-import com.structurizr.view.ViewSet;
 
 /**
  * Enhancer that generate a structurizr dsl file The dsl file is used to
@@ -244,6 +239,11 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 	}
 
 	@Override
+	public boolean startVisit(FilteredView filteredView) {
+		return true;
+	}
+
+	@Override
 	public void endVisit(View s, OutputBuilder builder) {
 		String PLACEHOLDER = "\t\t\tWARNING: Include and autolayout can't be infered from static view content, so you'll have to set that yourself\n\t\t}\n";
 		if(s instanceof ComponentView) {
@@ -276,6 +276,11 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 
 	@Override
 	public void endVisit(ViewSet viewset, OutputBuilder builder) {
+		architecture += "\n";
+	}
+
+	@Override
+	public void endVisit(FilteredView filteredView, OutputBuilder builder) {
 		architecture += "\n";
 	}
 }

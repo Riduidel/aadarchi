@@ -13,9 +13,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import com.structurizr.view.FilteredView;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
 import org.ndx.aadarchi.base.utils.SimpleOutputBuilder;
 
@@ -124,6 +124,13 @@ public class ArchitectureEnhancer {
 				views = views.parallel();
 			views.filter(s -> withClassLoader(() -> enhancer.startVisit(s)))
 				.forEach(s -> withClassLoader(() -> enhancer.endVisit(s, outputBuilder)));
+			enhancer.endVisit(viewset, outputBuilder);
+
+			Stream<FilteredView> filteredViews = viewset.getFilteredViews().stream();
+			if (enhancer.isParallel())
+				filteredViews = filteredViews.parallel();
+			filteredViews.filter(s -> withClassLoader(() -> enhancer.startVisit(s)))
+					.forEach(s -> withClassLoader(() -> enhancer.endVisit(s, outputBuilder)));
 			enhancer.endVisit(viewset, outputBuilder);
 		}
 	}

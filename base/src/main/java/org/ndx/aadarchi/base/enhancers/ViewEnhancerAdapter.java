@@ -1,18 +1,10 @@
 package org.ndx.aadarchi.base.enhancers;
 
+import com.structurizr.view.*;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.ViewEnhancer;
 
 import com.structurizr.Workspace;
-import com.structurizr.view.ComponentView;
-import com.structurizr.view.ContainerView;
-import com.structurizr.view.CustomView;
-import com.structurizr.view.DeploymentView;
-import com.structurizr.view.DynamicView;
-import com.structurizr.view.SystemContextView;
-import com.structurizr.view.SystemLandscapeView;
-import com.structurizr.view.View;
-import com.structurizr.view.ViewSet;
 
 /**
  * The view enhancer adapter allow visiting all view, and provides detailed informations about the view type.
@@ -83,6 +75,15 @@ public abstract class ViewEnhancerAdapter implements ViewEnhancer {
 	
 	protected boolean startVisit(CustomView c) {
 		return false;
+	}
+
+	@Override
+	public boolean startVisit(FilteredView filteredView) {
+		return true;
+	}
+
+	@Override
+	public void endVisit(FilteredView filteredView, OutputBuilder builder) {
 	}
 
 	@Override
