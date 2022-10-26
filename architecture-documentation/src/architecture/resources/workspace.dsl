@@ -2,7 +2,7 @@ workspace "aadarchi-documentation-system" {
 	model {
 		person_architect = person "Architect" "The architect as team scribe is the writer of this kind of documentation."
 		person_stakeholder = person "Stakeholder" "All project stakeholders are readers of this kind of documentation."
-		aadarchi = softwareSystem "Aadarchi" {
+		aadarchi = softwareSystem "Aadarchi" "auto-include" {
 			properties {
 				"aadarchi.tickets.project" "aadarchi-documentation-system"
 				"aadarchi.issue.manager" "https://github.com/Riduidel/aadarchi-documentation-system"
@@ -16,7 +16,7 @@ workspace "aadarchi-documentation-system" {
 				}
 				maven -> this "Invokes this plugin during build to generate data"
 			}
-			aadarchi_base = container "base" "" "Java, CDI" {
+			aadarchi_base = container "base" "" "Java, CDI" "auto-include" {
 				properties {
 					"aadarchi.sequence.generator.with" "true"
 				}
@@ -47,11 +47,17 @@ workspace "aadarchi-documentation-system" {
 		systemContext "aadarchi" "SystemContext" "Illustration of aadarchi-documentation usage" {
 			include *
 		}
-		container "aadarchi" "system_containers" "Agile architecture containers" {
+		container "aadarchi" "system_containers_source" "Agile architecture containers" {
 			include *
 		}
-		component "aadarchi_base" "base_components" "Agile architecture base components view" {
+		component "aadarchi_base" "base_components_source" "Agile architecture base components view" {
 			include *
 		}
+		filtered "system_containers_source" "Element,Relationship,auto-include" "system_containers_source" "Agile architecture containers" {
+		    include *
+		}
+		filtered "base_components_source" "Element,Relationship,auto-include" "base_components_source" "Agile architecture base components view" {
+        	include *
+        }
 	}
 }
