@@ -53,11 +53,7 @@ workspace "aadarchi-documentation-system" {
 		component "aadarchi_base" "base_components_source" "Agile architecture base components view" {
 			include *
 		}
-		filtered "system_containers_source" include "Element,Relationship,auto-include" "system_containers_source" "Agile architecture containers" {
-		    include *
-		}
-		filtered "base_components_source" include "Element,Relationship,auto-include" "base_components_source" "Agile architecture base components view" {
-        	include *
-        }
+		filtered "system_containers_source" include "Element,Relationship,auto-include" "system_containers" "Agile architecture containers"
+		filtered "base_components_source" include "Element,Relationship,auto-include" "base_components" "Agile architecture base components view"
 	}
 }
