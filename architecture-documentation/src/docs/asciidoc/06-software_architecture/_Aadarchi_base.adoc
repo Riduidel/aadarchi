@@ -1,8 +1,8 @@
 == base components
 
-[plantuml, {plantumldir}base_components, svg, opts="inline"]     
+[plantuml, {plantumldir}base_components_source, svg, opts="inline"]
 ----
-include::{structurizrdir}/base_components.plantuml[]
+include::{structurizrdir}/base_components_source.plantuml[]
 ----
 
 == base interface
