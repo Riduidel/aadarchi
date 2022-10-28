@@ -20,6 +20,7 @@ import org.gitlab4j.api.models.RepositoryFile;
 import org.gitlab4j.api.models.TreeItem;
 import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
+import org.ndx.aadarchi.base.utils.icon.FontIcon;
 
 import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.exception.WrappedException;
@@ -28,6 +29,7 @@ import com.structurizr.annotation.Component;
 @Component
 public class GitlabSCMHandler implements SCMHandler {
 	private @Inject GitLabContainer gitlab;
+	@Inject @FontIcon(name="gitlab") String gitlabIcon;
 
 	@Override
 	public boolean canHandle(String project) {
@@ -69,7 +71,7 @@ public class GitlabSCMHandler implements SCMHandler {
 
 	@Override
 	public String asciidocText() {
-		return "icon:gitlab[set=fab] Gitlab";
+		return (gitlabIcon + " Gitlab").trim();
 	}
 
 	@Override

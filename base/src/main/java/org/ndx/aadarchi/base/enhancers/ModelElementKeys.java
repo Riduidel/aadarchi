@@ -65,6 +65,13 @@ public interface ModelElementKeys {
 			String NAME = ModelElementKeys.PREFIX+"enhancers.disabled";
 			String SEPARATOR = ";";
 		}
+		interface DisabledFontIcons {
+			/**
+			 * Use this key to have font icons not used
+			 */
+			String NAME = ModelElementKeys.PREFIX+"fonticon.disabled";
+			String VALUE = "false";
+		}
 	}
 	interface Scm {
 

@@ -15,6 +15,7 @@ import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.ndx.aadarchi.base.enhancers.tickets.Ticket;
 import org.ndx.aadarchi.base.enhancers.tickets.TicketsHandler;
+import org.ndx.aadarchi.base.utils.icon.FontIcon;
 
 import com.structurizr.annotation.Component;
 
@@ -22,6 +23,7 @@ import com.structurizr.annotation.Component;
 public class GitHubTicketsHandler implements TicketsHandler {
 	@Inject Logger logger;
 	@Inject GitHub github;
+	@Inject @FontIcon(name="github") String githubIcon;
 
 	@Override
 	public boolean canHandle(String ticketsProject) {
@@ -79,7 +81,7 @@ public class GitHubTicketsHandler implements TicketsHandler {
 		}
 		try {
 			GHRepository repository = github.getRepository(project);
-			return "icon:github[set=fab] " + repository.getName();
+			return (githubIcon + " " + repository.getName()).trim();
 		} catch (IOException e) {
 			throw new GitHubHandlerException(String.format("Unable to read project %s", 
 					project), e);

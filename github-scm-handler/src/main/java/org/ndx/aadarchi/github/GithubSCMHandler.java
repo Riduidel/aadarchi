@@ -15,9 +15,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.jboss.weld.exceptions.UnsupportedOperationException;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
@@ -25,6 +23,7 @@ import org.kohsuke.github.GitHub;
 import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.base.utils.FileContentCache;
+import org.ndx.aadarchi.base.utils.icon.FontIcon;
 
 import com.pivovarit.function.ThrowingFunction;
 import com.structurizr.annotation.Component;
@@ -36,6 +35,7 @@ public class GithubSCMHandler implements SCMHandler {
 	@Inject GitHub github;
 	@Inject FileContentCache fileCache;
 	@Inject Instance<GitOperator> cloner;
+	@Inject @FontIcon(name="github") String githubIcon;
 	@Override
 	public boolean canHandle(String project) {
 		return Constants.isGitHubProject(project);
@@ -67,7 +67,7 @@ public class GithubSCMHandler implements SCMHandler {
 
 	@Override
 	public String asciidocText() {
-		return "icon:github[set=fab] GitHub";
+		return (githubIcon + " GitHub").trim();
 	}
 
 	/**
