@@ -2,9 +2,11 @@ package org.ndx.aadarchi.base;
 
 import java.io.File;
 import java.util.Comparator;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,7 +17,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.DisabledEnhancers;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
 import org.ndx.aadarchi.base.utils.SimpleOutputBuilder;
 
@@ -39,6 +41,19 @@ public class ArchitectureEnhancer {
 	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;
 	@Inject Logger logger;
 	@Inject @ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE) File enhancementsBase;
+	private Set<String> disabledEnhancers = Set.of();
+	@Inject 
+	public void loadDisabledEnhancers(@ConfigProperty(name=DisabledEnhancers.NAME) String disabledEnhancersNames) {
+		if(disabledEnhancersNames!=null) {
+			this.disabledEnhancers = Set.of(disabledEnhancersNames.split(DisabledEnhancers.SEPARATOR));
+		}
+	}
+	
+	public Stream<Enhancer> getEnhancers() {
+		return enhancers.stream()
+				.sorted(Comparator.comparingInt(e -> e.priority()))
+				.filter(this::filterEnhancer);
+	}
 
 	private OutputBuilder outputBuilder;
 	/**
@@ -67,17 +82,26 @@ public class ArchitectureEnhancer {
 	@PostConstruct public void loadOutputBuilder() {
 		outputBuilder = new SimpleOutputBuilder(enhancementsBase);
 	}
+	
+	private boolean filterEnhancer(Enhancer enhancer) {
+		String enhancerClassName = enhancer.getClass().getName();
+		if(disabledEnhancers.contains(enhancerClassName)) {
+			logger.warning(() -> String.format("Enhancer %s is disabled, so it won't enrich our model", enhancerClassName));
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 	public void enhance(Workspace workspace) {
 		classloader = Thread.currentThread().getContextClassLoader();
-		logger.info(() -> String.format("Enhancers applied to this architecture are\n%s",  
-			enhancers.stream()
-				.sorted(Comparator.comparingInt(e -> e.priority()))
+		logger.info(() -> String.format("Enhancers applied to this architecture are\n%s", 
+			getEnhancers()
 				.map(e -> String.format("%s => %d", e.getClass().getName(), e.priority()))
 				.collect(Collectors.joining("\n"))));
-		withStopWatch("Running all enhancements took %s", () -> enhancers.stream()
-			.sorted(Comparator.comparingInt(e -> e.priority()))
-			.forEach(enhancer -> enhancerVisitWorkspace(enhancer, workspace)));
+		withStopWatch("Running all enhancements took %s", 
+			() -> getEnhancers()
+				.forEach(enhancer -> enhancerVisitWorkspace(enhancer, workspace)));
 	}
 
 	/**

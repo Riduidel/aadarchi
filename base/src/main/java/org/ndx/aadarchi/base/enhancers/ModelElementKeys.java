@@ -56,6 +56,15 @@ public interface ModelElementKeys {
 			 */
 			String NAME = ModelElementKeys.PREFIX+"base.path";
 		}
+		interface DisabledEnhancers {
+			/**
+			 * Use this key to have the enhancers given as value disabled during documentation generation.
+			 * THe disabled enhancer names are given according to the syntax given in logs.
+			 * The used separator is ";"
+			 */
+			String NAME = ModelElementKeys.PREFIX+"enhancers.disabled";
+			String SEPARATOR = ";";
+		}
 	}
 	interface Scm {
 
