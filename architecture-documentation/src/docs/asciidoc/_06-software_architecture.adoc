@@ -2,9 +2,9 @@
 :chapter: Software%20Architecture
 include::_notify-bug-admonition.adoc[]
 
-[plantuml, {plantumldir}system_containers_source, svg, opts="inline"]
+[plantuml, {plantumldir}system_containers, svg, opts="inline"]
 ----
-include::{structurizrdir}/system_containers_source.plantuml[]
+include::{structurizrdir}/system_containers.plantuml[]
 ----
 
 **TODO**

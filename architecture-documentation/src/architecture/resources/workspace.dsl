@@ -2,7 +2,7 @@ workspace "aadarchi-documentation-system" {
 	model {
 		person_architect = person "Architect" "The architect as team scribe is the writer of this kind of documentation."
 		person_stakeholder = person "Stakeholder" "All project stakeholders are readers of this kind of documentation."
-		aadarchi = softwareSystem "Aadarchi" "auto-include" {
+		aadarchi = softwareSystem "Aadarchi" {
 			properties {
 				"aadarchi.tickets.project" "aadarchi-documentation-system"
 				"aadarchi.issue.manager" "https://github.com/Riduidel/aadarchi-documentation-system"
@@ -16,7 +16,7 @@ workspace "aadarchi-documentation-system" {
 				}
 				maven -> this "Invokes this plugin during build to generate data"
 			}
-			aadarchi_base = container "base" "" "Java, CDI" "auto-include" {
+			aadarchi_base = container "base" "" "Java, CDI" {
 				properties {
 					"aadarchi.sequence.generator.with" "true"
 				}
