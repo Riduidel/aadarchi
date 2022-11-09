@@ -6,12 +6,15 @@ import javax.inject.Inject;
 
 import org.ndx.aadarchi.base.OutputBuilder;
 
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ViewEnhancerAdapter;
 
 import com.structurizr.view.ComponentView;
 import com.structurizr.view.ContainerView;
 
 public class ViewUpdater extends ViewEnhancerAdapter {
+	public static final String NAME = ModelElementKeys.ConfigProperties.AutoUpdateViews.NAME;
+
 	@Inject Logger logger;
 	@Override
 	public boolean isParallel() {
@@ -36,14 +39,14 @@ public class ViewUpdater extends ViewEnhancerAdapter {
 	
 	@Override
 	protected void endVisit(ComponentView c, OutputBuilder builder) {
-		if(c.getKey().equals("base_components")) {
+		if(c.getProperties().equals(NAME)) {
 			c.addAllComponents();
 		}
 		super.endVisit(c, builder);
 	}
 	@Override
 	protected void endVisit(ContainerView c, OutputBuilder builder) {
-		if(c.getKey().equals("system_containers")) {
+		if (c.getProperties().equals(NAME)) {
 			c.addAllContainersAndInfluencers();
 		}
 		super.endVisit(c, builder);
