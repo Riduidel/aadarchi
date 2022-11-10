@@ -49,14 +49,14 @@ workspace "aadarchi-documentation-system" {
 		}
 		container "aadarchi" "system_containers" "Agile architecture containers" {
 			include *
-			autoLayout
+			
 			properties {
                 "aadarchi.auto.update" "true"
             }
 		}
 		component "aadarchi_base" "base_components" "Agile architecture base components view" {
 			include *
-            autoLayout
+
             properties {
                 "aadarchi.auto.update" "true"
             }
