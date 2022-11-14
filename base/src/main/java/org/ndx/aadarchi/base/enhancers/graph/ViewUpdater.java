@@ -36,14 +36,14 @@ public class ViewUpdater extends ViewEnhancerAdapter {
 	
 	@Override
 	protected void endVisit(ComponentView c, OutputBuilder builder) {
-		if(c.getProperties().equals(NAME)) {
+		if(c.getProperties().containsKey(NAME)) {
 			c.addAllComponents();
 		}
 		super.endVisit(c, builder);
 	}
 	@Override
 	protected void endVisit(ContainerView c, OutputBuilder builder) {
-		if (c.getProperties().equals(NAME)) {
+		if (c.getProperties().containsKey(NAME)) {
 			c.addAllContainersAndInfluencers();
 		}
 		super.endVisit(c, builder);
