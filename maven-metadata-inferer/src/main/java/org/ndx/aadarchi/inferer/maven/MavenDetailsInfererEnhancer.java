@@ -615,6 +615,18 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			// If there is some kind of SCM path, and a configured SCM provider,
 			// let's check if we can find some pom.xml
 			returned = processPomAtSCM(element);
+		} else if (element.getProperties().containsKey(ModelElementKeys.ConfigProperties.BasePath.NAME)) {
+			File basePath = new File(element.getProperties().get(ModelElementKeys.ConfigProperties.BasePath.NAME));
+			File potentialPom = new File(basePath, "pom.xml");
+			if(potentialPom.exists()) {
+				try {
+					returned = processPomAtPath(element, potentialPom.toURI().toURL().toString());
+				} catch (MalformedURLException e) {
+					logger.log(Level.SEVERE, 
+							String.format("Unable to convert file %s to url", potentialPom.getAbsolutePath()), 
+							e);
+				}
+			}
 		}
 		returned.ifPresent(mavenProject -> decorate(element, mavenProject));
 		return returned;
