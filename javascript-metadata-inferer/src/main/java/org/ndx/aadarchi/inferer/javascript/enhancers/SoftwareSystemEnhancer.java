@@ -17,13 +17,8 @@ public class SoftwareSystemEnhancer extends AbstractContainerEnhancer<SoftwareSy
     }
 
     @Override
-    protected void containedDependsUpon(Component component, Component found, String string) {
-        component.uses(found, string);
-    }
-
-    @Override
-    protected Container addContainedElementWithKey(JavascriptProject javascriptProject, String key) {
-        return enhanced.addContainer(key, this.javascriptDetailsInfererEnhancer.decorateTechnology(javascriptProject));
+    protected Container addContainedElementWithKey(JavascriptProject module, String key) {
+        return enhanced.addContainer(key, this.javascriptDetailsInfererEnhancer.decorateTechnology(module));
     }
 
     @Override
@@ -34,5 +29,10 @@ public class SoftwareSystemEnhancer extends AbstractContainerEnhancer<SoftwareSy
     @Override
     protected Collection<Container> getEnhancedChildren() {
         return enhanced.getContainers();
+    }
+
+    @Override
+    protected void containedDependsUpon(Container contained, Container found, String string) {
+         contained.uses(found, string);
     }
 }

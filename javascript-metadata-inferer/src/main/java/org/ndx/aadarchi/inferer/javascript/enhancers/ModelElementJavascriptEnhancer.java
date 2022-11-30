@@ -28,9 +28,6 @@ abstract class ModelElementJavascriptEnhancer<Enhanced extends StaticStructureEl
         javascriptDetailsInfererEnhancer.processModelElement(enhanced).ifPresent(this::startEnhancedWithJavascriptProject);
     }
 
-    private void startEnhancedWithJavascriptProject(Object o) {
-    }
-
     /**
      * When an element has a package, we call the {@link #endEnhanceWithJavascriptProject(JavascriptProject)}
      * method on the enhanced element

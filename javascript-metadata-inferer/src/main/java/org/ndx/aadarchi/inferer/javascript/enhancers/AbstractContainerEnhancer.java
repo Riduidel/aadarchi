@@ -1,8 +1,8 @@
 package org.ndx.aadarchi.inferer.javascript.enhancers;
 
 import com.structurizr.model.Component;
-import com.structurizr.model.Container;
 import com.structurizr.model.StaticStructureElement;
+import org.ndx.aadarchi.inferer.javascript.Dependency;
 import org.ndx.aadarchi.inferer.javascript.JavascriptDetailsInfererEnhancer;
 import org.ndx.aadarchi.inferer.javascript.JavascriptEnhancer;
 import org.ndx.aadarchi.inferer.javascript.JavascriptProject;
@@ -18,10 +18,10 @@ import java.util.stream.Stream;
  * @param <Enhanced>
  * @param <Contained>
  */
-abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement, Contained extends StaticStructureElement> extends ModelElementJavascriptEnhancer<Enhanced> {
+abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement, Contained extends StaticStructureElement>
+        extends ModelElementJavascriptEnhancer<Enhanced> {
 
     protected static final Logger logger = Logger.getLogger(AbstractContainerEnhancer.class.getName());
-
     private final JavascriptDetailsInfererEnhancer javascriptDetailsInfererEnhancer;
     protected Optional<String> additionalProfiles = Optional.empty();
 
@@ -30,25 +30,42 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
         this.javascriptDetailsInfererEnhancer = javascriptDetailsInfererEnhancer;
         this.additionalProfiles = Optional.ofNullable(enhanced.getProperties().get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_ADDITIONAL_PROFILES));
     }
-
+    //TODO : how to retrieve component list
     @Override
     protected void startEnhancedWithJavascriptProject(JavascriptProject javascriptProject) {
-            loadAllSubElements(javascriptProject).forEach(module -> findSubComponentFor(javascriptProject, (JavascriptProject) module));
+            loadAllSubElements(javascriptProject).forEach(component -> findSubComponentFor(javascriptProject, component));
     }
-
     @Override
     protected void endEnhanceWithJavascriptProject(JavascriptProject javascriptProject) {
-        loadAllSubElements(javascriptProject).forEach(module -> linkToDependenciesOf(javascriptProject));
+        loadAllSubElements(javascriptProject).forEach(this::linkToDependenciesOf);
     }
 
-    private void linkToDependenciesOf(JavascriptProject javascriptProjectModule) {
-        Contained contained = getContainedElementWithName(javascriptProjectModule);
+    /**
+     * When needed, add all dependency links between javascript project
+     *
+     * @param module
+     */
+    private void linkToDependenciesOf(JavascriptProject module) {
+        Contained contained = getContainedElementWithName(module);
         /*
         For each dependency of the npm project, if there is an associated
         name, link both of them
          */
+        ((List<Dependency>) module.getDependencies()).stream()
+                .map(dependency -> String.format("%s",dependency.getName()))
+                .flatMap(artifactKey -> findContainedWithArtifactKey(artifactKey))
+                .forEach(found -> containedDependsUpon(contained, found, "maven:dependency"));
     }
-    //A REVOIR : NAME IN PACKAGE.JSON ?
+
+    private Stream<Contained> findContainedWithArtifactKey(String artifactKey) {
+        return getEnhancedChildren().stream()
+                .filter(container -> container.getProperties()
+                        .containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_COORDINATES))
+                .filter(container -> container.getProperties()
+                        .get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_COORDINATES).equals(artifactKey))
+                .findFirst().stream();
+    }
+
     protected Stream<Contained> findContainedWithName(String name) {
         return getEnhancedChildren().stream()
                 .filter(container -> container.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_COORDINATES))
@@ -58,22 +75,22 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 
     protected abstract Collection<Contained> getEnhancedChildren();
 
-    //TO DOcheck addProperty and scm
-    void findSubComponentFor(JavascriptProject javascriptProject, JavascriptProject javascriptProjectModule) {
-        String key = getContainedElementKey(javascriptProjectModule);
+    //TODO : module.getProperties
+    void findSubComponentFor(JavascriptProject javascriptProject, JavascriptProject module) {
+        String key = getContainedElementKey(module);
         Contained linked = getContainedElementWithName(key);
         if(linked == null) {
-            linked =addContainedElementWithKey(javascriptProjectModule, key);
+            linked =addContainedElementWithKey(module, key);
         }
         //Now the container is loaded. Then, we can add some useful properties
         if(!linked.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE)) {
             linked.addProperty(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE,
-                    javascriptProjectModule.getProperties().get(JavascriptDetailsInfererEnhancer.NPM_PACKAGE_URL));
+                    module.getProperties().get(JavascriptDetailsInfererEnhancer.NPM_PACKAGE_URL));
         }
     }
-    protected abstract void containedDependsUpon(Component component, Component found, String string);
-    private Contained getContainedElementWithName(JavascriptProject javascriptProject) {
-        return getContainedElementWithName(getContainedElementKey(javascriptProject));
+    protected abstract void containedDependsUpon(Contained contained, Contained found, String string);
+    private Contained getContainedElementWithName(JavascriptProject module) {
+        return getContainedElementWithName(getContainedElementKey(module));
     }
 
     /**
