@@ -1,6 +1,5 @@
 package org.ndx.aadarchi.inferer.javascript.enhancers;
 
-import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.SoftwareSystem;
 import org.ndx.aadarchi.inferer.javascript.JavascriptDetailsInfererEnhancer;

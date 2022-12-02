@@ -2,6 +2,7 @@ package org.ndx.aadarchi.inferer.javascript.enhancers;
 
 import com.structurizr.model.Component;
 import com.structurizr.model.StaticStructureElement;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.inferer.javascript.Dependency;
 import org.ndx.aadarchi.inferer.javascript.JavascriptDetailsInfererEnhancer;
 import org.ndx.aadarchi.inferer.javascript.JavascriptEnhancer;
@@ -87,6 +88,8 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
             linked.addProperty(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE,
                     module.getProperties().get(JavascriptDetailsInfererEnhancer.NPM_PACKAGE_URL));
         }
+        /*linked.addProperty(ModelElementKeys.Scm.PATH,
+                module.getProperties().getProperty(ModelElementKeys.Scm.PATH));*/
     }
     protected abstract void containedDependsUpon(Contained contained, Contained found, String string);
     private Contained getContainedElementWithName(JavascriptProject module) {
