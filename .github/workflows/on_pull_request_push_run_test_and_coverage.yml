@@ -1,0 +1,33 @@
+name: On pull request push, perform a build with test reports shown and coverage evaluated (and compared with master)
+on:
+  pull_request:
+    branches-ignore: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: adopt
+          java-version: 11
+          cache: 'maven'
+      - name: Build with Maven
+        run: mvn -B test --file pom.xml -Pcoverage
+        env:
+          TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.3
+        with:
+          paths: |
+            ${{ github.workspace }}/base/target/site/jacoco/jacoco.xml,
+            ${{ github.workspace }}/architecture-documentation/target/site/jacoco/jacoco.xml,
+            ${{ github.workspace }}/markdown-to-asciidoc/target/site/jacoco/jacoco.xml,
+            ${{ github.workspace }}/maven-metadata-inferer/target/site/jacoco/jacoco.xml,
+            ${{ github.workspace }}/sequence-diagram-generator/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 10
+          min-coverage-changed-files: 50

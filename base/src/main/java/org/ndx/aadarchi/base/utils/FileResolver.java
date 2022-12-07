@@ -37,7 +37,8 @@ public class FileResolver {
 			if (file.startsWith("file:")) {
 				return Paths.get(new URL(file).toURI());
 			} else {
-				return new File(basedir, file).toPath();
+				// Maybe the file should be resolved as a full path file
+				return basedir.toPath().resolve(file);
 			}
 		} catch (MalformedURLException | URISyntaxException e) {
 			throw new UnableToResolveFileException(String.format("Unable to transform String %s into a file/path object", file), e);
