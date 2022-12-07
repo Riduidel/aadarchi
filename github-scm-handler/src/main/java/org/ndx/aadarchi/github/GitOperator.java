@@ -31,7 +31,7 @@ public class GitOperator {
 	@Inject @ConfigProperty(name=Constants.CONFIG_GITHUB_TOKEN) private String token;
 	private Set<String> branchesToCheckout;
 	@Inject 
-	public void setBranchesToCheckout(@ConfigProperty(name=Constants.CONFIG_GIT_BRANCHES_TO_CHECKOUT, defaultValue = "develop, main, master") String names) {
+	public void setBranchesToCheckout(@ConfigProperty(name=Constants.CONFIG_GIT_BRANCHES_TO_CHECKOUT, defaultValue = "develop, main, main") String names) {
 		this.branchesToCheckout = Arrays.asList(names.split(",")).stream()
 				.map(name -> name.trim())
 				.collect(Collectors.toSet());

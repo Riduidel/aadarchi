@@ -28,7 +28,7 @@ Don't forget to replace the value of `version` maven property by ![GitHub versio
 Aadarchi needs a description of your architecture, which is usually done in a workspace.dsl file (but can also be done in pure Java code).
 
 This file is an architecture description of your project in structurizr's domain-specific language. To learn more about how this DSL works, you can find all usefull informations there :
-[workspace.dsl language reference](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md)
+[workspace.dsl language reference](https://github.com/structurizr/dsl/blob/main/docs/language-reference.md)
 
 This "workspace.dsl" should be located in `src/architecture/resources/` (we will see later how to change this default path).
 

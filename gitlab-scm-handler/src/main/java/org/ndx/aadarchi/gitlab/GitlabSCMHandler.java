@@ -43,7 +43,7 @@ public class GitlabSCMHandler implements SCMHandler {
 			List<TreeItem> items = gitlab.getApi().getRepositoryApi().getTree(project, path, null);
 			return items.stream()
 					.map(ThrowingFunction.unchecked(item -> {
-						RepositoryFile gitlabFile = repositoryFileApi.getFile(project, item.getPath(), "master");
+						RepositoryFile gitlabFile = repositoryFileApi.getFile(project, item.getPath(), "main");
 						Pager<Blame> blame = repositoryFileApi.getBlame(project, item.getPath(), gitlabFile.getRef(), 1);
 						var commitDate = blame.first().get(0).getCommit().getCommittedDate();
 						return new GitlabFile(
@@ -66,7 +66,7 @@ public class GitlabSCMHandler implements SCMHandler {
 
 	@Override
 	public String linkTo(String project, String path) {
-		return String.format("%s/-/blob/master/%s", project, path);
+		return String.format("%s/-/blob/main/%s", project, path);
 	}
 
 	@Override

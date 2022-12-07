@@ -22,4 +22,4 @@ jobs:
           commit_prefix: "🤖"
           commit_message: "Updated readme to have version ${{ github.event.release.tag_name }} in"
           force: false
-          target_branch: master
+          target_branch: main

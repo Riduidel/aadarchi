@@ -1,6 +1,6 @@
 # Spring component detector
 
-Spring component detector configures [Structurizr-Spring](https://github.com/structurizr/java-extensions/tree/master/structurizr-spring) for optimal component detection and decoration
+Spring component detector configures [Structurizr-Spring](https://github.com/structurizr/java-extensions/tree/main/structurizr-spring) for optimal component detection and decoration
 
 ## Activating
 

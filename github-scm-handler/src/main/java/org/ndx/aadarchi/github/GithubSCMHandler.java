@@ -62,7 +62,7 @@ public class GithubSCMHandler implements SCMHandler {
 
 	@Override
 	public String linkTo(String project, String path) {
-		return String.format("%s/blob/master/%s", project, path);
+		return String.format("%s/blob/main/%s", project, path);
 	}
 
 	@Override

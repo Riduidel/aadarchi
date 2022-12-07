@@ -3,7 +3,7 @@
 include::_notify-bug-admonition.adoc[]
 
 Deployment of the aadarchi-documentation code is done by pushing code to GitHub.
-On push, there is a https://github.com/Riduidel/aadarchi-documentation-system/actions?query=workflow%3A%22Java+CI+with+Maven%22[GitHub action] (defined in https://github.com/Riduidel/aadarchi-documentation-system/blob/master/.github/workflows/build.yml[main module .github folder]) which will compile everything and generate the github pages.
+On push, there is a https://github.com/Riduidel/aadarchi-documentation-system/actions?query=workflow%3A%22Java+CI+with+Maven%22[GitHub action] (defined in https://github.com/Riduidel/aadarchi-documentation-system/blob/main/.github/workflows/build.yml[main module .github folder]) which will compile everything and generate the github pages.
 ////
 The deployment section is simply the mapping between the
 <<software architecture>> and the <<infrastructure architecture>>.

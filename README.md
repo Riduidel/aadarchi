@@ -26,7 +26,7 @@ Finally, don't forget to replace the value of `aadarchi-version` maven property 
 
 ## Usage
 
-Once the archetype has been run, you'll have a project with a Structurizr `workspace.dsl` file in `src/architecture/resources` (conform to [Structurizr DSL syntax](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md), which means that file can be viewed using [Structurizr-lite](https://dev.to/simonbrown/getting-started-with-structurizr-lite-27d0))
+Once the archetype has been run, you'll have a project with a Structurizr `workspace.dsl` file in `src/architecture/resources` (conform to [Structurizr DSL syntax](https://github.com/structurizr/dsl/blob/main/docs/language-reference.md), which means that file can be viewed using [Structurizr-lite](https://dev.to/simonbrown/getting-started-with-structurizr-lite-27d0))
 and asciidoc files following Agile architecture documentation template in `src/docs/asciidoc`.
 
 ### Generating architecture documentation
