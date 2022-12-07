@@ -1,6 +1,7 @@
 name: On pull request push, perform a build with test reports shown and coverage evaluated (and compared with master)
 on:
   pull_request:
+    branches_ignore: [ master ]
 
 jobs:
   build:
