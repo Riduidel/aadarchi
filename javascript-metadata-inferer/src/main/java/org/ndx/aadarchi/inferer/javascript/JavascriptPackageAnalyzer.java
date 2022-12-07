@@ -49,9 +49,9 @@ public class JavascriptPackageAnalyzer extends JavascriptDetailsInfererEnhancer 
     //TODO : parent?
     private void decorateRecursively(JavascriptProject project, List<JavascriptProject> children, BiFunction<JavascriptProject, List<JavascriptProject>, Boolean> consumer) {
         if(consumer.apply(project, children)) {
-            if(project.getParent()!=null) {
+            /*if(project.getParent()!=null) {
                 decorateRecursively(project.getParent(), consumer);
-            }
+            }*/
         }
     }
     private Set<String> doDecorateTechnology(JavascriptProject project) {
@@ -70,16 +70,21 @@ public class JavascriptPackageAnalyzer extends JavascriptDetailsInfererEnhancer 
         return technologies;
     }
     public void decorate(Element element, JavascriptProject javascriptProject) {
-        decorateCoordinates(element, javascriptProject);
         Optional.ofNullable(javascriptProject.getDescription()).stream()
                 .forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
 
     }
-
-    private void decorateCoordinates(Element element, JavascriptProject javascriptProject) {
-        if (!element.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_COORDINATES)) {
-            element.addProperty(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_COORDINATES,
-                    String.format("%s", javascriptProject.getName()));
-        }
-    }
+    /*private void decorateScmUrl(Element element, JavascriptProject javascriptProject) {
+        decorateRecursively(javascriptProject, (project,children) -> {
+            if(project.getScm()!=null) {
+                Scm scm = project.getScm();
+                if(scm.getUrl()!=null) {
+                    String url = scm.getUrl();
+                    element.addProperty(org.ndx.aadarchi.base.enhancers.ModelElementKeys.Scm.PROJECT, url);
+                    return false;
+                }
+            }
+            return null;
+        });
+    }*/
 }

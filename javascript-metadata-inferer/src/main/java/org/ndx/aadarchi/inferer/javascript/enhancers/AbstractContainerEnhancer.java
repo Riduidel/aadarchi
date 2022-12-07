@@ -1,9 +1,6 @@
 package org.ndx.aadarchi.inferer.javascript.enhancers;
 
-import com.structurizr.model.Component;
 import com.structurizr.model.StaticStructureElement;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
-import org.ndx.aadarchi.inferer.javascript.Dependency;
 import org.ndx.aadarchi.inferer.javascript.JavascriptDetailsInfererEnhancer;
 import org.ndx.aadarchi.inferer.javascript.JavascriptEnhancer;
 import org.ndx.aadarchi.inferer.javascript.JavascriptProject;
@@ -24,12 +21,10 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 
     protected static final Logger logger = Logger.getLogger(AbstractContainerEnhancer.class.getName());
     private final JavascriptDetailsInfererEnhancer javascriptDetailsInfererEnhancer;
-    protected Optional<String> additionalProfiles = Optional.empty();
 
     protected AbstractContainerEnhancer(JavascriptDetailsInfererEnhancer javascriptDetailsInfererEnhancer, Enhanced enhanced) {
         super(javascriptDetailsInfererEnhancer, enhanced);
         this.javascriptDetailsInfererEnhancer = javascriptDetailsInfererEnhancer;
-        this.additionalProfiles = Optional.ofNullable(enhanced.getProperties().get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_ADDITIONAL_PROFILES));
     }
     //TODO : how to retrieve component list
     @Override
@@ -52,26 +47,9 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
         For each dependency of the npm project, if there is an associated
         name, link both of them
          */
-        ((List<Dependency>) module.getDependencies()).stream()
+       /* ((List<Dependency>) module.getDependencies()).stream()
                 .map(dependency -> String.format("%s",dependency.getName()))
-                .flatMap(artifactKey -> findContainedWithArtifactKey(artifactKey))
-                .forEach(found -> containedDependsUpon(contained, found, "maven:dependency"));
-    }
-
-    private Stream<Contained> findContainedWithArtifactKey(String artifactKey) {
-        return getEnhancedChildren().stream()
-                .filter(container -> container.getProperties()
-                        .containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_COORDINATES))
-                .filter(container -> container.getProperties()
-                        .get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_COORDINATES).equals(artifactKey))
-                .findFirst().stream();
-    }
-
-    protected Stream<Contained> findContainedWithName(String name) {
-        return getEnhancedChildren().stream()
-                .filter(container -> container.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_COORDINATES))
-                .filter(container -> container.getProperties().get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_COORDINATES).equals(name))
-                .findFirst().stream();
+                .forEach(found -> containedDependsUpon(contained, found, "npm:dependency"));*/
     }
 
     protected abstract Collection<Contained> getEnhancedChildren();

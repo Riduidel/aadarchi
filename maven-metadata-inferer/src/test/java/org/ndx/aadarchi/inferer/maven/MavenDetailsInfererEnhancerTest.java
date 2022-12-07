@@ -7,7 +7,6 @@ import javax.enterprise.inject.Instance;
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.ndx.aadarchi.inferer.maven.MavenDetailsInfererEnhancer;
 
 class MavenDetailsInfererEnhancerTest {
 

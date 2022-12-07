@@ -4,15 +4,23 @@ import com.structurizr.model.*;
 import org.ndx.aadarchi.base.ModelEnhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
+import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.inferer.javascript.enhancers.ComponentEnhancer;
 import org.ndx.aadarchi.inferer.javascript.enhancers.ContainerEnhancer;
 import org.ndx.aadarchi.inferer.javascript.enhancers.SoftwareSystemEnhancer;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -22,6 +30,7 @@ import java.util.stream.Collectors;
  * @author nicolas-delsaux
  *
  */
+@com.structurizr.annotation.Component
 public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implements ModelEnhancer {
 
 	public static final String NPM_PACKAGE_URL = JavascriptDetailsInfererEnhancer.class.getName() + "#NPM_PACKAGE_URL";
@@ -33,6 +42,9 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	@Inject
 	JavascriptPackageReader javascriptPackageReader;
 	Stack<Set<? extends StaticStructureElement>> stack = new Stack<>();
+
+	@Inject
+	Instance<SCMHandler> scmHandler;
 
 	@Override
 	public boolean isParallel() {
@@ -106,12 +118,33 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		} else if (element.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE)) {
 			String packagePath = element.getProperties().get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE);
 			returned = processPackageFromPath(element, packagePath);
-		}
+		} else if (element.getProperties().containsKey(ModelElementKeys.Scm.PROJECT)) {
+		// If there is some kind of SCM path, and a configured SCM provider,
+		// let's check if we can find some pom.xml
+		returned = processPackageAtSCM(element);
+	}
 		returned.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorate(element, javascriptProject));
 		return returned;
 	}
 
-	 Optional<JavascriptProject> processPackageFromClass(Element element, String className) {
+	private Optional<JavascriptProject> processPackageAtSCM(Element element) {
+		var project = element.getProperties().get(ModelElementKeys.Scm.PROJECT);
+		for(SCMHandler handler : scmHandler) {
+			try {
+				Collection<SCMFile> packageSCMFile = handler.find(project, "/", file -> "package.json".equals(file.name()));
+				for(SCMFile scmFile : packageSCMFile) {
+					URL url = new URL(scmFile.url());
+					return Optional.ofNullable(javascriptPackageReader.readJavascriptProject(
+							(scmFile.url()), url));
+				}
+			} catch (IOException e) {
+				logger.log(Level.FINER, String.format("There is no pom.xml in %s, maybe it's normal", project), e);
+			}
+		}
+		return Optional.empty();
+	}
+
+	Optional<JavascriptProject> processPackageFromClass(Element element, String className) {
 		try {
 			JavascriptProject javascriptProject = findJavascriptProjectOf(Class.forName(className));
 			return Optional.of(javascriptProject);
@@ -122,7 +155,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		}
 	}
 	Optional<JavascriptProject> processPackageFromPath(Element element, String packagePath) {
-		JavascriptProject mavenProject = javascriptPackageReader.readNpmProject(packagePath);
+		JavascriptProject mavenProject = this.readJavascriptProject(packagePath);
 		return Optional.of(mavenProject);
 	}
 

@@ -9,8 +9,4 @@ public interface JavascriptEnhancer {
 	 * Name of a class we want to load the NPM package for.
 	 */
 	String AGILE_ARCHITECTURE_NPM_CLASS = ModelElementKeys.PREFIX+"npm.class";
-
-	String AGILE_ARCHITECTURE_NPM_COORDINATES = ModelElementKeys.PREFIX+"npm.coordinates";
-
-	String AGILE_ARCHITECTURE_NPM_ADDITIONAL_PROFILES = ModelElementKeys.PREFIX+"npm.profiles";
 }

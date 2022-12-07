@@ -82,6 +82,7 @@
 		<module>aadarchi-maven-plugin</module>
 		<module>cdi-in-maven-plugin-helper</module>
 		<module>structurizr-components-detector</module>
+		<module>javascript-metadata-inferer</module>
 	</modules>
 
 	<dependencyManagement>
