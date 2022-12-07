@@ -18,7 +18,6 @@ jobs:
         run: mvn -B test --file pom.xml -Pcoverage
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
-
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
