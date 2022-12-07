@@ -22,7 +22,19 @@ jobs:
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
         with:
-          paths: ${{ github.workspace }}/**/target/site/jacoco/jacoco.xml
+          paths:
+            -  ${{ github.workspace }}/aadarchi-maven-plugin/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/adr-tickets-extractor/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/base/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/cdi-config-extension/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/cdi-in-maven-plugin-helper/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/github-scm-handler/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/gitlab-scm-handler/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/markdown-to-asciidoc/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/maven-metadata-inferer/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/sequence-diagram-generator/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/spring-components-detector/target/site/jacoco/jacoco.xml
+            -  ${{ github.workspace }}/structurizr-components-detector/target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 10
           min-coverage-changed-files: 50
