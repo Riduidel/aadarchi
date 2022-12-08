@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import org.apache.maven.model.Dependency;
@@ -31,7 +33,9 @@ import org.ndx.aadarchi.base.utils.FileResolver;
 import com.pivovarit.function.ThrowingFunction;
 import com.structurizr.model.Element;
 
-public class MavenPomDecorator extends MavenDetailsInfererEnhancer {
+@Default
+@ApplicationScoped
+public class MavenPomDecorator {
 	private static final Logger logger = Logger.getLogger(MavenPomDecorator.class.getName());
 	@Inject FileResolver fileResolver;
 
