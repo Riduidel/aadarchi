@@ -14,19 +14,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @EnableWeld
-class MavenDetailsInfererEnhancerTest {
+class MavenPomReaderTest {
 
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
 
+    @Inject
     private MavenPomReader mavenPomReader;
     
-    @BeforeEach public void loadMavenPomReader() {
-    	mavenPomReader = weld.select(MavenPomReader.class).get();
-    }
-
 	@Test
-	void can_analyze_pom_on_filesystem() {
+	void can_read_pom_on_filesystem() {
 		MavenProject project = mavenPomReader.readMavenProject(new File("pom.xml").toURI().toString());
 		Assertions.assertThat(project).isNotNull();
 	}
@@ -36,12 +33,12 @@ class MavenDetailsInfererEnhancerTest {
 	 * (because there are some weird cases when loading from physical PATH)
 	 */
 	@Test
-	void can_analyze_pom_of_provided_class_name_from_a_known_jar() {
+	void can_read_pom_of_provided_class_name_from_a_known_jar() {
 		MavenProject project = mavenPomReader.findMavenProjectOf(Instance.class);
 		Assertions.assertThat(project).isNotNull();
 	}
 	@Test
-	void can_analyze_pom_of_provided_class_name_from_current_project() {
+	void can_read_pom_of_provided_class_name_from_current_project() {
 		MavenProject project = mavenPomReader.findMavenProjectOf(MavenDetailsInfererEnhancer.class);
 		Assertions.assertThat(project).isNotNull();
 	}
