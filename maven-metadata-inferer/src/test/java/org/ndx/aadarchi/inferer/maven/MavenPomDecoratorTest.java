@@ -35,9 +35,11 @@ public class MavenPomDecoratorTest {
 		decorator.decorate(system, project);
 		// Then
 		Assertions.assertThat(system.getProperties())
-			.containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES)
-			.containsKey(ModelElementKeys.Scm.PROJECT)
-			.containsKey(ModelElementKeys.ISSUE_MANAGER);
+		.containsOnlyKeys(
+				MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
+				ModelElementKeys.Scm.PROJECT,
+				ModelElementKeys.ISSUE_MANAGER
+				);
     }
     
     @Test
@@ -56,11 +58,10 @@ public class MavenPomDecoratorTest {
 		Assertions.assertThat(container.getDescription()).isNotNull();
 		Assertions.assertThat(container.getProperties())
 			.containsOnlyKeys(
-					Arrays.asList(
 							MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
 							ModelElementKeys.Scm.PROJECT,
 							ModelElementKeys.JAVA_SOURCES,
 							ModelElementKeys.JAVA_PACKAGES,
-							ModelElementKeys.ISSUE_MANAGER));
+							ModelElementKeys.ISSUE_MANAGER);
     }
 }

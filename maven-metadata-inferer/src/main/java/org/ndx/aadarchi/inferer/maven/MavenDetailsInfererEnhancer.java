@@ -15,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
@@ -48,6 +50,8 @@ import com.structurizr.model.StaticStructureElement;
  * @author nicolas-delsaux
  *
  */
+@Default
+@ApplicationScoped
 @com.structurizr.annotation.Component
 public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements ModelEnhancer {
 	@Inject protected Logger logger;
