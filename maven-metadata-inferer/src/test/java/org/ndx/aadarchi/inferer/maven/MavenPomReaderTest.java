@@ -10,8 +10,10 @@ import org.assertj.core.api.Assertions;
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+
+import com.structurizr.Workspace;
 
 @EnableWeld
 class MavenPomReaderTest {
@@ -22,10 +24,44 @@ class MavenPomReaderTest {
     @Inject
     private MavenPomReader mavenPomReader;
     
+    @Test public void can_process_pom_declared_through_class() {
+    	// Given
+    	var w = new Workspace(getClass().getName(), "a test workspace");
+    	var system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
+    	system.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_CLASS, MavenPomReader.class.getName());
+		// When
+    	var project = mavenPomReader.processModelElement(system);
+		// Then
+    	Assertions.assertThat(project)
+    		.get()
+    		.extracting(mavenProject -> mavenProject.getArtifactId()).isEqualTo("maven-metadata-inferer")
+    		;
+    }
+    
+    @Test public void can_process_pom_declared_through_base_path() {
+    	// Given
+    	var w = new Workspace(getClass().getName(), "a test workspace");
+    	var system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
+    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, new File(".").getAbsolutePath());
+		// When
+    	var project = mavenPomReader.processModelElement(system);
+		// Then
+    	Assertions.assertThat(project)
+    		.get()
+    		.extracting(mavenProject -> mavenProject.getArtifactId()).isEqualTo("maven-metadata-inferer")
+    		;
+    }
+    
 	@Test
 	void can_read_pom_on_filesystem() {
 		MavenProject project = mavenPomReader.readMavenProject(new File("pom.xml").toURI().toString());
 		Assertions.assertThat(project).isNotNull();
+	}
+    
+	@Test
+	void cannot_read_pom_of_missing_file() {
+		Assertions.assertThatThrownBy(() -> mavenPomReader.readMavenProject(""))
+			.isInstanceOf(MavenDetailsInfererException.class);
 	}
 
 	/**
