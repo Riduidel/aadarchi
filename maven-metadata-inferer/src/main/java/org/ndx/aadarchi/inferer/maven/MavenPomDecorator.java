@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -103,7 +105,7 @@ public class MavenPomDecorator extends MavenDetailsInfererEnhancer {
 	}
 
 	public void decorateJavaSource(Element element, MavenProject mavenProject) {
-		String mavenPomUrl = mavenProject.getProperties().get(MavenDetailsInfererEnhancer.MAVEN_MODULE_DIR).toString();
+		String mavenPomUrl = mavenProject.getProperties().get(MavenPomReader.MAVEN_MODULE_DIR).toString();
 		List<String> mavenSourceRoots = Optional.ofNullable((List<String>) mavenProject.getCompileSourceRoots())
 				.stream().filter(list -> !list.isEmpty()).findAny().orElse(Arrays.asList("src/main/java"));
 		String sourcePaths = mavenSourceRoots.stream().map(relativeFolder -> mavenPomUrl + "/" + relativeFolder)
@@ -182,6 +184,17 @@ public class MavenPomDecorator extends MavenDetailsInfererEnhancer {
 				.collect(Collectors.toList());
 	}
 
+	protected static String technologyWithVersionFromProperty(MavenProject mavenProject, String technology, String... propertyNames) {
+		return technology + Stream.of(propertyNames)
+				.flatMap(p -> new HashSet(Arrays.asList(p, p.replace('.', '-'), p.replace('-', '.'))).stream())
+				.filter(p -> mavenProject.getProperties().containsKey(p))
+				.map(p -> mavenProject.getProperties().get(p))
+				.map(text -> " "+text)
+				.findFirst()
+				.orElse("")
+				;
+	}
+
 	public static Set<String> doDecorateTechnology(MavenProject project) {
 		Set<String> technologies = new LinkedHashSet<String>();
 		switch (project.getPackaging()) {
@@ -194,7 +207,7 @@ public class MavenPomDecorator extends MavenDetailsInfererEnhancer {
 			technologies.add("war");
 		case "jar":
 			// If there is a java version property, use it to detect Java version
-			technologies.add(MavenDetailsInfererEnhancer.technologyWithVersionFromProperty(project, "Java", "java.version", "maven.compiler.target"));
+			technologies.add(MavenPomDecorator.technologyWithVersionFromProperty(project, "Java", "java.version", "maven.compiler.target"));
 			break;
 		case "pom":
 			break;
@@ -211,13 +224,13 @@ public class MavenPomDecorator extends MavenDetailsInfererEnhancer {
 				}
 				break;
 			case "io.quarkus":
-				technologies.add(MavenDetailsInfererEnhancer.technologyWithVersionFromProperty(project, "Quarkus", "quarkus.platform.version"));
+				technologies.add(MavenPomDecorator.technologyWithVersionFromProperty(project, "Quarkus", "quarkus.platform.version"));
 				break;
 			case "org.springframework":
 				technologies.add("Spring");
 				break;
 			case "org.apache.camel":
-				technologies.add(MavenDetailsInfererEnhancer.technologyWithVersionFromProperty(project, "Apache Camel", "camel.version"));
+				technologies.add(MavenPomDecorator.technologyWithVersionFromProperty(project, "Apache Camel", "camel.version"));
 				break;
 			case "org.springframework.boot":
 				technologies.add("Spring Boot");

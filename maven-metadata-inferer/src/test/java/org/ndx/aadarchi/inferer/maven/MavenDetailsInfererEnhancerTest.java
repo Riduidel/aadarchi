@@ -3,18 +3,31 @@ package org.ndx.aadarchi.inferer.maven;
 import java.io.File;
 
 import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.ndx.aadarchi.inferer.maven.MavenDetailsInfererEnhancer;
 
+@EnableWeld
 class MavenDetailsInfererEnhancerTest {
+
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
+
+    private MavenPomReader mavenPomReader;
+    
+    @BeforeEach public void loadMavenPomReader() {
+    	mavenPomReader = weld.select(MavenPomReader.class).get();
+    }
 
 	@Test
 	void can_analyze_pom_on_filesystem() {
-		MavenDetailsInfererEnhancer enhancer = new MavenDetailsInfererEnhancer();
-		MavenProject project = enhancer.readMavenProject(new File("pom.xml").toURI().toString());
+		MavenProject project = mavenPomReader.readMavenProject(new File("pom.xml").toURI().toString());
 		Assertions.assertThat(project).isNotNull();
 	}
 
@@ -24,14 +37,12 @@ class MavenDetailsInfererEnhancerTest {
 	 */
 	@Test
 	void can_analyze_pom_of_provided_class_name_from_a_known_jar() {
-		MavenDetailsInfererEnhancer enhancer = new MavenDetailsInfererEnhancer();
-		MavenProject project = enhancer.findMavenProjectOf(Instance.class);
+		MavenProject project = mavenPomReader.findMavenProjectOf(Instance.class);
 		Assertions.assertThat(project).isNotNull();
 	}
 	@Test
 	void can_analyze_pom_of_provided_class_name_from_current_project() {
-		MavenDetailsInfererEnhancer enhancer = new MavenDetailsInfererEnhancer();
-		MavenProject project = enhancer.findMavenProjectOf(MavenDetailsInfererEnhancer.class);
+		MavenProject project = mavenPomReader.findMavenProjectOf(MavenDetailsInfererEnhancer.class);
 		Assertions.assertThat(project).isNotNull();
 	}
 

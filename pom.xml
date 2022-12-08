@@ -185,9 +185,9 @@
 			<!-- https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent -->
 			<dependency>
 				<groupId>org.jboss.weld</groupId>
-				<artifactId>weld-junit-parent</artifactId>
-				<version>4.0.0.Final</version>
-				<type>pom</type>
+				<artifactId>weld-junit5</artifactId>
+				<version>2.0.2.Final</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

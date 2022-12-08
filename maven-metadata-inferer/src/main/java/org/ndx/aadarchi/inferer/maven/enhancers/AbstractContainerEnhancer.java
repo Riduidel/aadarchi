@@ -16,6 +16,7 @@ import org.apache.maven.project.MavenProject;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.inferer.maven.MavenDetailsInfererEnhancer;
 import org.ndx.aadarchi.inferer.maven.MavenEnhancer;
+import org.ndx.aadarchi.inferer.maven.MavenPomReader;
 
 import com.structurizr.model.StaticStructureElement;
 
@@ -32,20 +33,23 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 
 	protected Optional<String> additionalProfiles = Optional.empty();
 
-	public AbstractContainerEnhancer(MavenDetailsInfererEnhancer mavenDetailsInfererEnhancer, Enhanced enhanced) {
-		super(mavenDetailsInfererEnhancer, enhanced);
+	private MavenPomReader mavenPomReader;
+
+	public AbstractContainerEnhancer(MavenPomReader mavenPomReader, Enhanced enhanced) {
+		super(enhanced);
+		this.mavenPomReader = mavenPomReader;
 		this.additionalProfiles = Optional.ofNullable(
 				enhanced.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES));
 	}
 
 	@Override
 	protected void startEnhanceWithMavenProject(MavenProject mavenProject) {
-		loadAllSubElements(mavenProject).forEach(module -> findSubComponentFor(mavenProject, module));
+		loadAllSubElements(mavenProject, mavenPomReader).forEach(module -> findSubComponentFor(mavenProject, module));
 	}
 
 	@Override
 	protected void endEnhanceWithMavenProject(MavenProject mavenProject) {
-		loadAllSubElements(mavenProject).forEach(module -> linkToDependenciesOf(module));
+		loadAllSubElements(mavenProject, mavenPomReader).forEach(module -> linkToDependenciesOf(module));
 	}
 
 	/**
@@ -92,7 +96,7 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 		// Of course! We can add some useful properties
 		if (!linked.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM)) {
 			linked.addProperty(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM,
-					module.getProperties().getProperty(MavenDetailsInfererEnhancer.MAVEN_POM_URL));
+					module.getProperties().getProperty(MavenPomReader.MAVEN_POM_URL));
 		}
 		linked.addProperty(ModelElementKeys.Scm.PATH, 
 				module.getProperties().getProperty(ModelElementKeys.Scm.PATH));
@@ -115,11 +119,12 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 	 * modules are automagically flatMapped
 	 * 
 	 * @param mavenProject
+	 * @param mavenPomReader TODO
 	 * @return a stream of all contained maven projects
 	 */
 	@SuppressWarnings("unchecked")
-	private Stream<MavenProject> loadAllSubElements(MavenProject mavenProject) {
-		String pomPath = mavenProject.getProperties().getProperty(MavenDetailsInfererEnhancer.MAVEN_POM_URL);
+	private Stream<MavenProject> loadAllSubElements(MavenProject mavenProject, MavenPomReader mavenPomReader) {
+		String pomPath = mavenProject.getProperties().getProperty(MavenPomReader.MAVEN_POM_URL);
 		String parentScmDir = mavenProject.getProperties().getProperty(ModelElementKeys.Scm.PATH, "");
 		final String pomDir = pomPath.substring(0, pomPath.lastIndexOf("/pom.xml"));
 		List<String> modules = new ArrayList<>();
@@ -143,12 +148,12 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 								+ "If it is not normal, add the profile in the maven property \"AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES\"",
 						mavenProject, profile.getId(), profile.getModules())));
 		return modules.stream().map(module -> {
-				MavenProject modulePom = this.mavenDetailsInfererEnhancer.readMavenProject(String.format("%s/%s/pom.xml", pomDir, module));
+				MavenProject modulePom = mavenPomReader.readMavenProject(String.format("%s/%s/pom.xml", pomDir, module));
 				modulePom.getProperties().put(ModelElementKeys.Scm.PATH, 
 						parentScmDir.isBlank() ? module : parentScmDir + "/" + module);
 				return modulePom;
 			})
-			.flatMap(module -> module.getPackaging().equals("pom") ? loadAllSubElements(module)
+			.flatMap(module -> module.getPackaging().equals("pom") ? loadAllSubElements(module, mavenPomReader)
 					: Optional.of(module).stream());
 	}
 

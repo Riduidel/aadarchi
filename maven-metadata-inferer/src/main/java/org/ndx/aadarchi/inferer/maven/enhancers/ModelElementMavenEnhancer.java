@@ -1,7 +1,9 @@
 package org.ndx.aadarchi.inferer.maven.enhancers;
 
+import java.util.Optional;
+import java.util.function.Function;
+
 import org.apache.maven.project.MavenProject;
-import org.ndx.aadarchi.inferer.maven.MavenDetailsInfererEnhancer;
 
 import com.structurizr.model.StaticStructureElement;
 
@@ -13,23 +15,21 @@ import com.structurizr.model.StaticStructureElement;
  */
 abstract class ModelElementMavenEnhancer<Enhanced extends StaticStructureElement> {
 
-	protected final MavenDetailsInfererEnhancer mavenDetailsInfererEnhancer;
 	/**
 	 * Model element that we enhance
 	 */
 	protected final Enhanced enhanced;
 
-	public ModelElementMavenEnhancer(MavenDetailsInfererEnhancer mavenDetailsInfererEnhancer, Enhanced enhanced) {
-		this.mavenDetailsInfererEnhancer = mavenDetailsInfererEnhancer;
+	public ModelElementMavenEnhancer(Enhanced enhanced) {
 		this.enhanced = enhanced;
 	}
 
-	public void startEnhance() {
-		this.mavenDetailsInfererEnhancer.processModelElement(enhanced).ifPresent(this::startEnhanceWithMavenProject);
+	public void startEnhance(Function<Enhanced, Optional<MavenProject>> modelExtractor) {
+		modelExtractor.apply(enhanced).ifPresent(this::startEnhanceWithMavenProject);
 	}
 
-	public void endEnhance() {
-		this.mavenDetailsInfererEnhancer.processModelElement(enhanced).ifPresent(this::endEnhanceWithMavenProject);
+	public void endEnhance(Function<Enhanced, Optional<MavenProject>> modelExtractor) {
+		modelExtractor.apply(enhanced).ifPresent(this::endEnhanceWithMavenProject);
 	}
 
 	protected abstract void startEnhanceWithMavenProject(MavenProject mavenProject);
