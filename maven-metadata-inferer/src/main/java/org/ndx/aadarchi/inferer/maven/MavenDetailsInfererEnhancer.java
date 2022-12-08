@@ -75,7 +75,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		int containersNumber = stack.get(0).size();
 		logger.info(String.format("Starting visit of system %s, there are %d containers", softwareSystem, containersNumber));
 		logger.fine(String.format("Starting visit of system %s, , there are these containers : %s ", softwareSystem, softwareSystem.getContainers()));
-		new SoftwareSystemEnhancer(mavenPomReader, softwareSystem).startEnhance(null);
+		new SoftwareSystemEnhancer(mavenPomReader, softwareSystem).startEnhance(mavenPomReader::processModelElement);
 		return super.startVisit(softwareSystem);
 	}
 
@@ -92,28 +92,28 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			logger.fine(String.format("Ending visit of system %s, there are these new containers : %s", softwareSystem, newContainers ));
 		} else
 			logger.info("At the end, there are no new containers.");
-		new SoftwareSystemEnhancer(mavenPomReader, softwareSystem).endEnhance(null);
+		new SoftwareSystemEnhancer(mavenPomReader, softwareSystem).endEnhance(mavenPomReader::processModelElement);
 	}
 
 	@Override
 	public boolean startVisit(Container container) {
-		new ContainerEnhancer(mavenPomReader, container).startEnhance(null);
+		new ContainerEnhancer(mavenPomReader, container).startEnhance(mavenPomReader::processModelElement);
 		return super.startVisit(container);
 	}
 
 	@Override
 	public void endVisit(Container container, OutputBuilder builder) {
-		new ContainerEnhancer(mavenPomReader, container).endEnhance(null);
+		new ContainerEnhancer(mavenPomReader, container).endEnhance(mavenPomReader::processModelElement);
 	}
 
 	@Override
 	public boolean startVisit(Component component) {
-		new ComponentEnhancer(mavenPomReader, component).startEnhance(null);
+		new ComponentEnhancer(mavenPomReader, component).startEnhance(mavenPomReader::processModelElement);
 		return super.startVisit(component);
 	}
 
 	@Override
 	public void endVisit(Component component, OutputBuilder builder) {
-		new ComponentEnhancer(mavenPomReader, component).endEnhance(null);
+		new ComponentEnhancer(mavenPomReader, component).endEnhance(mavenPomReader::processModelElement);
 	}
 }
