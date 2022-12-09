@@ -2,37 +2,47 @@ package org.ndx.aadarchi.inferer.maven;
 
 import java.io.File;
 
-import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
-import org.ndx.aadarchi.inferer.maven.MavenDetailsInfererEnhancer;
+import org.ndx.aadarchi.base.OutputBuilder;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
-class MavenDetailsInfererEnhancerTest {
+import com.structurizr.Workspace;
+import com.structurizr.model.SoftwareSystem;
 
-	@Test
-	void can_analyze_pom_on_filesystem() {
-		MavenDetailsInfererEnhancer enhancer = new MavenDetailsInfererEnhancer();
-		MavenProject project = enhancer.readMavenProject(new File("pom.xml").toURI().toString());
-		Assertions.assertThat(project).isNotNull();
-	}
+@EnableWeld
+public class MavenDetailsInfererEnhancerTest {
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
 
-	/**
-	 * As a first test, we use a class that we know we load it from a JAR
-	 * (because there are some weird cases when loading from physical PATH)
-	 */
-	@Test
-	void can_analyze_pom_of_provided_class_name_from_a_known_jar() {
-		MavenDetailsInfererEnhancer enhancer = new MavenDetailsInfererEnhancer();
-		MavenProject project = enhancer.findMavenProjectOf(Instance.class);
-		Assertions.assertThat(project).isNotNull();
-	}
-	@Test
-	void can_analyze_pom_of_provided_class_name_from_current_project() {
-		MavenDetailsInfererEnhancer enhancer = new MavenDetailsInfererEnhancer();
-		MavenProject project = enhancer.findMavenProjectOf(MavenDetailsInfererEnhancer.class);
-		Assertions.assertThat(project).isNotNull();
-	}
+    @Inject MavenDetailsInfererEnhancer tested;
 
+    @Test public void can_visit_a_software_system_having_an_associated_pom() {
+    	// Given
+    	var w = new Workspace(getClass().getName(), "a test workspace");
+    	SoftwareSystem system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
+    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, new File(".").getAbsolutePath());
+		// When
+    	// We emulate in-depth visit (but do not really perform it)
+		tested.startVisit(w, null);
+		tested.startVisit(system);
+		tested.endVisit(system, null);
+		tested.endVisit(w, null);
+		// Then
+		Assertions.assertThat(system.getProperties())
+			.containsOnlyKeys(
+					ModelElementKeys.ConfigProperties.BasePath.NAME,
+					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
+					ModelElementKeys.Scm.PROJECT,
+					ModelElementKeys.JAVA_SOURCES,
+					ModelElementKeys.JAVA_PACKAGES,
+					ModelElementKeys.ISSUE_MANAGER
+					);
+    }
 }
