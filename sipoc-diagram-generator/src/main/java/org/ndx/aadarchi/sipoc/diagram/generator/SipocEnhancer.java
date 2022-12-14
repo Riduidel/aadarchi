@@ -5,12 +5,16 @@ import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@ApplicationScoped
+@Default
 public class SipocEnhancer extends ModelElementAdapter {
 
     @Inject
@@ -45,11 +49,11 @@ public class SipocEnhancer extends ModelElementAdapter {
     }
 
     String sipocDiagramGenerator(Stream<Element> stream) {
-        Set<Relationship> relationshipsSource = elements.get().getModel().getRelationships();
-        relationshipsSource.stream().filter(relationship -> relationship.getDestination().equals(elements))
+        Set<Relationship> relationshipSource = elements.get().getModel().getRelationships();
+        relationshipSource.stream().filter(relationship -> relationship.getDestination().equals(elements))
                 .collect(Collectors.toList());
         return stream.filter(element -> element.getModel().getRelationships().contains(element))
-                .map(element -> String.format("%s,%s,%s",relationshipsSource, element.getDescription(),element.getRelationships()))
-                .collect(Collectors.joining("\n\n", "[cols=\"1,1,1,1,1\"]\n" + "|\n|Incoming Relationship|Input|Process|Output|Outgoing Relationship\n\n", "\n|"));
+                .map(element -> String.format("%s,%s,%s",relationshipSource,  element.getDescription(),element.getRelationships()))
+                .collect(Collectors.joining("\n\n", "[cols=\"1,1,1\"]\n" + "|\n|Incoming Relationship|Input|Process|Output|Outgoing Relationship\n\n", "\n|"));
     }
 }
