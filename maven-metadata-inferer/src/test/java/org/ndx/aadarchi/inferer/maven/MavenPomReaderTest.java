@@ -42,7 +42,7 @@ class MavenPomReaderTest {
     	// Given
     	var w = new Workspace(getClass().getName(), "a test workspace");
     	var system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
-    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, new File(".").getAbsolutePath());
+    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, MavenDetailsInfererEnhancerTest.getAadarchiRootPath());
 		// When
     	var project = mavenPomReader.processModelElement(system);
 		// Then
