@@ -24,6 +24,7 @@
 		<version.structurizr.annotations>1.3.5</version.structurizr.annotations>
 		<version.jsoup>1.15.3</version.jsoup>
 		<version.junit>5.9.1</version.junit>
+		<error-prone.version>2.16</error-prone.version>
 	</properties>
 	<scm>
 		<connection>scm:git:git@github.com:Riduidel/aadarchi.git</connection>
@@ -211,6 +212,21 @@
 					<version>3.10.1</version>
 					<configuration>
 						<release>${maven.compiler.release}</release>
+						<compilerArgs>
+							<arg>-XDcompilePolicy=simple</arg>
+							<arg>-Xplugin:ErrorProne</arg>
+						</compilerArgs>
+						<annotationProcessorPaths>
+							<path>
+								<groupId>com.google.errorprone</groupId>
+								<artifactId>error_prone_core</artifactId>
+								<version>${error-prone.version}</version>
+							</path>
+							<!-- Other annotation processors go here.
+            If 'annotationProcessorPaths' is set, processors will no longer be
+            discovered on the regular -classpath; see also 'Using Error Prone
+            together with other annotation processors' below. -->
+						</annotationProcessorPaths>
 					</configuration>
 				</plugin>
 				<plugin>
