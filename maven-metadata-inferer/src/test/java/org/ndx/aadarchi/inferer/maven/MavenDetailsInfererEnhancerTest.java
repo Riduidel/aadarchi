@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.inferer.maven;
 
 import java.io.File;
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -10,10 +11,12 @@ import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
+import org.ndx.aadarchi.base.ArchitectureEnhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
 import com.structurizr.Workspace;
+import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.SoftwareSystem;
 
 @EnableWeld
@@ -22,6 +25,7 @@ public class MavenDetailsInfererEnhancerTest {
     public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
 
     @Inject MavenDetailsInfererEnhancer tested;
+	@Inject ArchitectureEnhancer enhancer;
 
     @Test public void can_visit_a_software_system_having_an_associated_pom() {
     	// Given
@@ -30,10 +34,7 @@ public class MavenDetailsInfererEnhancerTest {
     	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, new File(".").getAbsolutePath());
 		// When
     	// We emulate in-depth visit (but do not really perform it)
-		tested.startVisit(w, null);
-		tested.startVisit(system);
-		tested.endVisit(system, null);
-		tested.endVisit(w, null);
+    	enhancer.enhance(w, Arrays.asList(tested));
 		// Then
 		Assertions.assertThat(system.getProperties())
 			.containsOnlyKeys(
