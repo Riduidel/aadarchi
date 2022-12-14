@@ -48,7 +48,7 @@ class MavenPomReaderTest {
 		// Then
     	Assertions.assertThat(project)
     		.get()
-    		.extracting(mavenProject -> mavenProject.getArtifactId()).isEqualTo("maven-metadata-inferer")
+    		.extracting(mavenProject -> mavenProject.getArtifactId()).isEqualTo("system")
     		;
     }
     
