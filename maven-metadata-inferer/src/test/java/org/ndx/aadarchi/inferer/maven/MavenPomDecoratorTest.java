@@ -1,9 +1,6 @@
 package org.ndx.aadarchi.inferer.maven;
 
 import java.io.File;
-import java.util.Arrays;
-
-import javax.inject.Inject;
 
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
@@ -14,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
 import com.structurizr.Workspace;
+
+import jakarta.inject.Inject;
 
 @EnableWeld
 public class MavenPomDecoratorTest {

@@ -2,7 +2,7 @@ package org.ndx.aadarchi;
 
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.ndx.aadarchi.base.OutputBuilder;
 

@@ -4,23 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
-import javax.inject.Inject;
-
-import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
-import org.assertj.core.api.InstanceOfAssertFactory;
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.ArchitectureEnhancer;
-import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
 import com.structurizr.Workspace;
-import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.SoftwareSystem;
+
+import jakarta.inject.Inject;
 
 @EnableWeld
 public class MavenDetailsInfererEnhancerTest {

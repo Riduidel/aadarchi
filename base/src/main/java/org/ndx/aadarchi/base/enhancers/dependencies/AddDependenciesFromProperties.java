@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.ndx.aadarchi.base.OutputBuilder;

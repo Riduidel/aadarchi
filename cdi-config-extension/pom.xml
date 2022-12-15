@@ -9,9 +9,9 @@
 	<name>Aadarchi : CDI Config extension</name>
 	<description>Some CDI extensions</description>
 	<dependencies>
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
+			<dependency>
+				<groupId>jakarta.enterprise</groupId>
+				<artifactId>jakarta.enterprise.cdi-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.deltaspike.core</groupId>

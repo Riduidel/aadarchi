@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 /**
  * Interface implemented by SCM handlers to read files from SCM storage

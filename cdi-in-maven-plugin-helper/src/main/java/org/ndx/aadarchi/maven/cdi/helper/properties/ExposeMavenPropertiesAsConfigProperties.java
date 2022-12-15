@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.Source;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;

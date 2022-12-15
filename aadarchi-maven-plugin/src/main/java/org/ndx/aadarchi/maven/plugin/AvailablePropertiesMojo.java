@@ -9,10 +9,10 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.ndx.aadarchi.maven.cdi.helper.wrappers.AbstractCDIStarterMojo;
 
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.spi.Bean;
+import jakarta.enterprise.inject.spi.BeanManager;
+import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.inject.Inject;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -40,7 +40,7 @@ public class AvailablePropertiesMojo extends AbstractCDIStarterMojo {
          */
         Set<String> filteredPackages = new TreeSet<>(Arrays.asList(
         		"org.jboss.weld",
-        		"javax.enterprise.inject",
+        		"jakarta.enterprise.inject",
         		"org.apache.deltaspike"));
         
         private boolean isInFilteredPackage(String packageName) {

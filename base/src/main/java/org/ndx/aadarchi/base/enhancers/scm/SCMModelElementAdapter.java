@@ -3,8 +3,8 @@ package org.ndx.aadarchi.base.enhancers.scm;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 

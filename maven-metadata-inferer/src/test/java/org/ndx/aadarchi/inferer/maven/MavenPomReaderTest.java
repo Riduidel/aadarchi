@@ -2,9 +2,6 @@ package org.ndx.aadarchi.inferer.maven;
 
 import java.io.File;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
 import org.jboss.weld.junit5.EnableWeld;
@@ -14,6 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
 import com.structurizr.Workspace;
+
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 
 @EnableWeld
 class MavenPomReaderTest {

@@ -8,8 +8,8 @@ import org.ndx.aadarchi.base.Enhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;

@@ -1,6 +1,6 @@
 package org.ndx.aadarchi.maven.cdi.helper.properties;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.Filter;
 import org.apache.deltaspike.core.api.projectstage.ProjectStage;

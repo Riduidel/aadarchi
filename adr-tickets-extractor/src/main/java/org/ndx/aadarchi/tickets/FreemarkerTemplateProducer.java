@@ -2,8 +2,8 @@ package org.ndx.aadarchi.tickets;
 
 import java.io.IOException;
 
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
+import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.spi.InjectionPoint;
 
 import org.ndx.aadarchi.base.AgileArchitectureException;
 

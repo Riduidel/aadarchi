@@ -10,9 +10,9 @@
 	<description>Base module defining the various used interfaces, and some very useful implementations</description>
 	<packaging>jar</packaging>
 	<dependencies>
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
+			<dependency>
+				<groupId>jakarta.enterprise</groupId>
+				<artifactId>jakarta.enterprise.cdi-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.weld.se</groupId>
