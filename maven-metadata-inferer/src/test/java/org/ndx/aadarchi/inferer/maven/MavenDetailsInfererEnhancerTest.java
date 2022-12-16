@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -17,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.ArchitectureEnhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.UsesComponent;
@@ -29,12 +32,14 @@ public class MavenDetailsInfererEnhancerTest {
 
     @Inject MavenDetailsInfererEnhancer tested;
 	@Inject ArchitectureEnhancer enhancer;
+	
+	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) FileObject basePath;
 
     @Test public void can_visit_a_software_system_having_an_associated_pom() {
     	// Given
     	var w = new Workspace(getClass().getName(), "a test workspace");
     	SoftwareSystem system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
-    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, getAadarchiRootPath());
+    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, basePath.toString());
 		// When
     	// We emulate in-depth visit (but do not really perform it)
     	enhancer.enhance(w, Arrays.asList(tested));
@@ -64,23 +69,4 @@ public class MavenDetailsInfererEnhancerTest {
 					);
 			
     }
-
-    /**
-     * Obtain the aadarchi root path
-     * In fact, this method simply checks if the given path is the maven-metadata-inferer one.
-     * If so, it returns the parent, otherwise, it returns itself
-     * (this allows us to run the test both from JUnit and in Reactor build)
-     */
-	public static String getAadarchiRootPath() {
-		File current = new File(".");
-		try {
-			current = current.getCanonicalFile();
-			if(current.getName().equals("maven-metadata-inferer"))
-				return current.getParent();
-			else
-				return current.getAbsolutePath();
-		} catch (IOException e) {
-			throw new RuntimeException("We should be able to get this folder path, no?", e);
-		}
-	}
 }

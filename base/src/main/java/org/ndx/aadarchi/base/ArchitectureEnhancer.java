@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.lang3.stream.Streams;
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.vfs2.FileObject;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.DisabledEnhancers;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
@@ -41,7 +42,7 @@ import com.structurizr.view.ViewSet;
 @ApplicationScoped
 public class ArchitectureEnhancer {
 	@Inject Logger logger;
-	@Inject @ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE) File enhancementsBase;
+	@Inject @ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE) FileObject enhancementsBase;
 	private Set<String> disabledEnhancers = Set.of();
 	@Inject 
 	public void loadDisabledEnhancers(@ConfigProperty(name=DisabledEnhancers.NAME) String disabledEnhancersNames) {

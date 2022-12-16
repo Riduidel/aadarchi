@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.function.Function;
@@ -14,6 +13,8 @@ import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Force;
@@ -33,15 +34,15 @@ public class FileContentCache {
 	boolean force;
 	@Inject @ConfigProperty(
 			name = ModelElementKeys.ConfigProperties.CacheDir.NAME, 
-			defaultValue = ModelElementKeys.ConfigProperties.CacheDir.VALUE) File cacheDir;
+			defaultValue = ModelElementKeys.ConfigProperties.CacheDir.VALUE) FileObject cacheDir;
 
 	public InputStream openStreamFor(URL url, Function<URL, InputStream> cacheLoader) throws IOException {
-		File file = toCacheFile(url);
+		FileObject file = toCacheFile(url);
 		if(force || !file.exists() || shouldRefresh(file)) {
 			refreshCache(file, url, cacheLoader);
 		}
 		// Now it's time to load file in cache
-		return FileUtils.openInputStream(file);
+		return file.getContent().getInputStream();
 	}
 	public InputStream openStreamFor(String string, Function<URL, InputStream> cacheLoader) throws IOException {
 		return openStreamFor(new URL(string), cacheLoader);
@@ -57,9 +58,11 @@ public class FileContentCache {
 		return openStreamFor(file.url(), _url -> file.content());
 	}
 
-	private void refreshCache(File file, URL url, Function<URL, InputStream> cacheLoader) throws IOException {
-		file.getParentFile().mkdirs();
-		Files.copy(cacheLoader.apply(url), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	private void refreshCache(FileObject file, URL url, Function<URL, InputStream> cacheLoader) throws IOException {
+		file.getParent().createFolder();
+		try(InputStream input = cacheLoader.apply(url)) {
+			IOUtils.copy(input, file.getContent().getOutputStream());
+		}
 	}
 
 	/**
@@ -67,8 +70,13 @@ public class FileContentCache {
 	 * @param file
 	 * @return
 	 */
-	private boolean shouldRefresh(File file) {
-		return file.lastModified()<(System.currentTimeMillis()-1000*60*60*12);
+	private boolean shouldRefresh(FileObject file) {
+		try {
+			return file.getContent().getLastModifiedTime() <(System.currentTimeMillis()-1000*60*60*12);
+		} catch (FileSystemException e) {
+			throw new CantAccessPath(
+					String.format("Unable to access path for %s to get last modified", file), e);
+		}
 	}
 
 	/**
@@ -76,9 +84,14 @@ public class FileContentCache {
 	 * @param url url for which we want a cache key
 	 * @return a cache file path
 	 */
-	private File toCacheFile(URL url) {
-		File domain = new File(cacheDir, url.getHost());
-		File path = new File(domain, url.getFile().replace('?', '_'));
-		return path;
+	private FileObject toCacheFile(URL url) {
+		try {
+			FileObject domain = cacheDir.resolveFile(url.getHost());
+			FileObject path = domain.resolveFile(url.getFile().replace('?', '_'));
+			return path;
+		} catch(FileSystemException e) {
+			throw new CantToResolvePath(
+					String.format("Unable to construct path for %s", url), e);
+		}
 	}
 }

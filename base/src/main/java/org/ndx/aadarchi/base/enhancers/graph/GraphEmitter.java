@@ -1,27 +1,26 @@
 package org.ndx.aadarchi.base.enhancers.graph;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.ViewEnhancer;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.DiagramsDir;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Force;
+import org.ndx.aadarchi.base.utils.CantToResolvePath;
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.Component;
 import com.structurizr.export.plantuml.C4PlantUMLExporter;
-import com.structurizr.view.ComponentView;
-import com.structurizr.view.ContainerView;
 import com.structurizr.view.View;
 import com.structurizr.view.ViewSet;
 
@@ -34,10 +33,8 @@ import com.structurizr.view.ViewSet;
 @ApplicationScoped
 public class GraphEmitter implements ViewEnhancer {
 	@Inject Logger logger;
-	File destination;
-	@Inject public void setDestination(@ConfigProperty(name = DiagramsDir.NAME, defaultValue = DiagramsDir.VALUE) File destination) {
-		this.destination = destination.getAbsoluteFile();
-	}
+	@Inject @ConfigProperty(name = DiagramsDir.NAME, defaultValue = DiagramsDir.VALUE) FileObject destination;
+
 	@Inject @ConfigProperty(name = Force.NAME, defaultValue = Force.VALUE) boolean force;
 
 	@Inject 
@@ -63,19 +60,14 @@ public class GraphEmitter implements ViewEnhancer {
 	@Override
 	public boolean startVisit(View s) { return true; }
 
-	/**
-	 * At view end visit, we selectively remove the layout information if it is layout with legend
-	 */
 	@Override
 	public void endVisit(View diagram, OutputBuilder builder) {
-		if(diagram instanceof ComponentView || diagram instanceof ContainerView) {
-			Path path = new File(destination, diagram.getKey()+".plantuml").toPath();
-		}
+		// No more used
 	}
 
 	@Override
 	public void endVisit(ViewSet viewset, OutputBuilder builder) {
-		logger.info(String.format("All views should have been output to %s", destination.getAbsolutePath()));
+		logger.info(String.format("All views should have been output to %s", destination));
 	}
 
 	@Override
@@ -95,22 +87,31 @@ public class GraphEmitter implements ViewEnhancer {
 		plantUMLWriter.addSkinParam("ArrowThickness", "3");
 		plantUMLWriter.addSkinParam("svgLinkTarget", "_parent");
 		
-		destination.mkdirs();
+		try {
+			destination.createFolder();
+		} catch (FileSystemException e1) {
+			throw new CantCreateFolder(String.format("Can't create folder %s", destination), e1);
+		}
 		
 		plantUMLWriter.export(workspace).stream().parallel()
 			.forEach(diagram -> {
 				// Incredibly enough, that's not a view!
-				Path path = new File(destination, diagram.getKey()+".plantuml").toPath();
+				String name = diagram.getKey()+".plantuml";
+				FileObject output;
 				try {
-					Files.write(
-							path, 
-							diagram.getDefinition().getBytes(Charset.forName("UTF-8")));
-					logger.info(String.format("Generated diagram %s in file %s", diagram.getKey(), path));
-				} catch(IOException e) {
-					throw new CantWriteDiagram(
-							String.format("Can't write diagram %s in file %s",
-									diagram.getKey(), path),
-							e);
+					output = destination.resolveFile(name);
+					try {
+						IOUtils.write(diagram.getDefinition().getBytes(Charset.forName("UTF-8")),
+								output.getContent().getOutputStream());
+						logger.info(String.format("Generated diagram %s in file %s", diagram.getKey(), output));
+					} catch(IOException e) {
+						throw new CantWriteDiagram(
+								String.format("Can't write diagram %s in file %s",
+										diagram.getKey(), output),
+								e);
+					}
+				} catch (FileSystemException e1) {
+					throw new CantToResolvePath(String.format("Unable to resolve path to %s/%s", destination, name), e1);
 				}
 			});
 	}

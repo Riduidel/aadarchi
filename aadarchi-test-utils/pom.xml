@@ -5,19 +5,14 @@
 		<artifactId>system</artifactId>
 		<version>0.1.5-SNAPSHOT</version>
 	</parent>
-	<artifactId>cdi-config-extension</artifactId>
-	<name>Aadarchi : CDI Config extension</name>
-	<description>Some CDI extensions</description>
+	<artifactId>aadarchi-test-utils</artifactId>
+	<description>Some test utilities dedicated to the improvement of Aadarchi quality</description>
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-vfs2 -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-vfs2</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
 		</dependency>
+		<!-- Directly referenced to make sure we can create the ConfigSource allowing us to provide maven properties as config properties -->
 		<dependency>
 			<groupId>org.apache.deltaspike.core</groupId>
 			<artifactId>deltaspike-core-impl</artifactId>

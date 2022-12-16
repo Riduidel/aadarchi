@@ -15,13 +15,20 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.vfs2.AllFileSelector;
+import org.apache.commons.vfs2.FileExtensionSelector;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSelector;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.ModelEnhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
+import org.ndx.aadarchi.base.utils.CantToResolvePath;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;
@@ -39,20 +46,15 @@ import com.structurizr.model.SoftwareSystem;
  */
 @com.structurizr.annotation.Component(technology = "Java, CDI")
 public class DocumentsCollector implements ModelEnhancer {
-	private File enhancementsBase;
-	/**
-	 * Injecting enhancements base to have a folder where to put our documents.
-	 */
-	@Inject public void setEnhancementsBase(@ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE) File enhancementsBase) {
-		this.enhancementsBase = enhancementsBase.getAbsoluteFile();
-	}
+	@Inject @ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE)  FileObject enhancementsBase;
+
 	/**
 	 * Map that contains all elements that should be automagically included.
 	 * First level keys are the enums.
 	 * Second level keys are the components, sorted by their canonical name
 	 * And value is a sorted set of file names.
 	 */
-	Map<AgileArchitectureSection, Map<Element, Set<File>>> hierarchy = new EnumMap<>(AgileArchitectureSection.class);
+	Map<AgileArchitectureSection, Map<Element, Set<FileObject>>> hierarchy = new EnumMap<>(AgileArchitectureSection.class);
 	@Override
 	public boolean isParallel() {
 		return false;
@@ -69,7 +71,7 @@ public class DocumentsCollector implements ModelEnhancer {
 		for(AgileArchitectureSection section : AgileArchitectureSection.values()) {
 			hierarchy.put(section, 
 					new TreeMap<Element, 
-						Set<File>>(Comparator.comparing(element -> StructurizrUtils.getCanonicalPath(element))));
+						Set<FileObject>>(Comparator.comparing(element -> StructurizrUtils.getCanonicalPath(element))));
 		}
 		return true;
 	}
@@ -91,13 +93,14 @@ public class DocumentsCollector implements ModelEnhancer {
 	 * @param key
 	 * @param value
 	 */
-	void writeIncludeFor(AgileArchitectureSection section, Map<Element, Set<File>> enhancements) {
-		File target = new File(enhancementsBase, String.format("_%02d-%s.adoc", section.index(), section.name()));
+	void writeIncludeFor(AgileArchitectureSection section, Map<Element, Set<FileObject>> enhancements) {
+		String filename = String.format("_%02d-%s.adoc", section.index(), section.name());
 		try {
-			FileUtils.write(target, generateContent(section, enhancements, target.getParentFile()), "UTF-8");
+			FileObject target = enhancementsBase.resolveFile(filename);
+			IOUtils.write(generateContent(section, enhancements, target.getParent()), target.getContent().getOutputStream(), "UTF-8");
 		} catch (IOException e) {
 			throw new CantCollectEnhancements(
-					String.format("can't create include file %s", target.getAbsolutePath()),
+					String.format("can't create include file %s/%s", enhancementsBase, filename),
 					e);
 		}
 	}
@@ -109,7 +112,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	 * @param target
 	 * @return
 	 */
-	String generateContent(AgileArchitectureSection section, Map<Element, Set<File>> enhancements, File target) {
+	String generateContent(AgileArchitectureSection section, Map<Element, Set<FileObject>> enhancements, FileObject target) {
 		String content = enhancements.entrySet().stream()
 				// TODO potentially test for header generation based upon name deepness
 			.map(entry -> generateElementContent(section, target, entry.getKey(), entry.getValue()))
@@ -119,19 +122,23 @@ public class DocumentsCollector implements ModelEnhancer {
 		return content;
 	}
 
-	String generateElementContent(AgileArchitectureSection section, File target, Element element, Set<File> generated) {
+	String generateElementContent(AgileArchitectureSection section, FileObject target, Element element, Set<FileObject> generated) {
 		int deepness = StringUtils.countMatches(StructurizrUtils.getCanonicalPath(element), '/');
 		return String.format("%s\n"
 				+ "%s\n",
 			elementAsTitle(section, deepness, element),
 			generated.stream()
-				.map(file -> target.toPath().relativize(file.toPath()).toString())
+				.map(file -> relativePath(target, file))
 				.map(path -> String.format("include::%s[leveloffset=+%d]",
 						path,
 						deepness
 						))
 				.collect(Collectors.joining("\n"))
 			);
+	}
+
+	private String relativePath(FileObject target, FileObject file) {
+		throw new UnsupportedOperationException("TODO implement");
 	}
 
 	/**
@@ -188,13 +195,17 @@ public class DocumentsCollector implements ModelEnhancer {
 	 */
 	public void collect(Element element, OutputBuilder builder) {
 		for(AgileArchitectureSection section : AgileArchitectureSection.values()) {
-			File sectionFolderFor = builder.outputDirectoryFor(section, element);
-			File[] filesArray = sectionFolderFor.listFiles((dir, name) -> name.toLowerCase().endsWith(".adoc"));
-			if(filesArray!=null && filesArray.length>0) {
-				Set<File> files = Stream.of(filesArray)
-						.map(file -> file.getAbsoluteFile())
-						.collect(Collectors.toCollection(() -> new TreeSet<File>()));
-				hierarchy.get(section).put(element, files);
+			FileObject sectionFolderFor = builder.outputDirectoryFor(section, element);
+			FileObject[] filesArray;
+			try {
+				filesArray = sectionFolderFor.findFiles(new FileExtensionSelector("adoc"));
+				if(filesArray!=null && filesArray.length>0) {
+					Set<FileObject> files = Stream.of(filesArray)
+							.collect(Collectors.toCollection(() -> new TreeSet<FileObject>()));
+					hierarchy.get(section).put(element, files);
+				}
+			} catch (FileSystemException e) {
+				throw new CantToResolvePath(String.format("Unable to find asciidoc files in %s", sectionFolderFor), e);
 			}
 		}
 	}

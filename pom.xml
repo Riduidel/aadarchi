@@ -82,6 +82,7 @@
 		<module>aadarchi-maven-plugin</module>
 		<module>cdi-in-maven-plugin-helper</module>
 		<module>structurizr-components-detector</module>
+		<module>aadarchi-test-utils</module>
 	</modules>
 
 	<dependencyManagement>
@@ -105,6 +106,12 @@
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-dsl</artifactId>
 				<version>1.20.0</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-vfs2 -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-vfs2</artifactId>
+				<version>2.9.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.structurizr</groupId>
