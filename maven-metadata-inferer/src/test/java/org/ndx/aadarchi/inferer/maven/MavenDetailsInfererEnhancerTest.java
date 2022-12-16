@@ -39,7 +39,7 @@ public class MavenDetailsInfererEnhancerTest {
     	// Given
     	var w = new Workspace(getClass().getName(), "a test workspace");
     	SoftwareSystem system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
-    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, basePath.toString());
+    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, basePath.getName().getPath());
 		// When
     	// We emulate in-depth visit (but do not really perform it)
     	enhancer.enhance(w, Arrays.asList(tested));
