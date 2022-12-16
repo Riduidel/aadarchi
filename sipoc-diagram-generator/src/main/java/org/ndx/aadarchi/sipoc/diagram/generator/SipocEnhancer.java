@@ -54,6 +54,6 @@ public class SipocEnhancer extends ModelElementAdapter {
                 .collect(Collectors.toList());
         return stream.filter(element -> element.getModel().getRelationships().contains(element))
                 .map(element -> String.format("%s,%s,%s",relationshipSource,  element.getDescription(),element.getRelationships()))
-                .collect(Collectors.joining("\n\n", "[cols=\"1,1,1\"]\n" + "|\n|Incoming Relationship|Input|Process|Output|Outgoing Relationship\n\n", "\n|"));
+                .collect(Collectors.joining("\n\n", "[cols=\"1,1,1\"]\n" + "|\n|Incoming Relationship|Process|Outgoing Relationship\n\n", "\n|"));
     }
 }
