@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.vfs2.FileObject;
 import org.ndx.aadarchi.base.utils.FileResolver;
 import org.ndx.aadarchi.sequence.generator.SequenceGeneratorException;
 
@@ -37,6 +38,7 @@ public class ProjectRootBuilder {
 		}
 		List<Path> paths = files.stream()
 				.map(ThrowingFunction.unchecked(file -> fileResolver.fileAsUrltoPath(file)))
+				.map(FileObject::getPath)
 				.collect(Collectors.toList());
 		
 		Path initialPath = paths.get(0);

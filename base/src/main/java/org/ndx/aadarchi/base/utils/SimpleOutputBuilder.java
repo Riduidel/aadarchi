@@ -43,6 +43,9 @@ public class SimpleOutputBuilder implements OutputBuilder {
 
 	private FileObject outputFor(String path) {
 		try {
+			while(path.startsWith("/")) {
+				path = path.substring(1);
+			}
 			return enhancementsBase.resolveFile(path, NameScope.DESCENDENT);
 		} catch (FileSystemException e) {
 			throw new CantToResolvePath(String.format("Unable to resolve path %s relatively to %s", path, enhancementsBase), e);

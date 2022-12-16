@@ -93,8 +93,8 @@ public class SCMReadmeReader extends SCMModelElementAdapter {
 				if(force) {
 					outputFor.delete();
 				} else {
-					if(readme.lastModified()<outputFor.getContent().getLastModifiedTime())
-						return;
+					if(outputFor.exists() && readme.lastModified()<outputFor.getContent().getLastModifiedTime())
+							return;
 				}
 				try {
 					// Now we have content as asciidoc, so let's write it to the conventional location

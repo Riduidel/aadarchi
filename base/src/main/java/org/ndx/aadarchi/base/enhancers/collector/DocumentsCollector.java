@@ -138,7 +138,7 @@ public class DocumentsCollector implements ModelEnhancer {
 	}
 
 	private String relativePath(FileObject target, FileObject file) {
-		throw new UnsupportedOperationException("TODO implement");
+		return target.getPath().relativize(file.getPath()).toString();
 	}
 
 	/**
