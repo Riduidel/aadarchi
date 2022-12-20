@@ -87,7 +87,6 @@ public class FileContentCache {
 	private FileObject toCacheFile(URL url) {
 		try {
 			FileObject domain = cacheDir.resolveFile(url.getHost());
-			FileObject path = domain.resolveFile(url.getFile().replace('?', '_'));
 			return path;
 		} catch(FileSystemException e) {
 			throw new CantToResolvePath(
