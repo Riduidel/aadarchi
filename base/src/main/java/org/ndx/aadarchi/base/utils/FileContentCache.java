@@ -87,6 +87,11 @@ public class FileContentCache {
 	private FileObject toCacheFile(URL url) {
 		try {
 			FileObject domain = cacheDir.resolveFile(url.getHost());
+			String pathInUrl = url.getFile().replace('?', '_');
+			// Don't forget that linux systems don't like when paths start with "/"
+			if(pathInUrl.startsWith("/"))
+				pathInUrl = pathInUrl.substring(1);
+			FileObject path = domain.resolveFile(pathInUrl);
 			return path;
 		} catch(FileSystemException e) {
 			throw new CantToResolvePath(
