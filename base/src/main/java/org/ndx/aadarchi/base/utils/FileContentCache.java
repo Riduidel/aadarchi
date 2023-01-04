@@ -1,17 +1,14 @@
 package org.ndx.aadarchi.base.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.function.Function;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -61,7 +58,11 @@ public class FileContentCache {
 	private void refreshCache(FileObject file, URL url, Function<URL, InputStream> cacheLoader) throws IOException {
 		file.getParent().createFolder();
 		try(InputStream input = cacheLoader.apply(url)) {
-			IOUtils.copy(input, file.getContent().getOutputStream());
+			try(OutputStream output = file.getContent().getOutputStream()) {
+				IOUtils.copy(input, output);
+			} finally {
+				file.getContent().close();
+			}
 		}
 	}
 

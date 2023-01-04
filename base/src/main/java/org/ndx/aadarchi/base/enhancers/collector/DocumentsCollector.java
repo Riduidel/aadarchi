@@ -1,7 +1,7 @@
 package org.ndx.aadarchi.base.enhancers.collector;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.Normalizer;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -14,21 +14,18 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.vfs2.AllFileSelector;
 import org.apache.commons.vfs2.FileExtensionSelector;
 import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.ModelEnhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
-import org.ndx.aadarchi.base.utils.StructurizrUtils;
 import org.ndx.aadarchi.base.utils.CantToResolvePath;
+import org.ndx.aadarchi.base.utils.StructurizrUtils;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;
@@ -97,7 +94,12 @@ public class DocumentsCollector implements ModelEnhancer {
 		String filename = String.format("_%02d-%s.adoc", section.index(), section.name());
 		try {
 			FileObject target = enhancementsBase.resolveFile(filename);
-			IOUtils.write(generateContent(section, enhancements, target.getParent()), target.getContent().getOutputStream(), "UTF-8");
+			String content = generateContent(section, enhancements, target.getParent());
+			try(OutputStream outputStream = target.getContent().getOutputStream()) {
+				IOUtils.write(content, outputStream, "UTF-8");
+			} finally {
+				target.getContent().close();
+			}
 		} catch (IOException e) {
 			throw new CantCollectEnhancements(
 					String.format("can't create include file %s/%s", enhancementsBase, filename),

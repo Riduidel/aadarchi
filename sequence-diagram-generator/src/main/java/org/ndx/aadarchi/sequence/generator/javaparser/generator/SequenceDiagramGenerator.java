@@ -1,12 +1,11 @@
 package org.ndx.aadarchi.sequence.generator.javaparser.generator;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Stack;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.ndx.aadarchi.sequence.generator.SequenceGeneratorException;
@@ -88,7 +87,11 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 			try {
 				FileObject outputFile = outputFolder.resolveFile(methodDeclarationRepresentation.filename + ".plantuml");
 				outputFolder.createFolder();
-				IOUtils.write(usedKit.sequence(), outputFile.getContent().getOutputStream(), "UTF-8");
+				try(OutputStream outputStream = outputFile.getContent().getOutputStream()) {
+					IOUtils.write(usedKit.sequence(), outputStream, "UTF-8");
+				} finally {
+					outputFile.getContent().close();
+				}
 			} catch (IOException e) {
 				throw new SequenceGeneratorException(
 						String.format("Unable to write to %s/%s", outputFolder, methodDeclarationRepresentation.filename + ".plantuml"), e);

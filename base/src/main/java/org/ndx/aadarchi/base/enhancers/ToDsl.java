@@ -3,6 +3,7 @@ package org.ndx.aadarchi.base.enhancers;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
@@ -172,7 +173,11 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 			try {
 				StringBuilder builder = new StringBuilder(architecture);
 				dslTargetFile.getParent().createFolder();
-				IOUtils.write(builder, dslTargetFile.getContent().getOutputStream(), "UTF-8");
+				try(OutputStream outputStream = dslTargetFile.getContent().getOutputStream()) {
+					IOUtils.write(builder, outputStream, "UTF-8");
+				} finally {
+					dslTargetFile.getContent().close();
+				}
 			} catch (IOException e) {
 				throw new UnableToBuildDslException(
 						String.format("Unable to build dsl file %s", dslTargetFile), e);

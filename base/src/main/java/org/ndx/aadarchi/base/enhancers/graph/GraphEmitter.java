@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.base.enhancers.graph;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
@@ -100,15 +101,17 @@ public class GraphEmitter implements ViewEnhancer {
 				FileObject output;
 				try {
 					output = destination.resolveFile(name);
-					try {
+					try (OutputStream outputStream = output.getContent().getOutputStream()){
 						IOUtils.write(diagram.getDefinition().getBytes(Charset.forName("UTF-8")),
-								output.getContent().getOutputStream());
+								outputStream);
 						logger.info(String.format("Generated diagram %s in file %s", diagram.getKey(), output));
 					} catch(IOException e) {
 						throw new CantWriteDiagram(
 								String.format("Can't write diagram %s in file %s",
 										diagram.getKey(), output),
 								e);
+					} finally {
+						output.getContent().close();
 					}
 				} catch (FileSystemException e1) {
 					throw new CantToResolvePath(String.format("Unable to resolve path to %s/%s", destination, name), e1);

@@ -77,9 +77,12 @@ public class SimpleOutputBuilder implements OutputBuilder {
 		FileObject returned = outputFor(section, element, enhancer, format);
 		try {
 			returned.getParent().createFolder();
-			OutputStream outputStream = returned.getContent().getOutputStream();
-			IOUtils.write(format.createCommentForEnhancer(enhancer), outputStream, format.encoding());
-			IOUtils.write(text, outputStream, format.encoding());
+			try(OutputStream outputStream = returned.getContent().getOutputStream()) {
+				IOUtils.write(format.createCommentForEnhancer(enhancer), outputStream, format.encoding());
+				IOUtils.write(text, outputStream, format.encoding());
+			} finally {
+				returned.getContent().close();
+			}
 		} catch(IOException e) {
 			throw new UnableToWriteOutput(
 					String.format("Unable to write output to file %s", returned.getName().getPath()),
