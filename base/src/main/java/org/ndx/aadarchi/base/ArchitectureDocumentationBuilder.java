@@ -50,7 +50,6 @@ public class ArchitectureDocumentationBuilder {
 	/**
 	 * Run method that will allow the description to be invoked and augmentations to be performed
 	 * prior to have elements written. You should not have to overwrite this method.
-	 * @throws IOException
 	 */
 	public void run() throws IOException {
 		Workspace workspace = getArchitecture();

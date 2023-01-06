@@ -11,13 +11,13 @@ public interface OutputBuilder {
 	public static interface HandledFormat {
 		/**
 		 * get the used extension for this format, as declared in {@link OutputBuilder#outputFor(AgileArchitectureSection, Element, Enhancer, String)}
-		 * @return
+		 * @return file extension for that formt
 		 */
 		String getExtension();
 
 		/**
 		 * Creates the comment documenting which enhancer generated that file.
-		 * @param enhancer
+		 * @param enhancer the enhabcer for which an asciidoc comment will be written
 		 * @return a comment in the format specified indicating which enhancer generated the file
 		 */
 		String createCommentForEnhancer(Enhancer enhancer);
@@ -76,6 +76,7 @@ public interface OutputBuilder {
 	 * @param element the element to which we want to add some content
 	 * @param format file format. For asciidoc, one should use {@link Format#adoc}
 	 * @param enhancer the enhancer producing that content
+	 * @param text text to output
 	 * @return the file in which content has been written, for later reference (typically useful for generating links)
 	 */
 	File writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format, CharSequence text);
@@ -86,11 +87,15 @@ public interface OutputBuilder {
 	 * @param element the element to which we want to add some content
 	 * @param format file format. For asciidoc, one should use {@link Format#adoc}
 	 * @param enhancer the enhancer producing that content
+	 * @param text text to output
 	 * @return the file in which content has been written, for later reference (typically useful for generating links)
 	 */
 	File appendToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format, CharSequence text);
 	/**
 	 * Get the output directory in which all output is to be written.
+	 * @param section the section in which we want to add some content
+	 * @param element the element to which we want to add some content
+	 * @return a file in which to write content
 	 */
 	File outputDirectoryFor(AgileArchitectureSection section, Element element);
 }
