@@ -17,9 +17,6 @@ import java.util.stream.Stream;
 @Default
 public class SipocEnhancer extends ModelElementAdapter {
 
-    @Inject
-    Instance<Element> elements;
-
     @Override
     public boolean isParallel() {
         return true;
@@ -32,28 +29,30 @@ public class SipocEnhancer extends ModelElementAdapter {
 
     @Override
     public void endVisit(Component c, OutputBuilder builder) {
-        String sipocDiagram = sipocDiagramGenerator(elements.stream());
+        String sipocDiagram = sipocDiagramGenerator(c);
         builder.writeToOutput(AgileArchitectureSection.code, c,this, OutputBuilder.Format.adoc, sipocDiagram);
     }
 
     @Override
     public void endVisit(Container c, OutputBuilder builder) {
-    String sipocDiagram = sipocDiagramGenerator(elements.stream());
+    String sipocDiagram = sipocDiagramGenerator(c);
     builder.writeToOutput(AgileArchitectureSection.code, c,this, OutputBuilder.Format.adoc, sipocDiagram);
     }
 
     @Override
     public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {
-        String sipocDiagram = sipocDiagramGenerator(elements.stream());
+        String sipocDiagram = sipocDiagramGenerator(c);
         builder.writeToOutput(AgileArchitectureSection.code, softwareSystem,this, OutputBuilder.Format.adoc, sipocDiagram);
     }
 
-    String sipocDiagramGenerator(Stream<Element> stream) {
-        Set<Relationship> relationshipSource = elements.get().getModel().getRelationships();
-        relationshipSource.stream().filter(relationship -> relationship.getDestination().equals(elements))
-                .collect(Collectors.toList());
-        return stream.filter(element -> element.getModel().getRelationships().contains(element))
-                .map(element -> String.format("%s,%s,%s",relationshipSource,  element.getDescription(),element.getRelationships()))
-                .collect(Collectors.joining("\n\n", "[cols=\"1,1,1\"]\n" + "|\n|Incoming Relationship|Process|Outgoing Relationship\n\n", "\n|"));
+    String sipocDiagramGenerator(Element element) {
+    	// In the whole model
+        return element.getModel().getRelationships().stream()
+        	// Get relationships where element is source or destination
+        	.filter(relationship -> relationship.getSource().equals(element) || relationship.getDestination().equals(element))
+        	// Convert relationship to text line
+            .map(element -> String.format("%s,%s,%s",relationshipSource,  element.getDescription(),element.getRelationships()))
+            // Aggregate relationships ina  table
+            .collect(Collectors.joining("\n\n", "[cols=\"1,1,1\"]\n" + "|\n|Incoming Relationship|Process|Outgoing Relationship\n\n", "\n|"));
     }
 }
