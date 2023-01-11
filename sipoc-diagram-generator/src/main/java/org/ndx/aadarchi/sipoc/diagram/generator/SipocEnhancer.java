@@ -50,9 +50,7 @@ public class SipocEnhancer extends ModelElementAdapter {
         return element.getModel().getRelationships().stream()
         	// Get relationships where element is source or destination
         	.filter(relationship -> relationship.getSource().equals(element) || relationship.getDestination().equals(element))
-        	// Convert relationship to text line
-            .map(element -> String.format("%s,%s,%s",relationshipSource,  element.getDescription(),element.getRelationships()))
-            // Aggregate relationships ina  table
-            .collect(Collectors.joining("\n\n", "[cols=\"1,1,1\"]\n" + "|\n|Incoming Relationship|Process|Outgoing Relationship\n\n", "\n|"));
+        	.map => string
+        	.collect => table
     }
 }

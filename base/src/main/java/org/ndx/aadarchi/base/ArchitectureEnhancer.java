@@ -55,6 +55,7 @@ public class ArchitectureEnhancer {
 				.filter(this::filterEnhancer);
 	}
 
+	@Inject
 	private OutputBuilder outputBuilder;
 	/**
 	 * We memorize the used context classloader in order for parallel streams to be able to use it.
@@ -77,10 +78,6 @@ public class ArchitectureEnhancer {
 	private <Type> Type withClassLoader(Supplier<Type> supplier) {
 		Thread.currentThread().setContextClassLoader(classloader);
 		return supplier.get();
-	}
-	
-	@PostConstruct public void loadOutputBuilder() {
-		outputBuilder = new SimpleOutputBuilder(enhancementsBase);
 	}
 	
 	private boolean filterEnhancer(Enhancer enhancer) {

@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureException;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.Enhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
-import org.ndx.aadarchi.base.enhancers.includes.ImplicitIncludeManager;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
 
 import com.structurizr.model.Element;
 
@@ -23,7 +26,8 @@ public class SimpleOutputBuilder implements OutputBuilder {
 	private final File enhancementsBase;
 	public static final String SECTION_PATTERN = "%02d-%s";
 
-	public SimpleOutputBuilder(File outputBase) {
+	@Inject
+	public SimpleOutputBuilder(@ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE) File outputBase) {
 		super();
 		this.enhancementsBase = outputBase;
 	}
