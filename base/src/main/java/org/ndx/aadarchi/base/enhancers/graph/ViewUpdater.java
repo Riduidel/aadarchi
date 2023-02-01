@@ -1,17 +1,17 @@
-package org.ndx.aadarchi;
-
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
-import org.ndx.aadarchi.base.OutputBuilder;
-
-import org.ndx.aadarchi.base.enhancers.ViewEnhancerAdapter;
+package org.ndx.aadarchi.base.enhancers.graph;
 
 import com.structurizr.view.ComponentView;
 import com.structurizr.view.ContainerView;
+import org.ndx.aadarchi.base.OutputBuilder;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.base.enhancers.ViewEnhancerAdapter;
+
+import javax.inject.Inject;
+import java.util.logging.Logger;
 
 public class ViewUpdater extends ViewEnhancerAdapter {
+	public static final String NAME = ModelElementKeys.ConfigProperties.AutoUpdateViews.NAME;
+
 	@Inject Logger logger;
 	@Override
 	public boolean isParallel() {
@@ -36,14 +36,14 @@ public class ViewUpdater extends ViewEnhancerAdapter {
 	
 	@Override
 	protected void endVisit(ComponentView c, OutputBuilder builder) {
-		if(c.getKey().equals("base_components")) {
+		if(c.getProperties().containsKey(NAME)) {
 			c.addAllComponents();
 		}
 		super.endVisit(c, builder);
 	}
 	@Override
 	protected void endVisit(ContainerView c, OutputBuilder builder) {
-		if(c.getKey().equals("system_containers")) {
+		if (c.getProperties().containsKey(NAME)) {
 			c.addAllContainersAndInfluencers();
 		}
 		super.endVisit(c, builder);
