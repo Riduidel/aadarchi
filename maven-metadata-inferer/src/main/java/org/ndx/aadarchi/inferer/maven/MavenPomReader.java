@@ -20,6 +20,8 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
@@ -40,7 +42,7 @@ public class MavenPomReader {
 	@Inject Instance<SCMHandler> scmHandler;
 	@Inject Instance<MavenPomDecorator> mavenPomDecorator;
 	@Inject FileContentCache cache;
-	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) File basePath;
+	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) FileObject basePath;
 	/**
 	 * The maven reader used to read all poms
 	 */
@@ -130,13 +132,15 @@ public class MavenPomReader {
 			return readMavenProject(pomPath, url);
 		} catch(MalformedURLException e) {
 			// Maybe it's a file, relative to this basePath
-			File potential = new File(basePath, pomPath);
-			if(potential.exists()) {
-				try {
-					return readMavenProject(pomPath, potential.toURL());
-				} catch (MalformedURLException e1) {
-					// No need to catch that one, because the parent catch clause will handle it
+			FileObject potential;
+			try {
+				potential = basePath.resolveFile(pomPath);
+				if(potential.exists()) {
+					return readMavenProject(pomPath, potential.getURL());
 				}
+			} catch (FileSystemException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
 			}
 			throw new MavenDetailsInfererException(String.format("Unable to read URL %s", pomPath), e);
 		}

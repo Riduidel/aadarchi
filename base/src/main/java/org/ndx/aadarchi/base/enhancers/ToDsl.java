@@ -3,6 +3,7 @@ package org.ndx.aadarchi.base.enhancers;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.vfs2.FileObject;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureException;
 import org.ndx.aadarchi.base.ModelEnhancer;
@@ -64,7 +66,7 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 	boolean toDslEnabled;
 	@Inject
 	@ConfigProperty(name = ModelElementKeys.PREFIX + "todsl.target", defaultValue = "${project.build.directory}/structurizr/workspace.dsl")
-	private File dslTargetFile;
+	private FileObject dslTargetFile;
 
 	@Override
 	public boolean isParallel() {
@@ -170,11 +172,15 @@ public class ToDsl implements ModelEnhancer, ViewEnhancer {
 			architecture += "}";
 			try {
 				StringBuilder builder = new StringBuilder(architecture);
-				FileUtils.forceMkdir(dslTargetFile.getParentFile());
-				FileUtils.write(dslTargetFile, builder, "UTF-8");
+				dslTargetFile.getParent().createFolder();
+				try(OutputStream outputStream = dslTargetFile.getContent().getOutputStream()) {
+					IOUtils.write(builder, outputStream, "UTF-8");
+				} finally {
+					dslTargetFile.getContent().close();
+				}
 			} catch (IOException e) {
 				throw new UnableToBuildDslException(
-						String.format("Unable to build dsl file %s", dslTargetFile.getAbsolutePath()), e);
+						String.format("Unable to build dsl file %s", dslTargetFile), e);
 			}
 		}
 	}

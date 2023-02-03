@@ -5,13 +5,19 @@ import java.io.File;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemManager;
+import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
 
 import com.structurizr.Workspace;
 
@@ -21,8 +27,9 @@ class MavenPomReaderTest {
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
 
-    @Inject
-    private MavenPomReader mavenPomReader;
+    @Inject FileSystemManager fsManager;
+    @Inject MavenPomReader mavenPomReader;
+	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) FileObject basePath;
     
     @Test public void can_process_pom_declared_through_class() {
     	// Given
@@ -42,7 +49,7 @@ class MavenPomReaderTest {
     	// Given
     	var w = new Workspace(getClass().getName(), "a test workspace");
     	var system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
-    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, MavenDetailsInfererEnhancerTest.getAadarchiRootPath());
+    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, basePath.getName().getPath());
 		// When
     	var project = mavenPomReader.processModelElement(system);
 		// Then

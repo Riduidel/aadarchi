@@ -75,13 +75,14 @@
 		<module>aadarchi-maven-plugin</module>
 		<module>cdi-in-maven-plugin-helper</module>
 		<module>structurizr-components-detector</module>
+		<module>aadarchi-test-utils</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>javax.enterprise</groupId>
-				<artifactId>cdi-api</artifactId>
-				<version>2.0.SP1</version>
+				<groupId>jakarta.enterprise</groupId>
+				<artifactId>jakarta.enterprise.cdi-api</artifactId>
+				<version>2.0.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.weld.se</groupId>
@@ -97,6 +98,12 @@
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-dsl</artifactId>
 				<version>1.21.1</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-vfs2 -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-vfs2</artifactId>
+				<version>2.9.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.structurizr</groupId>

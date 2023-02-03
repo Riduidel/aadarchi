@@ -132,7 +132,7 @@ public class ComponentDetector extends ModelElementAdapter {
 		returned.add(new StructurizrAnnotationsComponentFinderStrategy());
 		if (container.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES)) {
 			Path sourceFolderAsPath = fileResolver
-					.fileAsUrltoPath(container.getProperties().get(ModelElementKeys.JAVA_SOURCES));
+					.fileAsUrltoPath(container.getProperties().get(ModelElementKeys.JAVA_SOURCES)).getPath();
 			returned.add(new SourceCodeComponentFinderStrategy(sourceFolderAsPath.toFile()));
 		}
 		return returned.toArray(new ComponentFinderStrategy[returned.size()]);

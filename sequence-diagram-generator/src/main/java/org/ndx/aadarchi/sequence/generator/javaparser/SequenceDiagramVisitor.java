@@ -1,6 +1,5 @@
 package org.ndx.aadarchi.sequence.generator.javaparser;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -22,6 +21,8 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
@@ -46,9 +47,11 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 
 	@Inject 
 	@ConfigProperty(name = DiagramsDir.NAME, defaultValue = DiagramsDir.VALUE)
-	File destination;
+	FileObject destination;
 	
 	@Inject FileResolver fileResolver;
+	
+	@Inject FileSystemManager fsManager;
 
 	/**
 	 * Map container canonical name to the container object.
@@ -148,7 +151,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 			if(container.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES)) {
 				ProjectRoot projectRoot = createProjectRootFor(container);
 				Map<String, CompilationUnit> sources = parseAllSources(projectRoot);
-				callGraphModel = new CallGraphModel(codeToComponents, sources);
+				callGraphModel = new CallGraphModel(codeToComponents, sources, fsManager);
 				// Now we have all compilation units parsed, let's try to analyze that a little by, say,
 				// mapping class names to their associated compilation units
 				callGraphModel.analyzeCalls(

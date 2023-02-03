@@ -1,9 +1,6 @@
 package org.ndx.aadarchi.base;
 
-import java.io.File;
-
-import org.ndx.aadarchi.base.OutputBuilder.Format;
-import org.ndx.aadarchi.base.enhancers.includes.ImplicitIncludeManager;
+import org.apache.commons.vfs2.FileObject;
 
 import com.structurizr.model.Element;
 
@@ -59,7 +56,7 @@ public interface OutputBuilder {
 	 * @return a path, relative to base
 	 * @deprecated prefer the version using the Format enum
 	 */
-	File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format);
+	FileObject outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format);
 	/**
 	 * Provide an output file for the given section and the given model element
 	 * @param section the section in which we want to add some content
@@ -68,7 +65,7 @@ public interface OutputBuilder {
 	 * @param enhancer the enhancer producing that content
 	 * @return a path, relative to base
 	 */
-	File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format);
+	FileObject outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format);
 	/**
 	 * Write the given text in the output file for the given enhancer.
 	 * BEWARE: This is not append. Content of file will be replaced.
@@ -79,7 +76,7 @@ public interface OutputBuilder {
 	 * @param text text to output
 	 * @return the file in which content has been written, for later reference (typically useful for generating links)
 	 */
-	File writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format, CharSequence text);
+	FileObject writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format, CharSequence text);
 	/**
 	 * Write the given text in the output file for the given enhancer.
 	 * BEWARE: This is pure append. Any preexisting content will be kept.
@@ -90,12 +87,12 @@ public interface OutputBuilder {
 	 * @param text text to output
 	 * @return the file in which content has been written, for later reference (typically useful for generating links)
 	 */
-	File appendToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format, CharSequence text);
+	FileObject appendToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format, CharSequence text);
 	/**
 	 * Get the output directory in which all output is to be written.
 	 * @param section the section in which we want to add some content
 	 * @param element the element to which we want to add some content
 	 * @return a file in which to write content
 	 */
-	File outputDirectoryFor(AgileArchitectureSection section, Element element);
+	FileObject outputDirectoryFor(AgileArchitectureSection section, Element element);
 }

@@ -14,7 +14,7 @@ jobs:
           java-version: 11
           cache: 'maven'
       - name: Build with Maven
-        run: mvn -B test --file pom.xml -Pcoverage-Daadarchi.github.token=$TOKEN_FOR_GITHUB
+        run: mvn -B test --file pom.xml -Pcoverage -Daadarchi.github.token=$TOKEN_FOR_GITHUB
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
       - name: Add coverage to PR
