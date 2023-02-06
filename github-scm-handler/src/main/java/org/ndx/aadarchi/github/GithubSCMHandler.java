@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -55,7 +56,7 @@ public class GithubSCMHandler implements SCMHandler {
 				.collect(Collectors.toList());
 		} catch (IOException e) {
 			throw new FileNotFoundException(
-					String.format("Unable to find file in %s/%s", project, path)
+					String.format("Unable to find file in %s/%s\nInital exception message is \"%s\"", project, path, e.getMessage())
 					);
 		}
 	}

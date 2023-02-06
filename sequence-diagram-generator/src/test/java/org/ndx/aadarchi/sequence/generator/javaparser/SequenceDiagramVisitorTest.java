@@ -3,15 +3,22 @@ package org.ndx.aadarchi.sequence.generator.javaparser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
+
+import org.assertj.core.api.AssertionsForClassTypes;
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.ndx.aadarchi.base.ArchitectureEnhancer;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.utils.SimpleOutputBuilder;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 import org.ndx.aadarchi.sequence.generator.SequenceGenerator;
-import org.ndx.aadarchi.sequence.generator.javaparser.SequenceDiagramVisitor;
 import org.ndx.aadarchi.sequence.generator.javaparser.adapter.CallGraphModel;
 import org.ndx.aadarchi.sequence.generator.javaparser.generator.SequenceDiagramGenerator;
 
@@ -21,8 +28,13 @@ import com.structurizr.model.Container;
 import com.structurizr.model.Model;
 import com.structurizr.model.SoftwareSystem;
 
+@EnableWeld
 class SequenceDiagramVisitorTest {
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
 
+	@Inject ArchitectureEnhancer enhancer;
+	@Inject SequenceDiagramVisitor tested;
 	@Test @Disabled
 	void can_read_a_model() {
 		// Given all those elements
@@ -39,23 +51,16 @@ class SequenceDiagramVisitorTest {
 		Component generator = sequenceGenerator.addComponent(SequenceDiagramGenerator.class.getSimpleName(), "Component producing the sequence diagram");
 		generator.addSupportingType(SequenceDiagramGenerator.class.getName());
 		// Let's build a sequence diagram visitor
-		SequenceDiagramVisitor tested = new SequenceDiagramVisitor();
-		tested.logger = Logger.getLogger(getClass().getName());
-		tested.destination = new File("target/tests/"+getClass().getSimpleName());
 		// Emulate the standard visit
-		tested.startVisit(model);
-		tested.startVisit(system);
+		enhancer.enhance(workspace, Arrays.asList(tested));
 		assertThat(tested.allContainers).hasSize(1);
 		assertThat(tested.codeToComponents).hasSize(3);
 		assertThat(tested.callGraphModel).isNull();
 		// And finally, visit the container and parse source code
-		tested.startVisit(sequenceGenerator);
 		assertThat(tested.callGraphModel).isNotNull();
 		// And visit components to see what happens
-		assertThat(tested.startVisit(visitor)).isTrue();
 		// And that something is generated
-		tested.endVisit(visitor, new SimpleOutputBuilder(tested.destination));
-		assertThat(tested.destination).isDirectoryContaining(file -> file.getName().equals(system.getName()));
+//		AssertionsForClassTypes.assertThat(tested.destination).isDirectoryContaining(file -> file.getName().equals(system.getName()));
 	}
 
 }

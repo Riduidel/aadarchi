@@ -3,11 +3,11 @@ package org.ndx.aadarchi.github;
 import static org.ndx.aadarchi.github.Constants.CONFIG_GITHUB_TOKEN;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.kohsuke.github.GitHub;
@@ -19,6 +19,7 @@ import org.kohsuke.github.GitHubBuilder;
  *
  */
 public class GitHubProducer {
+	@Inject Logger logger;
 
 	public @Produces @ApplicationScoped GitHub initialize(@ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token) {
 		if(token==null || token.isBlank()) {
@@ -27,7 +28,11 @@ public class GitHubProducer {
 					Constants.CONFIG_GITHUB_TOKEN));
 		}
 		try {
-			return new GitHubBuilder().withOAuthToken(token).build();
+			GitHub returned = new GitHubBuilder().withOAuthToken(token).build();
+			logger.info(
+					String.format("Connected to GitHub as %s, homepage is %s", 
+							returned.getMyself().getLogin(), returned.getMyself().getHtmlUrl()));
+			return returned;
 		} catch (IOException e) {
 			throw new GitHubHandlerException("Can't connect to GitHub! Maybe the token is bad");
 		}

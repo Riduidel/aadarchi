@@ -72,6 +72,11 @@ public interface ModelElementKeys {
 			String NAME = ModelElementKeys.PREFIX+"fonticon.disabled";
 			String VALUE = "false";
 		}
+
+		interface AutoUpdateViews {
+			String NAME = ModelElementKeys.PREFIX+"auto.update";
+			String VALUE = "false";
+		}
 	}
 	interface Scm {
 

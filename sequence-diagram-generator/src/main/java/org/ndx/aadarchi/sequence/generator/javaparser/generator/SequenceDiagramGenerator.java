@@ -1,12 +1,13 @@
 package org.ndx.aadarchi.sequence.generator.javaparser.generator;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Stack;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.vfs2.FileObject;
 import org.ndx.aadarchi.sequence.generator.SequenceGeneratorException;
 import org.ndx.aadarchi.sequence.generator.javaparser.adapter.BlockRepresentation;
 import org.ndx.aadarchi.sequence.generator.javaparser.adapter.CallGraphModel;
@@ -24,7 +25,7 @@ import com.structurizr.model.Component;
 
 public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 
-	private final File outputFolder;
+	private final FileObject outputFolder;
 	/**
 	 * Stack of construction kits. This allow empty loop to generate missing
 	 * diagrams, which are not added to main diagram.
@@ -33,7 +34,7 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 	private final Map<String, Component> classesToComponents;
 	private CallGraphModel callGraphModel;
 
-	public SequenceDiagramGenerator(File outputFolder, Map<String, Component> classesToComponents,
+	public SequenceDiagramGenerator(FileObject outputFolder, Map<String, Component> classesToComponents,
 			CallGraphModel callGraphModel) {
 		this.outputFolder = outputFolder;
 		this.classesToComponents = classesToComponents;
@@ -83,13 +84,17 @@ public class SequenceDiagramGenerator implements CodeRepresentationVisitor {
 		if (kits.isEmpty()) {
 			// See startVisit for the reason why
 			usedKit.deactivateMethodCall(methodDeclarationRepresentation);
-			File outputFile = new File(outputFolder, methodDeclarationRepresentation.filename + ".plantuml");
 			try {
-				outputFile.getParentFile().mkdirs();
-				FileUtils.write(outputFile, usedKit.sequence(), "UTF-8");
+				FileObject outputFile = outputFolder.resolveFile(methodDeclarationRepresentation.filename + ".plantuml");
+				outputFolder.createFolder();
+				try(OutputStream outputStream = outputFile.getContent().getOutputStream()) {
+					IOUtils.write(usedKit.sequence(), outputStream, "UTF-8");
+				} finally {
+					outputFile.getContent().close();
+				}
 			} catch (IOException e) {
 				throw new SequenceGeneratorException(
-						String.format("Unable to write to %s", outputFile.getAbsolutePath()), e);
+						String.format("Unable to write to %s/%s", outputFolder, methodDeclarationRepresentation.filename + ".plantuml"), e);
 			}
 		}
 	}

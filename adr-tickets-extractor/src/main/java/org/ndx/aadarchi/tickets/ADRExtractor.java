@@ -17,6 +17,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import org.apache.commons.vfs2.FileObject;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.Enhancer;
@@ -83,18 +84,18 @@ public class ADRExtractor
 	}
 
 	private void writeArchitectureDecisionsUsing(Element element, String project, String label, TicketsHandler handler, OutputBuilder builder) {
-		File output = builder.outputFor(AgileArchitectureSection.decision_log, element, this, "adoc");
-		if(force) {
-			output.delete();
-		}
-		Collection<Ticket> tickets = handler.getTicketsTagged(project, label);
-		// Write each decision
-		Map<Ticket, String> ticketsTexts = tickets.stream()
-			.sorted(new ByStatusThenDate())
-			.collect(Collectors.toMap(Function.identity(), 
-					t -> writeArchitectureDecisionTicket(builder, element, t)));
+		FileObject output = builder.outputFor(AgileArchitectureSection.decision_log, element, this, "adoc");
 		try {
-			try(FileWriter writer = new FileWriter(output)) {
+			if(force) {
+				output.delete();
+			}
+			Collection<Ticket> tickets = handler.getTicketsTagged(project, label);
+			// Write each decision
+			Map<Ticket, String> ticketsTexts = tickets.stream()
+					.sorted(new ByStatusThenDate())
+					.collect(Collectors.toMap(Function.identity(), 
+							t -> writeArchitectureDecisionTicket(builder, element, t)));
+			try(FileWriter writer = new FileWriter(output.getPath().toFile())) {
 				decisionList.process(new IndexModel(handler.getIssuesUrl(project),
 						handler.getProjectName(project), 
 						label,
@@ -120,13 +121,13 @@ public class ADRExtractor
 	private String writeArchitectureDecisionTicket(OutputBuilder builder, Element element, Ticket toWrite) {
 		Date date = toWrite.getLastDate();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd@HH-mm-ss");
-		File output = builder.outputFor(AgileArchitectureSection.decision_log, element, this,
+		FileObject output = builder.outputFor(AgileArchitectureSection.decision_log, element, this,
 				String.format("decision.%s.%s.adoc", toWrite.getStatus(), 
 						format.format(date)
 					));
-		output.getParentFile().mkdirs();
 		try {
-			try(FileWriter writer = new FileWriter(output)) {
+			output.getParent().createFolder();
+			try(FileWriter writer = new FileWriter(output.getPath().toFile())) {
 				decision.process(toWrite, writer);
 				return writer.toString();
 			}

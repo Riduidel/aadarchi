@@ -1,14 +1,10 @@
 package org.ndx.aadarchi.base.utils;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import javax.inject.Inject;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureException;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
@@ -26,22 +22,26 @@ public class FileResolver {
 		public UnableToResolveFileException(String string, Exception e) {
 			super(string, e);
 		}
-		
+
 	}
+
+	@Inject
+	FileSystemManager fsManager;
+
 	@Inject
 	@ConfigProperty(name = BasePath.NAME, defaultValue = BasePath.VALUE)
-	File basedir;
+	FileObject basedir;
 
-	public Path fileAsUrltoPath(String file) {
+	public FileObject fileAsUrltoPath(String file) {
 		try {
-			if (file.startsWith("file:")) {
-				return Paths.get(new URL(file).toURI());
-			} else {
-				// Maybe the file should be resolved as a full path file
-				return basedir.toPath().resolve(file);
+			return fsManager.resolveFile(file);
+		} catch (FileSystemException e) {
+			try {
+				return basedir.resolveFile(file);
+			} catch (FileSystemException e1) {
+				throw new UnableToResolveFileException(
+						String.format("Unable to transform String %s into a file/path object", file), e);
 			}
-		} catch (MalformedURLException | URISyntaxException e) {
-			throw new UnableToResolveFileException(String.format("Unable to transform String %s into a file/path object", file), e);
 		}
 	}
 }

@@ -1,8 +1,6 @@
 package org.ndx.aadarchi.inferer.maven;
 
-import java.io.File;
 import java.net.URL;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,6 +21,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
+import org.apache.commons.vfs2.AllFileSelector;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.IssueManagement;
 import org.apache.maven.model.Scm;
@@ -31,6 +32,7 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.utils.FileResolver;
 
 import com.pivovarit.function.ThrowingFunction;
+import com.pivovarit.function.ThrowingPredicate;
 import com.structurizr.model.Element;
 
 @Default
@@ -98,9 +100,10 @@ public class MavenPomDecorator {
 				String paths = element.getProperties().get(ModelElementKeys.JAVA_SOURCES);
 				String packages = Arrays.asList(paths.split(";")).stream()
 					.map(fileResolver::fileAsUrltoPath)
-					.filter(path -> path.toFile().exists())
-					.map(this::findPackagesInPath)
+					.filter(ThrowingPredicate.unchecked(FileObject::exists))
+					.map(ThrowingFunction.unchecked(this::findPackagesInPath))
 					.flatMap(Collection::stream)
+					.map(file -> file.getName().getPath())
 					.collect(Collectors.joining(";"));
 				if(!packages.isEmpty())
 					element.addProperty(ModelElementKeys.JAVA_PACKAGES, packages);
@@ -155,38 +158,26 @@ public class MavenPomDecorator {
 		});
 	}
 	
-	public Collection<Path> findPackagesInPath(File current) {
-		File[] childrenArray = current.listFiles();
+	public Collection<FileObject> findPackagesInPath(FileObject current) throws FileSystemException {
+		FileObject[] childrenArray = current.findFiles(new AllFileSelector());
 		if(childrenArray==null)
 			// There are no children here, so consider this file as terminal
-			return Arrays.asList(current.toPath());
-		List<File> childrenList = Arrays.asList(childrenArray);
+			return Arrays.asList(current);
+		List<FileObject> childrenList = Arrays.asList(childrenArray);
 		// If all elements are folders, then we can consider they're all packages and continue exploration
 		// Otherwise, this folder is a terminal package and we can return it "safely"
-		if(childrenList.stream().allMatch(File::isDirectory)) {
+		if(childrenList.stream().allMatch(ThrowingPredicate.unchecked(FileObject::isFolder))) {
 			return childrenList.stream()
-					.map(file -> findPackagesInPath(file))
+					.map(ThrowingFunction.unchecked(this::findPackagesInPath))
 					.flatMap(descendantList -> descendantList.stream())
 					.collect(Collectors.toList());
 		} else {
 			// There is at least one non-file in package (or list is empty)
 			// So this folder is terminal
-			return Arrays.asList(current.toPath());
+			return Arrays.asList(current);
 		}
 	}
 
-	/**
-	 * Explore the given path looking for the first folder containing more than one subfolder
-	 * @param path
-	 * @return a collection of java packages string corresponding to the given path
-	 */
-	public Collection<String> findPackagesInPath(Path path) {
-		return findPackagesInPath(path.toFile()).stream()
-				.map(packagePath -> path.relativize(packagePath))
-				.map(Path::toString)
-				.map(packageString -> packageString.replace(File.separatorChar, '.'))
-				.collect(Collectors.toList());
-	}
 
 	protected static String technologyWithVersionFromProperty(MavenProject mavenProject, String technology, String... propertyNames) {
 		return technology + Stream.of(propertyNames)

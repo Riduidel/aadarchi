@@ -45,16 +45,16 @@ public class ArchitectureDocumentationBuilder {
 	@Inject @UsesComponent(description = "Adds information to initial architecture description") ArchitectureEnhancer enhancer;
 	@Inject @UsesComponent(description = "Generates initial architecture description") @Any Instance<ArchitectureModelProvider> availableProviders;
 	@Inject @UsesComponent(description = "Read architecture description from workspace.dsl file") FromDsl fromDsl;
+	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;
 
 	/**
 	 * Run method that will allow the description to be invoked and augmentations to be performed
 	 * prior to have elements written. You should not have to overwrite this method.
-	 * @throws IOException
 	 */
 	public void run() throws IOException {
 		Workspace workspace = getArchitecture();
 		logger.info("Architecture has been described. Now enhancing it (including writing the diagrams)!");
-		enhancer.enhance(workspace);
+		enhancer.enhance(workspace, enhancers);
 	}
 
 	private Workspace getArchitecture() {

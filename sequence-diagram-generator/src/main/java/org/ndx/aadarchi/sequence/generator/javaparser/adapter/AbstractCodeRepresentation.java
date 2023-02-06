@@ -41,7 +41,7 @@ public abstract class AbstractCodeRepresentation implements CodeRepresentation {
 			return Optional.of(clazz.cast(this));
 		if(parent.isPresent()) {
 			CodeRepresentation parentRepresentation = parent.get();
-			if(clazz.isInstance(clazz)) {
+			if(clazz.isInstance(parentRepresentation)) {
 				return Optional.of(clazz.cast(parentRepresentation));
 			} else {
 				return parentRepresentation.containerOfType(clazz);

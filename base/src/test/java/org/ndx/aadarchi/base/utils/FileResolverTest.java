@@ -1,38 +1,49 @@
 package org.ndx.aadarchi.base.utils;
 
-import java.io.File;
-import java.nio.file.Path;
+import javax.inject.Inject;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemManager;
+import org.assertj.core.api.AssertionsForClassTypes;
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.assertj.core.api.Assertions;
 
+@EnableWeld
 class FileResolverTest {
 
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
+    @Inject FileSystemManager fsManager;
+	@Inject FileResolver resolver;
+    
+    /**
+     * We build this without using Weld, since this unit test doesn't access any maven property
+     * (typically the basedir can't be resolved)
+     * @throws FileSystemException 
+     */
+    @BeforeEach public void loadFileResolver() throws FileSystemException {
+    }
+
 	@Test
-	void can_resolve_subfolder() {
-		FileResolver resolver = new FileResolver();
+	void can_resolve_subfolder() throws FileSystemException {
 		// Given
-		// This file resolves as project base execution dir 
-		String userDir = System.getProperty("user.dir");
-		File userFile = new File(userDir);
-		resolver.basedir = new File(userDir);
 		// When
-		Path resolved = resolver.fileAsUrltoPath("src/main/java");
+		FileObject resolved = resolver.fileAsUrltoPath("src/main/java");
 		// Then
-		Assertions.assertThat(resolved).isEqualTo(new File(userFile, "src/main/java").toPath());
+		AssertionsForClassTypes.assertThat(resolved).isEqualTo(resolver.basedir.resolveFile("src/main/java"));
 	}
 	@Test
-	void bug_291_absolute_path_cant_be_resolved() {
-		FileResolver resolver = new FileResolver();
+	void bug_291_absolute_path_cant_be_resolved() throws FileSystemException {
 		// Given
-		// This file resolves as project base execution dir 
 		String userDir = System.getProperty("user.dir");
-		File userFile = new File(userDir);
-		resolver.basedir = new File(userDir);
 		// When
-		Path resolved = resolver.fileAsUrltoPath(userDir);
+		FileObject resolved = resolver.fileAsUrltoPath(userDir);
 		// Then
-		Assertions.assertThat(resolved).isEqualTo(userFile.toPath());
+		AssertionsForClassTypes.assertThat(resolved).isEqualTo(fsManager.resolveFile(userDir));
 	}
 
 }

@@ -9,13 +9,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import org.apache.commons.lang3.stream.Streams;
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.vfs2.FileObject;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.DisabledEnhancers;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
@@ -38,9 +41,8 @@ import com.structurizr.view.ViewSet;
 @com.structurizr.annotation.Component(technology = "Java, CDI")
 @ApplicationScoped
 public class ArchitectureEnhancer {
-	@Inject @UsesComponent(description="Uses all enhancers") Instance<Enhancer> enhancers;
 	@Inject Logger logger;
-	@Inject @ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE) File enhancementsBase;
+	@Inject @ConfigProperty(name=EnhancementsDir.NAME, defaultValue = EnhancementsDir.VALUE) FileObject enhancementsBase;
 	private Set<String> disabledEnhancers = Set.of();
 	@Inject 
 	public void loadDisabledEnhancers(@ConfigProperty(name=DisabledEnhancers.NAME) String disabledEnhancersNames) {
@@ -49,8 +51,8 @@ public class ArchitectureEnhancer {
 		}
 	}
 	
-	public Stream<Enhancer> getEnhancers() {
-		return enhancers.stream()
+	public Stream<Enhancer> getEnhancers(Iterable<Enhancer> enhancers) {
+		return StreamSupport.stream(enhancers.spliterator(), false)
 				.sorted(Comparator.comparingInt(e -> e.priority()))
 				.filter(this::filterEnhancer);
 	}
@@ -90,14 +92,14 @@ public class ArchitectureEnhancer {
 		}
 	}
 
-	public void enhance(Workspace workspace) {
+	public void enhance(Workspace workspace, Iterable<Enhancer> enhancers) {
 		classloader = Thread.currentThread().getContextClassLoader();
 		logger.info(() -> String.format("Enhancers applied to this architecture are\n%s", 
-			getEnhancers()
+			getEnhancers(enhancers)
 				.map(e -> String.format("%s => %d", e.getClass().getName(), e.priority()))
 				.collect(Collectors.joining("\n"))));
 		withStopWatch("Running all enhancements took %s", 
-			() -> getEnhancers()
+			() -> getEnhancers(enhancers)
 				.forEach(enhancer -> enhancerVisitWorkspace(enhancer, workspace)));
 	}
 

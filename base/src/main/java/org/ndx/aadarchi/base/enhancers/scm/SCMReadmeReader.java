@@ -1,6 +1,5 @@
 package org.ndx.aadarchi.base.enhancers.scm;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -10,11 +9,12 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.OutputBuilder.Format;
-import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.Scm;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
@@ -89,12 +89,12 @@ public class SCMReadmeReader extends SCMModelElementAdapter {
 						StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
 			} else {
 				SCMFile readme = file.iterator().next();
-				File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, Format.adoc);
+				FileObject outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, Format.adoc);
 				if(force) {
 					outputFor.delete();
 				} else {
-					if(readme.lastModified()<outputFor.lastModified())
-						return;
+					if(outputFor.exists() && readme.lastModified()<outputFor.getContent().getLastModifiedTime())
+							return;
 				}
 				try {
 					// Now we have content as asciidoc, so let's write it to the conventional location
@@ -110,7 +110,7 @@ public class SCMReadmeReader extends SCMModelElementAdapter {
 							e);
 				}
 			}
-		} catch(FileNotFoundException e) {
+		} catch(FileNotFoundException | FileSystemException e) {
 			logger.log(Level.SEVERE, String.format("Couldn't find any Readme for element %s"
 					+ "(project is %s, path %s and readme should be %s)", 
 					StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme), e);

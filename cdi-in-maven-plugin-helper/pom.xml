@@ -3,16 +3,12 @@
 	<parent>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
-		<version>0.1.5-SNAPSHOT</version>
+		<version>0.1.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>cdi-in-maven-plugin-helper</artifactId>
 	<name>Aadarchi : CDI in Maven helper</name>
 	<description>This small java library provides a simple way to have a maven Mojo use CDI for bean injection</description>
 	<dependencies>
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.jboss.weld.se</groupId>
 			<artifactId>weld-se-core</artifactId>
