@@ -38,16 +38,16 @@ public class ExposeMavenPropertiesAsConfigProperties implements ConfigSource {
 	public String getPropertyValue(String key) {
 		switch(key) {
 		case "project.basedir":
-			return computePathMatching(basedir -> new File(basedir, ".git").exists());
+			return computeBasedir();
 		case "project.build.directory":
-			return computePathMatching(buildDir -> new File(buildDir, "target").exists() && new File(buildDir, "target").isDirectory());
+			return computeBuildDirectory();
 		default:
 			return null;
 		}
 	}
 
 	private String computeBuildDirectory() {
-		return computePathMatching(file -> new File(file, "target").exists() && new File(file, "target").isDirectory());
+		return computePathMatching(file -> new File(file, "target").exists() && new File(file, "target").isDirectory())+"/target";
 	}
 
 	private String computeBasedir() {
