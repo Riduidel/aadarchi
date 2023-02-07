@@ -34,11 +34,6 @@
 		</dependency>
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
-			<artifactId>sipoc-diagram-generator</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>github-scm-handler</artifactId>
 			<version>${project.version}</version>
 		</dependency>
