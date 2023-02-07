@@ -7,7 +7,7 @@ jobs:
   replace_version_in_README:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Modify version number in README
         uses: mingjun97/file-regex-replace@master
         with:
