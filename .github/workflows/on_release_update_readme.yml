@@ -17,7 +17,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITUB_TOKEN }}
+          token: ${{ secrets.TOKEN_FOR_GITHUB }}
           commit-message: "Updated readme to have version ${{ github.event.release.tag_name }} in"
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
