@@ -3,7 +3,7 @@
   <parent>
     <groupId>io.github.Riduidel.aadarchi</groupId>
     <artifactId>system</artifactId>
-    <version>0.1.6</version>
+    <version>0.1.7-SNAPSHOT</version>
   </parent>
   <artifactId>structurizr-components-detector</artifactId>
   <name>Aadarchi : Structurizr components detector</name>
