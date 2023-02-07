@@ -3,10 +3,12 @@
 	<parent>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
-		<version>0.1.7-SNAPSHOT</version>
+		<version>0.1.6-SNAPSHOT</version>
 	</parent>
+	<name>Aadarchi: test utilities</name>
 	<artifactId>aadarchi-test-utils</artifactId>
-	<description>Some test utilities dedicated to the improvement of Aadarchi quality</description>
+	<description>Some test utilities dedicated to the improvement of Aadarchi quality. 
+	Mainly contains tools allowing easy injection of Maven properties into tests</description>
 	<dependencies>
 		<dependency>
 			<groupId>jakarta.enterprise</groupId>

@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>system</artifactId>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
-		<version>0.1.7-SNAPSHOT</version>
+		<version>0.1.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>architecture-documentation</artifactId>
 	<name>Aadarchi : System documentation generator</name>
@@ -30,6 +30,11 @@
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>structurizr-components-detector</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<artifactId>sipoc-diagram-generator</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

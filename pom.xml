@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.Riduidel.aadarchi</groupId>
 	<artifactId>system</artifactId>
-	<version>0.1.7-SNAPSHOT</version>
+	<version>0.1.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>Base module of a set of tools created to allow easy architecture documentation based upon Simon Brown work.</description>
 	<name>Aadarchi : root POM</name>
@@ -70,6 +70,7 @@
 		<module>maven-metadata-inferer</module>
 		<module>spring-components-detector</module>
 		<module>sequence-diagram-generator</module>
+		<module>sipoc-diagram-generator</module>
 		<module>archetype</module>
 		<module>markdown-to-asciidoc</module>
 		<module>aadarchi-maven-plugin</module>
