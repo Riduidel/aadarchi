@@ -22,6 +22,7 @@ jobs:
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
+          base: main
           branch: chore/update-readme-version
           branch-suffix: timestamp
           delete-branch: true
