@@ -14,9 +14,6 @@ import javax.inject.Inject;
 @ApplicationScoped
 public class SipocEnhancer extends ModelElementAdapter {
 
-    @Inject
-    SipocModel sipocModel;
-
     @Override
     public boolean isParallel() {
         return true;
@@ -62,6 +59,8 @@ public class SipocEnhancer extends ModelElementAdapter {
     }
 
     String generateSipocDiagram(Element element) {
+         SipocModel sipocModel = new SipocModel();
+         return sipocModel.generateSipocDiagram(element);
          sipocModel.buildAsciidocTable(element);
          return sipocModel.generateAsciidocTable();
     }
