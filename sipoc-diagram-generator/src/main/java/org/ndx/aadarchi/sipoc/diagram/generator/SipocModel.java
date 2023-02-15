@@ -2,54 +2,45 @@ package org.ndx.aadarchi.sipoc.diagram.generator;
 
 import com.structurizr.model.Element;
 
-import javax.inject.Inject;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SipocModel {
-    /**
-     * Input : description of the incoming relationship
-     */
-    private Set<String> incomingRelationshipDescriptions;
-    /**
-     * Process : description of the current element
-     */
-    private Set<String> processDescription;
-    /**
-     * Output : description off the outgoing relationship
-     */
-    private Set<String> outgoingRelationships;
-    /**
-     * Outgoing relationship : efferent relationship connected at the exit
-     */
-    private Set<String> outgoingRelationshipsDescriptions;
+
 
     Set<String> buildIncomingRelationship(Element element) {
-        return element.getModel().getRelationships().stream()
-                .filter(relationship -> relationship.getDestination().equals(element))
+        return  element.getEfferentRelationshipsWith(element).stream()
                 .map(relationship -> relationship.getSource().getName())
-                .filter(text -> text!=null)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
 
-    void buildIncomingRelationshipDescriptions(Element element) {
-        element.getModel().getRelationships().stream()
-                .filter(relationship -> relationship.getDestination().equals(element))
-                .forEach(relationship -> incomingRelationshipDescriptions.add(relationship.getSource().getDescription()));
+    Set<String> buildIncomingRelationshipDescriptions(Element element) {
+        return  element.getEfferentRelationshipsWith(element).stream()
+                .map(relationship -> relationship.getSource().getDescription())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
-    void buildProcessDescriptions(Element element) {
-        element.getDescription();
+    String buildProcessDescriptions(Element element) {
+       return element.getDescription();
     }
 
-    void buildOutgoingRelationship(Element element) {
-        element.getEfferentRelationshipsWith(element);
+    Set<String> buildOutgoingRelationship(Element element) {
+        return element.getModel().getRelationships().stream()
+                .filter(relationship -> relationship.getSource().equals(element))
+                .map(relationship -> relationship.getDestination().getName())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
-    void buildOutgoingDescriptions(Element element) {
-        element.getEfferentRelationshipsWith(element).stream()
+    Set<String> buildOutgoingDescriptions(Element element) {
+        return element.getModel().getRelationships().stream()
                 .filter(description -> description.getSource().equals(element))
-                .forEach(description -> outgoingRelationshipsDescriptions.add(description.getDestination().getDescription()));
+                .map(relationship -> relationship.getDestination().getDescription())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
     }
 
     private String getString(Set<String> treatment) {
@@ -58,6 +49,7 @@ public class SipocModel {
 
 
 	public String generateSipocDiagram(Element element) {
+        buildIncomingRelationship(element);
 		buildIncomingRelationshipDescriptions(element);
 		buildProcessDescriptions(element);
 		buildOutgoingRelationship(element);
@@ -65,9 +57,9 @@ public class SipocModel {
 
 		return  "[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" + "\n|===" +
 			getString(buildIncomingRelationship(element)) +
-			getString(incomingRelationshipDescriptions) +
-			getString(processDescription) +
-			getString(outgoingRelationshipsDescriptions) +
-			getString(outgoingRelationships);
+			getString(buildIncomingRelationshipDescriptions(element)) +
+			buildProcessDescriptions(element) +
+			getString(buildOutgoingRelationship(element)) +
+			getString(buildOutgoingDescriptions(element));
     }
 }

@@ -7,12 +7,13 @@ import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 
 
 @Default
 @ApplicationScoped
 public class SipocEnhancer extends ModelElementAdapter {
+
+    SipocModel sipocModel;
 
     @Override
     public boolean isParallel() {
@@ -59,9 +60,7 @@ public class SipocEnhancer extends ModelElementAdapter {
     }
 
     String generateSipocDiagram(Element element) {
-         SipocModel sipocModel = new SipocModel();
-         return sipocModel.generateSipocDiagram(element);
-         sipocModel.buildAsciidocTable(element);
-         return sipocModel.generateAsciidocTable();
+        SipocModel sipocModel = new SipocModel();
+        return sipocModel.generateSipocDiagram(element);
     }
 }
