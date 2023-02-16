@@ -27,7 +27,7 @@ public class SipocModel {
        return element.getDescription();
     }
 
-    Set<String> buildOutgoingRelationship(Element element) {
+    Set<String> buildOutgoingRelationships(Element element) {
         return element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getSource().equals(element))
                 .map(relationship -> relationship.getDestination().getName())
@@ -35,7 +35,7 @@ public class SipocModel {
                 .collect(Collectors.toSet());
     }
 
-    Set<String> buildOutgoingDescriptions(Element element) {
+    Set<String> buildOutgoingRelationshipDescriptions(Element element) {
         return element.getModel().getRelationships().stream()
                 .filter(description -> description.getSource().equals(element))
                 .map(relationship -> relationship.getDestination().getDescription())
@@ -52,14 +52,14 @@ public class SipocModel {
         buildIncomingRelationship(element);
 		buildIncomingRelationshipDescriptions(element);
 		buildProcessDescriptions(element);
-		buildOutgoingRelationship(element);
-		buildOutgoingDescriptions(element);
+		buildOutgoingRelationships(element);
+		buildOutgoingRelationshipDescriptions(element);
 
 		return  "[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" + "\n|===" +
 			getString(buildIncomingRelationship(element)) +
 			getString(buildIncomingRelationshipDescriptions(element)) +
 			buildProcessDescriptions(element) +
-			getString(buildOutgoingRelationship(element)) +
-			getString(buildOutgoingDescriptions(element));
+			getString(buildOutgoingRelationships(element)) +
+			getString(buildOutgoingRelationshipDescriptions(element));
     }
 }

@@ -5,15 +5,7 @@ import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-
-
-@Default
-@ApplicationScoped
 public class SipocEnhancer extends ModelElementAdapter {
-
-    SipocModel sipocModel;
 
     @Override
     public boolean isParallel() {
