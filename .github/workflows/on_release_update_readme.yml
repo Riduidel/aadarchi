@@ -7,7 +7,7 @@ jobs:
   replace_version_in_README:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Modify version number in README
         uses: mingjun97/file-regex-replace@master
         with:
@@ -17,11 +17,12 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
-          token: ${{ secrets.GITUB_TOKEN }}
+          token: ${{ secrets.TOKEN_FOR_GITHUB }}
           commit-message: "Updated readme to have version ${{ github.event.release.tag_name }} in"
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
+          base: main
           branch: chore/update-readme-version
           branch-suffix: timestamp
           delete-branch: true
