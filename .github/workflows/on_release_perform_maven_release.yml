@@ -46,7 +46,7 @@ jobs:
             ]
           properties: |
             [
-              {"aadarchi.github.token": ${{ secrets.TOKEN_FOR_GITHUB }} }
+              {"aadarchi.github.token": ${{ secrets.TOKEN_FOR_GITHUB }} },
               {"gpg.passphrase": ${{secrets.MAVEN_GPG_PASSPHRASE}} }
             ]
       - name: Configure Git user for push
