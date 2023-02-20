@@ -39,24 +39,20 @@ jobs:
         uses: s4u/maven-settings-action@v2.6.0
         with:
           override: true
+          githubServer: true
           servers: |
             [
             {
-                "id": "ossrh",
-                "username": "${{ secrets.OSS_SONATYPE_USERNAME }}",
-                "password": "${{ secrets.OSS_SONATYPE_PASSWORD }}"
-            },
-            {
-              "id": "github",
-              "username": "${{ github.repository }}",
-              "password": "${{ secrets.GITHUB_TOKEN }}"
+              "id": "ossrh",
+              "username": "${{ secrets.OSS_SONATYPE_USERNAME }}",
+              "password": "${{ secrets.OSS_SONATYPE_PASSWORD }}"
             }
             ]
           properties: |
             [
               {"aadarchi.github.token": "${{ secrets.TOKEN_FOR_GITHUB }}" },
               {"gpg.passphrase": "${{secrets.MAVEN_GPG_PASSPHRASE}}" },
-              {"releaseVersion", "${{ github.event.inputs.releaseversion }}"}
+              {"releaseVersion", "${{ github.event.inputs.releaseversion }}" }
             ]
       - name: Configure Git user for push
         uses: oleksiyrudenko/gha-git-credentials@v2-latest
