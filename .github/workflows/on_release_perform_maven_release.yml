@@ -15,7 +15,7 @@ on:
       releaseversion:
         description: 'Release version'
         required: true
-        default: '2.4.0'
+        default: '0.1.7'
 
 jobs:
   build:
@@ -46,8 +46,8 @@ jobs:
             ]
           properties: |
             [
-              {"aadarchi.github.token": ${{ secrets.TOKEN_FOR_GITHUB }} },
-              {"gpg.passphrase": ${{secrets.MAVEN_GPG_PASSPHRASE}} }
+              {"aadarchi.github.token": "${{ secrets.TOKEN_FOR_GITHUB }}" },
+              {"gpg.passphrase": "${{secrets.MAVEN_GPG_PASSPHRASE}}" }
             ]
       - name: Configure Git user for push
         uses: oleksiyrudenko/gha-git-credentials@v2-latest
