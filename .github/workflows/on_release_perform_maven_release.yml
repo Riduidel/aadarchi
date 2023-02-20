@@ -52,10 +52,10 @@ jobs:
             [
               {"aadarchi.github.token": "${{ secrets.TOKEN_FOR_GITHUB }}" },
               {"gpg.passphrase": "${{secrets.MAVEN_GPG_PASSPHRASE}}" },
-              {"releaseVersion", "${{RELEASE}}" }
+              {"releaseVersion", "${{RELEASE_VERSION}}" }
             ]
         env:
-          RELEASE: ${{github.event.inputs.releaseversion}}
+          RELEASE_VERSION: ${{github.event.inputs.releaseversion}}
       - name: Configure Git user for push
         uses: oleksiyrudenko/gha-git-credentials@v2-latest
         with:
