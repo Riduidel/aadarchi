@@ -40,8 +40,8 @@ jobs:
             [
             {
                 "id": "ossrh",
-                "username": "${{ secrets.SONATYPE_USERNAME }}",
-                "password": "${{ secrets.SONATYPE_PASSWORD }}"
+                "username": "${{ secrets.OSS_SONATYPE_USERNAME }}",
+                "password": "${{ secrets.OSS_SONATYPE_PASSWORD }}"
             }
             ]
           properties: |
