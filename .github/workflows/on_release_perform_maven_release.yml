@@ -21,6 +21,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    # See https://stackoverflow.com/a/61421306/15619
+    env:
+      RELEASE_VERSION: ${{github.event.inputs.releaseversion}}
 
     steps:
       - run: echo "Will perform a maven release with public version ${{ github.event.inputs.releaseversion }}"
@@ -52,10 +55,8 @@ jobs:
             [
               {"aadarchi.github.token": "${{ secrets.TOKEN_FOR_GITHUB }}" },
               {"gpg.passphrase": "${{secrets.MAVEN_GPG_PASSPHRASE}}" },
-              {"releaseVersion", "${{RELEASE_VERSION}}" }
+              {"releaseVersion", "${{env.RELEASE_VERSION}}" }
             ]
-        env:
-          RELEASE_VERSION: ${{github.event.inputs.releaseversion}}
       - name: Configure Git user for push
         uses: oleksiyrudenko/gha-git-credentials@v2-latest
         with:
