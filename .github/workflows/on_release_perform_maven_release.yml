@@ -35,7 +35,7 @@ jobs:
       - name: Do not forget to configure Maven Settings!
         uses: s4u/maven-settings-action@v2.6.0
         with:
-          override: false
+          override: true
           servers: |
             [
             {
