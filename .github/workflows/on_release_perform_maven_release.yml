@@ -55,7 +55,7 @@ jobs:
               {"releaseVersion", "${{RELEASE}}" }
             ]
         env:
-          RELEASE: "${{github.event.inputs.releaseversion}}"
+          RELEASE: ${{github.event.inputs.releaseversion}}
       - name: Configure Git user for push
         uses: oleksiyrudenko/gha-git-credentials@v2-latest
         with:
