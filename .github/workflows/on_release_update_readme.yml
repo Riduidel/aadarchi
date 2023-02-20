@@ -14,6 +14,12 @@ jobs:
           regex: '=[0-9]+\.[0-9]+\.[0-9]+ '
           replacement: '=${{ github.event.release.tag_name }} '
           include: '^README\.md'    # Optional, defaults to ".*"
+      - name: Modify version number in release action
+        uses: mingjun97/file-regex-replace@master
+        with:
+          regex: '=[0-9]+\.[0-9]+\.[0-9]+ '
+          replacement: '=${{ github.event.release.tag_name }} '
+          include: '^.github\workflows\on_release_perform_maven_release.yml'    # Optional, defaults to ".*"
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
