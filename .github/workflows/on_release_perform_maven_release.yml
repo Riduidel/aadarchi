@@ -47,7 +47,7 @@ jobs:
           properties: |
             [
               {"aadarchi.github.token": ${{ secrets.TOKEN_FOR_GITHUB }} }
-              {"gpg.passphrase": ${{MAVEN_GPG_PASSPHRASE}} }
+              {"gpg.passphrase": ${{secrets.MAVEN_GPG_PASSPHRASE}} }
             ]
       - name: Configure Git user for push
         uses: oleksiyrudenko/gha-git-credentials@v2-latest
