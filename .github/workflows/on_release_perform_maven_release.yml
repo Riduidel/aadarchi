@@ -44,6 +44,11 @@ jobs:
                 "password": "${{ secrets.SONATYPE_PASSWORD }}"
             }
             ]
+          properties: |
+            [
+              {"aadarchi.github.token": ${{ secrets.TOKEN_FOR_GITHUB }} }
+              {"gpg.passphrase": ${{MAVEN_GPG_PASSPHRASE}} }
+            ]
       - name: Configure Git user for push
         uses: oleksiyrudenko/gha-git-credentials@v2-latest
         with:
@@ -59,11 +64,10 @@ jobs:
           gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Build with Maven
-        run: mvn -B release:prepare release:perform -Prelease -DreleaseVersion=${{ github.event.inputs.releaseversion }} --file pom.xml -Daadarchi.github.token=$TOKEN_FOR_GITHUB -Dgpg.passphrase=$GPG_PASSPHRASE
+        run: mvn -B release:prepare release:perform -Prelease -DreleaseVersion=${{ github.event.inputs.releaseversion }} --file pom.xml
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
           MAVEN_USERNAME: ${{ secrets.OSS_SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSS_SONATYPE_PASSWORD }}
           GITHUB_USERNAME: ${{ github.repository }}
           GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          GPG_PASSPHRASE: ${{MAVEN_GPG_PASSPHRASE}}

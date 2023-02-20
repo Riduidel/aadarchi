@@ -357,9 +357,6 @@
 											<property>gpg.passphrase</property>
 											<message>You must set a gpg.passphrase property to be able to sign maven release!</message>
 										</requireProperty>
-										<requireActiveProfile>
-											<profiles>settings-aadarchi</profiles>
-										</requireActiveProfile>
 									</rules>
 								</configuration>
 							</execution>
@@ -429,7 +426,7 @@
 							<tagNameFormat>@{version}</tagNameFormat>
 							<!-- This profile MUST be defined in settings.xml and contains the 
 								various tokens (GitHub, GitLab and so on) -->
-							<releaseProfiles>settings-aadarchi,release</releaseProfiles>
+							<releaseProfiles>release</releaseProfiles>
 							<arguments>-Daadarchi.github.token=${aadarchi.github.token}</arguments>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<localCheckout>false</localCheckout>
