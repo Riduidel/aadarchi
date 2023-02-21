@@ -62,6 +62,10 @@ jobs:
               {"releaseVersion": "${{env.RELEASE_VERSION}}" },
               {"gpg.passphrase": "${{secrets.MAVEN_GPG_PASSPHRASE}}" }
             ]
+      - name: Configure Git user
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
       - name: Build with Maven
         run: mvn --no-transfer-progress -B release:prepare release:perform -Prelease --file pom.xml
         env:
