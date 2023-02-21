@@ -73,3 +73,7 @@ jobs:
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Build with Maven
         run: mvn -B release:prepare release:perform -Prelease --file pom.xml
+        env:
+          SCM_USERNAME_REF: 'github-actions'
+          SCM_TOKEN_REF: ${{ secrets.GITHUB_TOKEN }}
+          BUILD_ENV: 'github-actions'
