@@ -39,31 +39,20 @@ jobs:
           distribution: 'adopt'
           cache: maven
           server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
+          server-username: ${{ secrets.OSS_SONATYPE_USERNAME }}
+          server-password: ${{ secrets.OSS_SONATYPE_PASSWORD }}
+          gpg-passphrase: ${{secrets.MAVEN_GPG_PASSPHRASE}}
+          gpg-private-key: ${{secrets.MAVEN_GPG_PRIVATE_KEY}}
       - name: Do not forget to configure Maven Settings!
         uses: s4u/maven-settings-action@v2.6.0
         with:
           override: true
           githubServer: true
-          servers: |
-            [
-            {
-              "id": "ossrh",
-              "username": "${{ secrets.OSS_SONATYPE_USERNAME }}",
-              "password": "${{ secrets.OSS_SONATYPE_PASSWORD }}"
-            }
-            ]
           properties: |
             [
               {"aadarchi.github.token": "${{ secrets.TOKEN_FOR_GITHUB }}" },
-              {"gpg.passphrase": "${{secrets.MAVEN_GPG_PASSPHRASE}}" },
               {"releaseVersion": "${{env.RELEASE_VERSION}}" }
             ]
-      - name: Import GPG key
-        id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v5
-        with:
-          gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Build with Maven
         run: mvn --no-transfer-progress -B release:prepare release:perform -Prelease --file pom.xml
         env:
