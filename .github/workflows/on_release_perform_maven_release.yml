@@ -60,7 +60,9 @@ jobs:
             [
               {"aadarchi.github.token": "${{ secrets.TOKEN_FOR_GITHUB }}" },
               {"releaseVersion": "${{env.RELEASE_VERSION}}" },
-              {"gpg.passphrase": "${{secrets.MAVEN_GPG_PASSPHRASE}}" }
+              {"gpg.passphrase": "${{secrets.MAVEN_GPG_PASSPHRASE}}" },
+              {"username": "git"},
+              {"password": "${{ secrets.GITHUB_TOKEN }}"}
             ]
       - name: Build with Maven
         run: mvn --no-transfer-progress -B release:prepare release:perform -Prelease --file pom.xml

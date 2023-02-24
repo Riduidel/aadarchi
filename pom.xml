@@ -24,8 +24,9 @@
 		<error-prone.version>2.16</error-prone.version>
 	</properties>
 	<scm>
-		<connection>scm:git:ssh://git@github.com/Riduidel/aadarchi.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/Riduidel/aadarchi.git</developerConnection>
+		<!-- We use https connections for using GITHUB_TOKEN as password -->
+		<connection>scm:git:https://git@github.com/Riduidel/aadarchi.git</connection>
+		<developerConnection>scm:git:https://git@github.com/Riduidel/aadarchi.git</developerConnection>
 		<url>https://github.com/Riduidel/aadarchi.git</url>
 		<tag>HEAD</tag>
 	</scm>
