@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
-		<version>0.1.8</version>
+		<version>0.1.9-SNAPSHOT</version>
 	</parent>
 	<artifactId>adr-tickets-extractor</artifactId>
 	<name>Aadarchi : ADR ticket extractor</name>
