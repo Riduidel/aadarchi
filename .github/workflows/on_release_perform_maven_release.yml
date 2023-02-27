@@ -56,6 +56,12 @@ jobs:
         with:
           override: true
           githubServer: true
+          servers: |
+            [{
+                "id": "ossrh",
+                "username": "${{ secrets.OSS_SONATYPE_USERNAME }}",
+                "password": "${{ secrets.OSS_SONATYPE_PASSWORD }}"
+            }]
           properties: |
             [
               {"aadarchi.github.token": "${{ secrets.TOKEN_FOR_GITHUB }}" },
