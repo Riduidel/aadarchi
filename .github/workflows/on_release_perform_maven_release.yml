@@ -52,7 +52,7 @@ jobs:
           server-username: ${{ secrets.OSS_SONATYPE_USERNAME }}
           server-password: ${{ secrets.OSS_SONATYPE_PASSWORD }}
       - name: Do not forget to configure Maven Settings!
-        uses: s4u/maven-settings-action@v2.6.0
+        uses: s4u/maven-settings-action@v2.8.0
         with:
           override: true
           githubServer: true
