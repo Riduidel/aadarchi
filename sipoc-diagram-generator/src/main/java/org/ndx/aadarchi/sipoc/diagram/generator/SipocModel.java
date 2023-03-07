@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.sipoc.diagram.generator;
 
 import com.structurizr.model.Element;
+import com.structurizr.model.Relationship;
 
 import java.util.Objects;
 import java.util.Set;
@@ -12,17 +13,14 @@ public class SipocModel {
     Set<String> buildIncomingRelationships(Element element) {
         return  element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getDestination().equals(element))
-                .map(relationship -> relationship.getSource().getName())
-                .distinct()
-                .filter(Objects::nonNull)
+                .map(relationship -> relationship.getSource().getName() + " - " + relationship.getSource().getDescription())
                 .collect(Collectors.toSet());
     }
 
     Set<String> buildIncomingRelationshipDescriptions(Element element) {
         return  element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getDestination().equals(element))
-                .map(relationship -> relationship.getSource().getDescription())
-                .distinct()
+                .map(Relationship::getDescription)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
@@ -34,17 +32,14 @@ public class SipocModel {
     Set<String> buildOutgoingRelationships(Element element) {
         return element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getSource().equals(element))
-                .map(relationship -> relationship.getDestination().getName())
-                .distinct()
-                .filter(Objects::nonNull)
+                .map(relationship -> relationship.getDestination().getName() + " - " + relationship.getDestination().getDescription())
                 .collect(Collectors.toSet());
     }
 
     Set<String> buildOutgoingRelationshipDescriptions(Element element) {
         return element.getModel().getRelationships().stream()
                 .filter(description -> description.getSource().equals(element))
-                .map(relationship -> relationship.getDestination().getDescription())
-                .distinct()
+                .map(Relationship::getDescription)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }

@@ -14,6 +14,9 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
 
+import static org.ndx.aadarchi.sipoc.diagram.generator.SipocTestUtils.CONNECTS_CENTER_TO_OUTPUT;
+import static org.ndx.aadarchi.sipoc.diagram.generator.SipocTestUtils.CONNECTS_INPUT_TO_CENTER;
+
 class SipocEnhancerTest extends AbstractSipocTest {
     @Inject SipocEnhancer sipocEnhancer;
 
@@ -51,10 +54,10 @@ class SipocEnhancerTest extends AbstractSipocTest {
 		//then
 		Assertions.assertThat(sipocEnhancerTable).isEqualTo(
 				"[cols=\"1,1,1,1,1\"]\n" + "|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" +
-						"|"+ inputContainer.getName() +
-						"|"+ inputContainer.getDescription() +
+						"|"+ inputContainer.getName() + " - " + inputContainer.getDescription() +
+						"|" + CONNECTS_INPUT_TO_CENTER +
 						"|"+ centerContainer.getDescription() +
-						"|"+ outputContainer.getDescription() +
-						"|"+ outputContainer.getName());
+						"|" + CONNECTS_CENTER_TO_OUTPUT +
+						"|"+ outputContainer.getDescription() + " - " + outputContainer.getName());
 	}
 }

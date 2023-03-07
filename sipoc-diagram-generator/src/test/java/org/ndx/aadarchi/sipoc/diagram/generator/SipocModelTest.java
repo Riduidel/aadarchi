@@ -1,5 +1,6 @@
 package org.ndx.aadarchi.sipoc.diagram.generator;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import org.assertj.core.api.Assertions;
@@ -7,15 +8,17 @@ import org.junit.jupiter.api.Test;
 
 import com.structurizr.model.Relationship;
 
+import static org.assertj.core.util.IterableUtil.iterator;
+
 public class SipocModelTest extends AbstractSipocTest {
 
 	@Test public void can_create_input_list() {
 		// given
 		SipocModel sipocModel = new SipocModel();
-		// when
-		// then
 		Set<String> buildIncomingRelationship = Set.of(
 				String.format("%s - %s", inputContainer.getName(), inputContainer.getDescription()));
+		// when
+		// then
 		Assertions.assertThat(sipocModel.buildIncomingRelationships(centerContainer)).isEqualTo(buildIncomingRelationship);
 	}
 
@@ -23,9 +26,9 @@ public class SipocModelTest extends AbstractSipocTest {
 		// given
 		SipocModel sipocModel = new SipocModel();
 		Relationship relationship = inputContainer.getRelationships().iterator().next();
+		Set<String> buildIncomingRelationshipDescription = Set.of(relationship.getDescription());
 		// when
 		// then
-		Set<String> buildIncomingRelationshipDescription = Set.of(relationship.getDescription());
 		Assertions.assertThat(sipocModel.buildIncomingRelationshipDescriptions(centerContainer)).isEqualTo(buildIncomingRelationshipDescription);
 	}
 
@@ -36,14 +39,23 @@ public class SipocModelTest extends AbstractSipocTest {
 	}
 
     @Test public void can_create_outgoing_relationships_description() {
-        Set<String> buildOutgoingRelationshipDescriptions = Set.of(outputContainer.getDescription());
-        SipocModel sipocModel = new SipocModel();
-        Assertions.assertThat(sipocModel.buildOutgoingRelationshipDescriptions(centerContainer)).isEqualTo(buildOutgoingRelationshipDescriptions);
+		// given
+		SipocModel sipocModel = new SipocModel();
+		for (Relationship relationship : outputContainer.getRelationships()) {
+			// when
+			// then
+			Set<String> buildOutgoingRelationshipDescription = Set.of(relationship.getDescription());
+			Assertions.assertThat(sipocModel.buildOutgoingRelationshipDescriptions(centerContainer)).isEqualTo(buildOutgoingRelationshipDescription);
+		}
     }
 
     @Test public void can_create_outgoing_relationships() {
-        Set<String> buildOutgoingRelationships = Set.of(outputContainer.getName());
-        SipocModel sipocModel = new SipocModel();
-        Assertions.assertThat(sipocModel.buildOutgoingRelationships(centerContainer)).isEqualTo(buildOutgoingRelationships);
+		// given
+		SipocModel sipocModel = new SipocModel();
+		// when
+		// then
+		Set<String> buildOutgoingRelationships = Set.of(
+				String.format("%s - %s", outputContainer.getName(), outputContainer.getDescription()));
+		Assertions.assertThat(sipocModel.buildOutgoingRelationships(centerContainer)).isEqualTo(buildOutgoingRelationships);
     }
 }
