@@ -53,11 +53,12 @@ class SipocEnhancerTest extends AbstractSipocTest {
 		sipocEnhancer.generateSipocDiagram(centerContainer);
 		//then
 		Assertions.assertThat(sipocEnhancerTable).isEqualTo(
-				"[cols=\"1,1,1,1,1\"]\n" + "|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" +
+				"[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" +
 						"|"+ inputContainer.getName() + " - " + inputContainer.getDescription() +
 						"|" + CONNECTS_INPUT_TO_CENTER +
 						"|"+ centerContainer.getDescription() +
 						"|" + CONNECTS_CENTER_TO_OUTPUT +
-						"|"+ outputContainer.getDescription() + " - " + outputContainer.getName());
+						"|"+ outputContainer.getDescription() + " - " + outputContainer.getName() +
+						"\n|===");
 	}
 }

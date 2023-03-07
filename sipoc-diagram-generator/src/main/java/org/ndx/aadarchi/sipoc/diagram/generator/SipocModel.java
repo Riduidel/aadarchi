@@ -11,7 +11,7 @@ public class SipocModel {
 
 
     Set<String> buildIncomingRelationships(Element element) {
-        return element.getModel().getRelationships().stream()
+        return  element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getDestination().equals(element))
                 .map(Relationship::getSource)
                 .map(source -> source.getName() + " - " + source.getDescription())
@@ -39,7 +39,7 @@ public class SipocModel {
     }
 
     Set<String> buildOutgoingRelationshipDescriptions(Element element) {
-        return element.getModel().getRelationships().stream()
+        return  element.getModel().getRelationships().stream()
                 .filter(description -> description.getSource().equals(element))
                 .map(Relationship::getDescription)
                 .filter(Objects::nonNull)
@@ -47,15 +47,15 @@ public class SipocModel {
     }
 
     private String getString(Set<String> treatment) {
-        return String.join(" ", treatment);
+        return String.join("\n", treatment);
     }
 
 	public String generateSipocDiagram(Element element) {
         return  element.getModel().getRelationships().stream()
-                .map(s -> String.format("|%s|%s|%s|%s|%s",getString(buildIncomingRelationships(element)), getString(buildIncomingRelationshipDescriptions(element)), buildProcessDescriptions(element), getString(buildOutgoingRelationshipDescriptions(element)), getString(buildOutgoingRelationships(element))))
+                .map(s -> String.format("|%s|%s|%s|%s|%s",getString(buildIncomingRelationships(element)), getString(buildIncomingRelationshipDescriptions(element)),
+                        buildProcessDescriptions(element), getString(buildOutgoingRelationshipDescriptions(element)), getString(buildOutgoingRelationships(element))))
                 .distinct()
-                .collect(Collectors.joining("\n\n\n\n\n", "[cols=\"1,1,1,1,1\"]\n" + "|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n", ""));
-
+                .collect(Collectors.joining("\n\n\n\n\n", "[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n", "\n|==="));
     }
 
 }
