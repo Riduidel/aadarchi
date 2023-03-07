@@ -9,16 +9,20 @@ import java.util.stream.Collectors;
 public class SipocModel {
 
 
-    Set<String> buildIncomingRelationship(Element element) {
-        return  element.getEfferentRelationshipsWith(element).stream()
+    Set<String> buildIncomingRelationships(Element element) {
+        return  element.getModel().getRelationships().stream()
+                .filter(relationship -> relationship.getDestination().equals(element))
                 .map(relationship -> relationship.getSource().getName())
+                .distinct()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
 
     Set<String> buildIncomingRelationshipDescriptions(Element element) {
-        return  element.getEfferentRelationshipsWith(element).stream()
+        return  element.getModel().getRelationships().stream()
+                .filter(relationship -> relationship.getDestination().equals(element))
                 .map(relationship -> relationship.getSource().getDescription())
+                .distinct()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
@@ -31,6 +35,7 @@ public class SipocModel {
         return element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getSource().equals(element))
                 .map(relationship -> relationship.getDestination().getName())
+                .distinct()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
@@ -39,27 +44,23 @@ public class SipocModel {
         return element.getModel().getRelationships().stream()
                 .filter(description -> description.getSource().equals(element))
                 .map(relationship -> relationship.getDestination().getDescription())
+                .distinct()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
 
     private String getString(Set<String> treatment) {
-        return String.join("\n", treatment);
+        return String.join("/n", treatment);
     }
+
 
 
 	public String generateSipocDiagram(Element element) {
-        buildIncomingRelationship(element);
-		buildIncomingRelationshipDescriptions(element);
-		buildProcessDescriptions(element);
-		buildOutgoingRelationships(element);
-		buildOutgoingRelationshipDescriptions(element);
+        return  element.getModel().getRelationships().stream()
+                .map(s -> String.format("|%s|%s|%s|%s|%s",getString(buildIncomingRelationships(element)), getString(buildIncomingRelationshipDescriptions(element)), buildProcessDescriptions(element), getString(buildOutgoingRelationshipDescriptions(element)), getString(buildOutgoingRelationships(element))))
+                .distinct()
+                .collect(Collectors.joining("\n\n\n\n\n", "[cols=\"1,1,1,1,1\"]\n" + "|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n", ""));
 
-		return  "[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" + "\n|===" +
-			getString(buildIncomingRelationship(element)) +
-			getString(buildIncomingRelationshipDescriptions(element)) +
-			buildProcessDescriptions(element) +
-			getString(buildOutgoingRelationships(element)) +
-			getString(buildOutgoingRelationshipDescriptions(element));
     }
+
 }

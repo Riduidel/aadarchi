@@ -24,7 +24,7 @@ public class SipocEnhancer extends ModelElementAdapter {
 
     @Override
     public boolean startVisit(Container container) {
-        return true;
+        return false;
     }
 
     @Override
@@ -40,9 +40,9 @@ public class SipocEnhancer extends ModelElementAdapter {
     }
 
     @Override
-    public void endVisit(Container c, OutputBuilder builder) {
-    String sipocDiagram = generateSipocDiagram(c);
-    builder.writeToOutput(AgileArchitectureSection.code, c,this, OutputBuilder.Format.adoc, sipocDiagram);
+    public void endVisit(Container c,OutputBuilder builder) {
+        String sipocDiagram = generateSipocDiagram(c);
+        builder.writeToOutput(AgileArchitectureSection.code, c,this, OutputBuilder.Format.adoc, sipocDiagram);
     }
 
     @Override

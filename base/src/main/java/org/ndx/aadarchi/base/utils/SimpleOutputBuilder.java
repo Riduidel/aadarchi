@@ -5,19 +5,14 @@ import java.io.OutputStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.NameScope;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureException;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.Enhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
-import org.ndx.aadarchi.base.enhancers.includes.ImplicitIncludeManager;
 
 import com.structurizr.model.Element;
 
@@ -81,6 +76,8 @@ public class SimpleOutputBuilder implements OutputBuilder {
 			HandledFormat format, CharSequence text, boolean append) {
 		FileObject returned = outputFor(section, element, enhancer, format);
 		try {
+			if(!append)
+				returned.delete();
 			returned.getParent().createFolder();
 			try(OutputStream outputStream = returned.getContent().getOutputStream()) {
 				IOUtils.write(format.createCommentForEnhancer(enhancer), outputStream, format.encoding());
@@ -99,7 +96,7 @@ public class SimpleOutputBuilder implements OutputBuilder {
 
 	@Override
 	public FileObject writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer,
-			HandledFormat format, CharSequence text) {
+									HandledFormat format, CharSequence text) {
 		return writeToOutput(section, element, enhancer, format, text, false);
 	}
 
