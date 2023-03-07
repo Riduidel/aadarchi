@@ -11,9 +11,10 @@ public class SipocModel {
 
 
     Set<String> buildIncomingRelationships(Element element) {
-        return  element.getModel().getRelationships().stream()
+        return element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getDestination().equals(element))
-                .map(relationship -> relationship.getSource().getName() + " - " + relationship.getSource().getDescription())
+                .map(Relationship::getSource)
+                .map(source -> source.getName() + " - " + source.getDescription())
                 .collect(Collectors.toSet());
     }
 
@@ -32,7 +33,8 @@ public class SipocModel {
     Set<String> buildOutgoingRelationships(Element element) {
         return element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getSource().equals(element))
-                .map(relationship -> relationship.getDestination().getName() + " - " + relationship.getDestination().getDescription())
+                .map(Relationship::getDestination)
+                .map(destination -> destination.getName() + " - " + destination.getDescription())
                 .collect(Collectors.toSet());
     }
 
@@ -45,10 +47,8 @@ public class SipocModel {
     }
 
     private String getString(Set<String> treatment) {
-        return String.join("/n", treatment);
+        return String.join(" ", treatment);
     }
-
-
 
 	public String generateSipocDiagram(Element element) {
         return  element.getModel().getRelationships().stream()
