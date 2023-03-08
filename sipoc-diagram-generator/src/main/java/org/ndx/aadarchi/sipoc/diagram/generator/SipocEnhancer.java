@@ -24,7 +24,7 @@ public class SipocEnhancer extends ModelElementAdapter {
 
     @Override
     public boolean startVisit(Container container) {
-        return false;
+        return true;
     }
 
     @Override

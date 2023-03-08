@@ -3,6 +3,7 @@ package org.ndx.aadarchi.sipoc.diagram.generator;
 import com.structurizr.model.Element;
 import com.structurizr.model.Relationship;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,11 +12,12 @@ public class SipocModel {
 
 
     Set<String> buildIncomingRelationships(Element element) {
-        return  element.getModel().getRelationships().stream()
+        return element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getDestination().equals(element))
                 .map(Relationship::getSource)
                 .map(source -> source.getName() + " - " + source.getDescription())
-                .collect(Collectors.toSet());
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     Set<String> buildIncomingRelationshipDescriptions(Element element) {
@@ -23,7 +25,8 @@ public class SipocModel {
                 .filter(relationship -> relationship.getDestination().equals(element))
                 .map(Relationship::getDescription)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     String buildProcessDescriptions(Element element) {
@@ -31,23 +34,24 @@ public class SipocModel {
     }
 
     Set<String> buildOutgoingRelationships(Element element) {
-        return element.getModel().getRelationships().stream()
+        return  element.getModel().getRelationships().stream()
                 .filter(relationship -> relationship.getSource().equals(element))
                 .map(Relationship::getDestination)
                 .map(destination -> destination.getName() + " - " + destination.getDescription())
-                .collect(Collectors.toSet());
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     Set<String> buildOutgoingRelationshipDescriptions(Element element) {
         return  element.getModel().getRelationships().stream()
-                .filter(description -> description.getSource().equals(element))
+                .filter(relationship -> relationship.getSource().equals(element))
                 .map(Relationship::getDescription)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
+                .sorted()
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private String getString(Set<String> treatment) {
-        return String.join("\n", treatment);
+        return String.join("\n\n", treatment);
     }
 
 	public String generateSipocDiagram(Element element) {
