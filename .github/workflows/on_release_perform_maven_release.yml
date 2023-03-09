@@ -15,7 +15,7 @@ on:
       releaseversion:
         description: 'Release version'
         required: true
-        default: '0.1.7'
+        default: '0.1.10'
 
 jobs:
   build:
