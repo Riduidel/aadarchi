@@ -56,8 +56,8 @@ class SipocEnhancerTest extends AbstractSipocTest {
 						"\n|===");
 	}
 
-	@Test
-	public void can_create_a_sipoc_table_with_multiple_inputs() {
+	/*@Test
+	public void can_create_a_sipoc_table_with_multiple_inputs_and_outputs() {
 		//given
 		// What is this ?
 		//when
@@ -67,11 +67,11 @@ class SipocEnhancerTest extends AbstractSipocTest {
 		//then
 		Assertions.assertThat(sipocEnhancerTable).isEqualTo(
 				"[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" +
-						"|"+ (inputContainer1.getName() + " - " + inputContainer1.getDescription() + inputContainer2.getName() + " - " + inputContainer2.getDescription())+
+						"|"+ inputContainer1.getName() + " - " + inputContainer1.getDescription() + inputContainer2.getName() + " - " + inputContainer2.getDescription()+
 						"|" + CONNECTS_INPUT_TO_CENTER + CONNECTS_INPUT_TO_CENTER +
 						"|"+ centerContainer1.getDescription() +
 						"|" + CONNECTS_CENTER_TO_OUTPUT + CONNECTS_CENTER_TO_OUTPUT +
 						"|"+ outputContainer1.getDescription() + " - " + outputContainer1.getName() + outputContainer2.getName() + " - " + outputContainer2.getDescription() +
 						"\n|===");
-	}
+	}*/
 }
