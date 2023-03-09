@@ -80,7 +80,7 @@ public class SCMReadmeReader extends SCMModelElementAdapter {
 		try {
 			Collection<SCMFile> file = handler.find(elementProject, elementPath, filter);
 			if(file.isEmpty()) {
-				logger.severe(String.format("Couldn't find any Readme for element %s"
+				logger.severe(String.format("Couldn't find any Readme for element %s "
 						+ "(project is %s, path %s and readme should be %s)", 
 						StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
 			} else if(file.size()>1) {
