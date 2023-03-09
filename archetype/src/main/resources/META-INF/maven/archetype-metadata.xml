@@ -7,9 +7,6 @@
 	<requiredProperties>
 		<requiredProperty key="groupId" />
 		<requiredProperty key="artifactId" />
-		<requiredProperty key="aadarchi-version">
-			<defaultValue>UNDEFINED</defaultValue>
-		</requiredProperty>
 		<requiredProperty key="version">
 			<defaultValue>0.0.1-SNAPSHOT</defaultValue>
 		</requiredProperty>

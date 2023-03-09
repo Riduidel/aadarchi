@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>${groupId}</groupId>
-	<artifactId>${artifactId}</artifactId>
-	<version>${version}</version>
+	<groupId>\${groupId}</groupId>
+	<artifactId>\${artifactId}</artifactId>
+	<version>\${version}</version>
 	<properties>
 		<version.java>11</version.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -11,17 +11,11 @@
 		<aadarchi.main.class>org.ndx.aadarchi.base.ArchitectureDocumentationBuilder</aadarchi.main.class>
 
 		<!-- Defining a version that doesn't suck -->
-		<aadarchi-version>${aadarchi-version}</aadarchi-version>
+		<version.aadarchi>${project.version}</version.aadarchi>
 
 		<!-- If you want to use another kroki server, it is possible by deploying 
 			the kroki docker image -->
 		<kroki.server.url>https://kroki.io</kroki.server.url>
-		<!-- See latest version here: https://mvnrepository.com/artifact/org.asciidoctor/asciidoctorj-diagram -->
-		<version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
-		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
-		<version.jruby>9.2.9.0</version.jruby>
-		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
-		<version.revealjs>4.3.0</version.revealjs>
 	</properties>
 
 	<!-- tag::issues-url[] -->
@@ -29,15 +23,6 @@
 		<url>https://github.com/Riduidel/aadarchi/issues</url>
 	</issueManagement>
 	<!-- end::issues-url[] -->
-
-	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
-	See https://github.com/Riduidel/aadarchi/issues/159 for the weird protocol -->
-	<repositories>
-		<repository>
-			<id>mavengems</id>
-			<url>mavengem:https://rubygems.org</url>
-		</repository>
-	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -54,22 +39,22 @@
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>base</artifactId>
-			<version>${aadarchi-version}</version>
+			<version>\${version.aadarchi}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>github-scm-handler</artifactId>
-			<version>${aadarchi-version}</version>
+			<version>\${version.aadarchi}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>adr-tickets-extractor</artifactId>
-			<version>${aadarchi-version}</version>
+			<version>\${version.aadarchi}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>maven-metadata-inferer</artifactId>
-			<version>${aadarchi-version}</version>
+			<version>\${version.aadarchi}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -90,29 +75,6 @@
 			<version>2.0.1.Final</version>
 			<type>pom</type>
 		</dependency>
-		<!-- asciidoctor-kroki is added as POM dependency to make sure gem maven 
-			plugin downloads it -->
-		<dependency>
-			<groupId>rubygems</groupId>
-			<artifactId>asciidoctor-kroki</artifactId>
-			<version>${version.asciidoctor.kroki}</version>
-			<type>gem</type>
-			<!-- Avoid downloading gems included in AsciidoctorJ -->
-			<exclusions>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>asciidoctor</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>thread_safe</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>rubygems</groupId>
-					<artifactId>concurrent-ruby</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -128,7 +90,7 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.6.1</version>
 					<configuration>
-						<release>${maven.compiler.release}</release>
+						<release>\${maven.compiler.release}</release>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -143,44 +105,16 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<extensions>
-			<extension>
-				<!-- this allows us to download gems -->
-				<groupId>org.torquebox.mojo</groupId>
-				<artifactId>mavengem-wagon</artifactId>
-				<version>1.0.3</version>
-			</extension>
-		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>io.github.Riduidel.aadarchi</groupId>
 				<artifactId>aadarchi-maven-plugin</artifactId>
-				<version>${aadarchi-version}</version>
+				<version>\${version.aadarchi}</version>
 				<executions>
 					<execution>
 						<goals>
 							<goal>generate-model</goal>
 						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>de.saumya.mojo</groupId>
-				<artifactId>gem-maven-plugin</artifactId>
-				<version>1.1.8</version>
-				<configuration>
-					<jrubyVersion>${version.jruby}</jrubyVersion>
-					<gemHome>${project.build.directory}/gems</gemHome>
-					<gemPath>${project.build.directory}/gems</gemPath>
-				</configuration>
-				<executions>
-					<!-- Install required gems in target directory -->
-					<execution>
-						<id>install-gems</id>
-						<goals>
-							<goal>initialize</goal>
-						</goals>
-						<phase>initialize</phase>
 					</execution>
 				</executions>
 			</plugin>
@@ -200,7 +134,7 @@
 									<version>3.6</version>
 								</requireMavenVersion>
 								<requireJavaVersion>
-									<version>${version.java}</version>
+									<version>\${version.java}</version>
 								</requireJavaVersion>
 							</rules>
 						</configuration>
@@ -211,7 +145,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<release>${version.java}</release>
+					<release>\${version.java}</release>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -270,7 +204,7 @@
 								<configuration>
 									<artifacts>
 										<artifact>
-											<file>${project.build.directory}/asciidoc/docs/pdf/index.pdf</file>
+											<file>\${project.build.directory}/asciidoc/docs/pdf/index.pdf</file>
 											<type>pdf</type>
 											<classifier>documentation</classifier>
 										</artifact>
@@ -299,29 +233,6 @@
 					<exists>src/slides/asciidoc</exists>
 				</file>
 			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>rubygems</groupId>
-					<artifactId>asciidoctor-revealjs</artifactId>
-					<version>${version.asciidoctor.revealjs}</version>
-					<type>gem</type>
-					<!-- Avoid downloading gems included in AsciidoctorJ -->
-					<exclusions>
-						<exclusion>
-							<groupId>rubygems</groupId>
-							<artifactId>asciidoctor</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>rubygems</groupId>
-							<artifactId>thread_safe</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>rubygems</groupId>
-							<artifactId>concurrent-ruby</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-			</dependencies>
 			<build>
 				<plugins>
 					<plugin>

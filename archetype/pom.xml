@@ -4,16 +4,17 @@
 	<parent>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
-		<version>0.1.7-SNAPSHOT</version>
+		<version>0.1.11-SNAPSHOT</version>
 	</parent>
 	<artifactId>archetype</artifactId>
 	<packaging>maven-archetype</packaging>
-	
+
 	<name>Aadarchi : Archetype</name>
 	<description>Easily create configuration to document your project with this archetype</description>
 
 	<dependencies>
-		<!-- This dependency ensures the build order is the one we want (in other words it allows base to build before archetype) -->
+		<!-- This dependency ensures the build order is the one we want (in other words it allows
+		base to build before archetype) -->
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>base</artifactId>
@@ -23,6 +24,22 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>archetype-resources/pom.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>archetype-resources/pom.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.archetype</groupId>
@@ -50,6 +67,7 @@
 					<artifactId>maven-resources-plugin</artifactId>
 					<configuration>
 						<addDefaultExcludes>false</addDefaultExcludes>
+						<escapeString><![CDATA[\]]></escapeString>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -59,7 +77,8 @@
 		<profile>
 			<id>generate-asciidoc-templates</id>
 			<properties>
-				<pageUrl>http://www.codingthearchitecture.com/2016/05/31/agile_software_architecture_documentation.html</pageUrl>
+				<pageUrl>
+					http://www.codingthearchitecture.com/2016/05/31/agile_software_architecture_documentation.html</pageUrl>
 				<templatesDir>${asciidoc.source.docs.directory}</templatesDir>
 			</properties>
 			<build>
@@ -76,7 +95,8 @@
 								</goals>
 								<configuration>
 									<scripts>
-										<script>${pom.basedir}/src/build/groovy/download_templates.groovy</script>
+										<script>
+											${pom.basedir}/src/build/groovy/download_templates.groovy</script>
 									</scripts>
 								</configuration>
 							</execution>

@@ -15,54 +15,62 @@ on:
       releaseversion:
         description: 'Release version'
         required: true
-        default: '2.4.0'
+        default: '0.1.7'
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    # See https://stackoverflow.com/a/61421306/15619
+    env:
+      RELEASE_VERSION: ${{github.event.inputs.releaseversion}}
 
     steps:
       - run: echo "Will perform a maven release with public version ${{ github.event.inputs.releaseversion }}"
 
       - uses: actions/checkout@v3
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
         with:
-          distribution: adopt
-          java-version: 11
-          cache: 'maven'
-      - name: Do not forget to configure Maven Settings!
-        uses: s4u/maven-settings-action@v2.6.0
-        with:
-          override: false
-          servers: |
-            [
-            {
-                "id": "ossrh",
-                "username": "${{ secrets.SONATYPE_USERNAME }}",
-                "password": "${{ secrets.SONATYPE_PASSWORD }}"
-            }
-            ]
-      - name: Configure Git user for push
-        uses: oleksiyrudenko/gha-git-credentials@v2-latest
-        with:
-          global: true
-          actor: git
-          name: On release perform GitHub action
-          email: on_release_perform_maven_release@example.com
-          token: '${{ secrets.GITHUB_TOKEN }}'
+          ref: main
+          fetch-depth: '0'
       - name: Import GPG key
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v5
         with:
           gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+      - name: Setup git configuration
+        run: |
+          git config --global user.email "aadarchi-releaser-bot@users.noreply.github.com"
+          git config --global user.name "🤖 Aadarchi releaser bot"
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: maven
+          server-id: ossrh # Value of the distributionManagement/repository/id field of the pom.xml
+          server-username: ${{ secrets.OSS_SONATYPE_USERNAME }}
+          server-password: ${{ secrets.OSS_SONATYPE_PASSWORD }}
+      - name: Do not forget to configure Maven Settings!
+        uses: s4u/maven-settings-action@v2.8.0
+        with:
+          override: true
+          githubServer: true
+          servers: |
+            [{
+                "id": "ossrh",
+                "username": "${{ secrets.OSS_SONATYPE_USERNAME }}",
+                "password": "${{ secrets.OSS_SONATYPE_PASSWORD }}"
+            }]
+          properties: |
+            [
+              {"aadarchi.github.token": "${{ secrets.TOKEN_FOR_GITHUB }}" },
+              {"releaseVersion": "${{env.RELEASE_VERSION}}" },
+              {"gpg.passphrase": "${{secrets.MAVEN_GPG_PASSPHRASE}}" },
+              {"username": "git"},
+              {"password": "${{ secrets.GITHUB_TOKEN }}"}
+            ]
       - name: Build with Maven
-        run: mvn -B release:prepare release:perform -Prelease -DreleaseVersion=${{ github.event.inputs.releaseversion }} --file pom.xml -Daadarchi.github.token=$TOKEN_FOR_GITHUB
+        run: mvn --no-transfer-progress -B release:prepare release:perform -Prelease --file pom.xml
         env:
-          TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
-          MAVEN_USERNAME: ${{ secrets.OSS_SONATYPE_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSS_SONATYPE_PASSWORD }}
-          GITHUB_USERNAME: ${{ github.repository }}
-          GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
