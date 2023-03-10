@@ -66,7 +66,6 @@ public class SipocModelTest extends AbstractSipocTest {
 		// then
 		Assertions.assertThat(sipocModel.buildIncomingRelationships(centerContainer1)).isEqualTo(buildIncomingRelationship);
 	}
-
 	@Test public void can_create_multiple_output_list() {
 		// given
 		SipocModel sipocModel = new SipocModel();

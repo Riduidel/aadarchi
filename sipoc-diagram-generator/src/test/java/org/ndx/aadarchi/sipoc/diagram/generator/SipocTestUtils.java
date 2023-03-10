@@ -24,14 +24,17 @@ public class SipocTestUtils {
 		var outputContainer2 = system2.addContainer("Output container2", "Output container2");
 
 		inputContainer1.uses(centerContainer1, SipocTestUtils.CONNECTS_INPUT_TO_CENTER);
-		//inputContainer1.uses(centerContainer2, SipocTestUtils.CONNECTS_INPUT1_TO_CENTER);
-		inputContainer2.uses(centerContainer1, SipocTestUtils.CONNECTS_INPUT_TO_CENTER);
+		inputContainer2.uses(centerContainer1, SipocTestUtils.CONNECTS_INPUT2_TO_CENTER);
+		inputContainer1.uses(centerContainer1, SipocTestUtils.CONNECTS_INPUT_TO_CENTER);
 		centerContainer1.uses(outputContainer1, SipocTestUtils.CONNECTS_CENTER_TO_OUTPUT);
-		centerContainer1.uses(outputContainer2, SipocTestUtils.CONNECTS_CENTER_TO_OUTPUT);
+		centerContainer1.uses(outputContainer1, SipocTestUtils.CONNECTS_CENTER_TO_OUTPUT);
+		centerContainer1.uses(outputContainer2, SipocTestUtils.CONNECTS_CENTER_TO_OUTPUT2);
 
 		return workspace;
 	}
-
 	static final String CONNECTS_INPUT_TO_CENTER = "connects input to center";
+	static final String CONNECTS_INPUT2_TO_CENTER = "connects input2 to center";
 	static final String CONNECTS_CENTER_TO_OUTPUT = "connects center to output";
+	static final String CONNECTS_CENTER_TO_OUTPUT2 = "connects center to output2";
+
 }

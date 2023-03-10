@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.sipoc.diagram.generator;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -11,15 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.ArchitectureEnhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
-import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
 
 import static org.ndx.aadarchi.sipoc.diagram.generator.SipocTestUtils.*;
 
 class SipocEnhancerTest extends AbstractSipocTest {
     @Inject SipocEnhancer sipocEnhancer;
-
-	@Inject SipocEnhancer sipocEnhancer1;
 	@Inject ArchitectureEnhancer enhancer;
 	
 	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) FileObject basePath;
@@ -28,7 +26,7 @@ class SipocEnhancerTest extends AbstractSipocTest {
 	void test() {
     	// Given
 		// When
-		enhancer.enhance(workspace, Arrays.asList(sipocEnhancer));
+		enhancer.enhance(workspace, List.of(sipocEnhancer));
 		// Then
 		FileObject outputFolderForSystem = enhancer.getOutputBuilder()
 				.outputFor(AgileArchitectureSection.code, system, sipocEnhancer, OutputBuilder.Format.adoc);
@@ -56,7 +54,7 @@ class SipocEnhancerTest extends AbstractSipocTest {
 						"\n|===");
 	}
 
-	/*@Test
+	@Test
 	public void can_create_a_sipoc_table_with_multiple_inputs_and_outputs() {
 		//given
 		// What is this ?
@@ -67,11 +65,11 @@ class SipocEnhancerTest extends AbstractSipocTest {
 		//then
 		Assertions.assertThat(sipocEnhancerTable).isEqualTo(
 				"[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" +
-						"|"+ inputContainer1.getName() + " - " + inputContainer1.getDescription() + inputContainer2.getName() + " - " + inputContainer2.getDescription()+
-						"|" + CONNECTS_INPUT_TO_CENTER + CONNECTS_INPUT_TO_CENTER +
+						"|"+ inputContainer1.getName() + " - " + inputContainer1.getDescription() + "\n\n" + inputContainer2.getName() + " - " + inputContainer2.getDescription()+
+						"|" + CONNECTS_INPUT_TO_CENTER + "\n\n" + CONNECTS_INPUT2_TO_CENTER +
 						"|"+ centerContainer1.getDescription() +
-						"|" + CONNECTS_CENTER_TO_OUTPUT + CONNECTS_CENTER_TO_OUTPUT +
-						"|"+ outputContainer1.getDescription() + " - " + outputContainer1.getName() + outputContainer2.getName() + " - " + outputContainer2.getDescription() +
+						"|" + CONNECTS_CENTER_TO_OUTPUT + "\n\n" + CONNECTS_CENTER_TO_OUTPUT2 +
+						"|"+ outputContainer1.getDescription() + " - " + outputContainer1.getName() + "\n\n" + outputContainer2.getName() + " - " + outputContainer2.getDescription() +
 						"\n|===");
-	}*/
+	}
 }

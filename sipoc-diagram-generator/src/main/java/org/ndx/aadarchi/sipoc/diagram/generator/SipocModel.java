@@ -2,7 +2,6 @@ package org.ndx.aadarchi.sipoc.diagram.generator;
 
 import com.structurizr.model.Element;
 import com.structurizr.model.Relationship;
-
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -56,7 +55,7 @@ public class SipocModel {
 
 	public String generateSipocDiagram(Element element) {
         return  element.getModel().getRelationships().stream()
-                .map(s -> String.format("|%s|%s|%s|%s|%s",getString(buildIncomingRelationships(element)), getString(buildIncomingRelationshipDescriptions(element)),
+                .map(relationship -> String.format("|%s|%s|%s|%s|%s",getString(buildIncomingRelationships(element)), getString(buildIncomingRelationshipDescriptions(element)),
                         buildProcessDescriptions(element), getString(buildOutgoingRelationshipDescriptions(element)), getString(buildOutgoingRelationships(element))))
                 .distinct()
                 .collect(Collectors.joining("\n\n\n\n\n", "[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n", "\n|==="));
