@@ -63,13 +63,7 @@ public class ComponentDetector extends ModelElementAdapter {
 	public boolean startVisit(Container container) {
 		if (container.getProperties().containsKey(ModelElementKeys.JAVA_PACKAGES)) {
 			try {
-				switch (container.getName()) {
-				case "base":
-					startVisitBase(container, detectComponentsIn(container));
-					break;
-				default:
-//					detectComponentsIn(container);
-				}
+				detectComponentsIn(container);
 			} catch (Throwable t) {
 				logger.log(Level.WARNING, String.format("Unable to detect components in %s", container));
 			}
@@ -95,16 +89,6 @@ public class ComponentDetector extends ModelElementAdapter {
 		logger.info(String.format("Detected %d components of %s.", container.getComponents().size(),
 				container.getName()));
 		return componentFinder;
-	}
-
-	private void startVisitBase(Container container, ComponentFinder componentFinder) {
-		// Now we have all components, let's wire them
-		Component architectureEnhancer = container.getComponentWithName(ArchitectureEnhancer.class.getSimpleName());
-		Collection<Component> enhancers = findComponentsImplementing(container, componentFinder.getTypeRepository(),
-				Enhancer.class);
-		for (Component enhancer : enhancers) {
-			architectureEnhancer.uses(enhancer, "enhances documentation");
-		}
 	}
 
 	private Collection<Component> findComponentsImplementing(Container container, TypeRepository typeRepository,
