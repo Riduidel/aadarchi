@@ -77,10 +77,6 @@ public class MavenPomReader {
 		} else if (element.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM)) {
 			String pomPath = element.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM);
 			returned = processPomAtPath(element, pomPath);
-		} else if (element.getProperties().containsKey(ModelElementKeys.Scm.PROJECT)) {
-			// If there is some kind of SCM path, and a configured SCM provider,
-			// let's check if we can find some pom.xml
-			returned = processPomAtSCM(element);
 		} else if (element.getProperties().containsKey(ModelElementKeys.ConfigProperties.BasePath.NAME)) {
 			File basePath = new File(element.getProperties().get(ModelElementKeys.ConfigProperties.BasePath.NAME));
 			File potentialPom = new File(basePath, "pom.xml");
@@ -92,6 +88,10 @@ public class MavenPomReader {
 							String.format("Unable to convert file %s to url", potentialPom.getAbsolutePath()), e);
 				}
 			}
+		} else if (element.getProperties().containsKey(ModelElementKeys.Scm.PROJECT)) {
+			// If there is some kind of SCM path, and a configured SCM provider,
+			// let's check if we can find some pom.xml
+			returned = processPomAtSCM(element);
 		}
 		returned.ifPresent(mavenProject -> mavenPomDecorator.get().decorate(element, mavenProject));
 		return returned;

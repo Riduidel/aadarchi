@@ -1,46 +1,23 @@
 package org.ndx.aadarchi.inferer.maven;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.function.BiFunction;
-import java.util.logging.Level;
+import java.util.Set;
+import java.util.Stack;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.ndx.aadarchi.base.ModelEnhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
-import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
-import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
-import org.ndx.aadarchi.base.utils.FileContentCache;
-import org.ndx.aadarchi.base.utils.FileResolver;
 import org.ndx.aadarchi.inferer.maven.enhancers.ComponentEnhancer;
 import org.ndx.aadarchi.inferer.maven.enhancers.ContainerEnhancer;
 import org.ndx.aadarchi.inferer.maven.enhancers.SoftwareSystemEnhancer;
 
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
-import com.structurizr.model.Element;
 import com.structurizr.model.SoftwareSystem;
 import com.structurizr.model.StaticStructureElement;
 

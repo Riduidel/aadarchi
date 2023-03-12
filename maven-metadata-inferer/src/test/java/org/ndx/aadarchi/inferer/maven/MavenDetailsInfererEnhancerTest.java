@@ -7,6 +7,7 @@ import java.util.Arrays;
 import javax.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
@@ -35,7 +36,7 @@ public class MavenDetailsInfererEnhancerTest {
 	
 	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) FileObject basePath;
 
-    @Test public void can_visit_a_software_system_having_an_associated_pom() {
+    @Test public void can_visit_a_software_system_having_an_associated_pom() throws FileSystemException {
     	// Given
     	var w = new Workspace(getClass().getName(), "a test workspace");
     	SoftwareSystem system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
@@ -66,7 +67,13 @@ public class MavenDetailsInfererEnhancerTest {
 					ModelElementKeys.JAVA_SOURCES,
 					ModelElementKeys.JAVA_PACKAGES,
 					ModelElementKeys.ISSUE_MANAGER
-					);
-			
+					)
+			.containsEntry(ModelElementKeys.JAVA_SOURCES,
+					basePath.resolveFile("maven-metadata-inferer/src/main/java").getURL().toString()
+					)
+			.extracting(properties -> properties.get(ModelElementKeys.JAVA_PACKAGES))
+			.asInstanceOf(InstanceOfAssertFactories.STRING)
+			.contains("org.ndx.aadarchi.inferer.maven")
+			;
     }
 }
