@@ -28,7 +28,7 @@ public class EnhancerListerTest {
                 "|===\n" +
                 "|Priority|Enhancer\n" +
                 "\n" +
-                "|0|EmptyEnhancer\n" +
+                "|0|`EmptyEnhancer`\n" +
                 "|===");
     }
 

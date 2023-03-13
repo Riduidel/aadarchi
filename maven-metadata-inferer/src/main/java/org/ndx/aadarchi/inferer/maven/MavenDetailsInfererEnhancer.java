@@ -2,6 +2,7 @@ package org.ndx.aadarchi.inferer.maven;
 
 import java.util.Set;
 import java.util.Stack;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -54,8 +55,11 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	public boolean startVisit(SoftwareSystem softwareSystem) {
 		stack.push(softwareSystem.getContainers());
 		int containersNumber = stack.get(0).size();
-		logger.info(String.format("Starting visit of system %s, there are %d containers", softwareSystem, containersNumber));
-		logger.fine(String.format("Starting visit of system %s, , there are these containers : %s ", softwareSystem, softwareSystem.getContainers()));
+		if(logger.isLoggable(Level.FINE)) {
+			logger.fine(String.format("Starting visit of system %s, , there are these containers : %s ", softwareSystem, softwareSystem.getContainers()));
+		} else if(logger.isLoggable(Level.INFO)) {
+			logger.info(String.format("Starting visit of system %s, there are %d containers", softwareSystem, containersNumber));
+		}
 		new SoftwareSystemEnhancer(mavenPomReader, softwareSystem).startEnhance(mavenPomReader::processModelElement);
 		return super.startVisit(softwareSystem);
 	}
@@ -69,8 +73,11 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		Set<? extends StaticStructureElement> newContainers = softwareSystem.getContainers().stream().filter(element -> !initial.contains(element))
 				.collect(Collectors.toSet());
 		if( actualContainersNumber > initialContainersNumber) {
-			logger.info(String.format("Ending visit of system %s, there are %d containers, including %d new containers", softwareSystem, actualContainersNumber, newContainersNumber));
-			logger.fine(String.format("Ending visit of system %s, there are these new containers : %s", softwareSystem, newContainers ));
+			if(logger.isLoggable(Level.FINE)) {
+				logger.fine(String.format("Ending visit of system %s, there are these new containers : %s", softwareSystem, newContainers ));
+			} else if(logger.isLoggable(Level.INFO)) {
+				logger.info(String.format("Ending visit of system %s, there are %d containers, including %d new containers", softwareSystem, actualContainersNumber, newContainersNumber));
+			}
 		} else
 			logger.info("At the end, there are no new containers.");
 		new SoftwareSystemEnhancer(mavenPomReader, softwareSystem).endEnhance(mavenPomReader::processModelElement);

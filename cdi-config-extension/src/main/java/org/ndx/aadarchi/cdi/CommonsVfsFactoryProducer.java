@@ -1,14 +1,22 @@
 package org.ndx.aadarchi.cdi;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
-import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.VFS;
+import org.apache.commons.vfs2.impl.DefaultFileSystemManager;
 
 public class CommonsVfsFactoryProducer {
-	@Produces @Singleton public FileSystemManager produceCommonsVfsFactory() throws FileSystemException {
-		return VFS.getManager();
+	@Produces @Singleton public FileSystemManager produceCommonsVfsFactory() throws IOException {
+		FileSystemManager fileSystemManager = VFS.getManager();
+		if (fileSystemManager instanceof DefaultFileSystemManager) {
+			DefaultFileSystemManager configurable = (DefaultFileSystemManager) fileSystemManager;
+			configurable.setBaseFile(new File(".").getCanonicalFile());
+		}
+		return fileSystemManager;
 	}
 }

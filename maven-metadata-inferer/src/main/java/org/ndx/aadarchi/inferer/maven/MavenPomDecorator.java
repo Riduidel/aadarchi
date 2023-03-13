@@ -104,7 +104,6 @@ public class MavenPomDecorator {
 					.map(ThrowingFunction.unchecked(fileSystemManager::resolveFile))
 					.filter(ThrowingPredicate.unchecked(FileObject::exists))
 					.map(ThrowingFunction.unchecked(this::findPackagesInPath))
-					.flatMap(Collection::stream)
 					.collect(Collectors.joining(";"));
 				if(!packages.isEmpty())
 					element.addProperty(ModelElementKeys.JAVA_PACKAGES, packages);
@@ -158,18 +157,24 @@ public class MavenPomDecorator {
 		});
 	}
 	
-	public Collection<String> findPackagesInPath(FileObject current) throws FileSystemException {
-		FileObject[] children = current.findFiles(new FileTypeSelector(FileType.FILE));
-		return Stream.of(children)
-			.map(ThrowingFunction.unchecked(FileObject::getParent))
-			.distinct()
-			.map(FileObject::getPath)
-			.map(folder -> current.getPath().relativize(folder).toString())
-			.map(folder -> folder.replace('/', '.').replace('\\', '.'))
-			.sorted()
-			.collect(Collectors.toList());
+	public String findPackagesInPath(FileObject current) throws FileSystemException {
+		return findFirstPackageLevelInPath(current, current);
 	}
 
+
+	private String findFirstPackageLevelInPath(FileObject root, FileObject current) throws FileSystemException {
+		FileObject[] children = current.getChildren();
+		if(children.length==1) {
+			FileObject child = children[0];
+			if(child.isFolder()) {
+				return findFirstPackageLevelInPath(root, child);
+			}
+		}
+		// In any other case,  we assume we have found the first package folder
+		return root.getPath().relativize(current.getPath())
+			.toString()
+			.replace('/', '.').replace('\\', '.');
+	}
 
 	protected static String technologyWithVersionFromProperty(MavenProject mavenProject, String technology, String... propertyNames) {
 		return technology + Stream.of(propertyNames)

@@ -24,6 +24,7 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePat
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.UsesComponent;
+import com.structurizr.model.Container;
 import com.structurizr.model.SoftwareSystem;
 
 @EnableWeld
@@ -54,8 +55,13 @@ public class MavenDetailsInfererEnhancerTest {
 					);
 		// There are containers in system
 		Assertions.assertThat(system.getContainers()).isNotEmpty();
-		// There is even a contain
-		Assertions.assertThat(system.getContainerWithName("maven-metadata-inferer"))
+		Container mavenMetadataInferer = system.getContainerWithName("maven-metadata-inferer");
+		Container base = system.getContainerWithName("base");
+		Assertions.assertThat(mavenMetadataInferer.hasEfferentRelationshipWith(base))
+			.isTrue();
+		// Those containers have dependencies
+		// And the projects all have thei informations filled
+		Assertions.assertThat(mavenMetadataInferer)
 			.isNotNull()
 			.extracting(container -> container.getProperties())
 			.asInstanceOf(InstanceOfAssertFactories.MAP)
