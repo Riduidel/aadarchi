@@ -14,7 +14,6 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
  * @author Nicolas
  *
  */
-@com.structurizr.annotation.Component(technology = "Java, CDI")
 @ApplicationScoped
 public class IconProvider {
 	private boolean enabled;

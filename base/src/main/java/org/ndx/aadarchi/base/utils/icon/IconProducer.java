@@ -15,7 +15,6 @@ import com.structurizr.annotation.UsesComponent;
  */
 @ApplicationScoped
 public class IconProducer {
-	@UsesComponent(description = "Load icons")
 	@Inject IconProvider iconProvider;
 	
 	@Produces @FontIcon String createFontIcon(InjectionPoint injectionPoint) {
