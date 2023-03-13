@@ -5,9 +5,8 @@ workspace "aadarchi-documentation-system" {
 		aadarchi = softwareSystem "Aadarchi" {
 			properties {
 				"aadarchi.tickets.project" "aadarchi-documentation-system"
-				"aadarchi.issue.manager" "https://github.com/Riduidel/aadarchi-documentation-system"
 				"aadarchi.tickets.adr.label" "decision"
-				"aadarchi.maven.pom" "../pom.xml"
+				"aadarchi.maven.pom" "pom.xml"
 			}
 			maven = container "maven" "The maven build engine" "java, maven"
 			aadarchi_maven_plugin = container "aadarchi-maven-plugin" "" "java, maven-plugin"{
