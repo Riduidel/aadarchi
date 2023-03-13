@@ -6,6 +6,8 @@ import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 
+import com.structurizr.annotation.UsesComponent;
+
 /**
  * This icon producer uses the icon provider to generate the icon string when possible
  * @author Nicolas
@@ -13,6 +15,7 @@ import javax.inject.Inject;
  */
 @ApplicationScoped
 public class IconProducer {
+	@UsesComponent(description = "Load icons")
 	@Inject IconProvider iconProvider;
 	
 	@Produces @FontIcon String createFontIcon(InjectionPoint injectionPoint) {
