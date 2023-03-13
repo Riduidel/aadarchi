@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-import org.ndx.aadarchi.base.ArchitectureEnhancer;
-import org.ndx.aadarchi.base.Enhancer;
+import org.apache.commons.vfs2.FileSystemManager;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
-import org.ndx.aadarchi.base.utils.FileResolver;
 
+import com.pivovarit.function.ThrowingFunction;
 import com.structurizr.analysis.ComponentFinder;
 import com.structurizr.analysis.ComponentFinderStrategy;
 import com.structurizr.analysis.SourceCodeComponentFinderStrategy;
@@ -38,7 +38,7 @@ public class ComponentDetector extends ModelElementAdapter {
 	@Inject
 	Logger logger;
 	@Inject
-	FileResolver fileResolver;
+	FileSystemManager fileSystemManager;
 
 	@Override
 	public boolean isParallel() {
@@ -63,13 +63,7 @@ public class ComponentDetector extends ModelElementAdapter {
 	public boolean startVisit(Container container) {
 		if (container.getProperties().containsKey(ModelElementKeys.JAVA_PACKAGES)) {
 			try {
-				switch (container.getName()) {
-				case "base":
-					startVisitBase(container, detectComponentsIn(container));
-					break;
-				default:
-//					detectComponentsIn(container);
-				}
+				detectComponentsIn(container);
 			} catch (Throwable t) {
 				logger.log(Level.WARNING, String.format("Unable to detect components in %s", container));
 			}
@@ -97,16 +91,6 @@ public class ComponentDetector extends ModelElementAdapter {
 		return componentFinder;
 	}
 
-	private void startVisitBase(Container container, ComponentFinder componentFinder) {
-		// Now we have all components, let's wire them
-		Component architectureEnhancer = container.getComponentWithName(ArchitectureEnhancer.class.getSimpleName());
-		Collection<Component> enhancers = findComponentsImplementing(container, componentFinder.getTypeRepository(),
-				Enhancer.class);
-		for (Component enhancer : enhancers) {
-			architectureEnhancer.uses(enhancer, "enhances documentation");
-		}
-	}
-
 	private Collection<Component> findComponentsImplementing(Container container, TypeRepository typeRepository,
 			Class<?> implementedInterface) {
 		List<Component> returned = typeRepository.getAllTypes().stream()
@@ -131,9 +115,11 @@ public class ComponentDetector extends ModelElementAdapter {
 		List<ComponentFinderStrategy> returned = new LinkedList<>();
 		returned.add(new StructurizrAnnotationsComponentFinderStrategy());
 		if (container.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES)) {
-			Path sourceFolderAsPath = fileResolver
-					.fileAsUrltoPath(container.getProperties().get(ModelElementKeys.JAVA_SOURCES)).getPath();
-			returned.add(new SourceCodeComponentFinderStrategy(sourceFolderAsPath.toFile()));
+			Stream.of(container.getProperties().get(ModelElementKeys.JAVA_SOURCES).split(";"))
+				.map(ThrowingFunction.unchecked(fileSystemManager::resolveFile))
+				.map(folder -> folder.getPath().toFile())
+				.map(SourceCodeComponentFinderStrategy::new)
+				.forEach(returned::add);
 		}
 		return returned.toArray(new ComponentFinderStrategy[returned.size()]);
 	}

@@ -147,14 +147,17 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 						"Maven module %s profile %s declares the modules %s, which will not be handled here. Is it normal?\n"
 								+ "If it is not normal, add the profile in the maven property \"AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES\"",
 						mavenProject, profile.getId(), profile.getModules())));
-		return modules.stream().map(module -> {
-				MavenProject modulePom = mavenPomReader.readMavenProject(String.format("%s/%s/pom.xml", pomDir, module));
-				modulePom.getProperties().put(ModelElementKeys.Scm.PATH, 
-						parentScmDir.isBlank() ? module : parentScmDir + "/" + module);
-				return modulePom;
-			})
+		return modules.stream().map(module -> readSubModulePom(mavenPomReader, parentScmDir, pomDir, module))
 			.flatMap(module -> module.getPackaging().equals("pom") ? loadAllSubElements(module, mavenPomReader)
 					: Optional.of(module).stream());
+	}
+
+	private MavenProject readSubModulePom(MavenPomReader mavenPomReader, String parentScmDir, final String pomDir,
+			String module) {
+		MavenProject modulePom = mavenPomReader.readMavenProject(String.format("%s/%s/pom.xml", pomDir, module));
+		modulePom.getProperties().put(ModelElementKeys.Scm.PATH, 
+				parentScmDir.isBlank() ? module : parentScmDir + "/" + module);
+		return modulePom;
 	}
 
 	private Optional<Profile> getProfileNamed(MavenProject project, String profileName) {

@@ -28,7 +28,6 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.DiagramsDir;
-import org.ndx.aadarchi.base.utils.FileResolver;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 import org.ndx.aadarchi.sequence.generator.SequenceGenerator;
 import org.ndx.aadarchi.sequence.generator.javaparser.adapter.CallGraphModel;
@@ -48,8 +47,6 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	@Inject 
 	@ConfigProperty(name = DiagramsDir.NAME, defaultValue = DiagramsDir.VALUE)
 	FileObject destination;
-	
-	@Inject FileResolver fileResolver;
 	
 	@Inject FileSystemManager fsManager;
 
@@ -113,7 +110,7 @@ public class SequenceDiagramVisitor extends ModelElementAdapter {
 	 */
 	private ProjectRoot createProjectRootFor(Container container) {
 		mapPathsToContainers(getAssociatedContainersOf(container));
-		ProjectRoot projectRoot = new ProjectRootBuilder(fileResolver, pathsToContainers)
+		ProjectRoot projectRoot = new ProjectRootBuilder(fsManager, pathsToContainers)
 				.build(container);
 		return projectRoot;
 	}
