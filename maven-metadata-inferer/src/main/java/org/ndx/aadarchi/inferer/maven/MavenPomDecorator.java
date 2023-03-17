@@ -1,7 +1,5 @@
 package org.ndx.aadarchi.inferer.maven;
 
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -22,14 +20,17 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import org.apache.commons.vfs2.AllFileSelector;
+import org.apache.commons.vfs2.FileDepthSelector;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemManager;
+import org.apache.commons.vfs2.FileType;
+import org.apache.commons.vfs2.FileTypeSelector;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.IssueManagement;
 import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
-import org.ndx.aadarchi.base.utils.FileResolver;
 
 import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.ThrowingPredicate;
@@ -39,7 +40,8 @@ import com.structurizr.model.Element;
 @ApplicationScoped
 public class MavenPomDecorator {
 	private static final Logger logger = Logger.getLogger(MavenPomDecorator.class.getName());
-	@Inject FileResolver fileResolver;
+	@Inject
+	FileSystemManager fileSystemManager;
 
 	public static void decorateRecursively(MavenProject project, BiFunction<MavenProject, List<MavenProject>, Boolean> consumer) {
 		decorateRecursively(project, new LinkedList<MavenProject>(), consumer);
@@ -98,12 +100,10 @@ public class MavenPomDecorator {
 		if(!element.getProperties().containsKey(ModelElementKeys.JAVA_PACKAGES)) {
 			if(element.getProperties().containsKey(ModelElementKeys.JAVA_SOURCES)) {
 				String paths = element.getProperties().get(ModelElementKeys.JAVA_SOURCES);
-				String packages = Arrays.asList(paths.split(";")).stream()
-					.map(fileResolver::fileAsUrltoPath)
+				String packages = Stream.of(paths.split(";"))
+					.map(ThrowingFunction.unchecked(fileSystemManager::resolveFile))
 					.filter(ThrowingPredicate.unchecked(FileObject::exists))
 					.map(ThrowingFunction.unchecked(this::findPackagesInPath))
-					.flatMap(Collection::stream)
-					.map(file -> file.getName().getPath())
 					.collect(Collectors.joining(";"));
 				if(!packages.isEmpty())
 					element.addProperty(ModelElementKeys.JAVA_PACKAGES, packages);
@@ -116,10 +116,9 @@ public class MavenPomDecorator {
 		List<String> mavenSourceRoots = Optional.ofNullable((List<String>) mavenProject.getCompileSourceRoots())
 				.stream().filter(list -> !list.isEmpty()).findAny().orElse(Arrays.asList("src/main/java"));
 		String sourcePaths = mavenSourceRoots.stream().map(relativeFolder -> mavenPomUrl + "/" + relativeFolder)
-				.filter(relativeFolder -> relativeFolder.startsWith("file"))
-				.map(ThrowingFunction.unchecked(relativeFolder -> Paths.get(new URL(relativeFolder).toURI()).normalize()))
-				.filter(relativePath -> relativePath.toFile().exists())
-				.map(relativeFolder -> relativeFolder.toString())
+				.map(ThrowingFunction.unchecked(relativeFolder -> fileSystemManager.resolveFile(relativeFolder)))
+				.filter(ThrowingPredicate.unchecked(relativePath -> relativePath.exists()))
+				.map(ThrowingFunction.unchecked(relativeFolder -> relativeFolder.getURL().toString()))
 				.collect(Collectors.joining(";"));
 		if (!sourcePaths.isEmpty())
 			element.addProperty(ModelElementKeys.JAVA_SOURCES, sourcePaths);
@@ -158,26 +157,24 @@ public class MavenPomDecorator {
 		});
 	}
 	
-	public Collection<FileObject> findPackagesInPath(FileObject current) throws FileSystemException {
-		FileObject[] childrenArray = current.findFiles(new AllFileSelector());
-		if(childrenArray==null)
-			// There are no children here, so consider this file as terminal
-			return Arrays.asList(current);
-		List<FileObject> childrenList = Arrays.asList(childrenArray);
-		// If all elements are folders, then we can consider they're all packages and continue exploration
-		// Otherwise, this folder is a terminal package and we can return it "safely"
-		if(childrenList.stream().allMatch(ThrowingPredicate.unchecked(FileObject::isFolder))) {
-			return childrenList.stream()
-					.map(ThrowingFunction.unchecked(this::findPackagesInPath))
-					.flatMap(descendantList -> descendantList.stream())
-					.collect(Collectors.toList());
-		} else {
-			// There is at least one non-file in package (or list is empty)
-			// So this folder is terminal
-			return Arrays.asList(current);
-		}
+	public String findPackagesInPath(FileObject current) throws FileSystemException {
+		return findFirstPackageLevelInPath(current, current);
 	}
 
+
+	private String findFirstPackageLevelInPath(FileObject root, FileObject current) throws FileSystemException {
+		FileObject[] children = current.getChildren();
+		if(children.length==1) {
+			FileObject child = children[0];
+			if(child.isFolder()) {
+				return findFirstPackageLevelInPath(root, child);
+			}
+		}
+		// In any other case,  we assume we have found the first package folder
+		return root.getPath().relativize(current.getPath())
+			.toString()
+			.replace('/', '.').replace('\\', '.');
+	}
 
 	protected static String technologyWithVersionFromProperty(MavenProject mavenProject, String technology, String... propertyNames) {
 		return technology + Stream.of(propertyNames)

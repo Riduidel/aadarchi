@@ -7,6 +7,7 @@ import java.util.Arrays;
 import javax.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
@@ -23,6 +24,7 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePat
 
 import com.structurizr.Workspace;
 import com.structurizr.annotation.UsesComponent;
+import com.structurizr.model.Container;
 import com.structurizr.model.SoftwareSystem;
 
 @EnableWeld
@@ -35,7 +37,7 @@ public class MavenDetailsInfererEnhancerTest {
 	
 	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) FileObject basePath;
 
-    @Test public void can_visit_a_software_system_having_an_associated_pom() {
+    @Test public void can_visit_a_software_system_having_an_associated_pom() throws FileSystemException {
     	// Given
     	var w = new Workspace(getClass().getName(), "a test workspace");
     	SoftwareSystem system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
@@ -53,8 +55,13 @@ public class MavenDetailsInfererEnhancerTest {
 					);
 		// There are containers in system
 		Assertions.assertThat(system.getContainers()).isNotEmpty();
-		// There is even a contain
-		Assertions.assertThat(system.getContainerWithName("maven-metadata-inferer"))
+		Container mavenMetadataInferer = system.getContainerWithName("maven-metadata-inferer");
+		Container base = system.getContainerWithName("base");
+		Assertions.assertThat(mavenMetadataInferer.hasEfferentRelationshipWith(base))
+			.isTrue();
+		// Those containers have dependencies
+		// And the projects all have thei informations filled
+		Assertions.assertThat(mavenMetadataInferer)
 			.isNotNull()
 			.extracting(container -> container.getProperties())
 			.asInstanceOf(InstanceOfAssertFactories.MAP)
@@ -66,7 +73,13 @@ public class MavenDetailsInfererEnhancerTest {
 					ModelElementKeys.JAVA_SOURCES,
 					ModelElementKeys.JAVA_PACKAGES,
 					ModelElementKeys.ISSUE_MANAGER
-					);
-			
+					)
+			.containsEntry(ModelElementKeys.JAVA_SOURCES,
+					basePath.resolveFile("maven-metadata-inferer/src/main/java").getURL().toString()
+					)
+			.extracting(properties -> properties.get(ModelElementKeys.JAVA_PACKAGES))
+			.asInstanceOf(InstanceOfAssertFactories.STRING)
+			.contains("org.ndx.aadarchi.inferer.maven")
+			;
     }
 }
