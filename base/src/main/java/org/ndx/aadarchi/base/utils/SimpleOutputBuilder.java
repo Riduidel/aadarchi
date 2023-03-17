@@ -76,6 +76,8 @@ public class SimpleOutputBuilder implements OutputBuilder {
 			HandledFormat format, CharSequence text, boolean append) {
 		FileObject returned = outputFor(section, element, enhancer, format);
 		try {
+			if(!append)
+				returned.delete();
 			returned.getParent().createFolder();
 			try(OutputStream outputStream = returned.getContent().getOutputStream()) {
 				IOUtils.write(format.createCommentForEnhancer(enhancer), outputStream, format.encoding());
@@ -94,7 +96,7 @@ public class SimpleOutputBuilder implements OutputBuilder {
 
 	@Override
 	public FileObject writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer,
-			HandledFormat format, CharSequence text) {
+									HandledFormat format, CharSequence text) {
 		return writeToOutput(section, element, enhancer, format, text, false);
 	}
 

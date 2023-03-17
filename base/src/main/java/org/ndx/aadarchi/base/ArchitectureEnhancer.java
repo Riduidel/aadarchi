@@ -85,6 +85,10 @@ public class ArchitectureEnhancer {
 		outputBuilder = new SimpleOutputBuilder(enhancementsBase);
 	}
 	
+	public OutputBuilder getOutputBuilder() {
+		return outputBuilder;
+	}
+
 	private boolean filterEnhancer(Enhancer enhancer) {
 		String enhancerClassName = enhancer.getClass().getName();
 		if(disabledEnhancers.contains(enhancerClassName)) {
