@@ -29,7 +29,7 @@ class SipocEnhancerTest extends AbstractSipocTest {
 		enhancer.enhance(workspace, List.of(sipocEnhancer));
 		// Then
 		FileObject outputFolderForSystem = enhancer.getOutputBuilder()
-				.outputFor(AgileArchitectureSection.code, system, sipocEnhancer, OutputBuilder.Format.adoc);
+				.outputFor(AgileArchitectureSection.code, centerContainer, sipocEnhancer, OutputBuilder.Format.adoc);
 		Assertions.assertThat(outputFolderForSystem.getPath())
 			.isNotEmptyFile();
 	}
