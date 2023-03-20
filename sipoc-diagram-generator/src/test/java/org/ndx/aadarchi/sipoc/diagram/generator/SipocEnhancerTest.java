@@ -38,38 +38,46 @@ class SipocEnhancerTest extends AbstractSipocTest {
 	@Test
 	public void can_create_a_sipoc_table() {
 		//given
-		// What is this ?
-		//when
 		SipocEnhancer sipocEnhancer = new SipocEnhancer();
+		//when
 		String sipocEnhancerTable = sipocEnhancer.generateSipocDiagram(centerContainer);
-		sipocEnhancer.generateSipocDiagram(centerContainer);
 		//then
 		Assertions.assertThat(sipocEnhancerTable).isEqualTo(
 				"[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" +
-						"|"+ inputContainer.getName() + " - " + inputContainer.getDescription() +
+						"| *"+ inputContainer.getName() + "* " + inputContainer.getDescription() +
 						"|" + CONNECTS_INPUT_TO_CENTER +
 						"|"+ centerContainer.getDescription() +
 						"|" + CONNECTS_CENTER_TO_OUTPUT +
-						"|"+ outputContainer.getDescription() + " - " + outputContainer.getName() +
+						"| *"+ outputContainer.getDescription() + "* " + outputContainer.getName() +
 						"\n|===");
 	}
 
 	@Test
 	public void can_create_a_sipoc_table_with_multiple_inputs_and_outputs() {
 		//given
-		// What is this ?
-		//when
 		SipocEnhancer sipocEnhancer = new SipocEnhancer();
+		//when
 		String sipocEnhancerTable = sipocEnhancer.generateSipocDiagram(centerContainer1);
-		sipocEnhancer.generateSipocDiagram(centerContainer1);
 		//then
 		Assertions.assertThat(sipocEnhancerTable).isEqualTo(
 				"[cols=\"1,1,1,1,1\"]\n" + "|===\n|Incoming|Input|Process|Output|Outgoing\n\n\n\n\n" +
-						"|"+ inputContainer1.getName() + " - " + inputContainer1.getDescription() + "\n\n" + inputContainer2.getName() + " - " + inputContainer2.getDescription()+
+						"| *"+ inputContainer1.getName() + "* " + inputContainer1.getDescription() + "\n\n" + 
+						" *" + inputContainer2.getName() + "* " + inputContainer2.getDescription()+
 						"|" + CONNECTS_INPUT_TO_CENTER + "\n\n" + CONNECTS_INPUT2_TO_CENTER +
 						"|"+ centerContainer1.getDescription() +
 						"|" + CONNECTS_CENTER_TO_OUTPUT + "\n\n" + CONNECTS_CENTER_TO_OUTPUT2 +
-						"|"+ outputContainer1.getDescription() + " - " + outputContainer1.getName() + "\n\n" + outputContainer2.getName() + " - " + outputContainer2.getDescription() +
+						"| *"+ outputContainer1.getDescription() + "* " + outputContainer1.getName() + "\n\n" +
+						" *" + outputContainer2.getName() + "* " + outputContainer2.getDescription() +
 						"\n|===");
+	}
+	
+	@Test
+	public void do_not_generate_sipoc_table_when_there_are_no_connections() {
+		// Given
+		SipocEnhancer sipocEnhancer = new SipocEnhancer();
+		// When
+		String sipocTableForSystem = sipocEnhancer.generateSipocDiagram(system);
+		// Then
+		Assertions.assertThat(sipocTableForSystem).isEmpty();
 	}
 }

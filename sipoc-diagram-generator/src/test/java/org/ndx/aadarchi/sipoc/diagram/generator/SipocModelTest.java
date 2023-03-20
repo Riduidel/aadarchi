@@ -13,7 +13,7 @@ public class SipocModelTest extends AbstractSipocTest {
 		// given
 		SipocModel sipocModel = new SipocModel();
 		Set<String> buildIncomingRelationship = Set.of(
-				String.format("%s - %s", inputContainer.getName(), inputContainer.getDescription()));
+				String.format(" *%s* %s", inputContainer.getName(), inputContainer.getDescription()));
 		// when
 		// then
 		Assertions.assertThat(sipocModel.buildIncomingRelationships(centerContainer)).isEqualTo(buildIncomingRelationship);
@@ -52,7 +52,7 @@ public class SipocModelTest extends AbstractSipocTest {
 		// when
 		// then
 		Set<String> buildOutgoingRelationships = Set.of(
-				String.format("%s - %s", outputContainer.getName(), outputContainer.getDescription()));
+				String.format(" *%s* %s", outputContainer.getName(), outputContainer.getDescription()));
 		Assertions.assertThat(sipocModel.buildOutgoingRelationships(centerContainer)).isEqualTo(buildOutgoingRelationships);
     }
 
@@ -60,8 +60,8 @@ public class SipocModelTest extends AbstractSipocTest {
 		// given
 		SipocModel sipocModel = new SipocModel();
 		Set<String> buildIncomingRelationship = Set.of(
-				String.format("%s - %s", inputContainer1.getName(), inputContainer1.getDescription()),
-				String.format("%s - %s", inputContainer2.getName(), inputContainer2.getDescription()));
+				String.format(" *%s* %s", inputContainer1.getName(), inputContainer1.getDescription()),
+				String.format(" *%s* %s", inputContainer2.getName(), inputContainer2.getDescription()));
 		// when
 		// then
 		Assertions.assertThat(sipocModel.buildIncomingRelationships(centerContainer1)).isEqualTo(buildIncomingRelationship);
@@ -70,8 +70,8 @@ public class SipocModelTest extends AbstractSipocTest {
 		// given
 		SipocModel sipocModel = new SipocModel();
 		Set<String> buildOutgoingRelationship = Set.of(
-				String.format("%s - %s", outputContainer1.getName(), outputContainer1.getDescription()),
-				String.format("%s - %s", outputContainer2.getName(), outputContainer2.getDescription()));
+				String.format(" *%s* %s", outputContainer1.getName(), outputContainer1.getDescription()),
+				String.format(" *%s* %s", outputContainer2.getName(), outputContainer2.getDescription()));
 		// when
 		// then
 		Assertions.assertThat(sipocModel.buildOutgoingRelationships(centerContainer1)).isEqualTo(buildOutgoingRelationship);
