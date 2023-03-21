@@ -480,10 +480,10 @@
 								</goals>
 								<configuration>
 									<replacementType>file-contents</replacementType>
-									<baseDir></baseDir>
-									<findRegex>[0-9]+.[0-9]+.[0-9]+</findRegex>
+									<baseDir>${project.basedir}</baseDir>
+									<findRegex>[0-9]+.[0-9]+.[0-9]+(-SNAPSHOT)?</findRegex>
 									<replaceValue>${project.version}</replaceValue>
-									<recursive>true</recursive>
+									<recursive>false</recursive>
 									<fileMask>README.md</fileMask>
 								</configuration>
 							</execution>
