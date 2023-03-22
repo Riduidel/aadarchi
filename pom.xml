@@ -70,6 +70,7 @@
 			project architecture documentation -->
 		<module>architecture-documentation</module>
 		<module>maven-metadata-inferer</module>
+		<module>model-linter</module>
 		<module>spring-components-detector</module>
 		<module>sequence-diagram-generator</module>
 		<module>sipoc-diagram-generator</module>
