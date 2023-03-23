@@ -473,8 +473,8 @@
 						<artifactId>find-and-replace-maven-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>exec</id>
-								<phase>package</phase>
+								<id>change-version-in-readme</id>
+								<phase>process-resources</phase>
 								<goals>
 									<goal>find-and-replace</goal>
 								</goals>
@@ -485,6 +485,21 @@
 									<replaceValue>${project.version}</replaceValue>
 									<recursive>false</recursive>
 									<fileMask>README.md</fileMask>
+								</configuration>
+							</execution>
+							<execution>
+								<id>change-version-in-on-release-perform-maven-release</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>find-and-replace</goal>
+								</goals>
+								<configuration>
+									<replacementType>file-contents</replacementType>
+									<baseDir>.github/workflows</baseDir>
+									<findRegex>^default:\s*'(\d+\.\d+\.\d+(-SNAPSHOT)?)'$</findRegex>
+									<replaceValue>${project.version}</replaceValue>
+									<recursive>false</recursive>
+									<fileMask>on_release_perform_maven_release.yml</fileMask>
 								</configuration>
 							</execution>
 						</executions>
