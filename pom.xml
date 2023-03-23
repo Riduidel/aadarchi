@@ -496,8 +496,8 @@
 								<configuration>
 									<replacementType>file-contents</replacementType>
 									<baseDir>.github/workflows</baseDir>
-									<findRegex>^default:\s*'(\d+\.\d+\.\d+(-SNAPSHOT)?)'$</findRegex>
-									<replaceValue>${project.version}</replaceValue>
+									<findRegex>(default:\s+)('\d+\.\d+\.\d+')(-SNAPSHOT)?</findRegex>
+									<replaceValue>$1${project.version}</replaceValue>
 									<recursive>false</recursive>
 									<fileMask>on_release_perform_maven_release.yml</fileMask>
 								</configuration>
