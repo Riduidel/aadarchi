@@ -465,5 +465,48 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>update_version_in_files</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.github.floverfelt</groupId>
+						<artifactId>find-and-replace-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>change-version-in-readme</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>find-and-replace</goal>
+								</goals>
+								<configuration>
+									<replacementType>file-contents</replacementType>
+									<baseDir>${project.basedir}</baseDir>
+									<findRegex>[0-9]+.[0-9]+.[0-9]+(-SNAPSHOT)?</findRegex>
+									<replaceValue>${project.version}</replaceValue>
+									<recursive>false</recursive>
+									<fileMask>README.md</fileMask>
+								</configuration>
+							</execution>
+							<execution>
+								<id>change-version-in-on-release-perform-maven-release</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>find-and-replace</goal>
+								</goals>
+								<configuration>
+									<replacementType>file-contents</replacementType>
+									<baseDir>.github/workflows</baseDir>
+									<findRegex>(default:\s+)('\d+\.\d+\.\d+')(-SNAPSHOT)?</findRegex>
+									<replaceValue>$1${project.version}</replaceValue>
+									<recursive>false</recursive>
+									<fileMask>on_release_perform_maven_release.yml</fileMask>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
