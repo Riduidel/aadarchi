@@ -101,7 +101,7 @@ public class ArchitectureEnhancer {
 
 	public void enhance(Workspace workspace, Iterable<Enhancer> enhancers) {
 		classloader = Thread.currentThread().getContextClassLoader();
-		logger.info(() -> String.format("Enhancers applied to this architecture are\n%s", 
+		logger.info(() -> String.format("Enhancers applied to this architecture are:\n%s", 
 			getEnhancers(enhancers)
 				.map(e -> String.format("%s => %d", e.getClass().getName(), e.priority()))
 				.collect(Collectors.joining("\n"))));
