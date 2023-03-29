@@ -17,12 +17,13 @@ public class MavenLoggingRedirectorHandler extends Handler {
     public static String shortenSource(String originalSource) {
         String[] parts = originalSource.split("\\.");
         StringBuilder newSource = new StringBuilder();
-        for (int i = 0; i < parts.length; i++) {
+        for (int i = 0; i < parts.length - 1; i++) {
             if (i > 0) {
                 newSource.append(".");
             }
             newSource.append(parts[i].charAt(0));
         }
+        newSource.append("." + parts[parts.length - 1]);
         return newSource.toString();
     }
 
