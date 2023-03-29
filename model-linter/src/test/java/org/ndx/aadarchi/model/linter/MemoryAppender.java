@@ -4,9 +4,8 @@ package org.ndx.aadarchi.model.linter;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
+import ch.qos.logback.classic.Level;
 import java.util.stream.Collectors;
 
 public class MemoryAppender extends ListAppender<ILoggingEvent> {
@@ -38,13 +37,5 @@ public class MemoryAppender extends ListAppender<ILoggingEvent> {
                 .filter(event -> event.toString().contains(string)
                         && event.getLevel().equals(level))
                 .collect(Collectors.toList());
-    }
-
-    public int getSize() {
-        return this.list.size();
-    }
-
-    public List<ILoggingEvent> getLoggedEvents() {
-        return Collections.unmodifiableList(this.list);
     }
 }
