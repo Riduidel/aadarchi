@@ -1,19 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.github.Riduidel.aadarchi</groupId>
-		<artifactId>system</artifactId>
-		<version>0.1.11-SNAPSHOT</version>
-	</parent>
-	<artifactId>gitlab-scm-handler</artifactId>
-	<name>Aadarchi : Gitlab SCM Handler</name>
-	<description>Allow gitlab infos to be included in project documentation</description>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.github.Riduidel.aadarchi</groupId>
+    <artifactId>system</artifactId>
+    <version>0.1.11-SNAPSHOT</version>
+  </parent>
+  <artifactId>gitlab-vfs</artifactId>
+	<name>Aadarchi : GitLab virtual file system</name>
+	<description>A commons-vfs virtual file system allowing access to GitLab repository</description>
 	<dependencies>
-		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
-			<artifactId>base</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.gitlab4j</groupId>
 			<artifactId>gitlab4j-api</artifactId>
@@ -21,6 +16,10 @@
 		<dependency>
 			<groupId>com.pivovarit</groupId>
 			<artifactId>throwing-function</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-vfs2</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -38,16 +37,4 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<systemPropertyVariables>
-						<GITLAB_TOKEN>${GITLAB_ACCESS_TOKEN}</GITLAB_TOKEN>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 </project>

@@ -5,11 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,18 +20,15 @@ import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.commons.vfs2.VFS;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
-import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 
-import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
 
 @Default
@@ -147,10 +139,12 @@ public class MavenPomReader {
 	public MavenProject readMavenProject(FileObject pomFile) {
 		try {
 			URL url = pomFile.getURL();
-			try (InputStream input = SCMHandler.openStream(scmHandler, url)) {
+			try (InputStream input = pomFile.getContent().getInputStream()) {
 				return readMavenProject(pomFile, url, input);
 			} catch (XmlPullParserException | IOException e) {
 				throw new MavenDetailsInfererException(String.format("Unable to read stream from URL %s", url), e);
+			} finally {
+				pomFile.close();
 			}
 		} catch (FileSystemException e1) {
 			throw new MavenDetailsInfererException(String.format("Unable to read stream from file object %s", pomFile),

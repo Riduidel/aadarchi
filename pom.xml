@@ -24,7 +24,7 @@
 		<error-prone.version>2.16</error-prone.version>
 	</properties>
 	<scm>
-		<!-- We use https connections for using GITHUB_TOKEN as password -->
+		<!-- We use https connections for using aadarchi.github.token as password -->
 		<connection>scm:git:https://git@github.com/Riduidel/aadarchi.git</connection>
 		<developerConnection>scm:git:https://git@github.com/Riduidel/aadarchi.git</developerConnection>
 		<url>https://github.com/Riduidel/aadarchi.git</url>
@@ -79,6 +79,8 @@
 		<module>cdi-in-maven-plugin-helper</module>
 		<module>structurizr-components-detector</module>
 		<module>aadarchi-test-utils</module>
+		<module>github-vfs</module>
+		<module>gitlab-vfs</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -169,6 +171,16 @@
 				<groupId>org.eclipse.jgit</groupId>
 				<artifactId>org.eclipse.jgit</artifactId>
 				<version>6.3.0.202209071007-r</version>
+			</dependency>
+			<dependency>
+				<groupId>org.kohsuke</groupId>
+				<artifactId>github-api</artifactId>
+				<version>1.308</version>
+			</dependency>
+			<dependency>
+				<groupId>org.gitlab4j</groupId>
+				<artifactId>gitlab4j-api</artifactId>
+				<version>4.16.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.pivovarit</groupId>
@@ -319,7 +331,9 @@
 							<rules>
 								<requireProperty>
 									<property>aadarchi.github.token</property>
-									<message><![CDATA[You must have set the aadarchi.github.token. See https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token]]></message>
+									<message>
+										<![CDATA[You must have set the aadarchi.github.token. See https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token]]>
+									</message>
 								</requireProperty>
 							</rules>
 						</configuration>
