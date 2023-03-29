@@ -7,7 +7,6 @@ import com.structurizr.model.Relationship;
 
 import javax.inject.Inject;
 import java.util.*;
-import java.util.function.IntPredicate;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -31,7 +30,7 @@ public class ModelLinter {
         Optional <String> containerTechnology = Optional.ofNullable(container.getTechnology());
         if (containerTechnology.isEmpty()) {
             logger.log(Level.SEVERE,(String.format("your container %s should have a technology. " +
-                    "A lack of a technology prevent user to know which technology is associated to this element. You should add technologies used on your container", container.getName())));
+                    "A lack of a technology prevent user to know which technology is associated to this element. You should add technologies used on your container.", container.getName())));
         }
         return containerTechnology;
     }
@@ -40,7 +39,7 @@ public class ModelLinter {
         Optional <String> componentTechnology = Optional.ofNullable(component.getTechnology());
         if (componentTechnology.isEmpty()) {
             logger.log(Level.SEVERE, (String.format("your component %s should have a technology. " +
-                    "A lack of a technology prevent user to know which technology is used for this element. You should add technologies used on your component", component.getName())));
+                    "A lack of a technology prevent user to know which technology is used for this element. You should add technologies used on your component.", component.getName())));
         }
         return componentTechnology;
     }
@@ -48,22 +47,32 @@ public class ModelLinter {
 
     public Optional<Set<String>> verifyElementRelationshipDescription(Element element) {
         Set<String> relationshipDescriptions = element.getRelationships().stream().map(Relationship::getDescription).collect(Collectors.toSet());
-        for (String description : relationshipDescriptions) {
-            if(description.isEmpty() || relationshipDescriptions.contains(null))
-                logger.log(Level.SEVERE, (String.format("The description between element %s and element %s should specify description to help users to know which description is associated to this element." +
-                        "Please specify technologies used in this description ",  element.getName(), getElementRelationshipName(element))));
+        try {
+            for (String description : relationshipDescriptions) {
+                if(description.isEmpty())
+                    logger.log(Level.SEVERE, (String.format("The description between element %s and element %s should specify description to help users to know which description is associated to this element." +
+                            "Please specify description for this relationship.", element.getName(), getElementRelationshipName(element))));
+            }
+        }
+        catch (Exception exception) {
+            throw new IllegalArgumentException(String.format("The description of relationship between element %s and %s cannot be null. " +
+                    "Please specify a description to this this relationship.", element.getName(), getElementRelationshipName(element)));
         }
         return Optional.of(relationshipDescriptions);
     }
 
     public Optional<Set<String>> verifyElementRelationshipTechnology(Element element) {
         Set<String> relationshipTechnologies = element.getRelationships().stream().map(Relationship::getTechnology).collect(Collectors.toSet());
-        for (String technology : relationshipTechnologies) {
-            if(relationshipTechnologies.contains(null) || technology.isEmpty())
-                logger.log(Level.SEVERE, (String.format("The technology used in relationship between element %s and element %s should specify technologies to help users to know which technology is associated to this element." +
-                        "Please specify technologies used in this technology ",  element.getName(), getElementRelationshipName(element))));
-
-        }
+        try {
+            for (String technology : relationshipTechnologies) {
+                if (technology.isEmpty())
+                    logger.log(Level.SEVERE, (String.format("The technology used in relationship between element %s and element %s should specify technologies to help users to know which technology is associated to this element." +
+                            "Please specify technologies used in these relationship.", element.getName(), getElementRelationshipName(element))));
+            }
+        } catch (Exception exception) {
+        throw new IllegalArgumentException(String.format("The technology of relationship between element %s and %s cannot be null. " +
+                "Please specify technologies used in these relationship.", element.getName(), getElementRelationshipName(element)));
+    }
         return Optional.of(relationshipTechnologies);
     }
     public String getElementRelationshipName(Element element) {
@@ -74,9 +83,8 @@ public class ModelLinter {
         return null;
     }
 
-    public IntPredicate setLogger(String message) {
+    public void setLogger(String message) {
         logger.log(Level.SEVERE,message);
-        return null;
     }
 
     public void checksSomeFieldForAnElement(Element element) {
