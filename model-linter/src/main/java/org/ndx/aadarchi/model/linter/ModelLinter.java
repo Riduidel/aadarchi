@@ -49,7 +49,7 @@ public class ModelLinter {
     public Optional<Set<String>> verifyElementRelationshipDescription(Element element) {
         Set<String> relationshipDescriptions = element.getRelationships().stream().map(Relationship::getDescription).collect(Collectors.toSet());
         for (String description : relationshipDescriptions) {
-            if (description.isEmpty())
+            if(description.isEmpty() || relationshipDescriptions.contains(null))
                 logger.log(Level.SEVERE, (String.format("The description between element %s and element %s should specify description to help users to know which description is associated to this element." +
                         "Please specify technologies used in this description ",  element.getName(), getElementRelationshipName(element))));
         }
@@ -59,10 +59,10 @@ public class ModelLinter {
     public Optional<Set<String>> verifyElementRelationshipTechnology(Element element) {
         Set<String> relationshipTechnologies = element.getRelationships().stream().map(Relationship::getTechnology).collect(Collectors.toSet());
         for (String technology : relationshipTechnologies) {
-            if (technology.isEmpty()) {
+            if(relationshipTechnologies.contains(null) || technology.isEmpty())
                 logger.log(Level.SEVERE, (String.format("The technology used in relationship between element %s and element %s should specify technologies to help users to know which technology is associated to this element." +
                         "Please specify technologies used in this technology ",  element.getName(), getElementRelationshipName(element))));
-            }
+
         }
         return Optional.of(relationshipTechnologies);
     }
