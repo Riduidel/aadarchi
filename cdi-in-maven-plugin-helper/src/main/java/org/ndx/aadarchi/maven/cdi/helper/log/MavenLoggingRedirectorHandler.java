@@ -6,6 +6,9 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class MavenLoggingRedirectorHandler extends Handler {
 
     private Log mavenLog;
@@ -15,26 +18,26 @@ public class MavenLoggingRedirectorHandler extends Handler {
     }
 
     public static String shortenSource(String originalSource) {
+        if (originalSource.length() <= 20)
+            return (originalSource);
         String[] parts = originalSource.split("\\.");
-        StringBuilder newSource = new StringBuilder();
-        for (int i = 0; i < parts.length - 1; i++) {
-            if (i > 0) {
-                newSource.append(".");
-            }
-            newSource.append(parts[i].charAt(0));
-        }
-        newSource.append("." + parts[parts.length - 1]);
+        String newSource = Arrays.stream(parts, 0, parts.length - 1)
+                .map(s -> String.valueOf(s.charAt(0)))
+                .collect(Collectors.joining("."));
+
+        newSource += "." + parts[parts.length - 1];
         return newSource.toString();
     }
 
     @Override
     public void publish(LogRecord record) {
-        String source = record.getSourceClassName().length() <= 20 ? record.getSourceClassName() : shortenSource(record.getSourceClassName());
+        String source = shortenSource(record.getSourceClassName());
         Level level = record.getLevel();
-		if(level==Level.OFF)
+		if (level == Level.OFF)
     		return;
         int levelValue = level.intValue();
-		if (levelValue <= Level.FINEST.intValue()) {
+
+        if (levelValue <= Level.FINEST.intValue()) {
             mavenLog.debug("<" + source + "> " + record.getMessage(), record.getThrown());
         } else if(levelValue <=Level.FINER.intValue()) {
             mavenLog.debug("<" + source + "> " + record.getMessage(), record.getThrown());
