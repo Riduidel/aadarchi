@@ -1,23 +1,17 @@
 package org.ndx.aadarchi.model.linter;
 
-import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.Level;
 import com.structurizr.model.Relationship;
 import org.assertj.core.api.Assertions;
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Logger;
-
 
 import javax.inject.Inject;
-import java.util.List;
+
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 @EnableWeld
@@ -35,26 +29,27 @@ public class ModelLinterTest extends AbstractModelLinterTest {
         Assertions.assertThat(elementDescriptions).isEqualTo(modelLinter.verifyElementDescription(container));
     }
 
-    /*@Test
+    @Test
     public void element_doesnt_have_description_then_return_logger() {
+        ModelLinter modelLinter = new ModelLinter();
         modelLinter.verifyElementDescription(container2);
         MemoryAppender memoryAppender = new MemoryAppender();
-        String message = "your element %s should have a description. " +
+        final String message = "your element %s should have a description. " +
                 "A lack of a description prevent user to understand the aim of the element. You should add a description to your element";
         modelLinter.setLogger(message);
-        Assertions.assertThat(memoryAppender.search(message, Level.SEVERE)).extracting(message).containsOnly(message);
-    }*/
+        Assertions.assertThat(memoryAppender.search(message, Level.ERROR).size()).isEqualTo(1);
+    }
 
     @Test
     public void container_have_a_technology() {
         Optional<String> containerTechnology = Optional.of(container.getTechnology());
-        Assertions.assertThat(containerTechnology).isEqualTo(modelLinter.verifyElementTechnology(container));
+        Assertions.assertThat(containerTechnology).isEqualTo(modelLinter.verifyContainerTechnology(container));
     }
 
     @Test
     public void component_have_a_technology() {
         Optional<String> elementDescriptions = Optional.of(container.getTechnology());
-        Assertions.assertThat(elementDescriptions).isEqualTo(modelLinter.verifyElementTechnology(component));
+        Assertions.assertThat(elementDescriptions).isEqualTo(modelLinter.verifyComponentTechnology(component));
     }
 
     /*@Test
