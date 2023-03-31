@@ -1,13 +1,13 @@
 package org.ndx.aadarchi.maven.cdi.helper.log;
 
-import org.apache.maven.plugin.logging.Log;
-
+import java.util.Arrays;
+import java.util.function.BiConsumer;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-
-import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import org.apache.maven.plugin.logging.Log;
 
 public class MavenLoggingRedirectorHandler extends Handler {
 
@@ -19,7 +19,7 @@ public class MavenLoggingRedirectorHandler extends Handler {
 
     public static String shortenSource(String originalSource) {
         if (originalSource.length() <= 20)
-            return (originalSource);
+            return originalSource;
         String[] parts = originalSource.split("\\.");
         String newSource = Arrays.stream(parts, 0, parts.length - 1)
                 .map(s -> String.valueOf(s.charAt(0)))
@@ -31,27 +31,30 @@ public class MavenLoggingRedirectorHandler extends Handler {
 
     @Override
     public void publish(LogRecord record) {
-        String source = shortenSource(record.getSourceClassName());
         Level level = record.getLevel();
 		if (level == Level.OFF)
     		return;
         int levelValue = level.intValue();
 
         if (levelValue <= Level.FINEST.intValue()) {
-            mavenLog.debug("<" + source + "> " + record.getMessage(), record.getThrown());
+        	writeLog(mavenLog::debug, record);
         } else if(levelValue <=Level.FINER.intValue()) {
-            mavenLog.debug("<" + source + "> " + record.getMessage(), record.getThrown());
+        	writeLog(mavenLog::debug, record);
         } else if(levelValue <=Level.FINE.intValue()) {
-            mavenLog.debug("<" + source + "> " + record.getMessage(), record.getThrown());
+        	writeLog(mavenLog::debug, record);
         } else if(levelValue <=Level.CONFIG.intValue()) {
-            mavenLog.info("<" + source + "> " + record.getMessage(), record.getThrown());
+        	writeLog(mavenLog::info, record);
         } else if(levelValue <=Level.INFO.intValue()) {
-            mavenLog.info("<" + source + "> " + record.getMessage(), record.getThrown());
+        	writeLog(mavenLog::info, record);
         } else if(levelValue <=Level.WARNING.intValue()) {
-            mavenLog.warn("<" + source + "> " + record.getMessage(), record.getThrown());
+        	writeLog(mavenLog::warn, record);
         } else { //SEVERE
-            mavenLog.error("<" + source + "> " + record.getMessage(), record.getThrown());
+        	writeLog(mavenLog::error, record);
         }
+    }
+    private void writeLog(BiConsumer<CharSequence, Throwable> logWriter, LogRecord record) {
+        String source = shortenSource(record.getSourceClassName());
+    	logWriter.accept("<" + source + "> " + record.getMessage(), record.getThrown());
     }
     @Override
     public void flush() {
