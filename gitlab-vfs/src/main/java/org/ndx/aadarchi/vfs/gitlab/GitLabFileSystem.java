@@ -9,6 +9,7 @@ import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.provider.AbstractFileName;
 import org.apache.commons.vfs2.provider.AbstractFileSystem;
 import org.gitlab4j.api.GitLabApi;
+import org.ndx.aadarchi.vfs.github.GitHubFileObject;
 
 public class GitLabFileSystem extends AbstractFileSystem {
 
@@ -22,11 +23,8 @@ public class GitLabFileSystem extends AbstractFileSystem {
 	@Override
 	protected FileObject createFile(AbstractFileName name) throws Exception {
 		GitLabFileName filename  = (GitLabFileName) name;
-		throw new UnsupportedOperationException("TODO Implement "+getClass().getSimpleName()+"#createFile()");
-
-//		return new GitLabFileObject(filename, this, 
-//				gitlab.
-//				github.getRepository(filename.getContainingRepository()));
+		return new GitLabFileObject(filename, this, 
+				gitlab);
 	}
 
 	@Override

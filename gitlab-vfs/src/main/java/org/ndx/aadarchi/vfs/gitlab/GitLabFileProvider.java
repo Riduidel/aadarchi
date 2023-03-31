@@ -34,7 +34,7 @@ public class GitLabFileProvider extends AbstractOriginatingFileProvider {
 //            APPEND_CONTENT,
 			URI);
 
-	static final Type[] AUTHENTICATION_DATA_TYPES = { PASSWORD };
+	static final Type[] AUTHENTICATION_DATA_TYPES = { DOMAIN, PASSWORD };
 
 	public GitLabFileProvider() {
 		super();
@@ -68,5 +68,9 @@ public class GitLabFileProvider extends AbstractOriginatingFileProvider {
 		UserAuthenticationData userAuthenticationData = UserAuthenticatorUtils.authenticate(fileSystemOptions,
 				AUTHENTICATION_DATA_TYPES);
 		return Optional.ofNullable(userAuthenticationData);
+	}
+
+	public static String urlFor(String gitlabServer, String project) {
+		return "gitlab://"+gitlabServer+"/"+project;
 	}
 }
