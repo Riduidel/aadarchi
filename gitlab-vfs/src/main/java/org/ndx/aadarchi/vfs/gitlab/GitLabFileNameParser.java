@@ -16,12 +16,20 @@ public class GitLabFileNameParser extends GenericURLFileNameParser implements Fi
 	@Override
 	public FileName parseUri(VfsComponentContext context, FileName base, String fileName) throws FileSystemException {
 		GenericURLFileName temporary = (GenericURLFileName) super.parseUri(context, base, fileName);
-		return new GitLabFileName(temporary.getScheme(), 
+		GitLabFileName returned = new GitLabFileName(temporary.getScheme(), 
 				temporary.getHostName(), 
 				temporary.getPort(), temporary.getDefaultPort(), 
 				temporary.getUserName(), temporary.getPassword(),
 				temporary.getPath(),
 				temporary.getType(),
 				temporary.getQueryString());
+		if(base!=null) {
+			if (base instanceof GitLabFileName) {
+				GitLabFileName gitlabBase = (GitLabFileName) base;
+				returned.setProjectObject(gitlabBase.getProjectObject());
+				returned.setBranch(gitlabBase.getBranch());
+			}
+		}
+		return returned;
 	}
 }

@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.vfs.gitlab;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.vfs2.Capability;
 import org.apache.commons.vfs2.FileName;
@@ -9,7 +10,7 @@ import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.provider.AbstractFileName;
 import org.apache.commons.vfs2.provider.AbstractFileSystem;
 import org.gitlab4j.api.GitLabApi;
-import org.ndx.aadarchi.vfs.github.GitHubFileObject;
+import org.gitlab4j.api.models.Project;
 
 public class GitLabFileSystem extends AbstractFileSystem {
 
@@ -23,8 +24,14 @@ public class GitLabFileSystem extends AbstractFileSystem {
 	@Override
 	protected FileObject createFile(AbstractFileName name) throws Exception {
 		GitLabFileName filename  = (GitLabFileName) name;
-		return new GitLabFileObject(filename, this, 
-				gitlab);
+		if(filename.getProjectObject()==null) {
+			Project project = gitlab.getProjectApi().getProject(filename.getNamespace(), filename.getProject());
+			filename.setProjectObject(project);
+		}
+		if(filename.getBranch()==null) {
+			filename.setBranch(filename.getProjectObject().getDefaultBranch());
+		}
+		return new GitLabFileObject(filename, this, gitlab);
 	}
 
 	@Override

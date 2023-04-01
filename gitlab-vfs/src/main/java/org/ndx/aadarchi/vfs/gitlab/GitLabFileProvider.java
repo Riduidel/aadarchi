@@ -60,6 +60,9 @@ public class GitLabFileProvider extends AbstractOriginatingFileProvider {
 			UserAuthenticationData auth) {
 		String password = String.copyValueOf(auth.getData(PASSWORD));
 		String domain = String.copyValueOf(auth.getData(DOMAIN));
+		if(!domain.startsWith("http")) {
+			domain = "https://"+domain;
+		}
 		GitLabApi gitlabApi = new GitLabApi(domain, password);
 		return new GitLabFileSystem(rootFileName, fileSystemOptions, gitlabApi);
 	}
@@ -71,6 +74,6 @@ public class GitLabFileProvider extends AbstractOriginatingFileProvider {
 	}
 
 	public static String urlFor(String gitlabServer, String project) {
-		return "gitlab://"+gitlabServer+"/"+project;
+		return "gitlab://"+gitlabServer+"/"+project+GitLabFileName.PROJET_PATH_SEPARATOR;
 	}
 }

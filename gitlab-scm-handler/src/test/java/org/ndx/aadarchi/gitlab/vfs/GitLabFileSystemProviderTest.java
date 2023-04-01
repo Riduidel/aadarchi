@@ -10,6 +10,7 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.gitlab.Constants;
 import org.ndx.aadarchi.gitlab.GitlabSCMHandler;
 
@@ -21,7 +22,8 @@ class GitLabFileSystemProviderTest {
 	@Inject GitLabFileSystemProvider gitHubFileSystem;
 	
 	@BeforeAll public static void setGitlabServer() {
-		System.setProperty(Constants.CONFIG_GITLAB_URL, "framapiaf.org");
+		System.setProperty(Constants.CONFIG_GITLAB_URL, "framagit.org");
+
 	}
 
 	@Test
@@ -29,7 +31,7 @@ class GitLabFileSystemProviderTest {
 		// Given
 		FileObject repositoryRoot = gitHubFileSystem.getProjectRoot("Riduidel/codingame-maven-plugins");
 		// When
-		FileObject readme = repositoryRoot.getChild("README.md");
+		FileObject readme = repositoryRoot.getChild("README.adoc");
 		// Then
 		Assertions.assertThat((Object) readme).isNotNull();
 		Assertions.assertThat(readme.getContent().getSize()).isGreaterThan(100);
