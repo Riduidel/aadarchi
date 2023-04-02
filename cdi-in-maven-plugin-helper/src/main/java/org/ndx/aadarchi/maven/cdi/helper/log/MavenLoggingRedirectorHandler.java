@@ -1,6 +1,5 @@
 package org.ndx.aadarchi.maven.cdi.helper.log;
 
-import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -17,16 +16,24 @@ public class MavenLoggingRedirectorHandler extends Handler {
         this.mavenLog = log;
     }
 
-    public static String shortenSource(String originalSource) {
-        if (originalSource.length() <= 20)
-            return originalSource;
-        String[] parts = originalSource.split("\\.");
-        String newSource = Arrays.stream(parts, 0, parts.length - 1)
-                .map(s -> String.valueOf(s.charAt(0)))
-                .collect(Collectors.joining("."));
+    public static Integer getTotalSize(String[] parts) {
+        int totalSize = 0;
 
-        newSource += "." + parts[parts.length - 1];
-        return newSource.toString();
+        for (int i = 0; i < parts.length - 1; i++) {
+            totalSize += parts[i].length() + 1;
+        }
+        return totalSize;
+    }
+    public static String shortenSource(String originalSource) {
+        String[] parts = originalSource.split("\\.");
+        int classLength = parts[parts.length - 1].length();
+
+        for (int i = 0; i < parts.length - 1; i++) {
+            if (getTotalSize(parts) + classLength > 20) {
+                parts[i] = String.valueOf(parts[i].charAt(0));
+            }
+        }
+        return String.join(".", parts);
     }
 
     @Override
