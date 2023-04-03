@@ -44,7 +44,6 @@ public abstract class AbstractModelLinterTest {
 
     @AfterEach
     public void cleanUp() {
-        loggerHandler.flush();
         loggerHandler.close();
     }
 }
