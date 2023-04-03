@@ -1,10 +1,12 @@
 package org.ndx.aadarchi.maven.cdi.helper.log;
 
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.maven.plugin.logging.Log;
 
@@ -17,13 +19,12 @@ public class MavenLoggingRedirectorHandler extends Handler {
     }
 
     public static Integer getTotalSize(String[] parts) {
-        int totalSize = 0;
-
-        for (int i = 0; i < parts.length - 1; i++) {
-            totalSize += parts[i].length() + 1;
-        }
-        return totalSize;
+        return Arrays.stream(parts)
+                .limit(parts.length - 1)
+                .mapToInt(String::length)
+                .sum() + parts.length - 1;
     }
+
     public static String shortenSource(String originalSource) {
         String[] parts = originalSource.split("\\.");
         int classLength = parts[parts.length - 1].length();
