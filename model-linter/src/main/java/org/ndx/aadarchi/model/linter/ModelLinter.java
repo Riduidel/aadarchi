@@ -5,23 +5,20 @@ import com.structurizr.model.Container;
 import com.structurizr.model.Element;
 import com.structurizr.model.Relationship;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.util.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class ModelLinter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ModelLinter.class);
-    public void setLogger(String message) {
-        LOGGER.error(message);
-    }
+    public static final Logger logger = Logger.getLogger(ModelLinter.class.getName());
+
     public Optional verifyElementDescription(Element element) {
         Optional<String> elementDescription = Optional.ofNullable(element.getDescription());
         if (elementDescription.isEmpty()) {
-            setLogger(String.format("your element %s should have a description. " +
-                    "A lack of a description prevent user to understand the aim of the element. " +
-                    "You should add a description to your element", element.getName()));
+            logger.log(Level.SEVERE,(String.format("your element %s should have a description. " +
+                    "A lack of a description prevent user to understand the aim of the element. ", element.getName())));
         }
         return elementDescription;
     }
@@ -29,9 +26,8 @@ public class ModelLinter {
     public Optional verifyContainerTechnology(Container container) {
         Optional <String> containerTechnology = Optional.ofNullable(container.getTechnology());
         if (containerTechnology.isEmpty()) {
-            setLogger(String.format("your container %s should have a technology. " +
-                    "A lack of a technology prevent user to know which technology is associated to this element. " +
-                    "You should add technologies used on your container.", container.getName()));
+            logger.log(Level.SEVERE,(String.format("your container %s should have a technology. " +
+                    "A lack of a technology prevent user to know which technology is associated to this element. ", container.getName())));
         }
         return containerTechnology;
     }
@@ -39,9 +35,9 @@ public class ModelLinter {
     public Optional verifyComponentTechnology(Component component) {
         Optional <String> componentTechnology = Optional.ofNullable(component.getTechnology());
         if (componentTechnology.isEmpty()) {
-            setLogger(String.format("your component %s should have a technology. " +
+            logger.log(Level.SEVERE,(String.format("your component %s should have a technology. " +
                     "A lack of a technology prevent user to know which technology is used for this element. " +
-                    "You should add technologies used on your component.", component.getName()));
+                    "You should add technologies used on your component.", component.getName())));
         }
         return componentTechnology;
     }
@@ -51,9 +47,9 @@ public class ModelLinter {
         Set<String> relationshipDescriptions = element.getRelationships().stream().map(Relationship::getDescription).collect(Collectors.toSet());
         try {
             for (String description : relationshipDescriptions) {
-                if(description.isEmpty())
-                    setLogger(String.format("The description between element %s and element %s should specify description to help users to know which description is associated to this element." +
-                            "Please specify description for this relationship.", element.getName(), getElementRelationshipName(element)));
+                if(description.isEmpty() || relationshipDescriptions.contains(null))
+                    logger.log(Level.SEVERE,(String.format("The description between element %s and element %s should specify description to help users to know which description is associated to this element." +
+                            "Please specify description for this relationship.", element.getName(), getElementRelationshipName(element))));
             }
         }
         catch (Exception exception) {
@@ -68,8 +64,8 @@ public class ModelLinter {
         try {
             for (String technology : relationshipTechnologies) {
                 if (technology.isEmpty())
-                    setLogger(String.format("The technology used in relationship between element %s and element %s should specify technologies to help users to know which technology is associated to this element." +
-                            "Please specify technologies used in these relationship.", element.getName(), getElementRelationshipName(element)));
+                    logger.log(Level.SEVERE,(String.format("The technology used in relationship between element %s and element %s should specify technologies to help users to know which technology is associated to this element." +
+                            "Please specify technologies used in these relationship.", element.getName(), getElementRelationshipName(element))));
             }
         } catch (Exception exception) {
         throw new IllegalArgumentException(String.format("The technology of relationship between element %s and %s cannot be null. " +
@@ -83,26 +79,6 @@ public class ModelLinter {
                 return elementRelationship.getName();
         }
         return null;
-    }
-
-    public void checksSomeFieldForAnElement(Element element) {
-        verifyElementDescription(element);
-        verifyElementRelationshipDescription(element);
-        verifyElementRelationshipTechnology(element);
-    }
-
-    public void checksSomeFieldForContainer(Container container) {
-        verifyElementDescription(container);
-        verifyElementRelationshipDescription(container);
-        verifyElementRelationshipTechnology(container);
-        verifyContainerTechnology(container);
-    }
-
-    public void checksSomeFieldForComponent(Component component) {
-        verifyElementDescription(component);
-        verifyElementRelationshipDescription(component);
-        verifyElementRelationshipTechnology(component);
-        verifyComponentTechnology(component);
     }
 }
 

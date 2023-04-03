@@ -2,6 +2,7 @@ package org.ndx.aadarchi.model.linter;
 
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
+import com.structurizr.model.Element;
 import com.structurizr.model.SoftwareSystem;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
@@ -11,7 +12,6 @@ import javax.inject.Inject;
 public class ModelLinterEnhancer extends ModelElementAdapter {
     @Inject
     ModelLinter modelLinter;
-
     @Override
     public boolean isParallel() {
         return true;
@@ -24,7 +24,7 @@ public class ModelLinterEnhancer extends ModelElementAdapter {
 
     @Override
     public boolean startVisit(SoftwareSystem softwareSystem) {
-        return true;
+        return false;
     }
 
     @Override
@@ -34,22 +34,42 @@ public class ModelLinterEnhancer extends ModelElementAdapter {
 
     @Override
     public boolean startVisit(Component component) {
-        return true;
+        return false;
     }
 
     @Override
     public void endVisit(Component component, OutputBuilder builder) {
-        modelLinter.checksSomeFieldForComponent(component);
+        checksSomeFieldForComponent(component);
     }
 
     @Override
     public void endVisit(Container container, OutputBuilder builder) {
-        modelLinter.checksSomeFieldForContainer(container);
+        checksSomeFieldForContainer(container);
     }
 
     @Override
     public void endVisit(SoftwareSystem softwareSystem, OutputBuilder builder) {
-        modelLinter.checksSomeFieldForAnElement(softwareSystem);
+        checksSomeFieldForAnElement(softwareSystem);
+    }
+
+    private void checksSomeFieldForAnElement(Element element) {
+        modelLinter.verifyElementDescription(element);
+        modelLinter.verifyElementRelationshipDescription(element);
+        modelLinter.verifyElementRelationshipTechnology(element);
+    }
+
+    private void checksSomeFieldForContainer(Container container) {
+        modelLinter.verifyElementDescription(container);
+        modelLinter.verifyElementRelationshipDescription(container);
+        modelLinter.verifyElementRelationshipTechnology(container);
+        modelLinter.verifyContainerTechnology(container);
+    }
+
+    private void checksSomeFieldForComponent(Component component) {
+        modelLinter.verifyElementDescription(component);
+        modelLinter.verifyElementRelationshipDescription(component);
+        modelLinter.verifyElementRelationshipTechnology(component);
+        modelLinter.verifyComponentTechnology(component);
     }
 }
 

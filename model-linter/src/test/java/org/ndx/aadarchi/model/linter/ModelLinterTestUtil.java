@@ -8,9 +8,8 @@ public class ModelLinterTestUtil {
         var system = workspace.getModel().addSoftwareSystem("softwareSystem", "a softwareSystem that verify some useful hings");
         var container = system.addContainer("container", "container description", "Java");
         var component = container.addComponent("component", "component description", "Java");
-        var container2 = system.addContainer("container2", "", "");
+        var container2 = system.addContainer("container2", "container2 description", "");
         var container3 = system.addContainer("container3", "", "");
-        var component2 = container.addComponent("component2", "", "");
 
         container.uses(container2, "containers relationship with container2", "Java");
         container.uses(container3, "containers relationship with container3", "Javascript");

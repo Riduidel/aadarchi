@@ -8,17 +8,11 @@ import com.structurizr.model.SoftwareSystem;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
-import org.junit.jupiter.api.Test;
-import org.slf4j.LoggerFactory;
-import org.assertj.core.api.Assertions;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class AbstractModelLinterTest {
-    public static MemoryAppender memoryAppender;
-    public static final String LOGGER_NAME = "org.ndx.aadarchi.model.linter";
+    static LoggerHandler loggerHandler = new LoggerHandler();
 
     protected SoftwareSystem system;
     protected Workspace workspace;
@@ -41,17 +35,16 @@ public abstract class AbstractModelLinterTest {
         component2 = container.getComponentWithName("component2");
         container3 = system.getContainerWithName("container3");
 
-        Logger logger = (Logger) LoggerFactory.getLogger(LOGGER_NAME);
-        memoryAppender = new MemoryAppender();
-        memoryAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
-        logger.setLevel(Level.ERROR);
-        logger.addAppender(memoryAppender);
-        memoryAppender.start();
+        Logger logger = Logger.getLogger(ModelLinter.class.getName());
+        loggerHandler.setLevel(Level.ALL);
+        logger.setUseParentHandlers(false);
+        logger.addHandler(loggerHandler);
+        logger.setLevel(Level.ALL);
     }
 
     @AfterEach
     public void cleanUp() {
-        memoryAppender.reset();
-        memoryAppender.stop();
+        loggerHandler.flush();
+        loggerHandler.close();
     }
 }

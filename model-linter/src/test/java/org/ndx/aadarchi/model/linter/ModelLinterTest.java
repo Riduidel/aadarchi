@@ -1,6 +1,5 @@
 package org.ndx.aadarchi.model.linter;
 
-import ch.qos.logback.classic.Level;
 import com.structurizr.model.Relationship;
 import org.assertj.core.api.Assertions;
 import org.jboss.weld.junit5.EnableWeld;
@@ -31,13 +30,11 @@ public class ModelLinterTest extends AbstractModelLinterTest {
 
     @Test
     public void element_doesnt_have_description_then_return_logger() {
-        ModelLinter modelLinter = new ModelLinter();
-        modelLinter.verifyElementDescription(container2);
-        MemoryAppender memoryAppender = new MemoryAppender();
-        final String message = "your element %s should have a description. " +
-                "A lack of a description prevent user to understand the aim of the element. You should add a description to your element";
-        modelLinter.setLogger(message);
-        Assertions.assertThat(memoryAppender.search(message, Level.ERROR).size()).isEqualTo(1);
+        String expectedLogMessage = "your element container2 should have a description. " +
+                "A lack of a description prevent user to understand the aim of the element. ";
+        modelLinter.verifyElementDescription(container3);
+        String log = loggerHandler.getLogMessage();
+        Assertions.assertThat(log).isEqualTo(expectedLogMessage);
     }
 
     @Test
@@ -52,10 +49,14 @@ public class ModelLinterTest extends AbstractModelLinterTest {
         Assertions.assertThat(elementDescriptions).isEqualTo(modelLinter.verifyComponentTechnology(component));
     }
 
-    /*@Test
+    @Test
     public void container_doesnt_have_a_technology() {
-        Assertions.assertThat("your container2 should have a technology").isEqualTo(modelLinter.verifyElementTechnology(component2));
-    }*/
+        String expectedLogMessage = "your element container2 should have a technology. " +
+                "A lack of a technology prevent user to understand the aim of the element. ";
+        modelLinter.verifyContainerTechnology(container3);
+        String log = loggerHandler.getLogMessage();
+        Assertions.assertThat(log).isEqualTo(expectedLogMessage);
+    }
 
 
     @Test
@@ -65,12 +66,16 @@ public class ModelLinterTest extends AbstractModelLinterTest {
         Assertions.assertThat(description).isEqualTo(modelLinter.verifyElementRelationshipDescription(container));
     }
 
-    /*@Test
+    @Test
     public void relationship_doesnt_have_description_then_send_logger_info() {
-        Relationship relationship = container2.getRelationships().iterator().next();
-        String relationshipDescription = relationship.getDescription();
-        Assertions.assertThat(relationshipDescription).isEqualTo(modelLinter.verifyElementRelationshipDescription(container2));
-    }*/
+        String expectedLogMessage = "The description between element container2 and element container3 should specify description to " +
+                "help users to know which description is associated to this element." +
+                "Please specify description for this relationship.";
+        modelLinter.verifyElementRelationshipDescription(container2);
+        String log = loggerHandler.getLogMessage();
+        String sourceMethodName= loggerHandler.getSourceMethodName();
+        Assertions.assertThat(log).isEqualTo(expectedLogMessage);
+    }
 
     @Test
     public void relationship_should_have_a_technology() {
@@ -79,10 +84,13 @@ public class ModelLinterTest extends AbstractModelLinterTest {
         Assertions.assertThat(relationshipsTechnology).isEqualTo(modelLinter.verifyElementRelationshipTechnology(container));
     }
 
-    /*@Test
+    @Test
     public void relationship_doesnt_have_technology_then_send_logger_info() {
-        String relationshipTechnology = container2.getRelationships().iterator().next().getTechnology();
-        Assertions.assertThat("your element container2 should have a technology").isEqualTo(modelLinter.verifyElementRelationshipTechnology(container2));
-    }*/
+        String expectedLogMessage = "The technology used in relationship between element container2 and element container3 should specify technologies to help users to " +
+                "know which technology is associated to this element. Please specify technologies used in these relationship.";
+        modelLinter.verifyElementRelationshipTechnology(container2);
+        String log = loggerHandler.getLogMessage();
+        Assertions.assertThat(log).isEqualTo(expectedLogMessage);
+    }
 }
 
