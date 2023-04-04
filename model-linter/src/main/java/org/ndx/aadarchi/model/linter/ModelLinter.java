@@ -11,25 +11,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class ModelLinter {
     public static final Logger logger = Logger.getLogger(ModelLinter.class.getName());
 
     public Optional verifyElementDescription(Element element) {
-        Optional<String> elementDescription = Optional.ofNullable(element.getDescription());
-        if (elementDescription.isEmpty()) {
+        String description  =element.getDescription();
+        if (StringUtils.isBlank(description)) {
             logger.log(Level.SEVERE,(String.format("your element %s should have a description. " +
                     "A lack of a description prevent user to understand the aim of the element. ", element.getName())));
         }
-        return elementDescription;
+        return Optional.ofNullable(description);
     }
 
     public Optional verifyContainerTechnology(Container container) {
-        Optional <String> containerTechnology = Optional.ofNullable(container.getTechnology());
-        if (containerTechnology.isEmpty()) {
+        String technology = container.getTechnology();
+        if (StringUtils.isBlank(technology)) {
             logger.log(Level.SEVERE,(String.format("your container %s should have a technology. " +
                     "A lack of a technology prevent user to know which technology is associated to this element. ", container.getName())));
         }
-        return containerTechnology;
+        return Optional.ofNullable(technology);
     }
 
     public Optional verifyComponentTechnology(Component component) {

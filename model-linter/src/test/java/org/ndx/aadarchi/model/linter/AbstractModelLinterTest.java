@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class AbstractModelLinterTest {
-    static LoggerHandler loggerHandler = new LoggerHandler();
+    LoggerHandler loggerHandler;
 
     protected SoftwareSystem system;
     protected Workspace workspace;
@@ -35,6 +35,7 @@ public abstract class AbstractModelLinterTest {
         component2 = container.getComponentWithName("component2");
         container3 = system.getContainerWithName("container3");
 
+        loggerHandler = new LoggerHandler();
         Logger logger = Logger.getLogger(ModelLinter.class.getName());
         loggerHandler.setLevel(Level.ALL);
         logger.setUseParentHandlers(false);
