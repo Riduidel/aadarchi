@@ -18,7 +18,6 @@ public abstract class AbstractModelLinterTest {
     protected Workspace workspace;
     Container container;
     Container container2;
-
     Container container3;
     Component component;
     Component component2;

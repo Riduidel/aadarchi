@@ -13,7 +13,6 @@ public class LoggerHandler extends Handler {
     public List<LogRecord> getLog() {
         return new ArrayList<>(logRecordList);
     }
-
     public void getLogRecordSourceMethodName(String name) {
         if(Objects.equals(name, getMethodName())) {
             for (LogRecord logRecord : logRecordList) {
@@ -24,9 +23,8 @@ public class LoggerHandler extends Handler {
             }
         }
     }
-
     private String getMethodName() {
-        Class sourceClassName = ModelLinter.class;
+        Class<ModelLinter> sourceClassName = ModelLinter.class;
         Method[] methods = sourceClassName.getMethods();
         for (Method method : methods) {
             return method.getName();
@@ -43,7 +41,6 @@ public class LoggerHandler extends Handler {
     @Override
     public void flush() {
     }
-
     @Override
     public void close() throws SecurityException {
     }

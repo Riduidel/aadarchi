@@ -19,16 +19,14 @@ public class ModelLinterTest extends AbstractModelLinterTest {
 
     @WeldSetup
     public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
-
     @Inject
     ModelLinter modelLinter;
-
     @Test
     public void element_should_have_description() {
     	// Given
     	Optional<String> elementDescriptions = Optional.of(container.getDescription());
     	// When
-    	Optional tested = modelLinter.verifyElementDescription(container);
+    	Optional<String> tested = modelLinter.verifyElementDescription(container);
     	// Then
 		Assertions.assertThat(tested).isEqualTo(elementDescriptions);
     }
@@ -41,60 +39,88 @@ public class ModelLinterTest extends AbstractModelLinterTest {
         // When
         modelLinter.verifyElementDescription(container3);
         // Then
-        loggerHandler.getLogRecordSourceMethodName("verifyElementDescription");
-        String log = loggerHandler.getLogMessage();
-        Assertions.assertThat(log).isEqualTo(expectedLogMessage);
+        String logMessage = loggerHandler.getLogMessage();
+        Assertions.assertThat(logMessage).isEqualTo(expectedLogMessage);
     }
 
     @Test
     public void container_have_a_technology() {
+        //Given
         Optional<String> containerTechnology = Optional.of(container.getTechnology());
-        Assertions.assertThat(containerTechnology).isEqualTo(modelLinter.verifyContainerTechnology(container));
+        //When
+        Optional<String> tested = modelLinter.verifyContainerTechnology(container);
+        //Then
+        Assertions.assertThat(tested).isEqualTo(containerTechnology);
     }
 
     @Test
     public void component_have_a_technology() {
-        Optional<String> elementDescriptions = Optional.of(container.getTechnology());
-        Assertions.assertThat(elementDescriptions).isEqualTo(modelLinter.verifyComponentTechnology(component));
+        //Given
+        Optional<String> elementDescriptions = Optional.of(component.getTechnology());
+        //When
+        Optional<String> tested = modelLinter.verifyComponentTechnology(component);
+        //Then
+        Assertions.assertThat(tested).isEqualTo(elementDescriptions);
     }
 
     @Test
     public void container_doesnt_have_a_technology_then_return_logger() {
     	// Given
-        String expectedLogMessage = "your element container3 should have a technology. " +
-                "A lack of a technology prevent user to understand the aim of the element. ";
+        String expectedLogMessage = "your container container3 should have a technology. " +
+                "A lack of a technology prevent user to know which technology is associated to this element. ";
         // When
         modelLinter.verifyContainerTechnology(container3);
         // Then
-        loggerHandler.getLogRecordSourceMethodName("verifyContainerTechnology");
-        String log = loggerHandler.getLogMessage();
-        Assertions.assertThat(log).isEqualTo(expectedLogMessage);
+        String logMessage = loggerHandler.getLogMessage();
+        Assertions.assertThat(logMessage).isEqualTo(expectedLogMessage);
+    }
+
+    @Test
+    public void component_doesnt_have_a_technology_then_return_logger() {
+        // Given
+        String expectedLogMessage = "your component component2 should have a technology. " +
+                "A lack of a technology prevent user to know which technology is associated to this element. ";
+        // When
+        modelLinter.verifyComponentTechnology(component2);
+        // Then
+        String logMessage = loggerHandler.getLogMessage();
+        Assertions.assertThat(logMessage).isEqualTo(expectedLogMessage);
     }
 
 
     @Test
     public void relationship_must_have_description() {
+        //Given
         Set<Relationship> relationships =  container.getRelationships();
         Optional<Set<String>> description = Optional.of(relationships.stream().map(Relationship::getDescription).collect(Collectors.toSet()));
-        Assertions.assertThat(description).isEqualTo(modelLinter.verifyElementRelationshipDescription(container));
+        //When
+        Optional<Set<String>> tested = modelLinter.verifyElementRelationshipDescription(container);
+        //Then
+        Assertions.assertThat(tested).isEqualTo(description);
     }
 
     @Test
     public void relationship_doesnt_have_description_then_send_logger_info() {
+        //Given
         String expectedLogMessage = "The description between element container2 and element container3 should specify description to " +
                 "help users to know which description is associated to this element." +
                 "Please specify description for this relationship.";
+        //When
         modelLinter.verifyElementRelationshipDescription(container2);
-        //loggerHandler.getLogRecordSourceMethodName("verifyElementRelationshipDescription");
-        String log = loggerHandler.getLogMessage();
-        Assertions.assertThat(log).isEqualTo(expectedLogMessage);
+        //Then
+        String logMessage = loggerHandler.getLogMessage();
+        Assertions.assertThat(logMessage).isEqualTo(expectedLogMessage);
     }
 
     @Test
     public void relationship_should_have_a_technology() {
+        //Given
         Set<Relationship> relationships =  container.getRelationships();
         Optional<Set<String>> relationshipsTechnology = Optional.of(relationships.stream().map(Relationship::getTechnology).collect(Collectors.toSet()));
-        Assertions.assertThat(relationshipsTechnology).isEqualTo(modelLinter.verifyElementRelationshipTechnology(container));
+        //When
+        Optional<Set<String>> tested = modelLinter.verifyElementRelationshipTechnology(container);
+        //Then
+        Assertions.assertThat(tested).isEqualTo(relationshipsTechnology);
     }
 
     @Test
@@ -105,9 +131,8 @@ public class ModelLinterTest extends AbstractModelLinterTest {
         // When
         modelLinter.verifyElementRelationshipTechnology(container2);
         // Then
-        loggerHandler.getLogRecordSourceMethodName("verifyElementRelationshipTechnology");
-        String log = loggerHandler.getLogMessage();
-        Assertions.assertThat(log).isEqualTo(expectedLogMessage);
+        String logMessage = loggerHandler.getLogMessage();
+        Assertions.assertThat(logMessage).isEqualTo(expectedLogMessage);
     }
 }
 
