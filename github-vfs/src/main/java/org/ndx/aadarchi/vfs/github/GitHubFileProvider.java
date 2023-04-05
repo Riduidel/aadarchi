@@ -65,7 +65,18 @@ public class GitHubFileProvider extends AbstractOriginatingFileProvider {
 		return Optional.ofNullable(userAuthenticationData);
 	}
 
+	/**
+	 * Convert the relative project url into a valid commons-vfs url (with the GitHub prefix)
+	 * @param project user/project identifier. If absolute path is given as parameter, it is replaced.
+	 * @return
+	 */
 	public static String urlFor(String project) {
+		if(project.contains(".git")) {
+			project = project.replace(".git", "");
+		}
+		if(project.startsWith("https://github.com")) {
+			return project.replace("https://", "github://");
+		}
 		return String.format("github://github.com/%s", project);
 	}
 }
