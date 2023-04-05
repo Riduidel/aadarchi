@@ -65,6 +65,7 @@
 		<module>cdi-config-extension</module>
 		<module>adr-tickets-extractor</module>
 		<module>maven-metadata-inferer</module>
+		<module>model-linter</module>
 		<module>spring-components-detector</module>
 		<module>sequence-diagram-generator</module>
 		<module>sipoc-diagram-generator</module>
