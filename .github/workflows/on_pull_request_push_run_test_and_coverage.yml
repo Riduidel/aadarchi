@@ -14,7 +14,7 @@ jobs:
           java-version: 11
           cache: 'maven'
       - name: Build with Maven
-        run: mvn -B test --file pom.xml -Pcoverage -Daadarchi.github.token=$TOKEN_FOR_GITHUB -Daadarchi.gitlab.token=$TOKEN_FOR_GITLAB
+        run: mvn -B test --file pom.xml -Pcoverage -Daadarchi.github.token="$TOKEN_FOR_GITHUB" -Daadarchi.gitlab.token="$TOKEN_FOR_GITLAB"
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
           TOKEN_FOR_GITLAB: ${{ secrets.TOKEN_FOR_GITLAB }}
