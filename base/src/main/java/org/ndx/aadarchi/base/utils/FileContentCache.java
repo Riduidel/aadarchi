@@ -15,7 +15,8 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Force;
-import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
+
+import com.pivovarit.function.ThrowingFunction;
 
 /**
  * A specific file cache, usable to avoid downloading multiple times the same file content.
@@ -51,8 +52,12 @@ public class FileContentCache {
 	 * @return input stream to locally cached version of that file
 	 * @throws IOException thrown if remote file can't be read
 	 */
-	public InputStream openStreamFor(SCMFile file) throws IOException {
-		return openStreamFor(file.url(), _url -> file.content());
+	public InputStream openStreamFor(FileObject file) throws IOException {
+		try {
+			return openStreamFor(file.getPublicURIString(), ThrowingFunction.unchecked(_url -> file.getContent().getInputStream()));
+		} finally {
+			file.close();
+		}
 	}
 
 	private void refreshCache(FileObject file, URL url, Function<URL, InputStream> cacheLoader) throws IOException {

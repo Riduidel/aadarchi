@@ -24,7 +24,7 @@
 		<error-prone.version>2.16</error-prone.version>
 	</properties>
 	<scm>
-		<!-- We use https connections for using GITHUB_TOKEN as password -->
+		<!-- We use https connections for using aadarchi.github.token as password -->
 		<connection>scm:git:https://git@github.com/Riduidel/aadarchi.git</connection>
 		<developerConnection>scm:git:https://git@github.com/Riduidel/aadarchi.git</developerConnection>
 		<url>https://github.com/Riduidel/aadarchi.git</url>
@@ -63,12 +63,7 @@
 	<modules>
 		<module>base</module>
 		<module>cdi-config-extension</module>
-		<module>github-scm-handler</module>
-		<module>gitlab-scm-handler</module>
 		<module>adr-tickets-extractor</module>
-		<!-- This module is the typical usage of this project, as it contains this 
-			project architecture documentation -->
-		<module>architecture-documentation</module>
 		<module>maven-metadata-inferer</module>
 		<module>spring-components-detector</module>
 		<module>sequence-diagram-generator</module>
@@ -169,6 +164,16 @@
 				<groupId>org.eclipse.jgit</groupId>
 				<artifactId>org.eclipse.jgit</artifactId>
 				<version>6.3.0.202209071007-r</version>
+			</dependency>
+			<dependency>
+				<groupId>org.kohsuke</groupId>
+				<artifactId>github-api</artifactId>
+				<version>1.308</version>
+			</dependency>
+			<dependency>
+				<groupId>org.gitlab4j</groupId>
+				<artifactId>gitlab4j-api</artifactId>
+				<version>4.16.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.pivovarit</groupId>
@@ -307,20 +312,6 @@
 								<requireJavaVersion>
 									<version>11</version>
 								</requireJavaVersion>
-							</rules>
-						</configuration>
-					</execution>
-					<execution>
-						<id>enforce-github-token</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireProperty>
-									<property>aadarchi.github.token</property>
-									<message><![CDATA[You must have set the aadarchi.github.token. See https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token]]></message>
-								</requireProperty>
 							</rules>
 						</configuration>
 					</execution>
@@ -501,6 +492,104 @@
 									<replaceValue>$1${project.version}</replaceValue>
 									<recursive>false</recursive>
 									<fileMask>on_release_perform_maven_release.yml</fileMask>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>build_github_modules</id>
+			<activation>
+				<property>
+					<name>aadarchi.github.token</name>
+				</property>
+			</activation>
+			<modules>
+				<module>github-scm-handler</module>
+				<module>github-vfs</module>
+				<!-- This module is the typical usage of this project, as it contains this 
+			project architecture documentation -->
+				<module>architecture-documentation</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>fail_when_not_building_github_modules</id>
+			<activation>
+				<property>
+					<name>!aadarchi.github.token</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>enforce-github-token</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireProperty>
+											<property>aadarchi.github.token</property>
+											<message>
+												<![CDATA[You must have set the aadarchi.github.token if you want a full build of aadarchi.
+See https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token]]>
+											</message>
+										</requireProperty>
+									</rules>
+									<fail>false</fail>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>build_gitlab_modules</id>
+			<activation>
+				<property>
+					<name>aadarchi.gitlab.token</name>
+				</property>
+			</activation>
+			<modules>
+				<module>gitlab-scm-handler</module>
+				<module>gitlab-vfs</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>signal_when_not_building_gitlab_modules</id>
+			<activation>
+				<property>
+					<name>!aadarchi.gitlab.token</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>enforce-gitlab-token</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireProperty>
+											<property>aadarchi.gitlab.token</property>
+											<message>
+												<![CDATA[If you want to build the gitlab part of aadarchi, set the aadarchi.gitlab.token]]>
+											</message>
+										</requireProperty>
+									</rules>
+									<fail>false</fail>
 								</configuration>
 							</execution>
 						</executions>
