@@ -211,11 +211,6 @@
 				<version>5.2.0</version>
 				<scope>test</scope>
 			</dependency>
-			<dependency>
-				<groupId>berlin.yuna</groupId>
-				<artifactId>wiser-unit</artifactId>
-				<version>0.0.49</version>
-			</dependency>
 			<!-- https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent -->
 			<dependency>
 				<groupId>org.jboss.weld</groupId>
