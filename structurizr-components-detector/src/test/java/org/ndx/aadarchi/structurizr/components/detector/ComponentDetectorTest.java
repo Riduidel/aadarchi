@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
@@ -74,5 +75,22 @@ class ComponentDetectorTest {
         	.element(0)
         	.extracting(LogRecord::getMessage)
         	.isEqualTo("Detected 2 new components in container.");
+    }
+
+    @Test
+    void write_the_correct_logs_when_detecting_components_and_log_level_is_fine() throws Throwable {
+        //Given
+        Logger logger = Logger.getLogger(ComponentDetector.class.getName());
+        Workspace w = new Workspace(getClass().getSimpleName(), "a workspace for testing component addition");
+        var system = w.getModel().addSoftwareSystem("system");
+        var container = system.addContainer("container");
+        Mockito.when(componentFinder.findComponents())
+                .thenReturn(Set.of(container.addComponent("a"), container.addComponent("b")));
+        //When
+        logger.setLevel(Level.ALL);
+        componentDetector.doDetectComponentsIn(container, componentFinder);
+        //Then
+        Assertions.assertThat(logMemory.recordList)
+        	.hasSize(2);
     }
 }
