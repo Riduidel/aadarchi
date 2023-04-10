@@ -96,10 +96,8 @@ public class ComponentDetector extends ModelElementAdapter {
 	 * @throws Exception
 	 */
 	void doDetectComponentsIn(Container container, ComponentFinder componentFinder) throws Exception {
-		//Remove "detecting...." type messages
-		logger.info(String.format("Detecting components of %s. It can be long ...", container.getName()));
 		componentFinder.findComponents();
-		logger.info(String.format("Detected %d new components in %s.", container.getComponents().size(),
+		logger.info(String.format("%d modules found in %s.", container.getComponents().size(),
 				container.getName()));
 	}
 

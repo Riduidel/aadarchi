@@ -74,7 +74,7 @@ class ComponentDetectorTest {
         	.hasSize(1)
         	.element(0)
         	.extracting(LogRecord::getMessage)
-        	.isEqualTo("Detected 2 new components in container.");
+        	.isEqualTo("2 modules found in container.");
     }
 
     @Test
@@ -85,12 +85,18 @@ class ComponentDetectorTest {
         var system = w.getModel().addSoftwareSystem("system");
         var container = system.addContainer("container");
         Mockito.when(componentFinder.findComponents())
-                .thenReturn(Set.of(container.addComponent("a"), container.addComponent("b")));
+                .thenReturn(Set.of(container.addComponent("a")));
         //When
         logger.setLevel(Level.ALL);
         componentDetector.doDetectComponentsIn(container, componentFinder);
         //Then
         Assertions.assertThat(logMemory.recordList)
-        	.hasSize(2);
+        	.hasSize(1)
+                .element(0)
+                .extracting(LogRecord::getMessage)
+                .isEqualTo("1 modules found in container.");
+
+        Assertions.assertThat(logger.getLevel())
+                .isEqualTo(Level.ALL);
     }
 }
