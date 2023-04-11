@@ -75,7 +75,7 @@ public class ComponentDetector extends ModelElementAdapter {
 		return super.startVisit(container);
 	}
 
-	private ComponentFinder detectComponentsIn(Container container)
+	protected ComponentFinder detectComponentsIn(Container container)
 			throws MalformedURLException, URISyntaxException, Exception {
 		ComponentFinder componentFinder = new ComponentFinder(container,
 				container.getProperties().get(ModelElementKeys.JAVA_PACKAGES), strategies(container));
@@ -84,11 +84,21 @@ public class ComponentDetector extends ModelElementAdapter {
 			URLClassLoader urlClassLoader = (URLClassLoader) contextClassLoader;
 			componentFinder.setUrlClassLoader(urlClassLoader);
 		}
-		logger.info(String.format("Detecting components of %s. It can be long ...", container.getName()));
-		componentFinder.findComponents();
-		logger.info(String.format("Detected %d components of %s.", container.getComponents().size(),
-				container.getName()));
+		doDetectComponentsIn(container, componentFinder);
 		return componentFinder;
+	}
+
+	/**
+	 * Effective component detection method.
+	 * This extracted code is here to allow easier tests (which is bad, but cool)
+	 * @param container
+	 * @param componentFinder
+	 * @throws Exception
+	 */
+	void doDetectComponentsIn(Container container, ComponentFinder componentFinder) throws Exception {
+		componentFinder.findComponents();
+		logger.info(String.format("%d modules found in %s.", container.getComponents().size(),
+				container.getName()));
 	}
 
 	private Collection<Component> findComponentsImplementing(Container container, TypeRepository typeRepository,
