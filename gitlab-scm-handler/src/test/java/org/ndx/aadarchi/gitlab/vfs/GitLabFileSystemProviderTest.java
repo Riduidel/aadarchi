@@ -27,7 +27,7 @@ class GitLabFileSystemProviderTest {
 	}
 
 	@Test
-	void test() throws FileSystemException {
+	void can_get_readme_from_gitlab_repo() throws FileSystemException {
 		// Given
 		FileObject repositoryRoot = gitHubFileSystem.getProjectRoot("Riduidel/codingame-maven-plugins");
 		// When

@@ -59,7 +59,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<systemPropertyVariables>
-						<aadarchi.gitlab.url>${aadarchi.gitlab.token}</aadarchi.gitlab.url>
+						<aadarchi.gitlab.token>${aadarchi.gitlab.token}</aadarchi.gitlab.token>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
