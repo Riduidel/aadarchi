@@ -167,7 +167,7 @@
 			<id>Download rubgems in a scope where I can access that damned repository</id>
 			<activation>
 				<file>
-					<missing>${project.basedir}/src/main/resources/META-INF/gems</missing>
+					<missing>${basedir}/src/main/resources/META-INF/gems</missing>
 				</file>
 			</activation>
 			<properties>
@@ -176,7 +176,7 @@
 				<gems.destination>${project.basedir}/src/main/resources/META-INF/gems</gems.destination>
 			</properties>
 			<dependencies>
-				<!-- asciidoctor-kroki isadded as dependency, but will receive a VERY special treatment -->
+				<!-- asciidoctor-kroki is added as dependency, but will receive a VERY special treatment -->
 				<dependency>
 					<groupId>rubygems</groupId>
 					<artifactId>asciidoctor-kroki</artifactId>

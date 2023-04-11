@@ -9,6 +9,7 @@ import org.apache.maven.plugin.BuildPluginManager;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
@@ -16,9 +17,9 @@ import org.twdata.maven.mojoexecutor.MojoExecutor.ExecutionEnvironment;
 
 public abstract class AbstractMojoExecutorMojo extends AbstractMojo {
 
-	@Component
+	@Parameter( defaultValue = "${project}", readonly = true )
 	protected MavenProject mavenProject;
-	@Component
+	@Parameter( defaultValue = "${session}", readonly = true )
 	protected MavenSession mavenSession;
 	@Component
 	protected BuildPluginManager pluginManager;

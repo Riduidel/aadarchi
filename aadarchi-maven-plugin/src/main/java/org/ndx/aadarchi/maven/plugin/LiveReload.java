@@ -49,10 +49,10 @@ public class LiveReload extends AbstractMojo {
 	private String mojoGroupId;
 	@Parameter(defaultValue = "${mojo.artifactId}")
 	private String mojoArtifactId;
-	@Component
+	@Parameter( defaultValue = "${project}", readonly = true )
 	private MavenProject mavenProject;
 
-	@Component
+	@Parameter( defaultValue = "${session}", readonly = true )
 	private MavenSession mavenSession;
 
 	@Component
