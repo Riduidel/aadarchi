@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>io.github.Riduidel.aadarchi</groupId>
 	<artifactId>system</artifactId>
-	<version>0.1.5-SNAPSHOT</version>
+	<version>0.1.11-SNAPSHOT</version>
 	<packaging>pom</packaging>
-
 	<description>Base module of a set of tools created to allow easy architecture documentation based upon Simon Brown work.</description>
-
 	<name>Aadarchi : root POM</name>
 	<url>https://riduidel.github.io/aadarchi/</url>
-
 	<properties>
 		<maven.compiler.release>11</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-client -->
-		<version.structurizr.client>1.15.2</version.structurizr.client>
+		<version.structurizr.client>1.19.0</version.structurizr.client>
 		<!-- See latest version here: https://mvnrepository.com/artifact/com.structurizr/structurizr-plantuml -->
-		<version.structurizr.export>1.7.0</version.structurizr.export>
+		<version.structurizr.dsl>1.25.0</version.structurizr.dsl>
+		<version.structurizr.export>1.8.4</version.structurizr.export>
 		<version.structurizr.analysis>1.3.5</version.structurizr.analysis>
 		<version.structurizr.annotations>1.3.5</version.structurizr.annotations>
 		<version.jsoup>1.15.3</version.jsoup>
 		<version.junit>5.9.1</version.junit>
+		<error-prone.version>2.16</error-prone.version>
 	</properties>
 	<scm>
-		<connection>scm:git:git@github.com:Riduidel/aadarchi.git</connection>
-		<developerConnection>scm:git:git@github.com:Riduidel/aadarchi.git</developerConnection>
+		<!-- We use https connections for using aadarchi.github.token as password -->
+		<connection>scm:git:https://git@github.com/Riduidel/aadarchi.git</connection>
+		<developerConnection>scm:git:https://git@github.com/Riduidel/aadarchi.git</developerConnection>
 		<url>https://github.com/Riduidel/aadarchi.git</url>
 		<tag>HEAD</tag>
 	</scm>
@@ -35,7 +34,6 @@
 		<system>GitHub</system>
 		<url>https://github.com/Riduidel/aadarchi/issues</url>
 	</issueManagement>
-
 	<developers>
 		<developer>
 			<id>Riduidel</id>
@@ -46,14 +44,12 @@
 			</roles>
 		</developer>
 	</developers>
-
 	<licenses>
 		<license>
 			<name>The Apache License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
-
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -64,33 +60,28 @@
 			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-
 	<modules>
 		<module>base</module>
 		<module>cdi-config-extension</module>
-		<module>github-scm-handler</module>
-		<module>gitlab-scm-handler</module>
 		<module>adr-tickets-extractor</module>
-		<!-- This module is the typical usage of this project, as it contains this 
-			project architecture documentation -->
-		<module>architecture-documentation</module>
 		<module>maven-metadata-inferer</module>
+		<module>model-linter</module>
 		<module>spring-components-detector</module>
 		<module>sequence-diagram-generator</module>
+		<module>sipoc-diagram-generator</module>
 		<module>archetype</module>
 		<module>markdown-to-asciidoc</module>
 		<module>aadarchi-maven-plugin</module>
 		<module>cdi-in-maven-plugin-helper</module>
 		<module>structurizr-components-detector</module>
-		<module>javascript-metadata-inferer</module>
+		<module>aadarchi-test-utils</module>
 	</modules>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>javax.enterprise</groupId>
-				<artifactId>cdi-api</artifactId>
-				<version>2.0.SP1</version>
+				<groupId>jakarta.enterprise</groupId>
+				<artifactId>jakarta.enterprise.cdi-api</artifactId>
+				<version>2.0.2</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.weld.se</groupId>
@@ -105,7 +96,28 @@
 			<dependency>
 				<groupId>com.structurizr</groupId>
 				<artifactId>structurizr-dsl</artifactId>
-				<version>1.20.0</version>
+				<version>${version.structurizr.dsl}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.12.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-text</artifactId>
+				<version>1.10.0</version>
+			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-vfs2 -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-vfs2</artifactId>
+				<version>2.9.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.structurizr</groupId>
@@ -155,6 +167,16 @@
 				<version>6.3.0.202209071007-r</version>
 			</dependency>
 			<dependency>
+				<groupId>org.kohsuke</groupId>
+				<artifactId>github-api</artifactId>
+				<version>1.308</version>
+			</dependency>
+			<dependency>
+				<groupId>org.gitlab4j</groupId>
+				<artifactId>gitlab4j-api</artifactId>
+				<version>4.16.0</version>
+			</dependency>
+			<dependency>
 				<groupId>com.pivovarit</groupId>
 				<artifactId>throwing-function</artifactId>
 				<version>1.5.1</version>
@@ -183,16 +205,21 @@
 				<version>3.23.1</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-junit-jupiter</artifactId>
+				<version>5.2.0</version>
+				<scope>test</scope>
+			</dependency>
 			<!-- https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent -->
 			<dependency>
 				<groupId>org.jboss.weld</groupId>
-				<artifactId>weld-junit-parent</artifactId>
-				<version>4.0.0.Final</version>
-				<type>pom</type>
+				<artifactId>weld-junit5</artifactId>
+				<version>2.0.2.Final</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -212,6 +239,21 @@
 					<version>3.10.1</version>
 					<configuration>
 						<release>${maven.compiler.release}</release>
+						<compilerArgs>
+							<arg>-XDcompilePolicy=simple</arg>
+							<arg>-Xplugin:ErrorProne</arg>
+						</compilerArgs>
+						<annotationProcessorPaths>
+							<path>
+								<groupId>com.google.errorprone</groupId>
+								<artifactId>error_prone_core</artifactId>
+								<version>${error-prone.version}</version>
+							</path>
+							<!-- Other annotation processors go here.
+            If 'annotationProcessorPaths' is set, processors will no longer be
+            discovered on the regular -classpath; see also 'Using Error Prone
+            together with other annotation processors' below. -->
+						</annotationProcessorPaths>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -286,9 +328,56 @@
 	</build>
 	<profiles>
 		<profile>
+			<id>coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.8</version>
+						<executions>
+							<execution>
+								<id>Jacoco - prepare agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>Jacoco - generate report</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>release</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>A release configuration is present</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireProperty>
+											<property>gpg.passphrase</property>
+											<message>You must set a gpg.passphrase property to be able to sign maven release!</message>
+										</requireProperty>
+									</rules>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
@@ -312,6 +401,9 @@
 								<goals>
 									<goal>jar</goal>
 								</goals>
+								<configuration>
+									<failOnError>false</failOnError>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -326,6 +418,7 @@
 								<goals>
 									<goal>sign</goal>
 								</goals>
+								<!-- DON'T REMOVE THAT CONFIGURATION (see  https://stackoverflow.com/a/28860520/15619) -->
 								<configuration>
 									<!-- This is necessary for gpg to not try to use the pinentry programs -->
 									<gpgArguments>
@@ -349,7 +442,7 @@
 							<tagNameFormat>@{version}</tagNameFormat>
 							<!-- This profile MUST be defined in settings.xml and contains the 
 								various tokens (GitHub, GitLab and so on) -->
-							<releaseProfiles>settings-aadarchi,release</releaseProfiles>
+							<releaseProfiles>release</releaseProfiles>
 							<arguments>-Daadarchi.github.token=${aadarchi.github.token}</arguments>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<localCheckout>false</localCheckout>
@@ -366,6 +459,147 @@
 							<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
 							<autoReleaseAfterClose>true</autoReleaseAfterClose>
 						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>update_version_in_files</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.github.floverfelt</groupId>
+						<artifactId>find-and-replace-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>change-version-in-readme</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>find-and-replace</goal>
+								</goals>
+								<configuration>
+									<replacementType>file-contents</replacementType>
+									<baseDir>${project.basedir}</baseDir>
+									<findRegex>[0-9]+.[0-9]+.[0-9]+(-SNAPSHOT)?</findRegex>
+									<replaceValue>${project.version}</replaceValue>
+									<recursive>false</recursive>
+									<fileMask>README.md</fileMask>
+								</configuration>
+							</execution>
+							<execution>
+								<id>change-version-in-on-release-perform-maven-release</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>find-and-replace</goal>
+								</goals>
+								<configuration>
+									<replacementType>file-contents</replacementType>
+									<baseDir>.github/workflows</baseDir>
+									<findRegex>(default:\s+)('\d+\.\d+\.\d+')(-SNAPSHOT)?</findRegex>
+									<replaceValue>$1${project.version}</replaceValue>
+									<recursive>false</recursive>
+									<fileMask>on_release_perform_maven_release.yml</fileMask>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>build_github_modules</id>
+			<activation>
+				<property>
+					<name>aadarchi.github.token</name>
+				</property>
+			</activation>
+			<modules>
+				<module>github-scm-handler</module>
+				<module>github-vfs</module>
+				<!-- This module is the typical usage of this project, as it contains this 
+			project architecture documentation -->
+				<module>architecture-documentation</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>fail_when_not_building_github_modules</id>
+			<activation>
+				<property>
+					<name>!aadarchi.github.token</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>enforce-github-token</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireProperty>
+											<property>aadarchi.github.token</property>
+											<message>
+												<![CDATA[You must have set the aadarchi.github.token if you want a full build of aadarchi.
+See https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token]]>
+											</message>
+										</requireProperty>
+									</rules>
+									<fail>false</fail>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>build_gitlab_modules</id>
+			<activation>
+				<property>
+					<name>aadarchi.gitlab.token</name>
+				</property>
+			</activation>
+			<modules>
+				<module>gitlab-scm-handler</module>
+				<module>gitlab-vfs</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>signal_when_not_building_gitlab_modules</id>
+			<activation>
+				<property>
+					<name>!aadarchi.gitlab.token</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-enforcer-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>enforce-gitlab-token</id>
+								<goals>
+									<goal>enforce</goal>
+								</goals>
+								<configuration>
+									<rules>
+										<requireProperty>
+											<property>aadarchi.gitlab.token</property>
+											<message>
+												<![CDATA[If you want to build the gitlab part of aadarchi, set the aadarchi.gitlab.token]]>
+											</message>
+										</requireProperty>
+									</rules>
+									<fail>false</fail>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>

@@ -6,12 +6,14 @@ import java.nio.file.Path;
 
 import javax.inject.Inject;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.AsciidocSourceDir;
+import org.ndx.aadarchi.base.utils.CantAccessPath;
 import org.ndx.aadarchi.base.utils.SimpleOutputBuilder;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 
@@ -33,16 +35,16 @@ import com.structurizr.model.StaticStructureElement;
 @Component(technology = "Java, CDI")
 public class ImplicitIncludeManager extends ModelElementAdapter {
 	
-	private File sourceDir;
+	private FileObject sourceDir;
 
-	@Inject public void setDocumentsFolder(@ConfigProperty(name=AsciidocSourceDir.NAME, defaultValue = AsciidocSourceDir.VALUE) File sourceDir) {
+	@Inject public void setDocumentsFolder(@ConfigProperty(name=AsciidocSourceDir.NAME, defaultValue = AsciidocSourceDir.VALUE) FileObject sourceDir) {
 		if(sourceDir==null) {
 			throw new CantCreateImplicitInclude(
 					String.format("To have implicit includes working, you have to define the system property %s", 
 							AsciidocSourceDir.NAME)
 					);
 		}
-		this.sourceDir = sourceDir.getAbsoluteFile();
+		this.sourceDir = sourceDir;
 	}
 	/**
 	 * We set it at first element to have those text before all enhancers
@@ -62,18 +64,21 @@ public class ImplicitIncludeManager extends ModelElementAdapter {
 	private void generateLinkFor(AgileArchitectureSection section, Element element, OutputBuilder builder) {
 		String sectionFolder = String.format(SimpleOutputBuilder.SECTION_PATTERN, section.index(), section.name());
 		String elementName = String.format("%s.adoc", StructurizrUtils.getCanonicalPath(element).replace('/', '_'));
-		File potentialFile = new File(new File(sourceDir,sectionFolder), elementName);
-		File targetFile = builder.outputFor(section, element, this, OutputBuilder.Format.adoc);
-		if(potentialFile.exists()) {
-			try {
-				Path relativePath = targetFile.getParentFile().getCanonicalFile().toPath()
-						.relativize(potentialFile.getCanonicalFile().toPath());
-				builder.writeToOutput(section, element, this, OutputBuilder.Format.adoc, 
-						String.format("include::%s[leveloffset=+1]\n",
-								relativePath.toString()));
-			} catch (IOException e) {
-				throw new CantCreateImplicitInclude(String.format("Can't create file %s", targetFile), e);
+		try {
+			FileObject potentialFile = sourceDir.resolveFile(sectionFolder).resolveFile(elementName);
+			FileObject targetFile = builder.outputFor(section, element, this, OutputBuilder.Format.adoc);
+			if(potentialFile.exists()) {
+				try {
+					Path relativePath = targetFile.getParent().getPath().relativize(potentialFile.getPath());
+					builder.writeToOutput(section, element, this, OutputBuilder.Format.adoc, 
+							String.format("include::%s[leveloffset=+1]\n",
+									relativePath.toString()));
+				} catch (IOException e) {
+					throw new CantCreateImplicitInclude(String.format("Can't create file %s", targetFile), e);
+				}
 			}
+		} catch (FileSystemException e) {
+			throw new CantAccessPath(String.format("Cant't acces %s/%s/%s", sourceDir, sectionFolder, elementName), e);
 		}
 	}
 

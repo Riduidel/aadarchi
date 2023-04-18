@@ -53,7 +53,7 @@ public class EnhancerLister extends ModelElementAdapter {
         return stream
                 .filter(instance -> !instance.getClass().isInstance(this))
                 .sorted(Comparator.comparing(Enhancer::priority))
-                .map(instance -> String.format("|%d|%s", instance.priority(), getSimpleName(instance)))
+                .map(instance -> String.format("|%d|`%s`", instance.priority(), getSimpleName(instance)))
                 .collect(Collectors.joining("\n\n", "[cols=\"1,1\"]\n" + "|===\n|Priority|Enhancer\n\n", "\n|==="));
     }
 

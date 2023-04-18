@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
-		<version>0.1.5-SNAPSHOT</version>
+		<version>0.1.11-SNAPSHOT</version>
 	</parent>
 	<artifactId>maven-metadata-inferer</artifactId>
 	<name>Aadarchi : Maven metadata inferer</name>
@@ -22,16 +22,24 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.weld</groupId>
+			<artifactId>weld-junit5</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>aadarchi-test-utils</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

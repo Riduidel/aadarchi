@@ -10,11 +10,14 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemManager;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 import org.ndx.aadarchi.sequence.generator.javaparser.generator.SequenceDiagramGenerator;
 import org.ndx.aadarchi.sequence.generator.javaparser.visitor.JavaParserVisitorForBuildingCallGraph;
 
 import com.github.javaparser.ast.CompilationUnit;
+import com.pivovarit.function.ThrowingConsumer;
 import com.structurizr.model.Component;
 
 public class CallGraphModel {
@@ -41,9 +44,12 @@ public class CallGraphModel {
 	 * Full map of classes that have been parsed.
 	 */
 	private Map<String, CompilationUnit> sources;
+	
+	private FileSystemManager fsManager;
 
-	public CallGraphModel(Map<String, Component> classesToComponents, Map<String, CompilationUnit> sources) {
+	public CallGraphModel(Map<String, Component> classesToComponents, Map<String, CompilationUnit> sources, FileSystemManager fsManager) {
 		super();
+		this.fsManager = fsManager;
 		this.sources = sources;
 		this.classesToComponents = classesToComponents;
 	}
@@ -75,16 +81,18 @@ public class CallGraphModel {
 		}
 	}
 
-	public void generatePlantUMLDiagramFor(Component component, File destination) {
+	public void generatePlantUMLDiagramFor(Component component, FileObject destination) {
 		component.getCode().stream()
 			.map(code -> code.getType())
 			.map(code -> namesToClasses.get(code))
 			.filter(representation -> representation!=null)
-			.forEach(representation -> 
-				representation.accept( new SequenceDiagramGenerator(
-						new File(destination, StructurizrUtils.getCanonicalPath(component).substring(1).replace('.', '.')),
-						classesToComponents,
-						this))
+			.forEach(
+					ThrowingConsumer.unchecked(
+					representation -> 
+					representation.accept( new SequenceDiagramGenerator(
+							fsManager.resolveFile(destination, StructurizrUtils.getCanonicalPath(component).substring(1).replace('.', '.')),
+							classesToComponents,
+							this)))
 					);
 	}
 

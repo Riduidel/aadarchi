@@ -1,0 +1,7 @@
+= gitlab-vfs
+
+A https://commons.apache.org/proper/commons-vfs/[commons-vfs] file system allowing access to a GitLab code repository without having to clone it locally.
+
+== How to build
+
+Set the `aadarchi.gitlab.token` maven property in parent build, and it will build and test automatically.

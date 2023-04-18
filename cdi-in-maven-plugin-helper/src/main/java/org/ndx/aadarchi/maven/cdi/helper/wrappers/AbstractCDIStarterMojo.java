@@ -48,19 +48,19 @@ public abstract class AbstractCDIStarterMojo extends AbstractMojo implements Ext
 	@MojoProduces
 	private ArtifactResolver resolver;
 
-	@Component
+	@Parameter( defaultValue = "${project}", readonly = true )
 	@MojoProduces
 	private MavenProject project;
 
-	@Component
+	@Parameter( defaultValue = "${session}", readonly = true )
 	@MojoProduces
 	private MavenSession session;
 
-	@Component
+	@Parameter( defaultValue = "${mojoExecution}", readonly = true )
 	@MojoProduces
 	private MojoExecution mojoExecution;
 
-	@Component
+	@Parameter( defaultValue = "${plugin}", readonly = true )
 	private PluginDescriptor pluginDescriptor;
 
 	@Parameter(readonly = true, defaultValue = "${repositorySystemSession}")

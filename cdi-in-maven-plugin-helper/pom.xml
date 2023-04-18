@@ -3,16 +3,12 @@
 	<parent>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
-		<version>0.1.5-SNAPSHOT</version>
+		<version>0.1.11-SNAPSHOT</version>
 	</parent>
 	<artifactId>cdi-in-maven-plugin-helper</artifactId>
 	<name>Aadarchi : CDI in Maven helper</name>
 	<description>This small java library provides a simple way to have a maven Mojo use CDI for bean injection</description>
 	<dependencies>
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.jboss.weld.se</groupId>
 			<artifactId>weld-se-core</artifactId>
@@ -38,6 +34,21 @@
 		<dependency>
 			<groupId>org.apache.deltaspike.core</groupId>
 			<artifactId>deltaspike-core-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

@@ -1,7 +1,7 @@
 <h1 align="center">Welcome to Aadarchi 👋</h1>
 <p>
 	<a href="https://github.com/Riduidel/aadarchi/actions?query=workflow%3A%22Java+CI+with+Maven%22">
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/Riduidel/aadarchi/Java%20CI%20with%20Maven">
+<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/Riduidel/aadarchi/on_push_on_master_deploy_build.yml?branch=main">
 	</a>
   <a href="https://github.com/Riduidel/aadarchi/releases" target="_blank"><img src="https://badge.fury.io/gh/Riduidel%2Faadarchi.svg" alt="GitHub version"></a>
 <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Riduidel/aadarchi">
@@ -18,7 +18,7 @@ You can use the archetype by running this maven-friendly 😅command.
 Current version is ![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)
 
 ```sh
-mvn archetype:generate -DarchetypeVersion=0.1.4 -Daadarchi-version=0.1.4 -DarchetypeGroupId=io.github.Riduidel.aadarchi -DarchetypeArtifactId=archetype 
+mvn archetype:generate -DarchetypeVersion=0.1.10 -Daadarchi-version=0.1.10 -DarchetypeGroupId=io.github.Riduidel.aadarchi -DarchetypeArtifactId=archetype 
 ```
 
 This will ask you a few questions and generate the project.
@@ -26,7 +26,7 @@ Finally, don't forget to replace the value of `aadarchi-version` maven property 
 
 ## Usage
 
-Once the archetype has been run, you'll have a project with a Structurizr `workspace.dsl` file in `src/architecture/resources` (conform to [Structurizr DSL syntax](https://github.com/structurizr/dsl/blob/master/docs/language-reference.md), which means that file can be viewed using [Structurizr-lite](https://dev.to/simonbrown/getting-started-with-structurizr-lite-27d0))
+Once the archetype has been run, you'll have a project with a Structurizr `workspace.dsl` file in `src/architecture/resources` (conform to [Structurizr DSL syntax](https://github.com/structurizr/dsl/blob/main/docs/language-reference.md), which means that file can be viewed using [Structurizr-lite](https://dev.to/simonbrown/getting-started-with-structurizr-lite-27d0))
 and asciidoc files following Agile architecture documentation template in `src/docs/asciidoc`.
 
 ### Generating architecture documentation

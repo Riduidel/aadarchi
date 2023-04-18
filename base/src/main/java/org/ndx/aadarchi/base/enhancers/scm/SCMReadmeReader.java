@@ -1,6 +1,5 @@
 package org.ndx.aadarchi.base.enhancers.scm;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -10,11 +9,14 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSelector;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.PatternFileSelector;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.OutputBuilder.Format;
-import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.Scm;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
@@ -71,35 +73,37 @@ public class SCMReadmeReader extends SCMModelElementAdapter {
 	void writeReadmeFor(SCMHandler handler, Element element, String elementProject, OutputBuilder builder) {
 		String elementPath = element.getProperties().getOrDefault(Scm.PATH, "");
 		String elementReadme = element.getProperties().get(Scm.README);
-		Predicate<SCMFile> filter;
+		FileSelector filter;
 		if(elementReadme==null) {
-			filter = (file) -> file.name().toLowerCase().startsWith("readme.");
+			filter = new PatternFileSelector("readme\\.");
 		} else {
-			filter = (file) -> file.name().equals(elementReadme);
+			filter = new PatternFileSelector(elementReadme.replace(".", "\\."));
 		}
 		try {
-			Collection<SCMFile> file = handler.find(elementProject, elementPath, filter);
-			if(file.isEmpty()) {
-				logger.severe(String.format("Couldn't find any Readme for element %s"
+			FileObject root = handler.getProjectRoot(elementProject);
+			FileObject elementRoot = root.resolveFile(elementPath);
+			FileObject[] found = elementRoot.findFiles(filter);
+			if(found.length==0) {
+				logger.severe(String.format("Couldn't find any Readme for element %s "
 						+ "(project is %s, path %s and readme should be %s)", 
 						StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
-			} else if(file.size()>1) {
+			} else if(found.length>1) {
 				logger.severe(String.format("There are more than one valid Readme for element %s"
 						+ "(project is %s, path %s and readme should be %s)", 
 						StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme));
 			} else {
-				SCMFile readme = file.iterator().next();
-				File outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, Format.adoc);
+				FileObject readme = found[0];
+				FileObject outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, Format.adoc);
 				if(force) {
 					outputFor.delete();
 				} else {
-					if(readme.lastModified()<outputFor.lastModified())
-						return;
+					if(outputFor.exists() && readme.getContent().getLastModifiedTime()<outputFor.getContent().getLastModifiedTime())
+							return;
 				}
 				try {
 					// Now we have content as asciidoc, so let's write it to the conventional location
 					String readmeText = IOUtils.toString(cache.openStreamFor(readme), "UTF-8");
-					if(readme.name().toLowerCase().endsWith(".md")) {
+					if(readme.getName().getExtension().toLowerCase().equals("md")) {
 						readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
 					}
 					builder.writeToOutput(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
@@ -109,8 +113,11 @@ public class SCMReadmeReader extends SCMModelElementAdapter {
 							StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme), 
 							e);
 				}
+				finally {
+					readme.close();
+				}
 			}
-		} catch(FileNotFoundException e) {
+		} catch(FileSystemException e) {
 			logger.log(Level.SEVERE, String.format("Couldn't find any Readme for element %s"
 					+ "(project is %s, path %s and readme should be %s)", 
 					StructurizrUtils.getCanonicalPath(element), elementProject, elementPath, elementReadme), e);

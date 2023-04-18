@@ -5,9 +5,8 @@ workspace "aadarchi-documentation-system" {
 		aadarchi = softwareSystem "Aadarchi" {
 			properties {
 				"aadarchi.tickets.project" "aadarchi-documentation-system"
-				"aadarchi.issue.manager" "https://github.com/Riduidel/aadarchi-documentation-system"
 				"aadarchi.tickets.adr.label" "decision"
-				"aadarchi.maven.pom" "../pom.xml"
+				"aadarchi.maven.pom" "pom.xml"
 			}
 			maven = container "maven" "The maven build engine" "java, maven"
 			aadarchi_maven_plugin = container "aadarchi-maven-plugin" "" "java, maven-plugin"{
@@ -29,7 +28,7 @@ workspace "aadarchi-documentation-system" {
 		}
 		person_architect -> archetype_6 "Bootstrap a valid project"
 		person_architect -> maven "Generates documentation"
-		person_stakeholder -> architecture_documentation "Read generated documentation"
+		architecture_documentation -> person_stakeholder  "Read generated documentation"
 		archetype_6 -> architecture_documentation "Generates documentation project"
 	}
 	views {
@@ -49,9 +48,17 @@ workspace "aadarchi-documentation-system" {
 		}
 		container "aadarchi" "system_containers" "Agile architecture containers" {
 			include *
+			
+			properties {
+                "aadarchi.auto.update" "true"
+            }
 		}
 		component "aadarchi_base" "base_components" "Agile architecture base components view" {
 			include *
+
+            properties {
+                "aadarchi.auto.update" "true"
+            }
 		}
 	}
 }

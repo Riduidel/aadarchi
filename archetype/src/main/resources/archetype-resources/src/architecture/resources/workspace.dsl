@@ -13,10 +13,10 @@ workspace "aadarchi-documentation-system" {
 		systemContext "mySystem" "SystemContext" "Illustration of mySystem usage" {
 			include *
 		}
-		container "mySystem" "system_containers" "mySystem containers" {
+		container "mySystem" "SystemContainers" "mySystem containers" {
 			include *
 		}
-		component "myContainer" "container_components" "myContainer components" {
+		component "myContainer" "ContainerComponents" "myContainer components" {
 			include *
 		}
 	}

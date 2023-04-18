@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>system</artifactId>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
-		<version>0.1.5-SNAPSHOT</version>
+		<version>0.1.11-SNAPSHOT</version>
 	</parent>
 	<artifactId>architecture-documentation</artifactId>
 	<name>Aadarchi : System documentation generator</name>
@@ -34,6 +34,11 @@
 		</dependency>
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<artifactId>sipoc-diagram-generator</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
 			<artifactId>github-scm-handler</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -43,20 +48,22 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<artifactId>model-linter</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.jboss.weld/weld-junit-parent -->
 		<dependency>
 			<groupId>org.jboss.weld</groupId>
-			<artifactId>weld-junit-parent</artifactId>
-			<type>pom</type>
+			<artifactId>weld-junit5</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -97,41 +104,10 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M3</version>
-				<executions>
-					<execution>
-						<id>enforce-maven</id>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
-						<configuration>
-							<rules>
-								<requireMavenVersion>
-									<version>3.6</version>
-								</requireMavenVersion>
-								<requireJavaVersion>
-									<version>${version.java}</version>
-								</requireJavaVersion>
-							</rules>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<release>${version.java}</release>
 				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
-			</plugin>
-			<plugin>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.22.2</version>
 			</plugin>
 		</plugins>
 	</build>

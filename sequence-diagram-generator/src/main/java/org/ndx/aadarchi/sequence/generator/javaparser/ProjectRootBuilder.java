@@ -7,7 +7,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.ndx.aadarchi.base.utils.FileResolver;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemManager;
 import org.ndx.aadarchi.sequence.generator.SequenceGeneratorException;
 
 import com.github.javaparser.ParserConfiguration;
@@ -23,10 +24,10 @@ import com.structurizr.model.Container;
 public class ProjectRootBuilder {
 	private static final Logger logger = Logger.getLogger(ProjectRootBuilder.class.getName());
 	private List<String> files;
-	private FileResolver fileResolver;
+	private FileSystemManager fileSystemManager;
 
-	public ProjectRootBuilder(FileResolver fileResolver, Map<String, Container> pathsToContainers) {
-		this.fileResolver = fileResolver;
+	public ProjectRootBuilder(FileSystemManager fileSystemManager, Map<String, Container> pathsToContainers) {
+		this.fileSystemManager = fileSystemManager;
 		this.files = new ArrayList<>(pathsToContainers.keySet());
 	}
 
@@ -36,7 +37,8 @@ public class ProjectRootBuilder {
 			throw new SequenceGeneratorException(String.format("Unable to parse source for %s, as it is linked to no source path", container));
 		}
 		List<Path> paths = files.stream()
-				.map(ThrowingFunction.unchecked(file -> fileResolver.fileAsUrltoPath(file)))
+				.map(ThrowingFunction.unchecked(fileSystemManager::resolveFile))
+				.map(FileObject::getPath)
 				.collect(Collectors.toList());
 		
 		Path initialPath = paths.get(0);

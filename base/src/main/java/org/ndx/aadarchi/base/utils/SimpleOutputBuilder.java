@@ -1,92 +1,107 @@
 package org.ndx.aadarchi.base.utils;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.NameScope;
 import org.ndx.aadarchi.base.AgileArchitectureException;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.Enhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
-import org.ndx.aadarchi.base.enhancers.includes.ImplicitIncludeManager;
 
 import com.structurizr.model.Element;
 
 public class SimpleOutputBuilder implements OutputBuilder {
-	public static final class UnableToWiteOutput extends AgileArchitectureException {
-		public UnableToWiteOutput(String message, Throwable cause) {
+	public static final class UnableToWriteOutput extends AgileArchitectureException {
+		public UnableToWriteOutput(String message, Throwable cause) {
 			super(message, cause);
 		}
 	}
-	private final File enhancementsBase;
+
+	private final FileObject enhancementsBase;
 	public static final String SECTION_PATTERN = "%02d-%s";
 
-	public SimpleOutputBuilder(File outputBase) {
+	public SimpleOutputBuilder(FileObject outputBase) {
 		super();
 		this.enhancementsBase = outputBase;
 	}
 
 	@Override
-	public File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format) {
-		return new File(enhancementsBase,
-				// Yup, we use hex values for priority, to have less characters
-				String.format("%s/"+SECTION_PATTERN+"/_%08x-%s.%s", 
-					sanitize(StructurizrUtils.getCanonicalPath(element)),
-					section.index(), section.name(),
-					enhancer.priority(), enhancer.getClass().getSimpleName(), format
-					)
-				);
+	public FileObject outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format) {
+		// Yup, we use hex values for priority, to have less characters
+		String path = String.format("%s/" + SECTION_PATTERN + "/_%08x-%s.%s",
+				sanitize(StructurizrUtils.getCanonicalPath(element)), section.index(), section.name(),
+				enhancer.priority(), enhancer.getClass().getSimpleName(), format);
+		return outputFor(path);
+	}
+
+	private FileObject outputFor(String path) {
+		try {
+			while (path.startsWith("/")) {
+				path = path.substring(1);
+			}
+			return enhancementsBase.resolveFile(path, NameScope.DESCENDENT);
+		} catch (FileSystemException e) {
+			throw new CantToResolvePath(
+					String.format("Unable to resolve path %s relatively to %s", path, enhancementsBase), e);
+		}
 	}
 
 	@Override
-	public File outputDirectoryFor(AgileArchitectureSection section, Element element) {
-		return new File(enhancementsBase,
-				// Yup, we use hex values for priority, to have less characters
-				String.format("%s/"+SECTION_PATTERN, 
-					sanitize(StructurizrUtils.getCanonicalPath(element)),
-					section.index(), section.name()
-					)
-				);
+	public FileObject outputDirectoryFor(AgileArchitectureSection section, Element element) {
+		String path = String.format("%s/" + SECTION_PATTERN, sanitize(StructurizrUtils.getCanonicalPath(element)),
+				section.index(), section.name());
+		return outputFor(path);
 	}
 
 	private String sanitize(String canonicalPath) {
-		return Stream.of(canonicalPath.split("\\/"))
-				.map(name -> name.replaceAll("[:\\\\/*?|<>]", "_"))
+		return Stream.of(canonicalPath.split("\\/")).map(name -> name.replaceAll("[:\\\\/*?|<>]", "_"))
 				.collect(Collectors.joining("/"));
 	}
 
 	@Override
-	public File outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, HandledFormat format) {
+	public FileObject outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer,
+			HandledFormat format) {
 		return outputFor(section, element, enhancer, format.getExtension());
 	}
 
-	public File writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer,
+	public FileObject writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer,
 			HandledFormat format, CharSequence text, boolean append) {
-		File returned = outputFor(section, element, enhancer, format);
-		returned.getParentFile().mkdirs();
-		try {
-			FileUtils.write(returned, format.createCommentForEnhancer(enhancer), format.encoding(), append);
-			FileUtils.write(returned, text, format.encoding(), true);
-		} catch(IOException e) {
-			throw new UnableToWiteOutput(
-					String.format("Unable to write output to file %s", returned.getAbsolutePath()),
-					e
-					);
+		FileObject returned = outputFor(section, element, enhancer, format);
+		if (!StringUtils.isBlank(text)) {
+			try {
+				if (!append)
+					returned.delete();
+				returned.getParent().createFolder();
+				try (OutputStream outputStream = returned.getContent().getOutputStream()) {
+					IOUtils.write(format.createCommentForEnhancer(enhancer), outputStream, format.encoding());
+					IOUtils.write(text, outputStream, format.encoding());
+				} finally {
+					returned.getContent().close();
+				}
+			} catch (IOException e) {
+				throw new UnableToWriteOutput(
+						String.format("Unable to write output to file %s", returned.getName().getPath()), e);
+			}
 		}
 		return returned;
 	}
 
 	@Override
-	public File writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer,
+	public FileObject writeToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer,
 			HandledFormat format, CharSequence text) {
 		return writeToOutput(section, element, enhancer, format, text, false);
 	}
 
 	@Override
-	public File appendToOutput(AgileArchitectureSection section, Element element,
-			Enhancer enhancer, HandledFormat format, CharSequence text) {
+	public FileObject appendToOutput(AgileArchitectureSection section, Element element, Enhancer enhancer,
+			HandledFormat format, CharSequence text) {
 		return writeToOutput(section, element, enhancer, format, text, true);
 	}
 

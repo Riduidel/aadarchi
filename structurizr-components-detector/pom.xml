@@ -3,7 +3,7 @@
   <parent>
     <groupId>io.github.Riduidel.aadarchi</groupId>
     <artifactId>system</artifactId>
-    <version>0.1.5-SNAPSHOT</version>
+    <version>0.1.11-SNAPSHOT</version>
   </parent>
   <artifactId>structurizr-components-detector</artifactId>
   <name>Aadarchi : Structurizr components detector</name>
@@ -18,5 +18,23 @@
 			<artifactId>base</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+      <dependency>
+          <groupId>org.junit.jupiter</groupId>
+          <artifactId>junit-jupiter-api</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.assertj</groupId>
+          <artifactId>assertj-core</artifactId>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-junit-jupiter</artifactId>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.jboss.weld</groupId>
+          <artifactId>weld-junit5</artifactId>
+      </dependency>
   </dependencies>
 </project>
