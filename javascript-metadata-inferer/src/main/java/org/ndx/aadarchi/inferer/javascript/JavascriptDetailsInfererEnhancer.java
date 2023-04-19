@@ -119,10 +119,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	 */
 	public Optional<JavascriptProject> processModelElement(Element element) {
 		Optional<JavascriptProject> returned = Optional.empty();
-		if(element.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_CLASS)) {
-			String className = element.getProperties().get((JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_CLASS));
-			returned = processPackageFromClass(element, className);
-		} else if (element.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE)) {
+		if (element.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE)) {
 			String packagePath = element.getProperties().get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE);
 			returned = processPackageFromPath(element, packagePath);
 		} else if (element.getProperties().containsKey(ModelElementKeys.Scm.PROJECT)) {
@@ -148,16 +145,6 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		return Optional.empty();
 	}
 
-	Optional<JavascriptProject> processPackageFromClass(Element element, String className) {
-		try {
-			JavascriptProject javascriptProject = findJavascriptProjectOf(Class.forName(className));
-			return Optional.of(javascriptProject);
-		}catch(ClassNotFoundException e) {
-			throw new JavascriptDetailsInfererException(
-					String.format("Can't load class %s. Seems like there is a classloader incompatibility", className),
-					e);
-		}
-	}
 	Optional<JavascriptProject> processPackageFromPath(Element element, String packagePath) {
 		try {
 			return Optional.of(javascriptPackageReader.readNpmProject(fsManager.resolveFile(packagePath)));
@@ -167,36 +154,6 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		}
 	}
 
-	/**
-	 * Find the javascript project containing the given class name
-	 *
-	 * @param loadedClass a class for which we want a maven project
-	 * @return the associated maven project
-	 */
-	public JavascriptProject findJavascriptProjectOf(Class<?> loadedClass) {
-		String className = loadedClass.getName();
-		String path = loadedClass.getProtectionDomain().getCodeSource().getLocation().getPath();
-		File file = new File(path);
-		if (file.isDirectory()) {
-			return findJavascriptProjectOfClassFromDirectory(loadedClass, className, file);
-		} else {
-			throw new JavascriptDetailsInfererException(String.format("Unable to find package.xml from class %s", className));
-		}
-	}
-	private JavascriptProject findJavascriptProjectOfClassFromDirectory(Class<?> loadedClass, String className, File directory) {
-		File packageJson = new File(directory, "package.json");
-		File parentDir = directory.getParentFile();
-		if (packageJson.exists()) {
-			//return javascriptPackageReader.readNpmProject(parentDir);
-		} else if (!parentDir.equals(directory)) {
-			return findJavascriptProjectOfClassFromDirectory(loadedClass, className, parentDir);
-		} else {
-			throw new JavascriptDetailsInfererException(String.format(
-					"Seems like class %s is not loaded from a Javascript project, as we can't find any pom.xml file",
-					className));
-		}
-		return null;
-	}
 	public String decorateTechnology(JavascriptProject javascriptProject) {
 		return javascriptPackageAnalyzer.decorateTechnology(javascriptProject);
 	}
