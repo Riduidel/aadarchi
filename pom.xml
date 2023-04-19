@@ -22,6 +22,7 @@
 		<version.jsoup>1.15.3</version.jsoup>
 		<version.junit>5.9.1</version.junit>
 		<error-prone.version>2.16</error-prone.version>
+		<version.jackson>2.14.2</version.jackson>
 	</properties>
 	<scm>
 		<!-- We use https connections for using aadarchi.github.token as password -->
@@ -65,6 +66,7 @@
 		<module>cdi-config-extension</module>
 		<module>adr-tickets-extractor</module>
 		<module>maven-metadata-inferer</module>
+		<module>javascript-metadata-inferer</module>
 		<module>model-linter</module>
 		<module>spring-components-detector</module>
 		<module>sequence-diagram-generator</module>
@@ -218,6 +220,16 @@
 				<version>2.0.2.Final</version>
 				<scope>test</scope>
 			</dependency>
+	        <dependency>
+	            <groupId>com.fasterxml.jackson.core</groupId>
+	            <artifactId>jackson-databind</artifactId>
+	            <version>${version.jackson}</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>com.fasterxml.jackson.core</groupId>
+	            <artifactId>jackson-core</artifactId>
+	            <version>${version.jackson}</version>
+	        </dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>

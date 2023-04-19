@@ -1,18 +1,24 @@
 package org.ndx.aadarchi.inferer.javascript;
 
-import com.structurizr.model.Element;
-import org.ndx.aadarchi.base.utils.FileResolver;
-import javax.inject.Inject;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-public class JavascriptPackageAnalyzer extends JavascriptDetailsInfererEnhancer {
+import javax.inject.Inject;
+
+import com.structurizr.model.Element;
+
+public class JavascriptPackageAnalyzer {
 
     @Inject Logger logger;
-
-    @Inject FileResolver fileResolver;
 
     /**
      * Creates the string containing details about the used technology. For that we

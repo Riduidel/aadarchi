@@ -1,18 +1,27 @@
 package org.ndx.aadarchi.inferer.javascript;
 
-import com.structurizr.Workspace;
+import java.util.Arrays;
+
+import javax.inject.Inject;
+
 import org.assertj.core.api.Assertions;
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.ndx.aadarchi.base.ArchitectureEnhancer;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
-import javax.inject.Inject;
-import java.io.File;
-import java.util.Optional;
+import com.structurizr.Workspace;
 
-import static org.junit.jupiter.api.Assertions.*;
+@EnableWeld
 class JavascriptDetailsInfererEnhancerTest {
+    @WeldSetup
+    public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
+    @Inject JavascriptDetailsInfererEnhancer tested;
+	@Inject ArchitectureEnhancer enhancer;
 
     //call processModelElement to find package.json
     @BeforeEach
@@ -32,9 +41,9 @@ class JavascriptDetailsInfererEnhancerTest {
         var container = system.addContainer("packageJsonTest");
         container.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, "src/test/qvgdc-app");
                 //TODO write path of qvgdc as a string
-        System.out.println(container);
         // When
-        // TODO call the right enhancer
+    	// We emulate in-depth visit (but do not really perform it)
+    	enhancer.enhance(w, Arrays.asList(tested));
         // Then
         Assertions.assertThat(container.getTechnology()).isNotNull();
     }
@@ -49,7 +58,8 @@ class JavascriptDetailsInfererEnhancerTest {
         container.addProperty(ModelElementKeys.Scm.PROJECT, "https://github.com/Zenika/qvgdc-app");
                 // TODO get gqvdc scm url
         // When
-        // TODO call the right enhancer
+    	// We emulate in-depth visit (but do not really perform it)
+    	enhancer.enhance(w, Arrays.asList(tested));
         // Then
         Assertions.assertThat(container.getTechnology()).isNotNull();
     }

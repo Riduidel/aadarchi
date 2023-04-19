@@ -1,28 +1,34 @@
 package org.ndx.aadarchi.inferer.javascript;
 
-import com.structurizr.model.*;
-import org.ndx.aadarchi.base.ModelEnhancer;
-import org.ndx.aadarchi.base.OutputBuilder;
-import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
-import org.ndx.aadarchi.base.enhancers.scm.SCMFile;
-import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
-import org.ndx.aadarchi.inferer.javascript.enhancers.ComponentEnhancer;
-import org.ndx.aadarchi.inferer.javascript.enhancers.ContainerEnhancer;
-import org.ndx.aadarchi.inferer.javascript.enhancers.SoftwareSystemEnhancer;
-
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+
+import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileSystemManager;
+import org.ndx.aadarchi.base.ModelEnhancer;
+import org.ndx.aadarchi.base.OutputBuilder;
+import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
+import org.ndx.aadarchi.inferer.javascript.enhancers.ComponentEnhancer;
+import org.ndx.aadarchi.inferer.javascript.enhancers.ContainerEnhancer;
+import org.ndx.aadarchi.inferer.javascript.enhancers.SoftwareSystemEnhancer;
+
+import com.structurizr.model.Component;
+import com.structurizr.model.Container;
+import com.structurizr.model.Element;
+import com.structurizr.model.SoftwareSystem;
+import com.structurizr.model.StaticStructureElement;
 
 /**
  * An enhancer trying to read as much informations as possible from maven pom.
@@ -41,6 +47,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	Logger logger;
 	@Inject
 	JavascriptPackageReader javascriptPackageReader;
+	@Inject FileSystemManager fsManager;
 	Stack<Set<? extends StaticStructureElement>> stack = new Stack<>();
 
 	@Inject
@@ -131,14 +138,11 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		var project = element.getProperties().get(ModelElementKeys.Scm.PROJECT);
 		for(SCMHandler handler : scmHandler) {
 			try {
-				Collection<SCMFile> packageSCMFile = handler.find(project, "/", file -> "package.json".equals(file.name()));
-				for(SCMFile scmFile : packageSCMFile) {
-					URL url = new URL(scmFile.url());
-					return Optional.ofNullable(javascriptPackageReader.readJavascriptProject(
-							(scmFile.url()), url));
-				}
+				FileObject projectRoot = handler.getProjectRoot(project);
+				FileObject packageJson = projectRoot.getChild("package.json");
+					return Optional.ofNullable(javascriptPackageReader.readNpmProject(packageJson));
 			} catch (IOException e) {
-				logger.log(Level.FINER, String.format("There is no pom.xml in %s, maybe it's normal", project), e);
+				logger.log(Level.FINER, String.format("There is no package.json in %s, maybe it's normal", project), e);
 			}
 		}
 		return Optional.empty();
@@ -155,8 +159,12 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		}
 	}
 	Optional<JavascriptProject> processPackageFromPath(Element element, String packagePath) {
-		JavascriptProject mavenProject = this.readJavascriptProject(packagePath);
-		return Optional.of(mavenProject);
+		try {
+			return Optional.of(javascriptPackageReader.readNpmProject(fsManager.resolveFile(packagePath)));
+		} catch (FileSystemException e) {
+			logger.log(Level.WARNING, String.format("Unable to read package at path %s", packagePath), e);
+			return Optional.empty();
+		}
 	}
 
 	/**
@@ -191,9 +199,5 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	}
 	public String decorateTechnology(JavascriptProject javascriptProject) {
 		return javascriptPackageAnalyzer.decorateTechnology(javascriptProject);
-	}
-
-	public JavascriptProject readJavascriptProject(String packagePath) {
-		return javascriptPackageReader.readNpmProject(packagePath);
 	}
 }
