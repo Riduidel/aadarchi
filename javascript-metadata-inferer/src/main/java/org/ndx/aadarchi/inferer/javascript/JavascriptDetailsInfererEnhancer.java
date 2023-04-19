@@ -180,7 +180,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		if (file.isDirectory()) {
 			return findJavascriptProjectOfClassFromDirectory(loadedClass, className, file);
 		} else {
-			throw new JavascriptDetailsInfererException(String.format("", className));
+			throw new JavascriptDetailsInfererException(String.format("Unable to find package.xml from class %s", className));
 		}
 	}
 	private JavascriptProject findJavascriptProjectOfClassFromDirectory(Class<?> loadedClass, String className, File directory) {
