@@ -176,7 +176,7 @@
 			<dependency>
 				<groupId>org.gitlab4j</groupId>
 				<artifactId>gitlab4j-api</artifactId>
-				<version>4.16.0</version>
+				<version>5.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.pivovarit</groupId>
@@ -220,6 +220,11 @@
 				<version>2.0.2.Final</version>
 				<scope>test</scope>
 			</dependency>
+	        <dependency>
+				<groupId>com.fasterxml.jackson.jaxrs</groupId>
+	            <artifactId>jackson-jaxrs-json-provider</artifactId>
+	            <version>${version.jackson}</version>
+	        </dependency>
 	        <dependency>
 	            <groupId>com.fasterxml.jackson.core</groupId>
 	            <artifactId>jackson-databind</artifactId>
