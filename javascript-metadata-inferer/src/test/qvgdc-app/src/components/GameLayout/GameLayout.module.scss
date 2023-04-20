@@ -1,0 +1,55 @@
+.main {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  overflow: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.question {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  flex-direction: column;
+
+  header {
+    flex: 0 0 auto;
+  }
+}
+
+.player {
+  svg {
+    stroke: var(--primary-color);
+    width: 1.4em;
+    height: 1.4em;
+    stroke-width: 1;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+    margin-right: 0.4em;
+  }
+}
+
+.logo {
+  margin: 1.4em 1em 1.4em 0;
+  width: 32px;
+  height: 32px;
+  transform: translateZ(0);
+}
+
+.title {
+  margin-right: auto;
+  h1 {
+    color: inherit;
+    font-size: 18px;
+    font-weight: normal;
+    margin: 0;
+  }
+
+  p {
+    margin: 0.1em 0 0;
+    font-size: 12px;
+  }
+}

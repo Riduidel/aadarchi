@@ -1,5 +1,6 @@
 package org.ndx.aadarchi.inferer.javascript;
 
+<<<<<<< Updated upstream
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -8,6 +9,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+=======
+import com.structurizr.model.Element;
+import javax.inject.Inject;
+import java.util.*;
+>>>>>>> Stashed changes
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import java.util.stream.Stream;

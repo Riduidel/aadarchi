@@ -1,0 +1,11 @@
+.footerWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer {
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 0 6px rgba(black, 0.16);
+}

@@ -1,0 +1,47 @@
+@import '../../assets/scss/base/conf';
+
+.path {
+  filter: drop-shadow(3px 3px 15px red);
+}
+
+.counter {
+  position: relative;
+  display: inline-block;
+  pointer-events: none;
+
+  :global {
+    svg {
+      position: relative;
+      z-index: 1;
+      display: block;
+      color: $successColor;
+
+      circle {
+        transition: all 1s linear;
+      }
+    }
+  }
+}
+
+.finish {
+  color: $color1;
+  :global {
+    svg {
+      color: inherit;
+    }
+  }
+}
+
+.remaining {
+  font-size: 1.12em;
+  z-index: 3;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  line-height: 0.8;
+  pointer-events: none;
+  user-select: none;
+  transform: translate3d(-50%, -50%, 0);
+}

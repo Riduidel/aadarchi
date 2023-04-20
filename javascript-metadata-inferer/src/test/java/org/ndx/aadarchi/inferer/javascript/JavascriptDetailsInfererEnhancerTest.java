@@ -41,10 +41,16 @@ class JavascriptDetailsInfererEnhancerTest {
         var container = system.addContainer("packageJsonTest");
         container.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, "src/test/qvgdc-app");
                 //TODO write path of qvgdc as a string
+<<<<<<< Updated upstream
+=======
+        System.out.println("bahahahahaha");
+        System.out.println(container.getTechnology());
+>>>>>>> Stashed changes
         // When
     	// We emulate in-depth visit (but do not really perform it)
     	enhancer.enhance(w, Arrays.asList(tested));
         // Then
+        Assertions.assertThat(container.getTechnology()).isNotEmpty();
         Assertions.assertThat(container.getTechnology()).isNotNull();
     }
 
@@ -61,6 +67,7 @@ class JavascriptDetailsInfererEnhancerTest {
     	// We emulate in-depth visit (but do not really perform it)
     	enhancer.enhance(w, Arrays.asList(tested));
         // Then
+        System.out.println(container.getTechnology());
         Assertions.assertThat(container.getTechnology()).isNotNull();
     }
 }

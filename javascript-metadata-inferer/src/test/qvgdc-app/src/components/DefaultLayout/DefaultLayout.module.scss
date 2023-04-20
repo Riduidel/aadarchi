@@ -1,0 +1,15 @@
+.main {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  overflow: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.layout {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  flex-direction: column;
+}

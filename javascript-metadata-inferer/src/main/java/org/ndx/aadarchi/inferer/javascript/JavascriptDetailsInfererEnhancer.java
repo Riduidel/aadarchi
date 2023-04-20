@@ -1,5 +1,20 @@
 package org.ndx.aadarchi.inferer.javascript;
 
+<<<<<<< Updated upstream
+=======
+import com.structurizr.model.*;
+import org.ndx.aadarchi.base.ModelEnhancer;
+import org.ndx.aadarchi.base.OutputBuilder;
+import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
+import org.ndx.aadarchi.inferer.javascript.enhancers.ComponentEnhancer;
+import org.ndx.aadarchi.inferer.javascript.enhancers.ContainerEnhancer;
+import org.ndx.aadarchi.inferer.javascript.enhancers.SoftwareSystemEnhancer;
+
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+>>>>>>> Stashed changes
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -132,7 +147,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	}
 
 	private Optional<JavascriptProject> processPackageAtSCM(Element element) {
-		var project = element.getProperties().get(ModelElementKeys.Scm.PROJECT);
+		/*var project = element.getProperties().get(ModelElementKeys.Scm.PROJECT);
 		for(SCMHandler handler : scmHandler) {
 			try {
 				FileObject projectRoot = handler.getProjectRoot(project);
@@ -142,6 +157,9 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 				logger.log(Level.FINER, String.format("There is no package.json in %s, maybe it's normal", project), e);
 			}
 		}
+		return Optional.empty();
+
+		 */
 		return Optional.empty();
 	}
 
@@ -154,6 +172,39 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		}
 	}
 
+<<<<<<< Updated upstream
+=======
+	/**
+	 * Find the javascript project containing the given class name
+	 *
+	 * @param loadedClass a class for which we want a maven project
+	 * @return the associated maven project
+	 */
+	public JavascriptProject findJavascriptProjectOf(Class<?> loadedClass) {
+		String className = loadedClass.getName();
+		String path = loadedClass.getProtectionDomain().getCodeSource().getLocation().getPath();
+		File file = new File(path);
+		if (file.isDirectory()) {
+			return findJavascriptProjectOfClassFromDirectory(loadedClass, className, file);
+		} else {
+			throw new JavascriptDetailsInfererException(String.format("Couldn't find javascript project in %s", className));
+		}
+	}
+	private JavascriptProject findJavascriptProjectOfClassFromDirectory(Class<?> loadedClass, String className, File directory) {
+		File packageJson = new File(directory, "package.json");
+		File parentDir = directory.getParentFile();
+		if (packageJson.exists()) {
+			//return javascriptPackageReader.readNpmProject(parentDir);
+		} else if (!parentDir.equals(directory)) {
+			return findJavascriptProjectOfClassFromDirectory(loadedClass, className, parentDir);
+		} else {
+			throw new JavascriptDetailsInfererException(String.format(
+					"Seems like class %s is not loaded from a Javascript project, as we can't find any package.json file",
+					className));
+		}
+		return null;
+	}
+>>>>>>> Stashed changes
 	public String decorateTechnology(JavascriptProject javascriptProject) {
 		return javascriptPackageAnalyzer.decorateTechnology(javascriptProject);
 	}

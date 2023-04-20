@@ -1,0 +1,31 @@
+@import '../../assets/scss/base/conf';
+
+.suptitle {
+  margin: 0;
+  font-size: 14px;
+}
+
+.title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: normal;
+  color: $color1;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+}
+
+.infos {
+  margin-left: 0.6em;
+}
+
+.choices {
+  margin-top: 2em;
+}
+
+.actions {
+  padding-top: 2em;
+  height: 180px;
+}
