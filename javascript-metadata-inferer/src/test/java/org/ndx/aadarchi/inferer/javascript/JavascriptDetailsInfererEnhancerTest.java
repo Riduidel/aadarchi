@@ -1,5 +1,6 @@
 package org.ndx.aadarchi.inferer.javascript;
 
+import java.io.File;
 import java.util.Arrays;
 
 import javax.inject.Inject;
@@ -34,24 +35,24 @@ class JavascriptDetailsInfererEnhancerTest {
     }
 
     @Test
-    public void ensure_package_json_is_loaded_from_one_folder() {
+    public void ensure_package_json_is_loaded_from_one_folder() throws Exception {
         // Given
         Workspace w = new Workspace("test", "ensure we can read package.json");
         var system = w.getModel().addSoftwareSystem("testSystem");
         var container = system.addContainer("packageJsonTest");
-        container.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, "src/test/qvgdc-app");
+        File file = new File("src/test/qvgdc-app");
+        Assertions.assertThat(file)
+                .describedAs("There must be a package.json in the qvgdc-app folder")
+                .isDirectoryContaining(f -> f.getName().equals("package.json"));
+        container.addProperty(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE, file.toURL().toString());
                 //TODO write path of qvgdc as a string
-<<<<<<< Updated upstream
-=======
-        System.out.println("bahahahahaha");
-        System.out.println(container.getTechnology());
->>>>>>> Stashed changes
         // When
     	// We emulate in-depth visit (but do not really perform it)
     	enhancer.enhance(w, Arrays.asList(tested));
         // Then
-        Assertions.assertThat(container.getTechnology()).isNotEmpty();
-        Assertions.assertThat(container.getTechnology()).isNotNull();
+        Assertions.assertThat(container.getTechnology())
+                .describedAs("A javascript project should have technology loaded from the package.json file")
+                .isNotEmpty();
     }
 
 
@@ -62,12 +63,10 @@ class JavascriptDetailsInfererEnhancerTest {
         var system = w.getModel().addSoftwareSystem("testSystem");
         var container = system.addContainer("packageJsonTest");
         container.addProperty(ModelElementKeys.Scm.PROJECT, "https://github.com/Zenika/qvgdc-app");
-                // TODO get gqvdc scm url
         // When
     	// We emulate in-depth visit (but do not really perform it)
     	enhancer.enhance(w, Arrays.asList(tested));
         // Then
-        System.out.println(container.getTechnology());
-        Assertions.assertThat(container.getTechnology()).isNotNull();
+        Assertions.assertThat(container.getTechnology()).isNotEmpty();
     }
 }

@@ -1,20 +1,18 @@
 package org.ndx.aadarchi.inferer.javascript;
 
-<<<<<<< Updated upstream
-=======
 import com.structurizr.model.*;
 import org.ndx.aadarchi.base.ModelEnhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
-import org.ndx.aadarchi.inferer.javascript.enhancers.ComponentEnhancer;
+/*import org.ndx.aadarchi.inferer.javascript.enhancers.ComponentEnhancer;
 import org.ndx.aadarchi.inferer.javascript.enhancers.ContainerEnhancer;
 import org.ndx.aadarchi.inferer.javascript.enhancers.SoftwareSystemEnhancer;
-
+*/
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
->>>>>>> Stashed changes
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -35,9 +33,6 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
-import org.ndx.aadarchi.inferer.javascript.enhancers.ComponentEnhancer;
-import org.ndx.aadarchi.inferer.javascript.enhancers.ContainerEnhancer;
-import org.ndx.aadarchi.inferer.javascript.enhancers.SoftwareSystemEnhancer;
 
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
@@ -79,51 +74,8 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	}
 
 	@Override
-	public boolean startVisit(SoftwareSystem softwareSystem) {
-		stack.push(softwareSystem.getContainers());
-		int containersNumber = stack.get(0).size();
-		logger.fine(String.format("At the start, there are these containers : %s ", softwareSystem.getContainers()));
-		logger.info(String.format("At the start, there are %d containers", containersNumber));
-		new SoftwareSystemEnhancer(this, softwareSystem).startEnhance();
-		return super.startVisit(softwareSystem);
-	}
-
-	@Override
-	public void endVisit(SoftwareSystem softwareSystem, OutputBuilder outputBuilder) {
-		Set<? extends StaticStructureElement> initial = stack.pop();
-		int initialContainersNumber = initial.size();
-		int actualContainersNumber = softwareSystem.getContainers().size();
-		int newContainersNumber = actualContainersNumber - initialContainersNumber;
-		Set<? extends StaticStructureElement> newContainers = softwareSystem.getContainers().stream().filter(element -> !initial.contains(element))
-				.collect(Collectors.toSet());
-		if( actualContainersNumber > initialContainersNumber) {
-			logger.info(String.format("At the end, there are %d containers, including %d new containers", actualContainersNumber, newContainersNumber));
-			logger.fine(String.format("At the end, there are these new containers : %s", newContainers ));
-		} else
-			logger.info("At the end, there are no new containers.");
-		new SoftwareSystemEnhancer(this, softwareSystem).endEnhance();
-	}
-
-	@Override
-	public boolean startVisit(Container container) {
-		new ContainerEnhancer(this, container).startEnhance();
-		return super.startVisit(container);
-	}
-
-	@Override
-	public void endVisit(Container container, OutputBuilder outputBuilder) {
-		new ContainerEnhancer(this, container).endEnhance();
-	}
-
-	@Override
-	public boolean startVisit(Component component) {
-		new ComponentEnhancer(this, component).startEnhance();
-		return super.startVisit(component);
-	}
-
-	@Override
-	public void endVisit(Component component, OutputBuilder outputBuilder) {
-		new ComponentEnhancer(this, component).endEnhance();
+	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
+		processModelElement(element);
 	}
 
 	/**
@@ -138,28 +90,32 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 			String packagePath = element.getProperties().get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE);
 			returned = processPackageFromPath(element, packagePath);
 		} else if (element.getProperties().containsKey(ModelElementKeys.Scm.PROJECT)) {
-		// If there is some kind of SCM path, and a configured SCM provider,
-		// let's check if we can find some pom.xml
-		returned = processPackageAtSCM(element);
-	}
+			// If there is some kind of SCM path, and a configured SCM provider,
+			// let's check if we can find some pom.xml
+			returned = processPackageAtSCM(element);
+		}
 		returned.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorate(element, javascriptProject));
 		return returned;
 	}
 
+	/**
+	 * When we only have scm information, we check if there is a package.json and, if so, we read it using {@link #javascriptPackageReader}
+	 * @param element the model element
+	 * @return an optional containing the infos we obtained if they exist
+	 */
 	private Optional<JavascriptProject> processPackageAtSCM(Element element) {
-		/*var project = element.getProperties().get(ModelElementKeys.Scm.PROJECT);
+		var project = element.getProperties().get(ModelElementKeys.Scm.PROJECT);
 		for(SCMHandler handler : scmHandler) {
-			try {
-				FileObject projectRoot = handler.getProjectRoot(project);
-				FileObject packageJson = projectRoot.getChild("package.json");
+			if(handler.canHandle(project)) {
+				try {
+					FileObject projectRoot = handler.getProjectRoot(project);
+					FileObject packageJson = projectRoot.getChild("package.json");
 					return Optional.ofNullable(javascriptPackageReader.readNpmProject(packageJson));
-			} catch (IOException e) {
-				logger.log(Level.FINER, String.format("There is no package.json in %s, maybe it's normal", project), e);
+				} catch (IOException e) {
+					logger.log(Level.FINER, String.format("There is no package.json in %s, maybe it's normal", project), e);
+				}
 			}
 		}
-		return Optional.empty();
-
-		 */
 		return Optional.empty();
 	}
 
@@ -172,8 +128,6 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		}
 	}
 
-<<<<<<< Updated upstream
-=======
 	/**
 	 * Find the javascript project containing the given class name
 	 *
@@ -204,7 +158,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 		}
 		return null;
 	}
->>>>>>> Stashed changes
+
 	public String decorateTechnology(JavascriptProject javascriptProject) {
 		return javascriptPackageAnalyzer.decorateTechnology(javascriptProject);
 	}

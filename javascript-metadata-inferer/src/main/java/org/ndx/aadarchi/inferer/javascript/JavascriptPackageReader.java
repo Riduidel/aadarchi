@@ -40,9 +40,6 @@ public class JavascriptPackageReader {
         return null;
     }
 
-<<<<<<< Updated upstream
-=======
-
     /*public JavascriptProject readJavascriptProject(String packagePath, URL url) {
         try (InputStream input = SCMHandler.openStream(scmHandler, url)) {
             return readJavascriptProject(packagePath, url);
@@ -52,7 +49,6 @@ public class JavascriptPackageReader {
         return;
     }*/
 
->>>>>>> Stashed changes
     public Dependency readDependencies() {
         try {
             ObjectMapper mapper = new ObjectMapper();
