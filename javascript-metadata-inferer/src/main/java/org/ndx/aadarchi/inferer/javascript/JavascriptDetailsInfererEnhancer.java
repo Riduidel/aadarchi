@@ -6,6 +6,8 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
+import org.ndx.aadarchi.inferer.javascript.npm.JavascriptProject;
+
 /*import org.ndx.aadarchi.inferer.javascript.enhancers.ComponentEnhancer;
 import org.ndx.aadarchi.inferer.javascript.enhancers.ContainerEnhancer;
 import org.ndx.aadarchi.inferer.javascript.enhancers.SoftwareSystemEnhancer;

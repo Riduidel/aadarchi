@@ -10,6 +10,10 @@ import java.util.Set;
 import java.util.TreeSet;
 import com.structurizr.model.Element;
 import javax.inject.Inject;
+
+import org.ndx.aadarchi.inferer.javascript.npm.Dependency;
+import org.ndx.aadarchi.inferer.javascript.npm.JavascriptProject;
+
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;

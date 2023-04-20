@@ -1,4 +1,4 @@
-package org.ndx.aadarchi.inferer.javascript;
+package org.ndx.aadarchi.inferer.javascript.npm;
 
 import java.lang.reflect.Array;
 

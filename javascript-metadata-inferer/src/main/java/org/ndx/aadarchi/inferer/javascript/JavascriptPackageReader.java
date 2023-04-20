@@ -11,7 +11,10 @@ import javax.inject.Inject;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
+import org.ndx.aadarchi.inferer.javascript.npm.Dependency;
+import org.ndx.aadarchi.inferer.javascript.npm.JavascriptProject;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JavascriptPackageReader {
@@ -22,12 +25,16 @@ public class JavascriptPackageReader {
     @Inject
     Instance<SCMHandler> scmHandler;
     @Inject Logger logger;
+    
+    ObjectMapper mapper = new ObjectMapper()
+    		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
 
     public JavascriptProject readNpmProject(FileObject file) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
             String text = file.getContent().getString("UTF-8");
             JavascriptProject javascriptProject = mapper.readValue(text, JavascriptProject.class);
+            return javascriptProject;
         } catch (Exception e) {
             throw new JavascriptDetailsInfererException(String.format("Unable to read package.json file"));
         } finally {
@@ -37,7 +44,6 @@ public class JavascriptPackageReader {
 				logger.log(Level.SEVERE, String.format("Unable to close file %s", file.getPublicURIString()));
 			}
         }
-        return null;
     }
 
     /*public JavascriptProject readJavascriptProject(String packagePath, URL url) {

@@ -40,10 +40,9 @@ class JavascriptDetailsInfererEnhancerTest {
         Workspace w = new Workspace("test", "ensure we can read package.json");
         var system = w.getModel().addSoftwareSystem("testSystem");
         var container = system.addContainer("packageJsonTest");
-        File file = new File("src/test/qvgdc-app");
+        File file = new File("src/test/qvgdc-app/package.json");
         Assertions.assertThat(file)
-                .describedAs("There must be a package.json in the qvgdc-app folder")
-                .isDirectoryContaining(f -> f.getName().equals("package.json"));
+        	.isFile();
         container.addProperty(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE, file.toURL().toString());
                 //TODO write path of qvgdc as a string
         // When

@@ -1,4 +1,4 @@
-package org.ndx.aadarchi.inferer.javascript;
+package org.ndx.aadarchi.inferer.javascript.npm;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
