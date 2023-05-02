@@ -45,7 +45,7 @@ public class ContainerEnhancer extends AbstractContainerEnhancer<Container, Comp
 	protected String changeRelationshipDescription(Relationship uses) {
 		String relationshipDescription = null;
 		RelationshipsPropertiesFileReader propertiesFileReader = new RelationshipsPropertiesFileReader();
-		Map<String, String> relationshipDescriptionProperties = propertiesFileReader.readPropertiesFile();
+		Map<String, String> relationshipDescriptionProperties = propertiesFileReader.readPropertiesFile("base/src/architecture/resources/relationships-description.properties");
 		for (Map.Entry<String, String> entry: relationshipDescriptionProperties.entrySet()) {
 			String relationshipDescriptionProperty = uses.getSource().getName()+"->"+uses.getDestination().getName();
 			if (entry.getKey().contentEquals(relationshipDescriptionProperty)) {

@@ -7,11 +7,10 @@ import java.util.*;
 
 public class RelationshipsPropertiesFileReader {
 
-    public static final String DESCRIPTION_PROPERTIES_FILE = "base/src/architecture/resources/relationships-description.properties";
 
-    public Map<String, String> readPropertiesFile() {
+    public Map<String, String> readPropertiesFile(String filePath) {
         Properties properties = new Properties();
-        try (InputStream inputStream = new FileInputStream(DESCRIPTION_PROPERTIES_FILE)){
+        try (InputStream inputStream = new FileInputStream(filePath)){
           properties.load(inputStream);
       } catch (IOException ioException){
           ioException.printStackTrace();
