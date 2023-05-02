@@ -1,24 +1,18 @@
 package org.ndx.aadarchi.inferer.maven.enhancers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.structurizr.model.*;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
-import org.ndx.aadarchi.inferer.maven.MavenDetailsInfererEnhancer;
 import org.ndx.aadarchi.inferer.maven.MavenEnhancer;
 import org.ndx.aadarchi.inferer.maven.MavenPomReader;
-
-import com.structurizr.model.StaticStructureElement;
 
 /**
  * Basic extension of enhancer allowing decoration of a Structurizr container element
@@ -61,7 +55,7 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 		Contained contained = getContainedElementWithName(module);
 		// Now, for each dependency of the maven project, if there is an associated
 		// artifact, link both of them
-		((List<Dependency>) module.getDependencies()).stream()
+		List<Contained> collect = ((List<Dependency>) module.getDependencies()).stream()
 				.map(dependency -> String.format("%s:%s", dependency.getGroupId(), dependency.getArtifactId()))
 				.map(text -> text.replace("${project.groupId}", module.getGroupId())).peek(text -> {
 					if (text.contains("${")) {
@@ -69,11 +63,20 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 								"Container %s has one dependency (%s) expressed using Maven property, which we don't parse (excepted some hacks). Please remove that",
 								contained, text));
 					}
-				}).flatMap(artifactKey -> findContainedWithArtifactKey(artifactKey))
-				.forEach(found -> containedDependsUpon(contained, found, "maven:dependency"));
+				}).flatMap(this::findContainedWithArtifactKey)
+				.collect(Collectors.toList());
+				collect.forEach(found -> containedDependsUpon(contained, found , getRelationshipDescription(contained,found)));
+
 	}
 
-	protected abstract void containedDependsUpon(Contained contained, Contained found, String string);
+	protected abstract String changeRelationshipDescription(Relationship relationship);
+
+	protected abstract String getRelationshipDescription(Contained contained, Contained found);
+
+	protected abstract Relationship getCurrentRelationship(Contained contained, Contained found);
+
+	protected abstract void containedDependsUpon(Contained contained, Contained found, String description);
+
 
 	protected Stream<Contained> findContainedWithArtifactKey(String artifactKey) {
 		return getEnhancedChildren().stream()
@@ -83,7 +86,7 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 						.get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES).equals(artifactKey))
 				.findFirst().stream();
 	}
-
+	
 	protected abstract Collection<Contained> getEnhancedChildren();
 
 	void findSubComponentFor(MavenProject mavenProject, MavenProject module) {
