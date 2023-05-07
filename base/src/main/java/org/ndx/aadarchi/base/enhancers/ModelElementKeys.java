@@ -77,6 +77,15 @@ public interface ModelElementKeys {
 			String NAME = ModelElementKeys.PREFIX+"auto.update";
 			String VALUE = "false";
 		}
+		/**
+		 * Path of file storing the relationship names
+		 * @author nicolas-delsaux
+		 *
+		 */
+		interface RelationshipNames {
+			String NAME = ModelElementKeys.PREFIX+"relationships.names";
+			String VALUE = "${project.basedir}/src/architecture/resources/relationship.properties";
+		}
 	}
 	interface Scm {
 

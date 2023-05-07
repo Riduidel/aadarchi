@@ -3,6 +3,7 @@ package org.ndx.aadarchi.inferer.maven.enhancers;
 import java.util.Collection;
 
 import org.apache.maven.project.MavenProject;
+import org.ndx.aadarchi.base.utils.descriptions.RelationshipDescriptionProvider;
 import org.ndx.aadarchi.inferer.maven.MavenPomDecorator;
 import org.ndx.aadarchi.inferer.maven.MavenPomReader;
 
@@ -11,8 +12,8 @@ import com.structurizr.model.SoftwareSystem;
 
 public class SoftwareSystemEnhancer extends AbstractContainerEnhancer<SoftwareSystem, Container> {
 
-	public SoftwareSystemEnhancer(MavenPomReader mavenPomReader, SoftwareSystem softwareSystem) {
-		super(mavenPomReader, softwareSystem);
+	public SoftwareSystemEnhancer(MavenPomReader mavenPomReader, SoftwareSystem softwareSystem, RelationshipDescriptionProvider descriptionProvider) {
+		super(mavenPomReader, softwareSystem, descriptionProvider);
 	}
 
 	@Override

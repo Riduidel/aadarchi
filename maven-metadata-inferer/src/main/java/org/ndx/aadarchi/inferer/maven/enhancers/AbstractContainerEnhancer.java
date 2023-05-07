@@ -14,7 +14,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
-import org.ndx.aadarchi.inferer.maven.MavenDetailsInfererEnhancer;
+import org.ndx.aadarchi.base.utils.descriptions.RelationshipDescriptionProvider;
 import org.ndx.aadarchi.inferer.maven.MavenEnhancer;
 import org.ndx.aadarchi.inferer.maven.MavenPomReader;
 
@@ -35,11 +35,14 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 
 	private MavenPomReader mavenPomReader;
 
-	public AbstractContainerEnhancer(MavenPomReader mavenPomReader, Enhanced enhanced) {
+	private RelationshipDescriptionProvider descriptionProvider;
+
+	public AbstractContainerEnhancer(MavenPomReader mavenPomReader, Enhanced enhanced, RelationshipDescriptionProvider descriptionProvider) {
 		super(enhanced);
 		this.mavenPomReader = mavenPomReader;
 		this.additionalProfiles = Optional.ofNullable(
 				enhanced.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES));
+		this.descriptionProvider = descriptionProvider;
 	}
 
 	@Override
@@ -70,9 +73,21 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 								contained, text));
 					}
 				}).flatMap(artifactKey -> findContainedWithArtifactKey(artifactKey))
-				.forEach(found -> containedDependsUpon(contained, found, "maven:dependency"));
+				.forEach(found -> containedDependsUpon(contained, found, 
+						/*
+						 * We use the dependency provider to get the relationship name, if it is provided
+						 */
+						descriptionProvider.provideRelationshipDescription(contained, found)
+							.orElse("maven:dependency")
+							));
 	}
 
+	/**
+	 * Creates a relationship between both elements
+	 * @param contained contained module
+	 * @param found associated dependency
+	 * @param string dependency usage description
+	 */
 	protected abstract void containedDependsUpon(Contained contained, Contained found, String string);
 
 	protected Stream<Contained> findContainedWithArtifactKey(String artifactKey) {
@@ -102,6 +117,11 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 				module.getProperties().getProperty(ModelElementKeys.Scm.PATH));
 	}
 
+	/**
+	 * Get the child element linked to the given maven module
+	 * @param module
+	 * @return
+	 */
 	private Contained getContainedElementWithName(MavenProject module) {
 		return getContainedElementWithName(getContainedElementKey(module));
 	}
