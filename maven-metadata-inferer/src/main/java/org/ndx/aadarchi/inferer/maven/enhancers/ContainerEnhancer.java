@@ -7,13 +7,14 @@ import org.ndx.aadarchi.base.utils.descriptions.RelationshipDescriptionProvider;
 import org.ndx.aadarchi.inferer.maven.MavenPomDecorator;
 import org.ndx.aadarchi.inferer.maven.MavenPomReader;
 
+import com.structurizr.Workspace;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 
 public class ContainerEnhancer extends AbstractContainerEnhancer<Container, Component> {
 
-	public ContainerEnhancer(MavenPomReader mavenPomReader, Container container, RelationshipDescriptionProvider descriptionProvider) {
-		super(mavenPomReader, container, descriptionProvider);
+	public ContainerEnhancer(MavenPomReader mavenPomReader, Workspace workspace, Container container, RelationshipDescriptionProvider descriptionProvider) {
+		super(mavenPomReader, workspace, container, descriptionProvider);
 	}
 	
 	@Override

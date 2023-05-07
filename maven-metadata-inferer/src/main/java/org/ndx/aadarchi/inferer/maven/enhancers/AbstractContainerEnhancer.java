@@ -18,6 +18,7 @@ import org.ndx.aadarchi.base.utils.descriptions.RelationshipDescriptionProvider;
 import org.ndx.aadarchi.inferer.maven.MavenEnhancer;
 import org.ndx.aadarchi.inferer.maven.MavenPomReader;
 
+import com.structurizr.Workspace;
 import com.structurizr.model.StaticStructureElement;
 
 /**
@@ -37,7 +38,9 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 
 	private RelationshipDescriptionProvider descriptionProvider;
 
-	public AbstractContainerEnhancer(MavenPomReader mavenPomReader, Enhanced enhanced, RelationshipDescriptionProvider descriptionProvider) {
+	private Workspace workspace;
+
+	public AbstractContainerEnhancer(MavenPomReader mavenPomReader, Workspace workspace, Enhanced enhanced, RelationshipDescriptionProvider descriptionProvider) {
 		super(enhanced);
 		this.mavenPomReader = mavenPomReader;
 		this.additionalProfiles = Optional.ofNullable(
@@ -77,7 +80,7 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 						/*
 						 * We use the dependency provider to get the relationship name, if it is provided
 						 */
-						descriptionProvider.provideRelationshipDescription(contained, found)
+						descriptionProvider.provideRelationshipDescription(workspace, contained, found)
 							.orElse("maven:dependency")
 							));
 	}

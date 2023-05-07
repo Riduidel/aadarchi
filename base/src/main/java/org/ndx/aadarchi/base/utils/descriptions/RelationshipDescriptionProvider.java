@@ -16,6 +16,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.apache.deltaspike.core.api.config.Config;
+import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 
@@ -26,7 +27,6 @@ import com.structurizr.model.StaticStructureElement;
 @ApplicationScoped
 public class RelationshipDescriptionProvider {
 	@Inject Logger logger;
-	@Inject Config config;
 
 	public <Contained extends StaticStructureElement> Optional<String> provideRelationshipDescription(Workspace workspace, Contained from,
 			Contained to) {
@@ -51,7 +51,7 @@ public class RelationshipDescriptionProvider {
 						.get(ModelElementKeys.ConfigProperties.RelationshipNames.NAME))
 				.findFirst()
 				.orElse(ModelElementKeys.ConfigProperties.RelationshipNames.NAME);
-		File propertiesFile = config.resolve(propertiesPath)
+		File propertiesFile = ConfigResolver.resolve(propertiesPath)
 			.as(File.class)
 			.getValue();
 		Properties returned = new Properties();

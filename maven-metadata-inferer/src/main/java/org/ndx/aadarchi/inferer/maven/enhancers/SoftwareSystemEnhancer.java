@@ -7,13 +7,14 @@ import org.ndx.aadarchi.base.utils.descriptions.RelationshipDescriptionProvider;
 import org.ndx.aadarchi.inferer.maven.MavenPomDecorator;
 import org.ndx.aadarchi.inferer.maven.MavenPomReader;
 
+import com.structurizr.Workspace;
 import com.structurizr.model.Container;
 import com.structurizr.model.SoftwareSystem;
 
 public class SoftwareSystemEnhancer extends AbstractContainerEnhancer<SoftwareSystem, Container> {
 
-	public SoftwareSystemEnhancer(MavenPomReader mavenPomReader, SoftwareSystem softwareSystem, RelationshipDescriptionProvider descriptionProvider) {
-		super(mavenPomReader, softwareSystem, descriptionProvider);
+	public SoftwareSystemEnhancer(MavenPomReader mavenPomReader, Workspace workspace, SoftwareSystem softwareSystem, RelationshipDescriptionProvider descriptionProvider) {
+		super(mavenPomReader, workspace, softwareSystem, descriptionProvider);
 	}
 
 	@Override

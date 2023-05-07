@@ -18,6 +18,7 @@ import org.ndx.aadarchi.inferer.maven.enhancers.ComponentEnhancer;
 import org.ndx.aadarchi.inferer.maven.enhancers.ContainerEnhancer;
 import org.ndx.aadarchi.inferer.maven.enhancers.SoftwareSystemEnhancer;
 
+import com.structurizr.Workspace;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.SoftwareSystem;
@@ -41,6 +42,8 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 
 	Stack<Set<? extends StaticStructureElement>> stack = new Stack<>();
 
+	private Workspace workspace;
+
 	@Override
 	public boolean isParallel() {
 		return true;
@@ -53,6 +56,12 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 	public int priority() {
 		return 1;
 	}
+	
+	@Override
+	public boolean startVisit(Workspace workspace, OutputBuilder builder) {
+		this.workspace = workspace;
+		return super.startVisit(workspace, builder);
+	}
 
 	@Override
 	public boolean startVisit(SoftwareSystem softwareSystem) {
@@ -63,7 +72,7 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 		} else if(logger.isLoggable(Level.INFO)) {
 			logger.info(String.format("Starting visit of system %s, there are %d containers", softwareSystem, containersNumber));
 		}
-		new SoftwareSystemEnhancer(mavenPomReader, softwareSystem, descriptionProvider).startEnhance(mavenPomReader::processModelElement);
+		new SoftwareSystemEnhancer(mavenPomReader, workspace, softwareSystem, descriptionProvider).startEnhance(mavenPomReader::processModelElement);
 		return super.startVisit(softwareSystem);
 	}
 
@@ -83,18 +92,18 @@ public class MavenDetailsInfererEnhancer extends ModelElementAdapter implements 
 			}
 		} else
 			logger.info("At the end, there are no new containers.");
-		new SoftwareSystemEnhancer(mavenPomReader, softwareSystem, descriptionProvider).endEnhance(mavenPomReader::processModelElement);
+		new SoftwareSystemEnhancer(mavenPomReader, workspace, softwareSystem, descriptionProvider).endEnhance(mavenPomReader::processModelElement);
 	}
 
 	@Override
 	public boolean startVisit(Container container) {
-		new ContainerEnhancer(mavenPomReader, container, descriptionProvider).startEnhance(mavenPomReader::processModelElement);
+		new ContainerEnhancer(mavenPomReader, workspace, container, descriptionProvider).startEnhance(mavenPomReader::processModelElement);
 		return super.startVisit(container);
 	}
 
 	@Override
 	public void endVisit(Container container, OutputBuilder builder) {
-		new ContainerEnhancer(mavenPomReader, container, descriptionProvider).endEnhance(mavenPomReader::processModelElement);
+		new ContainerEnhancer(mavenPomReader, workspace, container, descriptionProvider).endEnhance(mavenPomReader::processModelElement);
 	}
 
 	@Override
