@@ -80,7 +80,9 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 						/*
 						 * We use the dependency provider to get the relationship name, if it is provided
 						 */
-						descriptionProvider.provideRelationshipDescription(workspace, contained, found)
+						descriptionProvider
+							.descriptionsIn(workspace)
+							.getDescriptionFor(contained, found)
 							.orElse("maven:dependency")
 							));
 	}
