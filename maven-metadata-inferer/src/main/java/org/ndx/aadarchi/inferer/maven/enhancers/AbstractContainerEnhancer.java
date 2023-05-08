@@ -46,6 +46,7 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 		this.additionalProfiles = Optional.ofNullable(
 				enhanced.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES));
 		this.descriptionProvider = descriptionProvider;
+		this.workspace = workspace;
 	}
 
 	@Override
