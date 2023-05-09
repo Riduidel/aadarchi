@@ -47,9 +47,7 @@ public class JavascriptPackageAnalyzer {
     }
 
     private Set<String> doDecorateTechnology(JavascriptProject project) {
-        System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
         Set<String> technologies = new LinkedHashSet<>();
-        //project.dependencies.forEach((k, v) -> System.out.println("Key : " + k + " Value : " + v));
 
         project.dependencies.forEach((k, v) -> {
             if (k.toString().startsWith("@angular")) {

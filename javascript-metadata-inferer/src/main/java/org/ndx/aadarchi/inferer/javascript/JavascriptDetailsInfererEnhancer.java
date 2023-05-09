@@ -88,11 +88,9 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	 * @return an optional containing the possible model element
 	 */
 	public Optional<JavascriptProject> processModelElement(Element element) {
-		System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
-		//get return value of decorate
 		String technologies = "";
-		// ----
 		Optional<JavascriptProject> toReturn = Optional.empty();
+
 		if (element.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE)) {
 			String packagePath = element.getProperties().get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE);
 			toReturn = processPackageFromPath(element, packagePath);
@@ -101,10 +99,8 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 			// let's check if we can find some package.json
 			toReturn = processPackageAtSCM(element);
 		}
-		//breakpoints here ???
         /*returned.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorate(element, javascriptProject));
 		return returned;*/
-		//maybe replace decorate by the method that manages technologies ?
 
 		toReturn.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorateTechnology(javascriptProject));
 		return toReturn;
@@ -116,8 +112,8 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	 * @return an optional containing the infos we obtained if they exist
 	 */
 	private Optional<JavascriptProject> processPackageAtSCM(Element element) {
-		System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
 		var project = element.getProperties().get(ModelElementKeys.Scm.PROJECT);
+
 		for(SCMHandler handler : scmHandler) {
 			if(handler.canHandle(project)) {
 				try {
@@ -134,7 +130,6 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 
 	Optional<JavascriptProject> processPackageFromPath(Element element, String packagePath) {
 		try {
-			System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
 			return Optional.of(javascriptPackageReader.readNpmProject(fsManager.resolveFile(packagePath)));
 		} catch (FileSystemException e) {
 			logger.log(Level.WARNING, String.format("Unable to read package at path %s", packagePath), e);
@@ -149,10 +144,10 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	 * @return the associated maven project
 	 */
 	public JavascriptProject findJavascriptProjectOf(Class<?> loadedClass) {
-		System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
 		String className = loadedClass.getName();
 		String path = loadedClass.getProtectionDomain().getCodeSource().getLocation().getPath();
 		File file = new File(path);
+
 		if (file.isDirectory()) {
 			return findJavascriptProjectOfClassFromDirectory(loadedClass, className, file);
 		} else {
@@ -161,7 +156,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	}
 
 	private JavascriptProject findJavascriptProjectOfClassFromDirectory(Class<?> loadedClass, String className, File directory) {
-		System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
+
 		File packageJson = new File(directory, "package.json");
 		File parentDir = directory.getParentFile();
 		if (packageJson.exists()) {
