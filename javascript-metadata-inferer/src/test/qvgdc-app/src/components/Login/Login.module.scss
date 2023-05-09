@@ -1,0 +1,25 @@
+.card {
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 2rem;
+
+  :global {
+    .Logo {
+      width: 160px;
+      height: 160px;
+    }
+  }
+}
+
+.form {
+  :global {
+    .MuiTextField-root {
+      width: 100%;
+    }
+  }
+}
+
+.title {
+  --margin: 1em 0;
+}

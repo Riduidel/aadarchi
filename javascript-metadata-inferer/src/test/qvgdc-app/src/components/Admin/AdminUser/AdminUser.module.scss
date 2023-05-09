@@ -1,0 +1,31 @@
+@import '../../../assets/scss/base/conf';
+
+.container {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.button {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.avatar {
+  display: inline-flex;
+  width: 2.5em;
+  height: 2.5em;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 3em;
+  background: linear-gradient(135deg, #db2244 0%, #c4285f 100%);
+  box-shadow: 0 3px 6px rgba(196, 40, 95, 0.3);
+  color: white;
+}

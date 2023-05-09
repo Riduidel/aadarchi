@@ -1,0 +1,87 @@
+.duckloader {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-bottom: 23%;
+  display: block;
+
+  &::before,
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 38%;
+    z-index: 4;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(white, 1) 0%, rgba(white, 0) 100%);
+  }
+  &::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(white, 1) 0%, rgba(white, 0) 100%);
+  }
+}
+
+.canard {
+  height: 81%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  animation: canard 1.5s linear infinite;
+}
+
+.vague {
+  position: absolute;
+  z-index: 2;
+  height: 34%;
+}
+
+.vagueBack {
+  z-index: 1;
+  bottom: 15%;
+  animation: vague 7s linear infinite;
+  opacity: 0.5;
+}
+
+.vagueFront {
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  animation: vague 3s linear infinite;
+}
+
+@keyframes vague {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(-11.111%, 4%, 0);
+  }
+
+  100% {
+    transform: translate3d(-22.222%, 0, 0);
+  }
+}
+
+@keyframes canard {
+  0%,
+  100% {
+    transform: rotate(0deg) translate3d(-50%, -50%, 0);
+  }
+  25% {
+    transform: rotate(1deg) translate3d(-50%, -47.5%, 0);
+  }
+  75% {
+    transform: rotate(-1deg) translate3d(-50%, -47.5%, 0);
+  }
+  50% {
+    transform: translate3d(-50%, -45%, 0);
+  }
+}

@@ -1,0 +1,104 @@
+@import '../../assets/scss/base/conf';
+
+.home {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @include breakpoint($tablet, up) {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  > * {
+    flex: 0 0 auto;
+  }
+}
+
+.backToGames {
+  color: var(--primary-color);
+  margin-bottom: 2em;
+  display: inline-block;
+  cursor: pointer;
+
+  svg {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: -0.1em;
+    width: 1em;
+    height: 1em;
+    stroke-width: 1;
+    margin-right: 0.4em;
+  }
+}
+
+.register {
+  text-align: center;
+
+  :global {
+    .MuiTextField-root {
+      width: 100%;
+      max-width: 360px;
+    }
+  }
+}
+
+.h1 {
+  text-align: center;
+  font-size: 2.5em;
+  font-weight: 300;
+  line-height: 1.2;
+  margin: 0;
+  color: $color1;
+  margin-top: 0.4em;
+
+  @include breakpoint($tablet, up) {
+    font-size: 3.4em;
+  }
+
+  span {
+    font-size: 0.3em;
+    display: block;
+    font-weight: 400;
+  }
+
+  strong {
+    font-weight: 400;
+    display: block;
+    font-size: 0.4em;
+  }
+}
+
+.logo {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+
+  @include breakpoint($tablet, up) {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+.right,
+.left {
+  text-align: center;
+  margin: 2em 0;
+
+  @include breakpoint($tablet, up) {
+    width: 50%;
+    flex: 1 1 auto;
+  }
+}
+
+.right {
+  button {
+    margin: 3em 0 3em;
+
+    @include breakpoint($tablet, up) {
+      margin: 3em 0 0;
+    }
+  }
+}

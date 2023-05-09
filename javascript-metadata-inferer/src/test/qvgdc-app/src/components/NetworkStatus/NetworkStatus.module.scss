@@ -1,0 +1,18 @@
+@import '../../assets/scss/base/conf';
+
+.online {
+  background: $successColor;
+  box-shadow: 0 2px 4px rgba($successColor, 0.3);
+}
+
+.offline {
+  background: $color1;
+  box-shadow: 0 2px 4px rgba($color1, 0.3);
+}
+
+.online,
+.offline {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+}

@@ -1,0 +1,31 @@
+{
+  "title": "Nouveau quizz",
+  "questions": [
+    {
+      "duration": 30,
+      "title": "Question 1",
+      "choices": [
+        {
+          "title": "Réponse 1"
+        },
+        {
+          "title": "Réponse 2",
+          "valid": true
+        }
+      ]
+    },
+    {
+      "duration": 30,
+      "title": "Question 2",
+      "choices": [
+        {
+          "title": "Réponse 1"
+        },
+        {
+          "title": "Réponse 2",
+          "valid": true
+        }
+      ]
+    }
+  ]
+}

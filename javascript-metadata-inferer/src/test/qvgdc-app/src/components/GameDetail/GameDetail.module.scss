@@ -1,0 +1,22 @@
+.title {
+  color: inherit;
+
+  :global {
+    svg {
+      width: 1em;
+      height: 1em;
+      stroke: var(--primary-color);
+      stroke-width: 1;
+
+      display: inline-block;
+      vertical-align: middle;
+      position: relative;
+      top: -0.2em;
+      margin-right: 0.4em;
+    }
+  }
+}
+
+.description {
+  margin-top: 0.4em;
+}

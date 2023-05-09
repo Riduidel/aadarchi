@@ -1,0 +1,133 @@
+// _conf.scss
+
+// colors 	-----------------------------------------------------------------------/
+$color1: #b31835;
+$warningColor: #ffa741;
+$errorColor: $color1;
+$successColor: #62ce87;
+$titleColor: $color1;
+$textColor: #42454d;
+$linkColor: $color1;
+$listColor: $color1;
+$fontSize: 16px;
+
+$borderRadius: 6px;
+
+// fonts 	-----------------------------------------------------------------------/
+$fontFamily: 'Nunito', Arial, Tahoma, Verdana, Helvetica, sans-serif;
+$fontFamilyTitle: 'Nunito', 'Nunito', Arial, Tahoma, Verdana, Helvetica, sans-serif;
+
+// sizes 	-----------------------------------------------------------------------/
+$wrapperSize: 1100px;
+
+$desktop: 1500px;
+$smallDesktop: 1170px;
+$bigTablet: 1024px;
+$tablet: 900px;
+$bigPhone: 720px;
+$phone: 440px;
+
+$easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+// mixins ---------------------------------------------------------------------/
+
+@mixin resetList {
+  ul,
+  li {
+    overflow: inherit;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+}
+
+@mixin object-fit($fit: fill, $position: null) {
+  -o-object-fit: $fit;
+  object-fit: $fit;
+
+  @if $position {
+    -o-object-position: $position;
+    object-position: $position;
+    font-family: 'object-fit: #{$fit}; object-position: #{$position}';
+  } @else {
+    font-family: 'object-fit: #{$fit}';
+  }
+}
+
+@mixin resetButton {
+  appearance: none;
+  padding: 0;
+  background: none;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+}
+
+@mixin clearfix {
+  &:before,
+  &:after {
+    content: ' ';
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+
+  *zoom: 1;
+}
+
+@mixin breakpoint($point: null, $type: down width) {
+  @if ($point != null) {
+    $whichProp: 'width';
+
+    @if (length($type) > 1 and (nth($type, 1) == 'height' or nth($type, 2) == 'height')) {
+      $whichProp: 'height';
+    }
+
+    @if (length($point) > 1) {
+      $maxPoint: nth($point, 2);
+      $minPoint: nth($point, 1);
+
+      @if (nth($point, 1) > nth($point, 2)) {
+        $maxPoint: nth($point, 1);
+        $minPoint: nth($point, 2);
+      }
+
+      $finalMinPoint: $minPoint + 1;
+      $finalMaxPoint: $maxPoint;
+
+      @if (nth($type, 1) == 'up' or nth($type, 2) == 'up') {
+        $finalMinPoint: $minPoint;
+        $finalMaxPoint: $maxPoint - 1;
+      }
+
+      @media (min-#{$whichProp}: #{$finalMinPoint}) and (max-#{$whichProp}: #{$finalMaxPoint}) {
+        @content;
+      }
+    } @else {
+      $finalPoint: $point;
+      $finalType: 'max-#{$whichProp}';
+
+      @if (length($type) > 1) {
+        @if (nth($type, 1) == 'up' or nth($type, 2) == 'up') {
+          $finalPoint: $point + 1;
+          $finalType: 'min-#{$whichProp}';
+        }
+      } @else {
+        @if (nth($type, 1) == 'up') {
+          $finalPoint: $point + 1;
+          $finalType: 'min-#{$whichProp}';
+        }
+      }
+
+      @media ($finalType: #{$finalPoint}) {
+        @content;
+      }
+    }
+  } @else {
+    @warn "Unfortunately, value from first parameter : `#{$point}` - is not a valid one. "
+              + "Please use valid value.";
+  }
+}

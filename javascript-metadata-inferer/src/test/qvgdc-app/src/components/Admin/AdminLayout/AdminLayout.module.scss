@@ -1,0 +1,33 @@
+@import '../../../assets/scss/base/conf';
+
+.title {
+  h1 {
+    font-size: 1.25rem;
+    color: inherit;
+    font-weight: 600;
+  }
+}
+
+.logo {
+  margin: 1em 2em 1em 0;
+  width: 32px;
+  height: 32px;
+  transform: translateZ(0);
+}
+
+.user {
+  margin-left: auto;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  box-shadow: 0 8px 32px rgba($textColor, 0.08);
+  margin-bottom: 4em;
+}
+
+.page {
+  padding-bottom: 4em;
+}

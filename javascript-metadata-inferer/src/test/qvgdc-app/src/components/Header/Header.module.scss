@@ -1,0 +1,14 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .test {
+    margin-right: auto;
+  }
+}
+
+.header {
+  position: relative;
+  z-index: 2;
+}

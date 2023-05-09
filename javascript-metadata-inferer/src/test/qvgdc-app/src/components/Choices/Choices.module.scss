@@ -1,0 +1,31 @@
+@import '../../assets/scss/base/conf';
+
+.questionIndex {
+  font-weight: bold;
+  color: $color1;
+  font-size: 18px;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-right: 0.6em;
+}
+
+.choice {
+  padding: 0.72em 2em;
+}
+
+.pendingchoice {
+  background: rgba($warningColor, 0.16);
+}
+
+.errorchoice {
+  background: rgba($errorColor, 0.1);
+}
+
+.goodchoice {
+  background: $successColor;
+  color: white;
+
+  .questionIndex {
+    color: inherit;
+  }
+}

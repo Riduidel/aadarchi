@@ -10,9 +10,7 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.gitlab.Constants;
-import org.ndx.aadarchi.gitlab.GitlabSCMHandler;
 
 @EnableWeld
 class GitLabFileSystemProviderTest {

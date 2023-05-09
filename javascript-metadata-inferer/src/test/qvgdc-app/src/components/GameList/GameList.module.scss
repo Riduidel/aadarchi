@@ -1,0 +1,24 @@
+@import '../../assets/scss/base/conf';
+
+.gameList {
+  @include breakpoint($tablet) {
+    fieldset {
+      width: 100%;
+    }
+  }
+  @include breakpoint($tablet, up) {
+    display: flex;
+    justify-content: center;
+  }
+}
+.h2 {
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+  color: inherit;
+  margin: 1em 0;
+
+  @include breakpoint($tablet, up) {
+    text-align: left;
+  }
+}

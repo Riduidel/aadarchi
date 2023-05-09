@@ -1,0 +1,193 @@
+:root {
+  --primary-color: #{$color1};
+}
+
+* {
+  &,
+  &::before,
+  &::after {
+    box-sizing: border-box;
+  }
+}
+
+body,
+td,
+pre,
+input[type='text'],
+textarea,
+select {
+  font-family: $fontFamily;
+  line-height: 1.4;
+  color: var(--text-color, #{$textColor});
+}
+
+#root,
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+.u-wrapper {
+  margin: 0 auto;
+  max-width: $wrapperSize;
+  text-align: justify;
+  width: 90%;
+
+  &--no-padding {
+    width: 100%;
+  }
+
+  @include breakpoint($smallDesktop) {
+    max-width: 90%;
+
+    &--no-padding {
+      max-width: 100%;
+    }
+  }
+
+  &--full {
+    max-width: 90%;
+  }
+}
+
+svg.icon {
+  width: 1em;
+  height: 1em;
+  margin: 0.195em;
+}
+
+svg symbol circle,
+svg symbol path {
+  overflow: visible;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+}
+
+.content {
+  ul,
+  ol {
+    position: relative;
+    padding: 0.5rem 0;
+  }
+
+  ul,
+  ol {
+    list-style-type: none;
+  }
+
+  ul li {
+    text-align: justify;
+    line-height: 1.4;
+    padding-left: 2.4rem;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    overflow: auto;
+
+    &:before {
+      content: '';
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-top: 0.4rem solid transparent;
+      border-bottom: 0.4rem solid transparent;
+      border-left: 0.4rem solid $listColor;
+      position: relative;
+      left: -1.2rem;
+      top: 0;
+      margin: 0 -0.4rem 0 0;
+    }
+  }
+
+  ol {
+    counter-reset: section;
+  }
+
+  ol li {
+    text-align: justify;
+    line-height: 1.4;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 2.3rem;
+    position: relative;
+    overflow: auto;
+
+    &:before {
+      counter-increment: section;
+      content: counters(section, '.') '.';
+      color: darken($listColor, 5%);
+      position: absolute;
+      transform: translateX(-100%);
+      padding-right: 5px;
+    }
+  }
+}
+
+a {
+  --shadow: #fff;
+  text-decoration-skip-ink: auto;
+  color: $linkColor;
+  text-decoration: none;
+  font: inherit;
+  background-image: linear-gradient(currentColor, currentColor);
+  text-decoration: none;
+  background-repeat: no-repeat;
+  background-size: 100% 1.5px;
+  background-position: center bottom 4%;
+  background-origin: padding-box;
+  text-shadow: 3px 0 var(--shadow), 2px 0 var(--shadow), 1px 0 var(--shadow), -1px 0 var(--shadow), -2px 0 var(--shadow),
+    -3px 0 var(--shadow);
+}
+
+h1,
+.h1 {
+  color: var(--primary-color);
+  font-size: 3.2rem;
+  font-weight: 600;
+  font-family: $fontFamilyTitle;
+  margin: var(--margin, 0.4em 0);
+  line-height: 1.1;
+}
+
+.h2,
+h2 {
+  color: var(--primary-color);
+  font-size: 2.4rem;
+  font-weight: 600;
+  font-family: $fontFamilyTitle;
+  margin: var(--margin, 0.4em 0);
+  line-height: 1.2;
+}
+
+.h3,
+h3 {
+  color: var(--primary-color);
+  font-size: 1.8rem;
+  font-weight: 600;
+  font-family: $fontFamilyTitle;
+  margin: var(--margin, 0.4em 0);
+  line-height: 1.2;
+}
+
+#jsonGame {
+  font-family: monospace;
+}
