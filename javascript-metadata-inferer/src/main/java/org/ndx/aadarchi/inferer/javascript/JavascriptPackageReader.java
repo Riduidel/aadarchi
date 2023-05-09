@@ -46,15 +46,6 @@ public class JavascriptPackageReader {
         }
     }
 
-    /*public JavascriptProject readJavascriptProject(String packagePath, URL url) {
-        try (InputStream input = SCMHandler.openStream(scmHandler, url)) {
-            return readJavascriptProject(packagePath, url);
-        } catch (IOException e) {
-            throw new JavascriptDetailsInfererException(String.format("Unable to read stream from URL %s", packagePath), e);
-        }
-        return;
-    }*/
-
     public Dependency readDependencies() {
         try {
             ObjectMapper mapper = new ObjectMapper();

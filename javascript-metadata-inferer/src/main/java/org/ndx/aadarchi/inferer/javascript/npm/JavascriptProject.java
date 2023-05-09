@@ -35,7 +35,7 @@ public class JavascriptProject implements Cloneable {
      */
     @JsonProperty("dependencies")
     @JsonAlias({"devDependencies", "peerDependencies", "peerDependenciesMeta", "bundleDependencies","optionalDependencies"})
-    private Map<Object, Object> dependencies;
+    public Map<Object, Object> dependencies;
     /**
      * version of node or npm that we work
      */
@@ -43,6 +43,7 @@ public class JavascriptProject implements Cloneable {
     /**
      * the operating system which the module run on
      */
+    
     private Set os;
     private Map<String, String> properties;
     private Object modules;

@@ -36,13 +36,51 @@ public class JavascriptPackageAnalyzer {
      * @return a string giving details about important project infos
      */
     public String decorateTechnology(JavascriptProject project) {
-        Set<String> technologies = new TreeSet<>();
-        decorateRecursively(project, (p, l) -> {
+        /*decorateRecursively(project, (p, l) -> {
             technologies.addAll(doDecorateTechnology(p));
             return true;
-        });
+        });*/
+        //Set<String> technologies = new TreeSet<>(doDecorateTechnology(project));
+        Set<String> technologies = doDecorateTechnology(project);
+        technologies.forEach(System.out::println);
         return String.join(",", technologies);
     }
+
+    private Set<String> doDecorateTechnology(JavascriptProject project) {
+        System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
+        Set<String> technologies = new LinkedHashSet<>();
+        //project.dependencies.forEach((k, v) -> System.out.println("Key : " + k + " Value : " + v));
+
+        project.dependencies.forEach((k, v) -> {
+            if (k.toString().startsWith("@angular")) {
+                technologies.add("angular");
+            } else if (k.toString().startsWith("react")) {
+                technologies.add("react.js");
+            } else if (k.toString().startsWith("vue")) {
+                technologies.add("vue.js");
+            } else if (k.toString().startsWith("node")) {
+                technologies.add("node.js");
+            }
+        });
+        return technologies;
+    }
+
+    /*private Set<String> doDecorateTechnology(JavascriptProject project) {
+        System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
+        Set<String> technologies = new LinkedHashSet<>();
+        for (Dependency dependency : (List<Dependency>) project.getDependencies()) {
+            if (dependency.getName().startsWith("@angular")) {
+                technologies.add("angular");
+            } else if (dependency.getName().startsWith("react")) {
+                technologies.add("react.js");
+            } else if (dependency.getName().startsWith("vue")) {
+                technologies.add("vue.js");
+            } else if (dependency.getName().startsWith("node")) {
+                technologies.add("node.js");
+            }
+        }
+        return technologies;
+    }*/
 
     private String technologyWithVersionFromDependency(JavascriptProject javascriptProject, String technology, String... propertyNames) {
         return technology + Stream.of(propertyNames)
@@ -67,25 +105,10 @@ public class JavascriptPackageAnalyzer {
             }*/
         }
     }
-    private Set<String> doDecorateTechnology(JavascriptProject project) {
-        Set<String> technologies = new LinkedHashSet<>();
-        for (Dependency dependency : (List<Dependency>) project.getDependencies()) {
-            if (dependency.getName().startsWith("@angular")) {
-                technologies.add("angular");
-            } else if (dependency.getName().startsWith("react")) {
-                technologies.add("react.js");
-            } else if (dependency.getName().startsWith("vue")) {
-                technologies.add("vue.js");
-            } else if (dependency.getName().startsWith("node")) {
-                technologies.add("node.js");
-            }
-        }
-        return technologies;
-    }
+
     public void decorate(Element element, JavascriptProject javascriptProject) {
         Optional.ofNullable(javascriptProject.getDescription()).stream()
                 .forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
-
     }
     /*private void decorateScmUrl(Element element, JavascriptProject javascriptProject) {
         decorateRecursively(javascriptProject, (project,children) -> {

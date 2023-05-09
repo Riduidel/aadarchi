@@ -48,6 +48,7 @@ import com.structurizr.model.StaticStructureElement;
  * @author nicolas-delsaux
  *
  */
+
 @com.structurizr.annotation.Component
 public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implements ModelEnhancer {
 
@@ -87,17 +88,26 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	 * @return an optional containing the possible model element
 	 */
 	public Optional<JavascriptProject> processModelElement(Element element) {
-		Optional<JavascriptProject> returned = Optional.empty();
+		System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
+		//get return value of decorate
+		String technologies = "";
+		// ----
+		Optional<JavascriptProject> toReturn = Optional.empty();
 		if (element.getProperties().containsKey(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE)) {
 			String packagePath = element.getProperties().get(JavascriptEnhancer.AGILE_ARCHITECTURE_NPM_PACKAGE);
-			returned = processPackageFromPath(element, packagePath);
+			toReturn = processPackageFromPath(element, packagePath);
 		} else if (element.getProperties().containsKey(ModelElementKeys.Scm.PROJECT)) {
 			// If there is some kind of SCM path, and a configured SCM provider,
-			// let's check if we can find some pom.xml
-			returned = processPackageAtSCM(element);
+			// let's check if we can find some package.json
+			toReturn = processPackageAtSCM(element);
 		}
-		returned.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorate(element, javascriptProject));
-		return returned;
+		//breakpoints here ???
+        /*returned.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorate(element, javascriptProject));
+		return returned;*/
+		//maybe replace decorate by the method that manages technologies ?
+
+		toReturn.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorateTechnology(javascriptProject));
+		return toReturn;
 	}
 
 	/**
@@ -106,6 +116,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	 * @return an optional containing the infos we obtained if they exist
 	 */
 	private Optional<JavascriptProject> processPackageAtSCM(Element element) {
+		System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
 		var project = element.getProperties().get(ModelElementKeys.Scm.PROJECT);
 		for(SCMHandler handler : scmHandler) {
 			if(handler.canHandle(project)) {
@@ -123,6 +134,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 
 	Optional<JavascriptProject> processPackageFromPath(Element element, String packagePath) {
 		try {
+			System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
 			return Optional.of(javascriptPackageReader.readNpmProject(fsManager.resolveFile(packagePath)));
 		} catch (FileSystemException e) {
 			logger.log(Level.WARNING, String.format("Unable to read package at path %s", packagePath), e);
@@ -137,6 +149,7 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 	 * @return the associated maven project
 	 */
 	public JavascriptProject findJavascriptProjectOf(Class<?> loadedClass) {
+		System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
 		String className = loadedClass.getName();
 		String path = loadedClass.getProtectionDomain().getCodeSource().getLocation().getPath();
 		File file = new File(path);
@@ -146,7 +159,9 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 			throw new JavascriptDetailsInfererException(String.format("Couldn't find javascript project in %s", className));
 		}
 	}
+
 	private JavascriptProject findJavascriptProjectOfClassFromDirectory(Class<?> loadedClass, String className, File directory) {
+		System.out.println("[][][]Method " + Thread.currentThread().getStackTrace()[1].getMethodName() + " called");
 		File packageJson = new File(directory, "package.json");
 		File parentDir = directory.getParentFile();
 		if (packageJson.exists()) {
@@ -159,9 +174,5 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 					className));
 		}
 		return null;
-	}
-
-	public String decorateTechnology(JavascriptProject javascriptProject) {
-		return javascriptPackageAnalyzer.decorateTechnology(javascriptProject);
 	}
 }
