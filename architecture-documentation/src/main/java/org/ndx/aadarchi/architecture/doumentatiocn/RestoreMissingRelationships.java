@@ -1,4 +1,4 @@
-package org.ndx.aadarchi;
+package org.ndx.aadarchi.architecture.doumentatiocn;
 
 import org.ndx.aadarchi.base.Enhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
