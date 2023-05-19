@@ -103,21 +103,17 @@
 						<arguments>-Dasciidoc.documents.hide.bug.report=true</arguments>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>io.github.Riduidel.aadarchi</groupId>
+					<artifactId>aadarchi-maven-plugin</artifactId>
+					<version>\${version.aadarchi}</version>
+					<dependencies>
+						<!-- If you have some specific code to add to that plugin, do it here -->
+					</dependencies>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
-				<groupId>io.github.Riduidel.aadarchi</groupId>
-				<artifactId>aadarchi-maven-plugin</artifactId>
-				<version>\${version.aadarchi}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate-model</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
@@ -160,6 +156,29 @@
 	</build>
 
 	<profiles>
+		<profile>
+			<id>generate-model</id>
+			<activation>
+				<file>
+					<exists>src/architecture/resources</exists>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.github.Riduidel.aadarchi</groupId>
+						<artifactId>aadarchi-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>generate-model</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 		<profile>
 			<id>generate-docs</id>
 			<activation>
