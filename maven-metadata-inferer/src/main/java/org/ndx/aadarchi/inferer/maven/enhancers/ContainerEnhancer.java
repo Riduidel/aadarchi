@@ -3,16 +3,18 @@ package org.ndx.aadarchi.inferer.maven.enhancers;
 import java.util.Collection;
 
 import org.apache.maven.project.MavenProject;
+import org.ndx.aadarchi.base.utils.descriptions.RelationshipDescriptionProvider;
 import org.ndx.aadarchi.inferer.maven.MavenPomDecorator;
 import org.ndx.aadarchi.inferer.maven.MavenPomReader;
 
+import com.structurizr.Workspace;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 
 public class ContainerEnhancer extends AbstractContainerEnhancer<Container, Component> {
 
-	public ContainerEnhancer(MavenPomReader mavenPomReader, Container container) {
-		super(mavenPomReader, container);
+	public ContainerEnhancer(MavenPomReader mavenPomReader, Workspace workspace, Container container, RelationshipDescriptionProvider descriptionProvider) {
+		super(mavenPomReader, workspace, container, descriptionProvider);
 	}
 	
 	@Override

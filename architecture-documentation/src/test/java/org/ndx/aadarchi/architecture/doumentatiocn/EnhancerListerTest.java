@@ -1,8 +1,8 @@
-package org.ndx.aadarchi;
+package org.ndx.aadarchi.architecture.doumentatiocn;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.ndx.aadarchi.EnhancerLister;
+import org.ndx.aadarchi.architecture.doumentatiocn.EnhancerLister;
 import org.ndx.aadarchi.base.Enhancer;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 

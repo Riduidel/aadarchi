@@ -1,4 +1,4 @@
-package org.ndx.aadarchi;
+package org.ndx.aadarchi.architecture.doumentatiocn;
 
 import com.structurizr.model.Container;
 import com.structurizr.model.SoftwareSystem;
