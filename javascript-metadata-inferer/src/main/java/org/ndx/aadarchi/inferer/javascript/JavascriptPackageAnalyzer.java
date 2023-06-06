@@ -42,7 +42,7 @@ public class JavascriptPackageAnalyzer {
         });*/
         //Set<String> technologies = new TreeSet<>(doDecorateTechnology(project));
         Set<String> technologies = doDecorateTechnology(project);
-        technologies.forEach(System.out::println);
+        //technologies.forEach(System.out::println);
         return String.join(",", technologies);
     }
 

@@ -8,10 +8,6 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.inferer.javascript.npm.JavascriptProject;
 
-/*import org.ndx.aadarchi.inferer.javascript.enhancers.ComponentEnhancer;
-import org.ndx.aadarchi.inferer.javascript.enhancers.ContainerEnhancer;
-import org.ndx.aadarchi.inferer.javascript.enhancers.SoftwareSystemEnhancer;
-*/
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
@@ -99,11 +95,14 @@ public class JavascriptDetailsInfererEnhancer extends ModelElementAdapter implem
 			// let's check if we can find some package.json
 			toReturn = processPackageAtSCM(element);
 		}
-        /*returned.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorate(element, javascriptProject));
+        /*toReturn.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorate(element, javascriptProject));
 		return returned;*/
 
-		toReturn.ifPresent(javascriptProject -> javascriptPackageAnalyzer.decorateTechnology(javascriptProject));
-		return toReturn;
+		 technologies = toReturn.stream()
+				.map(javascriptProject -> javascriptPackageAnalyzer.decorateTechnology(javascriptProject))
+				 .collect(Collectors.joining());
+		 System.out.println(technologies);
+		 return toReturn;
 	}
 
 	/**
