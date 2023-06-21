@@ -100,10 +100,6 @@ public interface ModelElementKeys {
 		 */
 		String PATH = ModelElementKeys.PREFIX+"scm.path";
 		/**
-		 * Readme path in project. Defaults to "readme.md". This should be a subpath of scm path.
-		 */
-		String README = ModelElementKeys.PREFIX+"scm.readme.path";
-		/**
 		 * When property is set to true, we will check if model element has an associated SCM project value 
 		 * which can be checked out
 		 * @author Nicolas

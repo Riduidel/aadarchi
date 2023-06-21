@@ -2,6 +2,7 @@ package org.ndx.aadarchi.vfs.github;
 
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.provider.FileNameParser;
 import org.apache.commons.vfs2.provider.GenericURLFileName;
 import org.apache.commons.vfs2.provider.GenericURLFileNameParser;
@@ -14,7 +15,7 @@ public class GitHubFileNameParser extends GenericURLFileNameParser implements Fi
 	}
 
 	@Override
-	public FileName parseUri(VfsComponentContext context, FileName base, String fileName) throws FileSystemException {
+	public GitHubFileName parseUri(VfsComponentContext context, FileName base, String fileName) throws FileSystemException {
 		GenericURLFileName temporary = (GenericURLFileName) super.parseUri(context, base, fileName);
 		String fullPath = temporary.getPath();
 		String[] segments = fullPath.split("/");
@@ -34,7 +35,7 @@ public class GitHubFileNameParser extends GenericURLFileNameParser implements Fi
 				temporary.getUserName(), temporary.getPassword(),
 				gitHubUserOrOrganization, repository,
 				fullPath,
-				temporary.getType(),
+				null /* can be loaded afterwards */,
 				temporary.getQueryString());
 	}
 }
