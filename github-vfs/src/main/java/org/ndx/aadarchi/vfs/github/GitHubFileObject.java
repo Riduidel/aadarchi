@@ -16,8 +16,6 @@ public class GitHubFileObject extends AbstractFileObject<GitHubFileSystem> imple
 	
 	private Optional<GHContent> ghContent = Optional.empty();
 
-	private FileType type = FileType.FILE_OR_FOLDER;
-
 	public GitHubFileObject(GitHubFileName name, GitHubFileSystem gitHubFileSystem, GHRepository ghRepository) {
 		super(name, gitHubFileSystem);
 		this.repository = ghRepository;
@@ -26,14 +24,6 @@ public class GitHubFileObject extends AbstractFileObject<GitHubFileSystem> imple
 	private GHContent getGHContent() throws IOException {
 		if(ghContent.isEmpty()) {
 			ghContent = Optional.of(repository.getFileContent(getName().getPathInRepository()));
-			switch(ghContent.get().getType()) {
-			case "dir":
-				type = FileType.FOLDER;
-				break;
-			case "file":
-				type = FileType.FILE;
-				break;
-			}
 		}
 		return ghContent.get();
 	}
@@ -45,7 +35,11 @@ public class GitHubFileObject extends AbstractFileObject<GitHubFileSystem> imple
 
 	@Override
 	protected FileType doGetType() throws Exception {
-		return type;
+		try {
+			return getGHContent().getType().equals("file") ? FileType.FILE : FileType.FOLDER;
+		} catch(Exception e) {
+			return FileType.FOLDER;
+		}
 	}
 	
 	@Override
@@ -60,10 +54,31 @@ public class GitHubFileObject extends AbstractFileObject<GitHubFileSystem> imple
 
 	@Override
 	protected String[] doListChildren() throws Exception {
-		return repository.getDirectoryContent(getName().getPathInRepository())
-				.stream()
-				.map(GHContent::getPath)
-				.toArray(String[]::new);
+		switch(getType()) {
+		case FILE: return new String[0];
+		default:
+			return repository.getDirectoryContent(getName().getPathInRepository())
+					.stream()
+					.map(GHContent::getPath)
+					.toArray(String[]::new);
+		}
 	}
 
+	@Override
+	protected FileObject[] doListChildrenResolved() throws Exception {
+		switch(getType()) {
+		case FILE: return new FileObject[0];
+		default:
+			return repository.getDirectoryContent(getName().getPathInRepository())
+					.stream()
+					.map(this::createChildFrom)
+					.map(githubFileName -> 
+						new GitHubFileObject(githubFileName, getAbstractFileSystem(), repository))
+					.toArray(size -> new GitHubFileObject[size]);
+		}
+	}
+	
+	private GitHubFileName createChildFrom(GHContent childDescription) {
+		return new GitHubFileName(getName(), childDescription);
+	}
 }

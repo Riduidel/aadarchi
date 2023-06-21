@@ -3,6 +3,7 @@ package org.ndx.aadarchi.vfs.github;
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.provider.GenericURLFileName;
+import org.kohsuke.github.GHContent;
 
 public class GitHubFileName extends GenericURLFileName implements FileName {
 
@@ -29,6 +30,23 @@ public class GitHubFileName extends GenericURLFileName implements FileName {
 				this.pathInRepository = path.substring(repositoryInPath+getContainingRepository().length());
 			}
 		}
+	}
+
+	/**
+	 * Constructs a child from a parent and a child specification
+	 * @param name
+	 * @param childDescription
+	 */
+	public GitHubFileName(GitHubFileName name, GHContent childDescription) {
+		super(name.getScheme(), name.getHostName(), name.getPort(), name.getDefaultPort(), 
+				name.getUserName(), name.getPassword(),
+				name.getPath()+"/"+childDescription.getPath(), 
+				childDescription.getType().equals("file") ? FileType.FILE : FileType.FOLDER, 
+				name.getQueryString());
+		this.githubUserOrOrganization = name.githubUserOrOrganization;
+		this.repository = name.repository;
+		this.pathInRepository = childDescription.getPath();
+		
 	}
 
 	public String getPathInRepository() {

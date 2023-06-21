@@ -54,7 +54,14 @@ public class FileContentCache {
 	 */
 	public InputStream openStreamFor(FileObject file) throws IOException {
 		try {
-			return openStreamFor(file.getPublicURIString(), ThrowingFunction.unchecked(_url -> file.getContent().getInputStream()));
+			// Sometimes this url uses custom protocols, which Java doesn't fully understand
+			// So replace all non standard protocols by http
+			String uri = file.getPublicURIString()
+					.replace("github:", "http:")
+					.replace("gitlab:", "http:");
+			return openStreamFor(
+					uri, 
+					ThrowingFunction.unchecked(_url -> file.getContent().getInputStream()));
 		} finally {
 			file.close();
 		}
