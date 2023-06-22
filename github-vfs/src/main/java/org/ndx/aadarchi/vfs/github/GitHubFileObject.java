@@ -2,13 +2,19 @@ package org.ndx.aadarchi.vfs.github;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystemException;
 import java.util.Optional;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.provider.AbstractFileObject;
+import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHContent;
 import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.PagedIterable;
+
+import com.pivovarit.function.ThrowingFunction;
+import com.pivovarit.function.exception.WrappedException;
 
 public class GitHubFileObject extends AbstractFileObject<GitHubFileSystem> implements FileObject {
 
@@ -45,6 +51,27 @@ public class GitHubFileObject extends AbstractFileObject<GitHubFileSystem> imple
 	@Override
 	protected InputStream doGetInputStream() throws Exception {
 		return getGHContent().read();
+	}
+	
+	@Override
+	protected long doGetLastModifiedTime() throws Exception {
+		try {
+			PagedIterable<GHCommit> commits = repository.queryCommits()
+					.pageSize(1)
+					.path(getName().getPathInRepository())
+					.list();
+			return commits.toList().stream()
+				.findFirst()
+				.map(ThrowingFunction.unchecked(commit -> commit.getCommitDate().getTime()))
+				.orElse(0l);
+		} catch (WrappedException | IOException e) {
+			throw new IOException(
+					String.format("Unable to get last commit info for %s",
+							getPath()
+					),
+					e);
+		}
+
 	}
 	
 	@Override
