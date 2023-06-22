@@ -1,21 +1,12 @@
 package org.ndx.aadarchi.base.enhancers.scm;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.vfs2.FileFilter;
-import org.apache.commons.vfs2.FileFilterSelector;
 import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSelector;
-import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.filter.RegexFileFilter;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
@@ -23,11 +14,10 @@ import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.OutputBuilder.Format;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
+import org.ndx.aadarchi.base.utils.commonsvfs.WhenFileDetected;
 
-import com.pivovarit.function.ThrowingFunction;
 import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
 import com.structurizr.model.StaticStructureElement;
@@ -42,12 +32,7 @@ import nl.jworks.markdown_to_asciidoc.Converter;
  */
 @Component(technology = "Java, CDI")
 public class ReadmeReader extends ModelElementAdapter {
-	@Inject
-	Logger logger;
-
-	@Inject
-	FileSystemManager fileSystemManager;
-	@Inject Instance<SCMHandler> scmHandlers;
+	@Inject public Logger logger;
 
 	@Inject
 	@ConfigProperty(name = "force", defaultValue = "false")
@@ -55,6 +40,8 @@ public class ReadmeReader extends ModelElementAdapter {
 
 	@Inject
 	FileContentCache cache;
+	
+	@Inject WhenFileDetected whenFileDetected;
 
 	@Override
 	public int priority() {
@@ -63,8 +50,7 @@ public class ReadmeReader extends ModelElementAdapter {
 
 	@Override
 	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
-		whenFileDetected(element, 
-				new RegexFileFilter("(readme|README)\\.(adoc|md)"),
+		whenFileDetected.whenFileDetected(element, new RegexFileFilter("(readme|README)\\.(adoc|md)"), 
 				// No file detected
 				elementRoot -> logger.severe(String.format(
 						"Couldn't find any Readme for element %s " + "(path is %s)",
@@ -77,62 +63,6 @@ public class ReadmeReader extends ModelElementAdapter {
 								+ "(path is %s)",
 						StructurizrUtils.getCanonicalPath(element), elementRoot))
 		);
-	}
-
-	/**
-	 * Perform the given success operation when file is detected.
-	 * 
-	 * @param element
-	 * @param onMultipleFileDetected 
-	 */
-	private void whenFileDetected(StaticStructureElement element, FileFilter fileFilter, 
-			Consumer<FileObject> onNoFileDetected,
-			BiConsumer<FileObject, FileObject> onFileDetected, 
-			BiConsumer<FileObject, FileObject[]> onMultipleFileDetected) {
-		Map<String, String> properties = element.getProperties();
-		Optional<FileObject> analyzedPath = Optional.empty();
-		if (properties.containsKey(ModelElementKeys.ConfigProperties.BasePath.NAME)) {
-			String localPath = properties.get(ModelElementKeys.ConfigProperties.BasePath.NAME);
-			try {
-				analyzedPath = Optional.ofNullable(
-						fileSystemManager.resolveFile(localPath));
-			} catch (FileSystemException e) {
-				logger.log(Level.SEVERE, String.format("Unable to resolve path to %s", localPath), e);
-			}
-		} else if (properties.containsKey(ModelElementKeys.Scm.PROJECT)) {
-			var scmProject = properties.get(ModelElementKeys.Scm.PROJECT);
-			var path = properties.getOrDefault(ModelElementKeys.Scm.PATH, "");
-			analyzedPath = scmHandlers.stream()
-				.filter(handler -> handler.canHandle(scmProject))
-				.map(handler -> handler.getProjectRoot(scmProject))
-				.findFirst()
-				.map(ThrowingFunction.unchecked(scmProjectRoot -> scmProjectRoot.resolveFile(path)));
-		}
-
-		if(analyzedPath.isPresent()) {
-			var elementRoot = analyzedPath.get();
-			FileSelector filter = new FileFilterSelector(fileFilter);
-			try {
-				FileObject[] found = elementRoot.findFiles(filter);
-				if (found.length == 0) {
-					onNoFileDetected.accept(elementRoot);
-				} else if (found.length > 1) {
-					onMultipleFileDetected.accept(elementRoot, found);
-				} else {
-					FileObject detected = found[0];
-					onFileDetected.accept(elementRoot, detected);
-				}
-			} catch (FileSystemException e) {
-				logger.log(Level.SEVERE,
-						String.format(
-								"Couldn't find any file matching pattern %s for element %s"
-										+ "(element path is %s)",
-								StructurizrUtils.getCanonicalPath(element),
-								filter,
-								elementRoot),
-						e);
-			}
-		}
 	}
 
 	void writeReadmeFor(FileObject readme, Element element, OutputBuilder builder) {
