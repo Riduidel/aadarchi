@@ -11,6 +11,8 @@ public interface MavenEnhancer {
 	 * <li>a http(s)? url</li>
 	 * <li>a resource in jar url</li>
 	 *  </ul>
+	 *  This property is only written by this enhancer, never read.
+	 *  YOu can use it to identify the element as a maven module.
 	 */
 	String AGILE_ARCHITECTURE_MAVEN_POM = ModelElementKeys.PREFIX+"maven.pom";
 	/**

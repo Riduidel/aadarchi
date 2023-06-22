@@ -76,14 +76,14 @@ class MavenPomReaderTest {
 	 * (because there are some weird cases when loading from physical PATH)
 	 */
 	@Test
-	void can_read_pom_of_provided_class_name_from_a_known_jar() {
-		MavenProject project = mavenPomReader.findMavenProjectOf(Instance.class);
-		Assertions.assertThat(project).isNotNull();
+	void can_find_pom_of_provided_class_name_from_a_known_jar() {
+		FileObject project = mavenPomReader.findMavenPomFrom(Instance.class);
+		Assertions.assertThat((Object) project).isNotNull();
 	}
 	@Test
-	void can_read_pom_of_provided_class_name_from_current_project() {
-		MavenProject project = mavenPomReader.findMavenProjectOf(MavenDetailsInfererEnhancer.class);
-		Assertions.assertThat(project).isNotNull();
+	void can_find_pom_of_provided_class_name_from_current_project() {
+		FileObject project = mavenPomReader.findMavenPomFrom(MavenDetailsInfererEnhancer.class);
+		Assertions.assertThat((Object) project).isNotNull();
 	}
 
 }

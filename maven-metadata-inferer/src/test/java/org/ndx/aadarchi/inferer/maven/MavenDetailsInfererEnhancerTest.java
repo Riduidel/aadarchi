@@ -1,7 +1,5 @@
 package org.ndx.aadarchi.inferer.maven;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 
 import javax.inject.Inject;
@@ -9,21 +7,17 @@ import javax.inject.Inject;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
-import org.assertj.core.api.InstanceOfAssertFactory;
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.ArchitectureEnhancer;
-import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
 
 import com.structurizr.Workspace;
-import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.Container;
 import com.structurizr.model.SoftwareSystem;
 
@@ -66,9 +60,9 @@ public class MavenDetailsInfererEnhancerTest {
 			.extracting(container -> container.getProperties())
 			.asInstanceOf(InstanceOfAssertFactories.MAP)
 			.containsOnlyKeys(
-					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM,
 					ModelElementKeys.Scm.PATH,
 					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
+					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM,
 					ModelElementKeys.Scm.PROJECT,
 					ModelElementKeys.JAVA_SOURCES,
 					ModelElementKeys.JAVA_PACKAGES,
