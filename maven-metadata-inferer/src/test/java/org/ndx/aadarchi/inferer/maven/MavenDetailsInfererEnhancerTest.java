@@ -60,6 +60,7 @@ public class MavenDetailsInfererEnhancerTest {
 			.extracting(container -> container.getProperties())
 			.asInstanceOf(InstanceOfAssertFactories.MAP)
 			.containsOnlyKeys(
+					ModelElementKeys.ConfigProperties.BasePath.NAME,
 					ModelElementKeys.Scm.PATH,
 					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
 					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM,

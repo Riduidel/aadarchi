@@ -121,6 +121,15 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 		}
 		linked.addProperty(ModelElementKeys.Scm.PATH, 
 				module.getProperties().getProperty(ModelElementKeys.Scm.PATH));
+		if(enhanced.getProperties().containsKey(ModelElementKeys.Scm.PROJECT)) {
+			linked.addProperty(ModelElementKeys.Scm.PROJECT, 
+					enhanced.getProperties().get(ModelElementKeys.Scm.PROJECT));
+		}
+		if(enhanced.getProperties().containsKey(ModelElementKeys.ConfigProperties.BasePath.NAME)) {
+			linked.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, 
+					enhanced.getProperties().get(ModelElementKeys.ConfigProperties.BasePath.NAME)
+					+ "/" +module.getArtifactId());
+		}
 	}
 
 	/**
