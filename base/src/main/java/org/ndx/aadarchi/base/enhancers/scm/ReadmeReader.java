@@ -2,6 +2,8 @@ package org.ndx.aadarchi.base.enhancers.scm;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,12 +11,12 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.vfs2.FileFilter;
 import org.apache.commons.vfs2.FileFilterSelector;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.commons.vfs2.PatternFileSelector;
 import org.apache.commons.vfs2.filter.RegexFileFilter;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
@@ -22,7 +24,6 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.OutputBuilder.Format;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys.Scm;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 
@@ -62,6 +63,32 @@ public class ReadmeReader extends ModelElementAdapter {
 
 	@Override
 	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
+		whenFileDetected(element, 
+				new RegexFileFilter("(readme|README)\\.(adoc|md)"),
+				// No file detected
+				elementRoot -> logger.severe(String.format(
+						"Couldn't find any Readme for element %s " + "(path is %s)",
+						StructurizrUtils.getCanonicalPath(element), elementRoot)),
+				// One file detected
+				(elementRoot, readme) -> writeReadmeFor(readme, element, builder),
+				// on multiple file detected
+				(elementRoot, detectedFiles) -> logger.severe(String.format(
+						"There are more than one valid Readme for element %s"
+								+ "(path is %s)",
+						StructurizrUtils.getCanonicalPath(element), elementRoot))
+		);
+	}
+
+	/**
+	 * Perform the given success operation when file is detected.
+	 * 
+	 * @param element
+	 * @param onMultipleFileDetected 
+	 */
+	private void whenFileDetected(StaticStructureElement element, FileFilter fileFilter, 
+			Consumer<FileObject> onNoFileDetected,
+			BiConsumer<FileObject, FileObject> onFileDetected, 
+			BiConsumer<FileObject, FileObject[]> onMultipleFileDetected) {
 		Map<String, String> properties = element.getProperties();
 		Optional<FileObject> analyzedPath = Optional.empty();
 		if (properties.containsKey(ModelElementKeys.ConfigProperties.BasePath.NAME)) {
@@ -84,21 +111,16 @@ public class ReadmeReader extends ModelElementAdapter {
 
 		if(analyzedPath.isPresent()) {
 			var elementRoot = analyzedPath.get();
-			FileSelector filter = new FileFilterSelector(new RegexFileFilter("(readme|README)\\.(adoc|md)"));
+			FileSelector filter = new FileFilterSelector(fileFilter);
 			try {
 				FileObject[] found = elementRoot.findFiles(filter);
 				if (found.length == 0) {
-					logger.severe(String.format(
-							"Couldn't find any Readme for element %s " + "(path is %s)",
-							StructurizrUtils.getCanonicalPath(element), elementRoot));
+					onNoFileDetected.accept(elementRoot);
 				} else if (found.length > 1) {
-					logger.severe(String.format(
-							"There are more than one valid Readme for element %s"
-									+ "(path is %s)",
-							StructurizrUtils.getCanonicalPath(element), elementRoot));
+					onMultipleFileDetected.accept(elementRoot, found);
 				} else {
-					FileObject readme = found[0];
-					writeReadmeFor(readme, element, builder);
+					FileObject detected = found[0];
+					onFileDetected.accept(elementRoot, detected);
 				}
 			} catch (FileSystemException e) {
 				logger.log(Level.SEVERE,
@@ -111,32 +133,33 @@ public class ReadmeReader extends ModelElementAdapter {
 						e);
 			}
 		}
-
 	}
 
-	void writeReadmeFor(FileObject readme, Element element, OutputBuilder builder) throws FileSystemException {
+	void writeReadmeFor(FileObject readme, Element element, OutputBuilder builder) {
 		FileObject outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, Format.adoc);
-		if (force) {
-			outputFor.delete();
-		} else {
-			if (outputFor.exists()
-					&& readme.getContent().getLastModifiedTime() < outputFor.getContent().getLastModifiedTime())
-				return;
-		}
 		try {
-			// Now we have content as asciidoc, so let's write it to the conventional
-			// location
-			String readmeText = IOUtils.toString(cache.openStreamFor(readme), "UTF-8");
-			if (readme.getName().getExtension().toLowerCase().equals("md")) {
-				readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
+			try {
+				if (force) {
+					outputFor.delete();
+				} else {
+					if (outputFor.exists()
+							&& readme.getContent().getLastModifiedTime() < outputFor.getContent().getLastModifiedTime())
+						return;
+				}
+				// Now we have content as asciidoc, so let's write it to the conventional
+				// location
+				String readmeText = IOUtils.toString(cache.openStreamFor(readme), "UTF-8");
+				if (readme.getName().getExtension().toLowerCase().equals("md")) {
+					readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
+				}
+				builder.writeToOutput(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
+			} finally {
+				readme.close();
 			}
-			builder.writeToOutput(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			throw new CantExtractReadme(String.format(
 					"Can't extract readme of container %s from file %s",
 					StructurizrUtils.getCanonicalPath(element), readme), e);
-		} finally {
-			readme.close();
 		}
 	}
 }
