@@ -16,7 +16,7 @@ import org.ndx.aadarchi.base.OutputBuilder.Format;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
-import org.ndx.aadarchi.base.utils.commonsvfs.WhenFileDetected;
+import org.ndx.aadarchi.base.utils.commonsvfs.FileObjectDetector;
 
 import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;
@@ -32,7 +32,7 @@ import nl.jworks.markdown_to_asciidoc.Converter;
  */
 @Component(technology = "Java, CDI")
 public class ReadmeReader extends ModelElementAdapter {
-	@Inject public Logger logger;
+	@Inject Logger logger;
 
 	@Inject
 	@ConfigProperty(name = "force", defaultValue = "false")
@@ -41,7 +41,7 @@ public class ReadmeReader extends ModelElementAdapter {
 	@Inject
 	FileContentCache cache;
 	
-	@Inject WhenFileDetected whenFileDetected;
+	@Inject FileObjectDetector detector;
 
 	@Override
 	public int priority() {
@@ -50,18 +50,18 @@ public class ReadmeReader extends ModelElementAdapter {
 
 	@Override
 	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
-		whenFileDetected.whenFileDetected(element, new RegexFileFilter("(readme|README)\\.(adoc|md)"), 
+		detector.whenFileDetected(element, new RegexFileFilter("(readme|README)\\.(adoc|md)"), 
 				// No file detected
-				elementRoot -> logger.severe(String.format(
+				elementRoot -> { logger.severe(String.format(
 						"Couldn't find any Readme for element %s " + "(path is %s)",
-						StructurizrUtils.getCanonicalPath(element), elementRoot)),
+						StructurizrUtils.getCanonicalPath(element), elementRoot)); },
 				// One file detected
-				(elementRoot, readme) -> writeReadmeFor(readme, element, builder),
+				(elementRoot, readme) -> { writeReadmeFor(readme, element, builder); },
 				// on multiple file detected
-				(elementRoot, detectedFiles) -> logger.severe(String.format(
+				(elementRoot, detectedFiles) -> { logger.severe(String.format(
 						"There are more than one valid Readme for element %s"
 								+ "(path is %s)",
-						StructurizrUtils.getCanonicalPath(element), elementRoot))
+						StructurizrUtils.getCanonicalPath(element), elementRoot)); }
 		);
 	}
 
