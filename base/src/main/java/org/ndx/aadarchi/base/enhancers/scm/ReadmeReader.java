@@ -34,14 +34,13 @@ import com.structurizr.model.StaticStructureElement;
 import nl.jworks.markdown_to_asciidoc.Converter;
 
 /**
- * Collect each model element readme (well, when the {@link Scm#PROJECT} key is
- * set) and output them in generated elements folder
+ * Collect each model element readme and output them in generated elements folder
  * 
  * @author nicolas-delsaux
  *
  */
 @Component(technology = "Java, CDI")
-public class SCMReadmeReader extends ModelElementAdapter {
+public class ReadmeReader extends ModelElementAdapter {
 	@Inject
 	Logger logger;
 
