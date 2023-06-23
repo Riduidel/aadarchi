@@ -68,6 +68,20 @@ class GitHubFileSystemTest {
 	}
 
 	@Test
+	void can_read_readme_content_in_subfolder() throws IOException {
+		FileObject rootFile = VFS.getManager().resolveFile(GitHubFileProvider.urlFor("Riduidel/aadarchi"), authenticationOptions);
+		FileObject base = rootFile.getChild("base");
+		FileObject readme = base.getChild("README.md");
+		// File type is not known before calling getContent
+		Assertions.assertThat(rootFile.getType()).isEqualTo(FileType.FOLDER);
+		Assertions.assertThat(readme.getType()).isEqualTo(FileType.FILE);
+		Assertions.assertThat(readme.getPublicURIString()).isEqualTo("github://github.com/Riduidel/aadarchi/base/README.md");
+		Assertions.assertThat(readme.getContent().getSize()).isGreaterThan(100);
+		Assertions.assertThat(readme.getContent().getString(Charset.forName("UTF-8")))
+			.contains("Architecture");
+	}
+
+	@Test
 	void can_find_readme_in_root_folder() throws IOException {
 		FileObject rootFile = VFS.getManager().resolveFile(GitHubFileProvider.urlFor("Riduidel/aadarchi"), authenticationOptions);
 		FileObject[] files = rootFile.findFiles(new FileFilterSelector(new RegexFileFilter("README\\..*")));

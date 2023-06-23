@@ -40,7 +40,7 @@ public class GitHubFileName extends GenericURLFileName implements FileName {
 	public GitHubFileName(GitHubFileName name, GHContent childDescription) {
 		super(name.getScheme(), name.getHostName(), name.getPort(), name.getDefaultPort(), 
 				name.getUserName(), name.getPassword(),
-				name.getPath()+"/"+childDescription.getPath(), 
+				"/"+name.getContainingRepository()+"/"+childDescription.getPath(), 
 				childDescription.getType().equals("file") ? FileType.FILE : FileType.FOLDER, 
 				name.getQueryString());
 		this.githubUserOrOrganization = name.githubUserOrOrganization;
