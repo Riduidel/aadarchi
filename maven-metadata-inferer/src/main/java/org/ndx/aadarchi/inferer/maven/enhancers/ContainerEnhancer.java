@@ -19,13 +19,12 @@ public class ContainerEnhancer extends AbstractContainerEnhancer<Container, Comp
 	
 	@Override
 	protected void startEnhanceWithMavenProject(MavenProject mavenProject) {
-		enhanced.setTechnology(MavenPomDecorator.decorateTechnology(mavenProject));
 		super.startEnhanceWithMavenProject(mavenProject);
 	}
 
 	@Override
 	protected Component addContainedElementWithKey(MavenProject module, String key) {
-		return enhanced.addComponent(key, module.getDescription(), MavenPomDecorator.decorateTechnology(module));
+		return enhanced.addComponent(key, module.getDescription());
 	}
 
 	@Override

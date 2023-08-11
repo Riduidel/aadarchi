@@ -54,7 +54,6 @@ public class MavenPomDecoratorTest {
 		decorator.decorate(container, project);
 		// Then
 		// Don't forget that mavenpomdecorator doesn't independently update used technologies
-		Assertions.assertThat(container.getTechnology()).isBlank();
 		Assertions.assertThat(container.getDescription()).isNotNull();
 		Assertions.assertThat(container.getProperties())
 			.containsOnlyKeys(
