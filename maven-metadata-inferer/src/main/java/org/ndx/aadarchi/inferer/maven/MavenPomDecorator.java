@@ -1,7 +1,6 @@
 package org.ndx.aadarchi.inferer.maven;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -18,22 +17,22 @@ import java.util.stream.Stream;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.apache.commons.vfs2.AllFileSelector;
-import org.apache.commons.vfs2.FileDepthSelector;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.commons.vfs2.FileType;
-import org.apache.commons.vfs2.FileTypeSelector;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.IssueManagement;
 import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
+import org.json.JSONObject;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
 import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.ThrowingPredicate;
+import com.structurizr.model.Component;
+import com.structurizr.model.Container;
 import com.structurizr.model.Element;
 
 @Default
@@ -42,6 +41,8 @@ public class MavenPomDecorator {
 	private static final Logger logger = Logger.getLogger(MavenPomDecorator.class.getName());
 	@Inject
 	FileSystemManager fileSystemManager;
+	
+	@Inject @Named(MvnRepositoryArtifactsProducer.MVNREPOSITORY_ARTIFACTS) JSONObject mvnRepositoryArtifacts;
 
 	public static void decorateRecursively(MavenProject project, BiFunction<MavenProject, List<MavenProject>, Boolean> consumer) {
 		decorateRecursively(project, new LinkedList<MavenProject>(), consumer);
@@ -71,6 +72,7 @@ public class MavenPomDecorator {
 		decorateJavaSource(element, mavenProject);
 		decorateJavaPackage(element, mavenProject);
 		decorateMavenProperties(element, mavenProject);
+		decorateTechnology(element, mavenProject);
 		Optional.ofNullable(mavenProject.getDescription()).stream()
 				.forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
 	}
@@ -187,6 +189,11 @@ public class MavenPomDecorator {
 				;
 	}
 
+	/**
+	 * TODO replace that with usage of {@link #mvnRepositoryArtifacts}
+	 * @param project
+	 * @return
+	 */
 	public static Set<String> doDecorateTechnology(MavenProject project) {
 		Set<String> technologies = new LinkedHashSet<String>();
 		switch (project.getPackaging()) {
@@ -241,21 +248,27 @@ public class MavenPomDecorator {
 	}
 
 	/**
-	 * Creates the string containing details about the used technology. For that we
-	 * will simply read the maven project plugins (for compilers) and dependencies
-	 * (for frameworks)
-	 * 
+	 * @param element element for which we want the technologies
 	 * @param project
 	 * @return a string giving details about important project infos
 	 */
-	public static String decorateTechnology(MavenProject project) {
+	public void decorateTechnology(Element element, MavenProject project) {
+		// TODO replace simple set with something more complex
+		// Maybe a set of artifact objects
 		Set<String> technologies = new TreeSet<String>();
 		decorateRecursively(project, (p, l) -> { 
 			technologies.addAll(MavenPomDecorator.doDecorateTechnology(p));
 			// We should explore all parent poms
 			return true;
 		});
-		return technologies.stream().collect(Collectors.joining(","));
+		String technologiesText = technologies.stream().collect(Collectors.joining(","));
+		if(element instanceof Component) {
+			((Component) element).setTechnology(technologiesText);
+		} else if(element instanceof Container) {
+			((Container) element).setTechnology(technologiesText);
+		}
+		// TODO add a property to element containing the technologies artifact ids
+		// For later being able to give some details 
 	}
 
 }

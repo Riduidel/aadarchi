@@ -14,7 +14,6 @@ public class ComponentEnhancer extends ModelElementMavenEnhancer<Component> {
 
 	@Override
 	protected void startEnhanceWithMavenProject(MavenProject mavenProject) {
-		enhanced.setTechnology(MavenPomDecorator.decorateTechnology(mavenProject));
 	}
 
 	@Override

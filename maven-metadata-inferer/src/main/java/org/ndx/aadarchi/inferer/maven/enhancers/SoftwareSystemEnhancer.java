@@ -19,7 +19,7 @@ public class SoftwareSystemEnhancer extends AbstractContainerEnhancer<SoftwareSy
 
 	@Override
 	protected Container addContainedElementWithKey(MavenProject module, String key) {
-		return enhanced.addContainer(key, module.getDescription(), MavenPomDecorator.decorateTechnology(module));
+		return enhanced.addContainer(key, module.getDescription());
 	}
 
 	@Override

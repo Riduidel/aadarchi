@@ -44,9 +44,18 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20230618</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+			</resource>
 			<resource>
 				<directory>${project.build.directory}/generated/resources</directory>
 			</resource>
@@ -74,11 +83,12 @@
 									<goal>wget</goal>
 								</goals>
 								<configuration>
-										<!-- The last version of that file is always good -->
-										<url><![CDATA[https://raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json]]></url>
-										<unpack>false</unpack>
-										<outputDirectory><![CDATA[${project.build.directory}/generated/resources]]></outputDirectory>
-										<outputFileName>mvnrepository.json</outputFileName>
+									<!-- The last version of that file is always
+									good -->
+									<url><![CDATA[https://raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json]]></url>
+									<unpack>false</unpack>
+									<outputDirectory><![CDATA[${project.build.directory}/generated/resources]]></outputDirectory>
+									<outputFileName>mvnrepository.json</outputFileName>
 								</configuration>
 							</execution>
 						</executions>
