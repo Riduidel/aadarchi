@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
@@ -7,7 +9,8 @@
 	</parent>
 	<artifactId>maven-metadata-inferer</artifactId>
 	<name>Aadarchi : Maven metadata inferer</name>
-	<description>A module allowing as much informations as possible to be read from Maven POM</description>
+	<description>A module allowing as much informations as possible to be read
+		from Maven POM</description>
 	<dependencies>
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
@@ -42,4 +45,46 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.build.directory}/generated/resources</directory>
+			</resource>
+		</resources>
+	</build>
+	<profiles>
+		<profile>
+			<id>Download popular artifacts</id>
+			<activation>
+				<file>
+					<missing>
+						${project.build.directory}/generated/resources/mvnrepository/artifacts.json</missing>
+				</file>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.googlecode.maven-download-plugin</groupId>
+						<artifactId>download-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>Download mvnrepository popular artifacts</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>wget</goal>
+								</goals>
+								<configuration>
+										<!-- The last version of that file is always good -->
+										<url><![CDATA[https://raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json]]></url>
+										<unpack>false</unpack>
+										<outputDirectory><![CDATA[${project.build.directory}/generated/resources]]></outputDirectory>
+										<outputFileName>mvnrepository.json</outputFileName>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
