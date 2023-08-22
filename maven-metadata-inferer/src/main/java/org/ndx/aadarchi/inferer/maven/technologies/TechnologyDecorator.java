@@ -46,7 +46,41 @@ public class TechnologyDecorator {
 	 */
 	public void decorateTechnology(Element element, MavenProject project) {
 		Map<String, String> dependencies = new TreeMap<String, String>();
-		MavenPomDecorator.decorateRecursively(project, (mavenProject, mavenModules) -> { 
+		/**
+		 * Unfortunatly, we have to make some cumbersome code to extract versions expressed in dependency management
+		 * (or through properties)
+		 */
+		Map<String, String> managedDependenciesVersions = new TreeMap<String, String>();
+		MavenPomDecorator.decorateRecursively(project, (mavenProject, mavenModules) -> {
+			if(mavenProject.getDependencyManagement()!=null) {
+				mavenProject.getDependencyManagement().getDependencies()
+					.forEach(d -> managedDependenciesVersions.put(d.getGroupId()+"."+d.getArtifactId(), d.getVersion()));
+				for(String dependencyId : managedDependenciesVersions.keySet()) {
+					String version = managedDependenciesVersions.get(dependencyId);
+					String propertyInterpolationStart = "${";
+					String propertyInterpolationEnd = "}";
+					while(version.contains(propertyInterpolationStart)) {
+						String property = version.substring(version.indexOf(
+								propertyInterpolationStart)+propertyInterpolationStart.length(), 
+								version.indexOf(propertyInterpolationEnd));
+						if(mavenProject.getProperties().containsKey(property)) {
+							version = version.replace(
+									propertyInterpolationStart+property+propertyInterpolationEnd, 
+									mavenProject.getProperties().getProperty(property));
+							managedDependenciesVersions.put(dependencyId, version);
+						} else {
+							// If this property is unknown, it may well be defined in a parent pom
+							break;
+						}
+					}
+				}
+				// Before to write that, let's replace all dependencies versions with the ones we know
+				for(String dependencyId : dependencies.keySet()) {
+					if(managedDependenciesVersions.containsKey(dependencyId)) {
+						dependencies.put(dependencyId, managedDependenciesVersions.get(dependencyId));
+					}
+				}
+			}
 			dependencies.putAll(doDecorateTechnologies(mavenProject, element));
 			// We should explore all parent poms
 			return true;
