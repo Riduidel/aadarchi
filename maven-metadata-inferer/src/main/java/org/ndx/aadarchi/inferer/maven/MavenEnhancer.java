@@ -1,6 +1,10 @@
 package org.ndx.aadarchi.inferer.maven;
 
+import java.util.Map;
+
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public interface MavenEnhancer {
 	/**
@@ -29,4 +33,7 @@ public interface MavenEnhancer {
 	 * When set, this allows users to enter a list of profiles names separated by ";"
 	 */
 	String AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES = ModelElementKeys.PREFIX+"maven.profiles";
+
+	String AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES = ModelElementKeys.PREFIX+"maven.technologies";
+	TypeReference<Map<String, String>> AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES_TYPE = new TypeReference<Map<String, String>>() {};
 }

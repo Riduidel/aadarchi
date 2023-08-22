@@ -44,6 +44,7 @@ public class MavenDetailsInfererEnhancerTest {
 			.containsOnlyKeys(
 					ModelElementKeys.ConfigProperties.BasePath.NAME,
 					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
+					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES,
 					ModelElementKeys.Scm.PROJECT,
 					ModelElementKeys.ISSUE_MANAGER
 					);
@@ -64,6 +65,7 @@ public class MavenDetailsInfererEnhancerTest {
 					ModelElementKeys.Scm.PATH,
 					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
 					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_POM,
+					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES,
 					ModelElementKeys.Scm.PROJECT,
 					ModelElementKeys.JAVA_SOURCES,
 					ModelElementKeys.JAVA_PACKAGES,

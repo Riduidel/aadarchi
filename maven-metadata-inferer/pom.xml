@@ -44,11 +44,10 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20230618</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.15.2</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -66,8 +65,7 @@
 			<id>Download popular artifacts</id>
 			<activation>
 				<file>
-					<missing>
-						${project.build.directory}/generated/resources/mvnrepository/artifacts.json</missing>
+					<missing><![CDATA[${project.build.directory}/generated/resources/mvnrepository/artifacts.json]]></missing>
 				</file>
 			</activation>
 			<build>
@@ -87,6 +85,8 @@
 									good -->
 									<url><![CDATA[https://raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json]]></url>
 									<unpack>false</unpack>
+									<overwrite>true</overwrite>
+									<skipCache>true</skipCache>
 									<outputDirectory><![CDATA[${project.build.directory}/generated/resources]]></outputDirectory>
 									<outputFileName>mvnrepository.json</outputFileName>
 								</configuration>
