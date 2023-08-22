@@ -49,20 +49,20 @@ public class MavenTechnologiesDocumentationEnhancerTest {
 		// Then
 		// There are containers in system
 		Assertions.assertThat(system.getContainers()).isNotEmpty();
-		Container base = system.getContainerWithName("maven-metadata-inferer");
+		Container mavenMetadataInferer = system.getContainerWithName("maven-metadata-inferer");
 		// For this container, we will try to see what versions are given for some dependencies
-		Assertions.assertThat(base.getProperties())
+		Assertions.assertThat(mavenMetadataInferer.getProperties())
 			.containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES);
 		// Now extract the dependencies
 		ObjectMapper objectMapper = new ObjectMapper();
 		Map<String, String> dependenciesVersions = objectMapper.readValue(
-				base.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES)
+				mavenMetadataInferer.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES)
 				, MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES_TYPE);
 		// Yeah, i'm searching for the dependency that make that very line of code possible
 		// So it should not fail
 		Assertions.assertThat(dependenciesVersions)
 			.extractingByKey("org.assertj.assertj-core")
 			.isEqualTo("3.23.1");
-
+		Assertions.assertThat(mavenMetadataInferer.getTechnology()).doesNotStartWith(",");
     }
 }

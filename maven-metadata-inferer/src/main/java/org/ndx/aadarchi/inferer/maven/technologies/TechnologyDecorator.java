@@ -129,13 +129,14 @@ public class TechnologyDecorator {
 			Method technologySetter = element.getClass().getDeclaredMethod("setTechnology", String.class);
 			Method technologyGetter = element.getClass().getDeclaredMethod("getTechnology");
 			String existingTechnologies = (String) technologyGetter.invoke(element);
-			List<String> existingTechnologiesList = List.of(existingTechnologies==null && !existingTechnologies.isBlank() ? new String[0] : existingTechnologies.split(","));
+			List<String> existingTechnologiesList = List.of(existingTechnologies==null || existingTechnologies.isBlank() ? new String[0] : existingTechnologies.split(","));
 			Set<String> technologiesToInsert = new TreeSet<>();
 			technologiesToInsert.addAll(technologies);
 			// Little problem : this won't make Java appear first, maybe a solution with some kind
 			// of virtual artifact for the JVM and sorting based upon popularity would do the trick
 			technologiesToInsert.addAll(existingTechnologiesList);
-			technologySetter.invoke(element, technologiesToInsert.stream().collect(Collectors.joining(",")));
+			String technologiesText = technologiesToInsert.stream().collect(Collectors.joining(","));
+			technologySetter.invoke(element, technologiesText);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			// Nothing to do, because some elements of the Structurizr model don't have any technology declared
 		}
