@@ -1,14 +1,10 @@
 package org.ndx.aadarchi.inferer.maven;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -17,22 +13,18 @@ import java.util.stream.Stream;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.maven.model.Dependency;
 import org.apache.maven.model.IssueManagement;
 import org.apache.maven.model.Scm;
 import org.apache.maven.project.MavenProject;
-import org.json.JSONObject;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.inferer.maven.technologies.TechnologyDecorator;
 
 import com.pivovarit.function.ThrowingFunction;
 import com.pivovarit.function.ThrowingPredicate;
-import com.structurizr.model.Component;
-import com.structurizr.model.Container;
 import com.structurizr.model.Element;
 
 @Default
@@ -42,7 +34,7 @@ public class MavenPomDecorator {
 	@Inject
 	FileSystemManager fileSystemManager;
 	
-	@Inject @Named(MvnRepositoryArtifactsProducer.MVNREPOSITORY_ARTIFACTS) JSONObject mvnRepositoryArtifacts;
+	@Inject TechnologyDecorator technologyDecorator;
 
 	public static void decorateRecursively(MavenProject project, BiFunction<MavenProject, List<MavenProject>, Boolean> consumer) {
 		decorateRecursively(project, new LinkedList<MavenProject>(), consumer);
@@ -72,7 +64,7 @@ public class MavenPomDecorator {
 		decorateJavaSource(element, mavenProject);
 		decorateJavaPackage(element, mavenProject);
 		decorateMavenProperties(element, mavenProject);
-		decorateTechnology(element, mavenProject);
+		technologyDecorator.decorateTechnology(element, mavenProject);
 		Optional.ofNullable(mavenProject.getDescription()).stream()
 				.forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
 	}
@@ -177,98 +169,4 @@ public class MavenPomDecorator {
 			.toString()
 			.replace('/', '.').replace('\\', '.');
 	}
-
-	protected static String technologyWithVersionFromProperty(MavenProject mavenProject, String technology, String... propertyNames) {
-		return technology + Stream.of(propertyNames)
-				.flatMap(p -> new HashSet(Arrays.asList(p, p.replace('.', '-'), p.replace('-', '.'))).stream())
-				.filter(p -> mavenProject.getProperties().containsKey(p))
-				.map(p -> mavenProject.getProperties().get(p))
-				.map(text -> " "+text)
-				.findFirst()
-				.orElse("")
-				;
-	}
-
-	/**
-	 * TODO replace that with usage of {@link #mvnRepositoryArtifacts}
-	 * @param project
-	 * @return
-	 */
-	public static Set<String> doDecorateTechnology(MavenProject project) {
-		Set<String> technologies = new LinkedHashSet<String>();
-		switch (project.getPackaging()) {
-		case "ear":
-			technologies.add("Java");
-			technologies.add("ear");
-			break;
-		case "war":
-			technologies.add("Java");
-			technologies.add("war");
-		case "jar":
-			// If there is a java version property, use it to detect Java version
-			technologies.add(MavenPomDecorator.technologyWithVersionFromProperty(project, "Java", "java.version", "maven.compiler.target"));
-			break;
-		case "pom":
-			break;
-		default:
-			logger.warning(String.format(
-					"Maven component %s uses packaging %s which we don't know. Please submit a bug to aadarchi-documentation-system to have this particular packaging correctly handled",
-					project, project.getPackaging()));
-		}
-		for (Dependency dependency : (List<Dependency>) project.getDependencies()) {
-			switch (dependency.getGroupId()) {
-			case "org.apache.maven":
-				if("maven-plugin-api".equals(dependency.getArtifactId())) {
-					technologies.add("maven-plugin");
-				}
-				break;
-			case "io.quarkus":
-				technologies.add(MavenPomDecorator.technologyWithVersionFromProperty(project, "Quarkus", "quarkus.platform.version"));
-				break;
-			case "org.springframework":
-				technologies.add("Spring");
-				break;
-			case "org.apache.camel":
-				technologies.add(MavenPomDecorator.technologyWithVersionFromProperty(project, "Apache Camel", "camel.version"));
-				break;
-			case "org.springframework.boot":
-				technologies.add("Spring Boot");
-				break;
-			case "com.google.gwt":
-				technologies.add("GWT");
-				break;
-			case "javax.enterprise":
-				if("cdi-api".equals(dependency.getArtifactId())) {
-					technologies.add("CDI");
-				}
-				break;
-			}
-		}
-		return technologies;
-	}
-
-	/**
-	 * @param element element for which we want the technologies
-	 * @param project
-	 * @return a string giving details about important project infos
-	 */
-	public void decorateTechnology(Element element, MavenProject project) {
-		// TODO replace simple set with something more complex
-		// Maybe a set of artifact objects
-		Set<String> technologies = new TreeSet<String>();
-		decorateRecursively(project, (p, l) -> { 
-			technologies.addAll(MavenPomDecorator.doDecorateTechnology(p));
-			// We should explore all parent poms
-			return true;
-		});
-		String technologiesText = technologies.stream().collect(Collectors.joining(","));
-		if(element instanceof Component) {
-			((Component) element).setTechnology(technologiesText);
-		} else if(element instanceof Container) {
-			((Container) element).setTechnology(technologiesText);
-		}
-		// TODO add a property to element containing the technologies artifact ids
-		// For later being able to give some details 
-	}
-
 }

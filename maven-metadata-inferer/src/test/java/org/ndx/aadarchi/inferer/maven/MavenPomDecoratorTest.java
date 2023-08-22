@@ -37,6 +37,7 @@ public class MavenPomDecoratorTest {
 		Assertions.assertThat(system.getProperties())
 		.containsOnlyKeys(
 				MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
+				MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES,
 				ModelElementKeys.Scm.PROJECT,
 				ModelElementKeys.ISSUE_MANAGER
 				);
@@ -53,11 +54,14 @@ public class MavenPomDecoratorTest {
 		// When
 		decorator.decorate(container, project);
 		// Then
-		// Don't forget that mavenpomdecorator doesn't independently update used technologies
 		Assertions.assertThat(container.getDescription()).isNotNull();
+		Assertions.assertThat(container.getTechnology())
+			.isNotNull()
+			.containsIgnoringCase("maven");
 		Assertions.assertThat(container.getProperties())
 			.containsOnlyKeys(
 							MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
+							MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES,
 							ModelElementKeys.Scm.PROJECT,
 							ModelElementKeys.JAVA_SOURCES,
 							ModelElementKeys.JAVA_PACKAGES,
