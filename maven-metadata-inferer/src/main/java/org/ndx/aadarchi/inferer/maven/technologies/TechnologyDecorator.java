@@ -2,13 +2,14 @@ package org.ndx.aadarchi.inferer.maven.technologies;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -22,8 +23,9 @@ import org.ndx.aadarchi.inferer.maven.MavenEnhancer;
 import org.ndx.aadarchi.inferer.maven.MavenPomDecorator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.structurizr.model.Component;
+import com.structurizr.model.Container;
 import com.structurizr.model.Element;
 
 /**
@@ -126,18 +128,24 @@ public class TechnologyDecorator {
 	private void injectTechnologiesInElement(Element element, List<String> technologies) {
 		// As I don't want to repeat myself, I use the rude way of the method handle
 		try {
-			Method technologySetter = element.getClass().getDeclaredMethod("setTechnology", String.class);
-			Method technologyGetter = element.getClass().getDeclaredMethod("getTechnology");
-			String existingTechnologies = (String) technologyGetter.invoke(element);
-			List<String> existingTechnologiesList = List.of(existingTechnologies==null || existingTechnologies.isBlank() ? new String[0] : existingTechnologies.split(","));
-			Set<String> technologiesToInsert = new TreeSet<>();
-			technologiesToInsert.addAll(technologies);
-			// Little problem : this won't make Java appear first, maybe a solution with some kind
-			// of virtual artifact for the JVM and sorting based upon popularity would do the trick
-			technologiesToInsert.addAll(existingTechnologiesList);
-			String technologiesText = technologiesToInsert.stream().collect(Collectors.joining(","));
-			technologySetter.invoke(element, technologiesText);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			Consumer<String> setter = element instanceof Container ? 
+					((Container) element)::setTechnology :
+						element instanceof Component ? ((Component) element)::setTechnology : null;  
+			Supplier<String> getter = element instanceof Container ? 
+					((Container) element)::getTechnology :
+						element instanceof Component ? ((Component) element)::getTechnology : null;  
+			if(setter!=null && getter!=null) {
+				String existingTechnologies = getter.get();
+				List<String> existingTechnologiesList = List.of(existingTechnologies==null || existingTechnologies.isBlank() ? new String[0] : existingTechnologies.split(","));
+				Set<String> technologiesToInsert = new TreeSet<>();
+				technologiesToInsert.addAll(technologies);
+				// Little problem : this won't make Java appear first, maybe a solution with some kind
+				// of virtual artifact for the JVM and sorting based upon popularity would do the trick
+				technologiesToInsert.addAll(existingTechnologiesList);
+				String technologiesText = technologiesToInsert.stream().collect(Collectors.joining(","));
+				setter.accept(technologiesText);
+			}
+		} catch (SecurityException | IllegalArgumentException e) {
 			// Nothing to do, because some elements of the Structurizr model don't have any technology declared
 		}
 	}
