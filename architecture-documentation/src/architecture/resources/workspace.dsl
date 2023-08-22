@@ -9,13 +9,13 @@ workspace "aadarchi-documentation-system" {
 				"aadarchi.maven.pom" "pom.xml"
 			}
 			maven = container "maven" "The maven build engine" "java, maven"
-			aadarchi_maven_plugin = container "aadarchi-maven-plugin" "" "java, maven-plugin"{
+			aadarchi_maven_plugin = container "aadarchi-maven-plugin" {
 				properties {
 					"aadarchi.sequence.generator.with" "true"
 				}
 				maven -> this "Invokes this plugin during build to generate data"
 			}
-			aadarchi_base = container "base" "" "Java, CDI" {
+			aadarchi_base = container "base"{
 				properties {
 					"aadarchi.sequence.generator.with" "true"
 				}
@@ -24,7 +24,7 @@ workspace "aadarchi-documentation-system" {
 				aadarchi_maven_plugin -> this
 			}
 			archetype_6 = container "archetype" "" "maven"
-			architecture_documentation = container "architecture-documentation" "" "java, maven, structurizr, asciidoc"
+			architecture_documentation = container "architecture-documentation"
 		}
 		person_architect -> archetype_6 "Bootstrap a valid project"
 		person_architect -> maven "Generates documentation"
