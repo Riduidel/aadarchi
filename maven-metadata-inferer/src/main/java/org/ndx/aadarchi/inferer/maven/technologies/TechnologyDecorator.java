@@ -121,6 +121,13 @@ public class TechnologyDecorator {
 				.filter(a -> !a.tags.contains("testing"))
 				.map(a -> a.name)
 				.collect(Collectors.toList());
+		if(!dependenciesToArtifacts.values().stream()
+				.filter(a -> a.tags.contains("language"))
+				.findAny()
+				.isPresent()) {
+			// No language lib has been found, so let's consider it a Java element!
+			technologies.add("Java");
+		}
 		injectTechnologiesInElement(element, technologies);
 		return dependenciesToArtifacts.keySet().stream().collect(Collectors.toMap(d -> d.getGroupId()+"."+d.getArtifactId(), d -> d.getVersion()==null ? "":d.getVersion()));
 	}
