@@ -78,12 +78,31 @@ public class MavenDetailsInfererEnhancerTest {
 			.asInstanceOf(InstanceOfAssertFactories.STRING)
 			.contains("org.ndx.aadarchi.inferer.maven")
 			;
+    }
+
+    @Test public void bug_373_is_fixed() throws FileSystemException {
+    	// Given
+    	var w = new Workspace(getClass().getName(), "a test workspace");
+    	SoftwareSystem system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
+    	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, basePath.getName().getPath());
+		// When
+    	enhancer.enhance(w, Arrays.asList(tested));
+		// Then
+		// There are containers in system
+		Assertions.assertThat(system.getContainers()).isNotEmpty();
 		// There are added containers
 		Container sipocDiagramGenerator = system.getContainerWithName("sipoc-diagram-generator");
 		Assertions.assertThat(sipocDiagramGenerator)
 			.isNotNull()
 			;
 		Assertions.assertThat(sipocDiagramGenerator.getTechnology())
+			.isNotBlank()
+			.isEqualTo("Java");
+		Container springComponentDetector = system.getContainerWithName("spring-components-detector");
+		Assertions.assertThat(springComponentDetector)
+			.isNotNull()
+			;
+		Assertions.assertThat(springComponentDetector.getTechnology())
 			.isNotBlank()
 			.isEqualTo("Java");
     }
