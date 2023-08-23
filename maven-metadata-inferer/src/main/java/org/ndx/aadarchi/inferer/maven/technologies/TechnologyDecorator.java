@@ -55,27 +55,7 @@ public class TechnologyDecorator {
 		Map<String, String> managedDependenciesVersions = new TreeMap<String, String>();
 		MavenPomDecorator.decorateRecursively(project, (mavenProject, mavenModules) -> {
 			if(mavenProject.getDependencyManagement()!=null) {
-				mavenProject.getDependencyManagement().getDependencies()
-					.forEach(d -> managedDependenciesVersions.put(d.getGroupId()+"."+d.getArtifactId(), d.getVersion()));
-				for(String dependencyId : managedDependenciesVersions.keySet()) {
-					String version = managedDependenciesVersions.get(dependencyId);
-					String propertyInterpolationStart = "${";
-					String propertyInterpolationEnd = "}";
-					while(version.contains(propertyInterpolationStart)) {
-						String property = version.substring(version.indexOf(
-								propertyInterpolationStart)+propertyInterpolationStart.length(), 
-								version.indexOf(propertyInterpolationEnd));
-						if(mavenProject.getProperties().containsKey(property)) {
-							version = version.replace(
-									propertyInterpolationStart+property+propertyInterpolationEnd, 
-									mavenProject.getProperties().getProperty(property));
-							managedDependenciesVersions.put(dependencyId, version);
-						} else {
-							// If this property is unknown, it may well be defined in a parent pom
-							break;
-						}
-					}
-				}
+				updateManagedDependencies(managedDependenciesVersions, mavenProject);
 				// Before to write that, let's replace all dependencies versions with the ones we know
 				for(String dependencyId : dependencies.keySet()) {
 					if(managedDependenciesVersions.containsKey(dependencyId)) {
@@ -92,6 +72,30 @@ public class TechnologyDecorator {
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	private void updateManagedDependencies(Map<String, String> managedDependenciesVersions, MavenProject mavenProject) {
+		mavenProject.getDependencyManagement().getDependencies()
+			.forEach(d -> managedDependenciesVersions.put(d.getGroupId()+"."+d.getArtifactId(), d.getVersion()));
+		for(String dependencyId : managedDependenciesVersions.keySet()) {
+			String version = managedDependenciesVersions.get(dependencyId);
+			String propertyInterpolationStart = "${";
+			String propertyInterpolationEnd = "}";
+			while(version.contains(propertyInterpolationStart)) {
+				String property = version.substring(version.indexOf(
+						propertyInterpolationStart)+propertyInterpolationStart.length(), 
+						version.indexOf(propertyInterpolationEnd));
+				if(mavenProject.getProperties().containsKey(property)) {
+					version = version.replace(
+							propertyInterpolationStart+property+propertyInterpolationEnd, 
+							mavenProject.getProperties().getProperty(property));
+					managedDependenciesVersions.put(dependencyId, version);
+				} else {
+					// If this property is unknown, it may well be defined in a parent pom
+					break;
+				}
+			}
 		}
 	}
 
@@ -117,9 +121,12 @@ public class TechnologyDecorator {
 				.filter(a -> !a.tags.contains("testing"))
 				.map(a -> a.name)
 				.collect(Collectors.toList());
-		// If dependencies are recognized, it means Java is used!
-		if(!technologies.isEmpty()) {
-			technologies.add(0, "Java");
+		if(!dependenciesToArtifacts.values().stream()
+				.filter(a -> a.tags.contains("language"))
+				.findAny()
+				.isPresent()) {
+			// No language lib has been found, so let's consider it a Java element!
+			technologies.add("Java");
 		}
 		injectTechnologiesInElement(element, technologies);
 		return dependenciesToArtifacts.keySet().stream().collect(Collectors.toMap(d -> d.getGroupId()+"."+d.getArtifactId(), d -> d.getVersion()==null ? "":d.getVersion()));
