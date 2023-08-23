@@ -118,7 +118,7 @@ public class TechnologyDecorator {
 				.map(a -> a.name)
 				.collect(Collectors.toList());
 		// If dependencies are recognized, it means Java is used!
-		if(!technologies.isEmpty()) {
+		if(!dependenciesToArtifacts.isEmpty()) {
 			technologies.add(0, "Java");
 		}
 		injectTechnologiesInElement(element, technologies);

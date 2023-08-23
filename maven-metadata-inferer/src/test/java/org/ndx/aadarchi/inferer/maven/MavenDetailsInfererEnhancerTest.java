@@ -78,5 +78,13 @@ public class MavenDetailsInfererEnhancerTest {
 			.asInstanceOf(InstanceOfAssertFactories.STRING)
 			.contains("org.ndx.aadarchi.inferer.maven")
 			;
+		// There are added containers
+		Container sipocDiagramGenerator = system.getContainerWithName("sipoc-diagram-generator");
+		Assertions.assertThat(sipocDiagramGenerator)
+			.isNotNull()
+			;
+		Assertions.assertThat(sipocDiagramGenerator.getTechnology())
+			.isNotBlank()
+			.isEqualTo("Java");
     }
 }
