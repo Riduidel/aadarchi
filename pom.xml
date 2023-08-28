@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.Riduidel.aadarchi</groupId>
 	<artifactId>system</artifactId>
-	<version>0.1.11</version>
+	<version>0.1.12-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>Base module of a set of tools created to allow easy
 		architecture documentation based upon Simon Brown work.</description>
@@ -33,7 +33,7 @@
 		<developerConnection>
 			scm:git:https://git@github.com/Riduidel/aadarchi.git</developerConnection>
 		<url>https://github.com/Riduidel/aadarchi.git</url>
-		<tag>0.1.11</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
 		<system>GitHub</system>
