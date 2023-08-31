@@ -3,6 +3,12 @@ on:
   push:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      releaseversion:
+        description: 'Release version'
+        required: true
+        default: "0.1.11"
 jobs:
   deploy:
     runs-on: ubuntu-latest
