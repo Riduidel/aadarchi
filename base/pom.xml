@@ -48,11 +48,6 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>markdown-to-asciidoc</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
 			<artifactId>MarkdownToAsciidoc</artifactId>
 			<version>${project.version}</version>
 		</dependency>
