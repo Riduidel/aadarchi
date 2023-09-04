@@ -1,1 +1,0 @@
-pandoc -s -S unorderedlists.md -t asciidoc -o unorderedlists.adoc
