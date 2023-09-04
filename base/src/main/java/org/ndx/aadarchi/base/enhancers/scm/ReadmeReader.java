@@ -1,13 +1,11 @@
 package org.ndx.aadarchi.base.enhancers.scm;
 
-import java.util.logging.Logger;
-
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-
+import com.kodcu.asciidocfx.MarkdownToAsciidoc;
+import com.structurizr.annotation.Component;
+import com.structurizr.model.Element;
+import com.structurizr.model.StaticStructureElement;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.filter.RegexFileFilter;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
@@ -18,11 +16,8 @@ import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 import org.ndx.aadarchi.base.utils.commonsvfs.FileObjectDetector;
 
-import com.structurizr.annotation.Component;
-import com.structurizr.model.Element;
-import com.structurizr.model.StaticStructureElement;
-
-import nl.jworks.markdown_to_asciidoc.Converter;
+import javax.inject.Inject;
+import java.util.logging.Logger;
 
 /**
  * Collect each model element readme and output them in generated elements folder
@@ -80,7 +75,7 @@ public class ReadmeReader extends ModelElementAdapter {
 				// location
 				String readmeText = IOUtils.toString(cache.openStreamFor(readme), "UTF-8");
 				if (readme.getName().getExtension().toLowerCase().equals("md")) {
-					readmeText = Converter.convertMarkdownToAsciiDoc(readmeText);
+					readmeText = MarkdownToAsciidoc.convert(readmeText);
 				}
 				builder.writeToOutput(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
 			} finally {

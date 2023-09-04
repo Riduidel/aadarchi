@@ -1,8 +1,7 @@
 package org.ndx.aadarchi.base.utils;
 
+import com.kodcu.asciidocfx.MarkdownToAsciidoc;
 import org.ndx.aadarchi.base.AgileArchitectureException;
-
-import nl.jworks.markdown_to_asciidoc.Converter;
 
 public class AsciidocProducer {
 	public static class UnableToGetAsciidocFrom extends AgileArchitectureException {
@@ -15,8 +14,7 @@ public class AsciidocProducer {
 
 	private String asAsciidoc(String filename, String content) {
 		if(filename.endsWith(".md")) {
-			return Converter.convertMarkdownToAsciiDoc(
-					content);
+			return MarkdownToAsciidoc.convert(content);
 		} else if(filename.endsWith(".adoc")) {
 			return content;
 		} else {
