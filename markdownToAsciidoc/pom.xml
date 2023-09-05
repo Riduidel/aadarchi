@@ -10,9 +10,19 @@
         <version>0.1.12-SNAPSHOT</version>
     </parent>
     <artifactId>MarkdownToAsciidoc</artifactId>
+    <name>Aadarchi : </name>
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js</artifactId>
+            <version>22.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.graalvm.js</groupId>
+            <artifactId>js-scriptengine</artifactId>
+            <version>22.0.0</version>
+        </dependency>
     </dependencies>
 
 

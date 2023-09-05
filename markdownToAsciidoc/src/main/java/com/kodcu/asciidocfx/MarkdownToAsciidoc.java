@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class MarkdownToAsciidoc {
 
     private static final ScriptEngineManager engineManager = new ScriptEngineManager();
-    private static final ScriptEngine engine = engineManager.getEngineByName("js");
+    private static final ScriptEngine engine = engineManager.getEngineByName("graal.js");
 
     static {
 
