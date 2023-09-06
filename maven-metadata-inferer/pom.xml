@@ -1,11 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.github.Riduidel.aadarchi</groupId>
 		<artifactId>system</artifactId>
-		<version>0.1.11-SNAPSHOT</version>
+		<version>0.1.12-SNAPSHOT</version>
 	</parent>
 	<artifactId>maven-metadata-inferer</artifactId>
 	<name>Aadarchi : Maven metadata inferer</name>
@@ -44,11 +42,10 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20230618</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.15.2</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -66,8 +63,7 @@
 			<id>Download popular artifacts</id>
 			<activation>
 				<file>
-					<missing>
-						${project.build.directory}/generated/resources/mvnrepository/artifacts.json</missing>
+					<missing><![CDATA[${project.build.directory}/generated/resources/mvnrepository/artifacts.json]]></missing>
 				</file>
 			</activation>
 			<build>
@@ -87,8 +83,14 @@
 									good -->
 									<url><![CDATA[https://raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json]]></url>
 									<unpack>false</unpack>
+									<overwrite>true</overwrite>
+									<skipCache>true</skipCache>
 									<outputDirectory><![CDATA[${project.build.directory}/generated/resources]]></outputDirectory>
 									<outputFileName>mvnrepository.json</outputFileName>
+									<!-- Ten seconds for that downoad is cool, no? -->
+									<readTimeOut>10000</readTimeOut>
+									<!-- And ten retries is the maximum I'm able to tolerate -->
+									<retries>10</retries>
 								</configuration>
 							</execution>
 						</executions>

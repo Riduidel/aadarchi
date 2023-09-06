@@ -2,11 +2,10 @@ package org.ndx.aadarchi.github;
 
 import java.io.IOException;
 import java.util.Date;
+import com.kodcu.asciidocfx.MarkdownToAsciidoc;
 
 import org.kohsuke.github.GHIssueComment;
 import org.ndx.aadarchi.base.enhancers.tickets.Comment;
-
-import nl.jworks.markdown_to_asciidoc.Converter;
 
 public class GitHubComment implements Comment {
 	private GHIssueComment source;
@@ -26,7 +25,7 @@ public class GitHubComment implements Comment {
 
 	@Override
 	public String getText() {
-		return Converter.convertMarkdownToAsciiDoc(source.getBody());
+		return MarkdownToAsciidoc.convert(source.getBody());
 	}
 
 }

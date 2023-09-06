@@ -1,14 +1,15 @@
-name: On tag created generate GitHub release notes
+name: On tag created generate GitHub release with notes
 on:
   push:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Generate release notes
-        uses: raulanatol/github-actions-releaser@main
+      - uses: lakto/gren-action@v2.0.0
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_FOR_GITHUB }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          options: '--override'
