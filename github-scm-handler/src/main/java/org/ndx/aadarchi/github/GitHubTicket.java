@@ -1,17 +1,16 @@
 package org.ndx.aadarchi.github;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import com.kodcu.asciidocfx.MarkdownToAsciidoc;
 import org.kohsuke.github.GHIssue;
 import org.ndx.aadarchi.base.enhancers.tickets.Comment;
 import org.ndx.aadarchi.base.enhancers.tickets.Ticket;
 import org.ndx.aadarchi.base.enhancers.tickets.TicketStatus;
 
-import nl.jworks.markdown_to_asciidoc.Converter;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class GitHubTicket implements Ticket {
 
@@ -33,7 +32,7 @@ public class GitHubTicket implements Ticket {
 
 	@Override
 	public String getText() {
-		return Converter.convertMarkdownToAsciiDoc(source.getBody());
+		return MarkdownToAsciidoc.convert(source.getBody());
 	}
 
 	@Override

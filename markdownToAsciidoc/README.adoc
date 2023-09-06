@@ -1,0 +1,31 @@
+= Markdown to AsciiDoc converter
+
+A small, lightweight converter for Markdown to http://www.asciidoc.org[AsciiDoc] written in Java, and using Javascript.
+
+It's a fork from https://github.com/asciidocfx/MarkdownToAsciidoc/tree/master[Github] +
+We added Graal dependences to run JS without using Java 8 JVM compiler.
+
+== Usage
+
+To use the library, call the following:
+
+.Synchronous way
+[source,java]
+----
+String result = MarkdownToAsciidoc.convert("# Tittle");
+----
+
+.Asynchronous way
+[source,java]
+----
+MarkdownToAsciidoc.convert("# Tittle", r -> {
+    System.out.println(r);
+});
+----
+
+.Path way
+[source,java]
+----
+Path outputPath = Paths.get("C:\\output.asciidoc");
+MarkdownToAsciidoc.convert("# Tittle", outputPath);
+----

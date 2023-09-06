@@ -76,7 +76,7 @@
 		<module>sequence-diagram-generator</module>
 		<module>sipoc-diagram-generator</module>
 		<module>archetype</module>
-		<module>markdown-to-asciidoc</module>
+		<module>markdownToAsciidoc</module>
 		<module>aadarchi-maven-plugin</module>
 		<module>cdi-in-maven-plugin-helper</module>
 		<module>structurizr-components-detector</module>
