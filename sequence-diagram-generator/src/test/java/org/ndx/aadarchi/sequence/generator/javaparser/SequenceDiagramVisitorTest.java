@@ -52,7 +52,7 @@ class SequenceDiagramVisitorTest {
 		generator.addSupportingType(SequenceDiagramGenerator.class.getName());
 		// Let's build a sequence diagram visitor
 		// Emulate the standard visit
-		enhancer.enhance(workspace, tested;
+		enhancer.enhance(workspace, tested);
 		assertThat(tested.allContainers).hasSize(1);
 		assertThat(tested.codeToComponents).hasSize(3);
 		assertThat(tested.callGraphModel).isNull();
