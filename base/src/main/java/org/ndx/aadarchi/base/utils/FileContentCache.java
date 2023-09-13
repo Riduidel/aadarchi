@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.provider.local.LocalFile;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Force;
@@ -34,16 +35,24 @@ public class FileContentCache {
 			name = ModelElementKeys.ConfigProperties.CacheDir.NAME, 
 			defaultValue = ModelElementKeys.ConfigProperties.CacheDir.VALUE) FileObject cacheDir;
 
-	public InputStream openStreamFor(URL url, Function<URL, InputStream> cacheLoader) throws IOException {
+	private InputStream openStreamFor(FileObject source, Function<URL, InputStream> function) throws IOException {
+		// We shouldn't cache local files.
+		// It's both inefficient, and triggers weird bugs on Windows
+		if(source instanceof LocalFile) {
+			return source.getContent().getInputStream();
+		}
+		// Sometimes this url uses custom protocols, which Java doesn't fully understand
+		// So replace all non standard protocols by http
+		String uri = source.getPublicURIString()
+				.replace("github:", "http:")
+				.replace("gitlab:", "http:");
+		URL url = new URL(uri);
 		FileObject file = toCacheFile(url);
 		if(force || !file.exists() || shouldRefresh(file)) {
-			refreshCache(file, url, cacheLoader);
+			refreshCache(file, url, function);
 		}
 		// Now it's time to load file in cache
 		return file.getContent().getInputStream();
-	}
-	public InputStream openStreamFor(String string, Function<URL, InputStream> cacheLoader) throws IOException {
-		return openStreamFor(new URL(string), cacheLoader);
 	}
 
 	/**
@@ -54,13 +63,8 @@ public class FileContentCache {
 	 */
 	public InputStream openStreamFor(FileObject file) throws IOException {
 		try {
-			// Sometimes this url uses custom protocols, which Java doesn't fully understand
-			// So replace all non standard protocols by http
-			String uri = file.getPublicURIString()
-					.replace("github:", "http:")
-					.replace("gitlab:", "http:");
 			return openStreamFor(
-					uri, 
+					file, 
 					ThrowingFunction.unchecked(_url -> file.getContent().getInputStream()));
 		} finally {
 			file.close();
@@ -100,7 +104,9 @@ public class FileContentCache {
 	private FileObject toCacheFile(URL url) {
 		try {
 			FileObject domain = cacheDir.resolveFile(url.getHost());
-			String pathInUrl = url.getFile().replace('?', '_');
+			String pathInUrl = url.getFile()
+					.replace('?', '_')
+					.replace(":", "__");
 			// Don't forget that linux systems don't like when paths start with "/"
 			if(pathInUrl.startsWith("/"))
 				pathInUrl = pathInUrl.substring(1);

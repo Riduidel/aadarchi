@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.base;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
@@ -99,6 +100,9 @@ public class ArchitectureEnhancer {
 		}
 	}
 
+	public void enhance(Workspace workspace, Enhancer...enhancers) {
+		enhance(workspace, Arrays.asList(enhancers));
+	}
 	public void enhance(Workspace workspace, Iterable<Enhancer> enhancers) {
 		classloader = Thread.currentThread().getContextClassLoader();
 		logger.info(() -> String.format("Enhancers applied to this architecture are:\n%s", 

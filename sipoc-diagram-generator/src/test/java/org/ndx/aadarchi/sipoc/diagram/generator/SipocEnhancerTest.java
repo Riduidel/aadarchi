@@ -26,7 +26,7 @@ class SipocEnhancerTest extends AbstractSipocTest {
 	void test() {
     	// Given
 		// When
-		enhancer.enhance(workspace, List.of(sipocEnhancer));
+		enhancer.enhance(workspace, sipocEnhancer);
 		// Then
 		FileObject outputFolderForSystem = enhancer.getOutputBuilder()
 				.outputFor(AgileArchitectureSection.code, centerContainer, sipocEnhancer, OutputBuilder.Format.adoc);
