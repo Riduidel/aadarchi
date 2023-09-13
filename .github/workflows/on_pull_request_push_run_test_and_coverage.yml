@@ -21,8 +21,6 @@ jobs:
       - name: Detect all jacoco.xml files
         run: |
           find . -iname jacoco.xml >> $env:JACOCO_FILES
-
-          echo "::set-output name=jacoco_files::$env:JACOCO_FILES"
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
