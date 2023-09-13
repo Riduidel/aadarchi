@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
+import org.apache.commons.vfs2.provider.local.LocalFile;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Force;
@@ -103,7 +104,9 @@ public class FileContentCache {
 	private FileObject toCacheFile(URL url) {
 		try {
 			FileObject domain = cacheDir.resolveFile(url.getHost());
-			String pathInUrl = url.getFile().replace('?', '_');
+			String pathInUrl = url.getFile()
+					.replace('?', '_')
+					.replace(":", "__");
 			// Don't forget that linux systems don't like when paths start with "/"
 			if(pathInUrl.startsWith("/"))
 				pathInUrl = pathInUrl.substring(1);
