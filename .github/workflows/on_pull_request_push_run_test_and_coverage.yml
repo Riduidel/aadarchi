@@ -25,8 +25,8 @@ jobs:
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
         with:
-          paths: ${{ env.JACOCO_FILES }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          paths: "${{ env.JACOCO_FILES }}"
+          token: "${{ secrets.GITHUB_TOKEN }}"
           min-coverage-overall: 10
           min-coverage-changed-files: 50
           title: Current coverage (as computed by Jacoco)
