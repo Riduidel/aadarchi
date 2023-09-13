@@ -11,6 +11,7 @@ import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.Preconditions;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
 
 @EnableWeld
@@ -26,6 +27,8 @@ class FileContentCacheTest {
 	void bug_81_can_read_a_local_readme_file() throws IOException {
     	// Given
 		var readme = basePath.resolveFile("README.md");
+		Preconditions.condition(readme.exists(), "Readme file should exist");
+		Preconditions.condition(readme.getContent().getSize()>0, "There should be some content in readme");
 		// When
 		try(var input = tested.openStreamFor(readme)) {
 			Assertions.assertThat(input).isNotEmpty();
