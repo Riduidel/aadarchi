@@ -20,14 +20,14 @@ jobs:
           TOKEN_FOR_GITLAB: ${{ secrets.TOKEN_FOR_GITLAB }}
       - name: Detect all jacoco.xml files
         run: |
-          jacoco_files = $(find . -iname jacoco.xml)
+          find . -iname jacoco.xml >> $env:JACOCO_FILES
 
-            echo "::set-output name=jacoco_files::$jacoco_files"
+          echo "::set-output name=jacoco_files::$env:JACOCO_FILES"
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
         with:
-          paths: ${{ jacoco_files }}
+          paths: ${{ env.JACOCO_FILES }}
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 10
           min-coverage-changed-files: 50
