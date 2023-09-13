@@ -23,6 +23,7 @@ jobs:
         uses: madrapps/jacoco-report@v1.3
         with:
           paths: |
+            ${{ github.workspace }}/base/target/site/jacoco/jacoco.xml,
             ${{ github.workspace }}/architecture-documentation/target/site/jacoco/jacoco.xml,
             ${{ github.workspace }}/markdown-to-asciidoc/target/site/jacoco/jacoco.xml,
             ${{ github.workspace }}/maven-metadata-inferer/target/site/jacoco/jacoco.xml,
