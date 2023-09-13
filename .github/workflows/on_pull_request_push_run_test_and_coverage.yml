@@ -18,15 +18,16 @@ jobs:
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
           TOKEN_FOR_GITLAB: ${{ secrets.TOKEN_FOR_GITLAB }}
+      - name: Detect all jacoco.xml files
+        run: |
+          jacoco_files = $(find . -iname jacoco.xml)
+
+            echo "::set-output name=jacoco_files::$jacoco_files"
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
         with:
-          paths: |
-            ${{ github.workspace }}/architecture-documentation/target/site/jacoco/jacoco.xml,
-            ${{ github.workspace }}/markdown-to-asciidoc/target/site/jacoco/jacoco.xml,
-            ${{ github.workspace }}/maven-metadata-inferer/target/site/jacoco/jacoco.xml,
-            ${{ github.workspace }}/sequence-diagram-generator/target/site/jacoco/jacoco.xml
+          paths: ${{ jacoco_files }}
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 10
           min-coverage-changed-files: 50
