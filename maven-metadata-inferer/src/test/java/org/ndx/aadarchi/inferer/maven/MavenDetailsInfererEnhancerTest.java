@@ -38,7 +38,7 @@ public class MavenDetailsInfererEnhancerTest {
     	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, basePath.getName().getPath());
 		// When
     	// We emulate in-depth visit (but do not really perform it)
-    	enhancer.enhance(w, Arrays.asList(tested));
+    	enhancer.enhance(w, tested);
 		// Then
 		Assertions.assertThat(system.getProperties())
 			.containsOnlyKeys(
@@ -86,7 +86,7 @@ public class MavenDetailsInfererEnhancerTest {
     	SoftwareSystem system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
     	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, basePath.getName().getPath());
 		// When
-    	enhancer.enhance(w, Arrays.asList(tested));
+    	enhancer.enhance(w, tested);
 		// Then
 		// There are containers in system
 		Assertions.assertThat(system.getContainers()).isNotEmpty();
