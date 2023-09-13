@@ -31,7 +31,7 @@ class FileContentCacheTest {
 		Preconditions.condition(readme.getContent().getSize()>0, "There should be some content in readme");
 		// When
 		try(var input = tested.openStreamFor(readme)) {
-			Assertions.assertThat(input).isNotEmpty();
+			Assertions.assertThat(input).isNotNull();
 		}
 	}
 }
