@@ -39,7 +39,7 @@ public class FileContentCache {
 		// We shouldn't cache local files.
 		// It's both inefficient, and triggers weird bugs on Windows
 		if(source instanceof LocalFile) {
-			
+			return source.getContent().getInputStream();
 		}
 		// Sometimes this url uses custom protocols, which Java doesn't fully understand
 		// So replace all non standard protocols by http
