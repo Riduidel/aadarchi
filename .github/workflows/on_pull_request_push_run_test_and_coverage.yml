@@ -18,10 +18,12 @@ jobs:
         env:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
           TOKEN_FOR_GITLAB: ${{ secrets.TOKEN_FOR_GITLAB }}
+      # Seen on https://stackoverflow.com/a/70405596/15619
       - name: Detect all jacoco.xml files
+        uses: mathiasvr/command-output@v1
         id: list-reports
-        run: |
-          find . -iname jacoco.xml >> $GITHUB_OUTPUT
+        with:
+          run: find . -iname jacoco.xml
       - name: Add coverage to PR
         id: jacoco
         uses: madrapps/jacoco-report@v1.3
