@@ -57,7 +57,7 @@ public class MavenPomDecoratorTest {
 		Assertions.assertThat(container.getDescription()).isNotNull();
 		Assertions.assertThat(container.getTechnology())
 			.isNotNull()
-			.containsIgnoringCase("maven");
+			.containsIgnoringCase("Java");
 		Assertions.assertThat(container.getProperties())
 			.containsOnlyKeys(
 							MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
