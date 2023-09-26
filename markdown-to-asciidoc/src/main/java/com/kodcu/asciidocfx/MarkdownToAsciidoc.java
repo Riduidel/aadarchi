@@ -41,7 +41,13 @@ public class MarkdownToAsciidoc {
         }
     }
 
-    public static String convert(String markdown) {
+    /**
+     * Convert the input string, considered as Markdown, into Asciidoc.
+     * @see https://github.com/oracle/graaljs/blob/master/docs/user/NashornMigrationGuide.md#multithreading
+     * @param markdown
+     * @return
+     */
+    public static synchronized String convert(String markdown) {
         try {
             engine.put("markdown", markdown);
             return (String) engine.eval("markdownToAsciidoc(markdown)");
