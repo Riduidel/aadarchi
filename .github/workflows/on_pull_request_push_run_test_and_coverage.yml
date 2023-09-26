@@ -19,14 +19,11 @@ jobs:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
           TOKEN_FOR_GITLAB: ${{ secrets.TOKEN_FOR_GITLAB }}
       # Seen on https://stackoverflow.com/a/70405596/15619
-      - name: Detect all jacoco.xml files
-        id: list-reports
-        run: echo "JACOCO_REPORTS=$(find . -iname jacoco.xml)" >> $GITHUB_OUTPUT
       - name: Add coverage to PR
         id: jacoco
-        uses: madrapps/jacoco-report@v1.3
+        uses: madrapps/jacoco-report@v1.6.1
         with:
-          paths: ${{ steps.list-reports.outputs.GITHUB_OUTPUT }}
+          paths: **/target/site/jacoco/jacoco.xml
           token: "${{ secrets.GITHUB_TOKEN }}"
           min-coverage-overall: 10
           min-coverage-changed-files: 50
