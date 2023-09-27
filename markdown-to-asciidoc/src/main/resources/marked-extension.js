@@ -1,5 +1,10 @@
 var md2AscRenderer = new marked.Renderer();
 
+md2AscRenderer.html = function (text, block) {
+    return "++++\n"+text+"\n++++\n";
+};
+
+
 md2AscRenderer.heading = function (text, level) {
     return "\n" + repeatStuff("=", level) + " " + text + "\n";
 };
@@ -106,14 +111,7 @@ md2AscRenderer.image = function (href, title, text) {
 };
 
 function markdownToAsciidoc(input) {
-    var result = "";
-    try {
-        var result = marked(input, {renderer: md2AscRenderer});
-    }
-    catch (e) {
-        throw  e;
-    }
-    return result;
+    return marked(input, {renderer: md2AscRenderer});
 }
 
 function repeatStuff(s, n) {
