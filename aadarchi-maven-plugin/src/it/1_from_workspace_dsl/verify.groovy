@@ -6,7 +6,8 @@ Is there one line containing project version? And if so, does it contains the "p
     def lines = logFile.readLines()
     // Now filter that collection
     def inStep = lines.findAll { it.contains "ArchitectureEnhancer" }
-    assert inStep.size>1
+    logger.info "Found lines ${inStep}"
+    assert inStep.size()>1
     // We have log lines, but do we also have generated content ?
     File structurizrOutput = new File(basedir, "target/structurizr")
     assert structurizrOutput.exists() && structurizrOutput.isDirectory()

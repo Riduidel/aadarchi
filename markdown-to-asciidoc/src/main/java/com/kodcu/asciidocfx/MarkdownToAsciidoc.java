@@ -3,6 +3,9 @@ package com.kodcu.asciidocfx;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
+
+import org.apache.commons.io.IOUtils;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -23,25 +26,25 @@ public class MarkdownToAsciidoc {
 
     static {
 
-        try (InputStream markedStream = MarkdownToAsciidoc.class.getResourceAsStream("/marked.js");
-             InputStream markedExtensionStream = MarkdownToAsciidoc.class.getResourceAsStream("/marked-extension.js");
-             InputStreamReader markedIn = new InputStreamReader(markedStream, "UTF-8");
-             InputStreamReader markedExtensionIn = new InputStreamReader(markedExtensionStream, "UTF-8");
-             BufferedReader markedReader = new BufferedReader(markedIn);
-             BufferedReader markedExtensionReader = new BufferedReader(markedExtensionIn);) {
-
-            String markedScript = markedReader.lines().collect(Collectors.joining("\n"));
-            String markedExtensionScript = markedExtensionReader.lines().collect(Collectors.joining("\n"));
+        try {
+        	String markedScript = IOUtils.toString(MarkdownToAsciidoc.class.getResource("/marked.js"), "UTF-8");
+        	String markedExtensionScript = IOUtils.toString(MarkdownToAsciidoc.class.getResource("/marked-extension.js"), "UTF-8");
 
             engine.eval(markedScript);
             engine.eval(markedExtensionScript);
 
         } catch (Exception e) {
-            e.printStackTrace();
+        	throw new UnsupportedOperationException("Unable to load marked scripts", e);
         }
     }
 
-    public static String convert(String markdown) {
+    /**
+     * Convert the input string, considered as Markdown, into Asciidoc.
+     * @see https://github.com/oracle/graaljs/blob/master/docs/user/NashornMigrationGuide.md#multithreading
+     * @param markdown
+     * @return
+     */
+    public static synchronized String convert(String markdown) {
         try {
             engine.put("markdown", markdown);
             return (String) engine.eval("markdownToAsciidoc(markdown)");
