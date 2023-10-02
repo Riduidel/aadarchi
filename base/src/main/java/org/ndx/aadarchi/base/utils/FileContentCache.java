@@ -35,6 +35,13 @@ public class FileContentCache {
 			name = ModelElementKeys.ConfigProperties.CacheDir.NAME, 
 			defaultValue = ModelElementKeys.ConfigProperties.CacheDir.VALUE) FileObject cacheDir;
 
+	/**
+	 * Open stream from the given source.
+	 * @param source
+	 * @param function
+	 * @return
+	 * @throws IOException
+	 */
 	private InputStream openStreamFor(FileObject source, Function<URL, InputStream> function) throws IOException {
 		// We shouldn't cache local files.
 		// It's both inefficient, and triggers weird bugs on Windows
@@ -45,7 +52,10 @@ public class FileContentCache {
 		// So replace all non standard protocols by http
 		String uri = source.getPublicURIString()
 				.replace("github:", "http:")
-				.replace("gitlab:", "http:");
+				.replace("gitlab:", "http:")
+				.replace("http5s:", "https:")
+				.replace("http5:", "http:")
+				;
 		URL url = new URL(uri);
 		FileObject file = toCacheFile(url);
 		if(force || !file.exists() || shouldRefresh(file)) {
