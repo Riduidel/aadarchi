@@ -10,6 +10,7 @@ import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
+import org.ndx.aadarchi.base.utils.FileContentCache;
 
 @EnableWeld
 class MvnRepositoryArtifactsProducerTest {
@@ -18,6 +19,8 @@ class MvnRepositoryArtifactsProducerTest {
     public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
     
     @Inject @Named(MvnRepositoryArtifactsProducer.MVNREPOSITORY_ARTIFACTS) Map<String, MvnRepositoryArtifact> data;
+    
+    @Inject FileContentCache cache;
 
 	@Test
 	void mvnrepository_has_some_artifacts_in() {

@@ -56,6 +56,7 @@ public class MavenPomDecorator {
 	 * @param mavenProject
 	 */
 	public void decorate(Element element, MavenProject mavenProject) {
+		decorateMavenProperties(element, mavenProject);
 		// I use optional to avoid writing endless if(...!=null) lines.
 		// It may be ugly, but I'm trying a /style/ here
 		decorateCoordinates(element, mavenProject);
@@ -63,7 +64,6 @@ public class MavenPomDecorator {
 		decorateIssueManager(element, mavenProject);
 		decorateJavaSource(element, mavenProject);
 		decorateJavaPackage(element, mavenProject);
-		decorateMavenProperties(element, mavenProject);
 		technologyDecorator.decorateTechnology(element, mavenProject);
 		Optional.ofNullable(mavenProject.getDescription()).stream()
 				.forEach(description -> element.setDescription(description.replaceAll("\n", " ")));
@@ -120,7 +120,7 @@ public class MavenPomDecorator {
 
 	/**
 	 * Extract all properties having the good prefix from maven pom and copy them
-	 * into model element properties. THis copy may overwrite properties defined
+	 * into model element properties. This copy will not overwrite properties defined
 	 * elsewhen
 	 * 
 	 * @param element      element to copy properties into
@@ -130,6 +130,7 @@ public class MavenPomDecorator {
 		mavenProject.getProperties().entrySet().stream()
 				.map(entry -> Map.entry(entry.getKey().toString(), entry.getValue().toString()))
 				.filter(entry -> entry.getKey().startsWith(ModelElementKeys.PREFIX))
+				.filter(entry -> !element.getProperties().containsKey(entry.getKey()))
 				.forEach(entry -> element.addProperty(entry.getKey(), entry.getValue()));
 	}
 

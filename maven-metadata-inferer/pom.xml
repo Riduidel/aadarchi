@@ -9,6 +9,10 @@
 	<name>Aadarchi : Maven metadata inferer</name>
 	<description>A module allowing as much informations as possible to be read
 		from Maven POM</description>
+	<properties>
+		<!-- The http5s is some kind of commons-vfs weirdity -->
+		<aadarchi-technologies-url>raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json</aadarchi-technologies-url>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>io.github.Riduidel.aadarchi</groupId>
@@ -52,6 +56,7 @@
 		<resources>
 			<resource>
 				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
 			</resource>
 			<resource>
 				<directory>${project.build.directory}/generated/resources</directory>
@@ -81,7 +86,7 @@
 								<configuration>
 									<!-- The last version of that file is always
 									good -->
-									<url><![CDATA[https://raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json]]></url>
+									<url>https://${aadarchi-technologies-url}</url>
 									<unpack>false</unpack>
 									<overwrite>true</overwrite>
 									<skipCache>true</skipCache>
