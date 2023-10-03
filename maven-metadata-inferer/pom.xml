@@ -11,7 +11,7 @@
 		from Maven POM</description>
 	<properties>
 		<!-- The http5s is some kind of commons-vfs weirdity -->
-		<aadarchi.technologies.url>http5s://raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json</aadarchi.technologies.url>
+		<aadarchi-technologies-url>raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json</aadarchi-technologies-url>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,7 +86,7 @@
 								<configuration>
 									<!-- The last version of that file is always
 									good -->
-									<url>${aadarchi.technologies.url}</url>
+									<url>https://${aadarchi-technologies-url}</url>
 									<unpack>false</unpack>
 									<overwrite>true</overwrite>
 									<skipCache>true</skipCache>
