@@ -3,6 +3,7 @@ package org.ndx.aadarchi.inferer.maven.technologies;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -51,6 +52,7 @@ public class MvnRepositoryArtifactsProducer {
 				return objectMapper.readValue(input, new TypeReference<Map<String, MvnRepositoryArtifact>>() {});
 			}
 		} catch(Exception e) {
+			logger.log(Level.WARNING, "Unable to read remote mvnrepository.json file", e);
 			try(InputStream input = cache.openStreamFor(defaultAadarchiTechnlogies)) {
 				return objectMapper.readValue(input, new TypeReference<Map<String, MvnRepositoryArtifact>>() {});
 			}
