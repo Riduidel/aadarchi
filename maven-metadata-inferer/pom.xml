@@ -16,7 +16,7 @@
 		aadarchi. will be injected into project elements
 		allowing us to filter out all dependencies tagged with "jackson"
 		-->
-		<aadarchi.filter.dependencies.tagged>jackson</aadarchi.filter.dependencies.tagged>
+		<aadarchi.filter.dependencies.tagged>testing,jackson</aadarchi.filter.dependencies.tagged>
 	</properties>
 	<dependencies>
 		<dependency>

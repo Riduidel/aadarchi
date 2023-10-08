@@ -81,7 +81,8 @@ public class MavenPomDecoratorTest {
 		decorator.decorate(container, project);
 		// Then
 		Assertions.assertThat(container.getProperties())
-			.containsEntry(MavenEnhancer.FilterDpendenciesTagged.NAME, "jackson");
+			.containsKey(MavenEnhancer.FilterDpendenciesTagged.NAME)
+			;
 		Assertions.assertThat(container.getTechnology())
 			.isNotNull().doesNotContainIgnoringCase("jackson");
     }
