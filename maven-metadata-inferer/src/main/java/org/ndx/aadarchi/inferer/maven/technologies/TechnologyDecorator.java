@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
@@ -27,6 +28,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 import com.structurizr.model.Element;
+
+import edu.emory.mathcs.backport.java.util.Arrays;
 
 /**
  * Component dedicated to technology decoration.
@@ -117,7 +120,15 @@ public class TechnologyDecorator {
 	 * @return 
 	 */
 	private Map<String, String> doDecorateTechnologies(MavenProject mavenProject, Element element) {
-		// This gives us a map listing all dependencies to all artifacts.
+		String[] splitted = element.getProperties()
+				.getOrDefault(MavenEnhancer.FilterDpendenciesTagged.NAME, 
+						MavenEnhancer.FilterDpendenciesTagged.VALUE)
+				.split(",");
+		List<String> filteredTags =
+				Stream.of(splitted)
+					.map(String::trim)
+					.collect(Collectors.toList())
+				;
 		Map<Dependency, MvnRepositoryArtifact> dependenciesToArtifacts = ((List<Dependency>) mavenProject.getDependencies()).stream()
 			.filter(d -> mvnRepositoryArtifacts.containsKey(d.getGroupId()+"."+d.getArtifactId()))
 			.collect(Collectors.toMap(Function.identity(), 
@@ -127,14 +138,11 @@ public class TechnologyDecorator {
 			.collect(Collectors.groupingBy(entry -> entry.getKey().getGroupId(),
 					Collectors.minBy(this::compareEntriesByRanking)));
 		// Now we can map dependencies to artifacts, first put the list of artifact names into technologies
-		List<String> technologies =	dependenciesToArtifactsByGroup.values().stream()
-			.filter(Optional::isPresent)
-			.map(Optional::get)
-			.map(Entry::getValue)
-			// We filter out all technologies tagged with "testing" to simplify things a little in technologies
-			.filter(a -> !a.tags.contains("testing"))
-			.map(a -> a.name)
-			.collect(Collectors.toList());
+		List<String> technologies = dependenciesToArtifacts.values().stream()
+				// We filter out all technologies tagged with "testing" to simplify things a little in technologies
+				.filter(a -> !isAnyTagFiltered(filteredTags, a.tags))
+				.map(a -> a.name)
+				.collect(Collectors.toList());
 		if(!dependenciesToArtifacts.values().stream()
 				.filter(a -> a.tags.contains("language"))
 				.findAny()
@@ -144,6 +152,19 @@ public class TechnologyDecorator {
 		}
 		injectTechnologiesInElement(element, technologies);
 		return dependenciesToArtifacts.keySet().stream().collect(Collectors.toMap(d -> d.getGroupId()+"."+d.getArtifactId(), d -> d.getVersion()==null ? "":d.getVersion()));
+	}
+
+	/**
+	 * Check if any of the artifact tags is in the filtered list
+	 * @param filteredTags
+	 * @param artifactTags
+	 * @return true if any of the artifact tags appears in the filtered list 
+	 */
+	private boolean isAnyTagFiltered(List<String> filteredTags, List<String> artifactTags) {
+		return artifactTags.stream()
+				.filter(tag -> filteredTags.contains(tag))
+				.findAny()
+				.isPresent();
 	}
 
 	private void injectTechnologiesInElement(Element element, List<String> technologies) {
