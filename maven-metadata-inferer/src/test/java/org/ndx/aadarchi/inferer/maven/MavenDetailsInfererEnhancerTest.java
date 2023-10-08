@@ -41,7 +41,7 @@ public class MavenDetailsInfererEnhancerTest {
     	enhancer.enhance(w, tested);
 		// Then
 		Assertions.assertThat(system.getProperties())
-			.containsOnlyKeys(
+			.containsKeys(
 					ModelElementKeys.ConfigProperties.BasePath.NAME,
 					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
 					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES,
@@ -60,7 +60,7 @@ public class MavenDetailsInfererEnhancerTest {
 			.isNotNull()
 			.extracting(container -> container.getProperties())
 			.asInstanceOf(InstanceOfAssertFactories.MAP)
-			.containsOnlyKeys(
+			.containsKeys(
 					ModelElementKeys.ConfigProperties.BasePath.NAME,
 					ModelElementKeys.Scm.PATH,
 					MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,

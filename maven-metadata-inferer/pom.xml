@@ -10,8 +10,13 @@
 	<description>A module allowing as much informations as possible to be read
 		from Maven POM</description>
 	<properties>
-		<!-- The http5s is some kind of commons-vfs weirdity -->
+		<!-- aadarchi- won't be injected into project elements -->
 		<aadarchi-technologies-url>raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json</aadarchi-technologies-url>
+		<!-- 
+		aadarchi. will be injected into project elements
+		allowing us to filter out all dependencies tagged with "jackson"
+		-->
+		<aadarchi.filter.dependencies.tagged>jackson</aadarchi.filter.dependencies.tagged>
 	</properties>
 	<dependencies>
 		<dependency>

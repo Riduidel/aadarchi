@@ -36,4 +36,11 @@ public interface MavenEnhancer {
 
 	String AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES = ModelElementKeys.PREFIX+"maven.technologies";
 	TypeReference<Map<String, String>> AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES_TYPE = new TypeReference<Map<String, String>>() {};
+	/**
+	 * When set, dependencies tagged with one of the tags in this list will be filtered out from signifiant dependencies
+	 */
+	 public interface FilterDpendenciesTagged {
+		 String NAME = ModelElementKeys.PREFIX+"filter.dependencies.tagged";
+		 String VALUE = "testing";
+	 }
 }

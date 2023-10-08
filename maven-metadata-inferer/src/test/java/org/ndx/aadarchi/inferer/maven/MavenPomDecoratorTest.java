@@ -59,12 +59,29 @@ public class MavenPomDecoratorTest {
 			.isNotNull()
 			.containsIgnoringCase("Java");
 		Assertions.assertThat(container.getProperties())
-			.containsOnlyKeys(
+			.containsKeys(
 							MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
 							MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES,
 							ModelElementKeys.Scm.PROJECT,
 							ModelElementKeys.JAVA_SOURCES,
 							ModelElementKeys.JAVA_PACKAGES,
 							ModelElementKeys.ISSUE_MANAGER);
+    }
+    
+    @Test
+    public void test_for_394_filter_jackson_out() {
+    	// Given
+    	var w = new Workspace(getClass().getName(), "a test workspace");
+    	var system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
+    	var container = system.addContainer("maven-metadata-inferer");
+		MavenProject project = reader.readMavenProject(new File("pom.xml").toURI().toString());
+		Assertions.assertThat(project).isNotNull();
+		// When
+		decorator.decorate(container, project);
+		// Then
+		Assertions.assertThat(container.getProperties())
+			.containsEntry(MavenEnhancer.FilterDpendenciesTagged.NAME, "jackson");
+		Assertions.assertThat(container.getTechnology())
+			.isNotNull().doesNotContainIgnoringCase("jackson");
     }
 }
