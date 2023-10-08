@@ -71,8 +71,13 @@ public class MavenTechnologiesDocumentationEnhancer extends ModelElementAdapter 
 			.append("|").append(version==null || version.isBlank() ? "{nbsp}" : version);
 		if(key.versions.containsKey(version))
 			returned.append(" (released ").append(key.versions.get(version)).append(")");
+		returned.append("|");
+		if(key.categories==null || key.categories.isEmpty()) {
+			returned.append("{nbsp}");
+		} else {
+			returned.append(key.categories.stream().collect(Collectors.joining()));
+		}
 		returned
-			.append("|").append(key.categories.isEmpty() ? "{nbsp}" : key.categories.stream().collect(Collectors.joining()))
 			.append("|").append(key.description)
 			;
 		return returned.toString();
