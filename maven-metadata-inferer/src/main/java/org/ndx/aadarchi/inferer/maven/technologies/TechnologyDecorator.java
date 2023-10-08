@@ -1,9 +1,9 @@
 package org.ndx.aadarchi.inferer.maven.technologies;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -101,6 +101,12 @@ public class TechnologyDecorator {
 			}
 		}
 	}
+	
+	private <T extends Object> int compareEntriesByRanking(T t1, T t2) {
+		Entry<Dependency, MvnRepositoryArtifact> first = (Entry<Dependency, MvnRepositoryArtifact>) t1;
+		Entry<Dependency, MvnRepositoryArtifact> second = (Entry<Dependency, MvnRepositoryArtifact>) t2;
+		return Integer.compare(first.getValue().ranking, second.getValue().ranking);
+	}
 
 	/**
 	 * Decorate the given element with the given technologies by applying the following steps
@@ -127,6 +133,10 @@ public class TechnologyDecorator {
 			.filter(d -> mvnRepositoryArtifacts.containsKey(d.getGroupId()+"."+d.getArtifactId()))
 			.collect(Collectors.toMap(Function.identity(), 
 					d -> mvnRepositoryArtifacts.get(d.getGroupId()+"."+d.getArtifactId())));
+		// We want to have that list filtered to keep, for each group id, the most popular dependency
+		Map<String, Optional<Entry<Dependency, MvnRepositoryArtifact>>> dependenciesToArtifactsByGroup = dependenciesToArtifacts.entrySet().stream()
+			.collect(Collectors.groupingBy(entry -> entry.getKey().getGroupId(),
+					Collectors.minBy(this::compareEntriesByRanking)));
 		// Now we can map dependencies to artifacts, first put the list of artifact names into technologies
 		List<String> technologies = dependenciesToArtifacts.values().stream()
 				// We filter out all technologies tagged with "testing" to simplify things a little in technologies
