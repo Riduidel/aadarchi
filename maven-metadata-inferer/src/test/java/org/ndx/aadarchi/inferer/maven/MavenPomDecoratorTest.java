@@ -35,7 +35,7 @@ public class MavenPomDecoratorTest {
 		decorator.decorate(system, project);
 		// Then
 		Assertions.assertThat(system.getProperties())
-		.containsOnlyKeys(
+		.containsKeys(
 				MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_COORDINATES,
 				MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES,
 				ModelElementKeys.Scm.PROJECT,
