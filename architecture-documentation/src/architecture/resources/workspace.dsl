@@ -25,7 +25,10 @@ workspace "aadarchi-documentation-system" {
 				aadarchi_maven_plugin -> this
 			}
 			archetype_6 = container "archetype" "" "maven"
-			architecture_documentation = container "architecture-documentation"
+			architecture_documentation = container "architecture-documentation" {
+				this -> aadarchi_maven_plugin "Generates architecture diagrams"
+				this -> aadarchi_maven_plugin "Generates documentation artifacts"
+			}
 		}
 		person_architect -> archetype_6 "Bootstrap a valid project"
 		person_architect -> maven "Generates documentation"
