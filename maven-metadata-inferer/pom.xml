@@ -14,9 +14,10 @@
 		<aadarchi-technologies-url>raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json</aadarchi-technologies-url>
 		<!-- 
 		aadarchi. will be injected into project elements
-		allowing us to filter out all dependencies tagged with "jackson"
+		allowing us to filter out all dependencies tagged with "jackson".
+		We keep this one in POM due to some test relying upon it.
 		-->
-		<aadarchi.filter.dependencies.tagged>testing,jackson</aadarchi.filter.dependencies.tagged>
+		<aadarchi.maven.filter.dependencies.tagged>testing,jackson,commons,io</aadarchi.maven.filter.dependencies.tagged>
 	</properties>
 	<dependencies>
 		<dependency>

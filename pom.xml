@@ -25,7 +25,6 @@
 		<version.jsoup>1.15.3</version.jsoup>
 		<version.junit>5.9.1</version.junit>
 		<error-prone.version>2.16</error-prone.version>
-		<aadarchi.filter.dependencies.tagged>testing, jackson, commons, io</aadarchi.filter.dependencies.tagged>
 	</properties>
 	<scm>
 		<!-- We use https connections for using aadarchi.github.token as

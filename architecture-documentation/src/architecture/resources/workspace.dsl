@@ -7,6 +7,7 @@ workspace "aadarchi-documentation-system" {
 				"aadarchi.tickets.project" "aadarchi-documentation-system"
 				"aadarchi.tickets.adr.label" "decision"
 				"aadarchi.maven.pom" "pom.xml"
+				"aadarchi.maven.filter.dependencies.tagged" "testing, jackson, commons, io"
 			}
 			maven = container "maven" "The maven build engine" "java, maven"
 			aadarchi_maven_plugin = container "aadarchi-maven-plugin" {
