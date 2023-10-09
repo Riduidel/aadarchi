@@ -4,7 +4,7 @@
     <parent>
     <groupId>io.github.Riduidel.aadarchi</groupId>
     <artifactId>system</artifactId>
-    <version>0.1.12</version>
+    <version>0.1.13-SNAPSHOT</version>
 </parent>
 <artifactId>model-linter</artifactId>
 <name>Aadarchi : Model linter</name>
