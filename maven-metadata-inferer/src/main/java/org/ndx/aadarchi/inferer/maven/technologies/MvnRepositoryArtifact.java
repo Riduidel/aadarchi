@@ -2,11 +2,14 @@ package org.ndx.aadarchi.inferer.maven.technologies;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MvnRepositoryArtifact {
+public class MvnRepositoryArtifact implements Comparable<MvnRepositoryArtifact> {
 	public final String name;
 	public final String coordinates;
 	public final String description;
@@ -16,6 +19,7 @@ public class MvnRepositoryArtifact {
 	public final String page;
 	public final int ranking;
 	public final int users;
+	public final String categoriesText;
 
 	@JsonCreator
 	public MvnRepositoryArtifact(@JsonProperty("name") String name, 
@@ -34,9 +38,20 @@ public class MvnRepositoryArtifact {
 		this.page = page;
 		this.description = description;
 		this.categories = categories;
+		this.categoriesText = categories==null ? "" : categories.stream().sorted().collect(Collectors.joining());
 		this.users = users;
 		this.ranking = ranking;
 		this.tags = tags;
 		this.versions = versions;
+	}
+
+	@Override
+	public int compareTo(MvnRepositoryArtifact o) {
+		return new CompareToBuilder()
+				.append(categoriesText, o.categoriesText)
+				.append(-1*ranking, -1*o.ranking)
+				.append(users, o.users)
+				.append(name, o.name)
+				.toComparison();
 	}
 }
