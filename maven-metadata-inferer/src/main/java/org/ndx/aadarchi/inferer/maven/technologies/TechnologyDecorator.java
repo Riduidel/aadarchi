@@ -138,7 +138,9 @@ public class TechnologyDecorator {
 			.collect(Collectors.groupingBy(entry -> entry.getKey().getGroupId(),
 					Collectors.minBy(this::compareEntriesByRanking)));
 		// Now we can map dependencies to artifacts, first put the list of artifact names into technologies
-		List<String> technologies = dependenciesToArtifacts.values().stream()
+		List<String> technologies = dependenciesToArtifactsByGroup.values().stream()
+				.flatMap(optional -> optional.stream())
+				.map(entry -> entry.getValue())
 				// We filter out all technologies tagged with "testing" to simplify things a little in technologies
 				.filter(a -> !isAnyTagFiltered(filteredTags, a.tags))
 				.map(a -> a.name)
