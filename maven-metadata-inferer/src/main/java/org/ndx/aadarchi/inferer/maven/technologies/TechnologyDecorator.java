@@ -69,7 +69,11 @@ public class TechnologyDecorator {
 					}
 				}
 			}
-			dependencies.putAll(doDecorateTechnologies(mavenProject, element));
+			List<Dependency> popularDependencies = ((List<Dependency>) mavenProject.getDependencies()).stream()
+					.filter(d -> mvnRepositoryArtifacts.containsKey(d.getGroupId()+"."+d.getArtifactId()))
+					.collect(Collectors.toList());
+			dependencies.putAll(popularDependencies.stream().collect(Collectors.toMap(d -> d.getGroupId()+"."+d.getArtifactId(), d -> d.getVersion()==null ? "":d.getVersion())));
+			doDecorateTechnologies(popularDependencies, element);
 			// We should explore all parent poms
 			return true;
 		});
@@ -122,7 +126,7 @@ public class TechnologyDecorator {
 	 * @param element
 	 * @return 
 	 */
-	private Map<String, String> doDecorateTechnologies(MavenProject mavenProject, Element element) {
+	private void doDecorateTechnologies(List<Dependency> popularDependencies, Element element) {
 		String[] splitted = element.getProperties()
 				.getOrDefault(MavenEnhancer.FilterDpendenciesTagged.NAME, 
 						MavenEnhancer.FilterDpendenciesTagged.VALUE)
@@ -132,8 +136,7 @@ public class TechnologyDecorator {
 					.map(String::trim)
 					.collect(Collectors.toList())
 				;
-		Map<Dependency, MvnRepositoryArtifact> dependenciesToArtifacts = ((List<Dependency>) mavenProject.getDependencies()).stream()
-			.filter(d -> mvnRepositoryArtifacts.containsKey(d.getGroupId()+"."+d.getArtifactId()))
+		Map<Dependency, MvnRepositoryArtifact> dependenciesToArtifacts = popularDependencies.stream() 
 			.map(d -> Map.entry(d, mvnRepositoryArtifacts.get(d.getGroupId()+"."+d.getArtifactId())))
 			.filter(entry ->!isAnyTagFiltered(filteredTags, entry.getValue()))
 			.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
@@ -155,7 +158,6 @@ public class TechnologyDecorator {
 			technologies.add("Java");
 		}
 		injectTechnologiesInElement(element, technologies);
-		return dependenciesToArtifacts.keySet().stream().collect(Collectors.toMap(d -> d.getGroupId()+"."+d.getArtifactId(), d -> d.getVersion()==null ? "":d.getVersion()));
 	}
 
 	/**
