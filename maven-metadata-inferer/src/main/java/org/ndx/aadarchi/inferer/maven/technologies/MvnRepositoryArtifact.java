@@ -49,8 +49,6 @@ public class MvnRepositoryArtifact implements Comparable<MvnRepositoryArtifact> 
 	public int compareTo(MvnRepositoryArtifact o) {
 		return new CompareToBuilder()
 				.append(categoriesText, o.categoriesText)
-				.append(-1*ranking, -1*o.ranking)
-				.append(users, o.users)
 				.append(name, o.name)
 				.toComparison();
 	}
