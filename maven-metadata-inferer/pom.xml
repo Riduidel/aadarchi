@@ -74,7 +74,7 @@
 			<id>Download popular artifacts</id>
 			<activation>
 				<file>
-					<missing><![CDATA[${project.build.directory}/generated/resources/mvnrepository/artifacts.json]]></missing>
+					<missing><![CDATA[${basedir}/target/generated/resources/mvnrepository/artifacts.json]]></missing>
 				</file>
 			</activation>
 			<build>

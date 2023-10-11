@@ -30,7 +30,8 @@ import com.structurizr.model.Element;
 @Default
 @ApplicationScoped
 public class MavenPomDecorator {
-	private static final Logger logger = Logger.getLogger(MavenPomDecorator.class.getName());
+	@Inject
+	Logger logger;
 	@Inject
 	FileSystemManager fileSystemManager;
 	

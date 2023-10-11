@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,6 +41,8 @@ import edu.emory.mathcs.backport.java.util.Arrays;
 @Default
 @ApplicationScoped
 public class TechnologyDecorator {
+	@Inject
+	Logger logger;
 	@Inject @Named(MvnRepositoryArtifactsProducer.MVNREPOSITORY_ARTIFACTS) Map<String, MvnRepositoryArtifact> mvnRepositoryArtifacts;
 
 	ObjectMapper objectMapper = new ObjectMapper();
@@ -66,7 +69,11 @@ public class TechnologyDecorator {
 					}
 				}
 			}
-			dependencies.putAll(doDecorateTechnologies(mavenProject, element));
+			List<Dependency> popularDependencies = ((List<Dependency>) mavenProject.getDependencies()).stream()
+					.filter(d -> mvnRepositoryArtifacts.containsKey(d.getGroupId()+"."+d.getArtifactId()))
+					.collect(Collectors.toList());
+			dependencies.putAll(popularDependencies.stream().collect(Collectors.toMap(d -> d.getGroupId()+"."+d.getArtifactId(), d -> d.getVersion()==null ? "":d.getVersion())));
+			doDecorateTechnologies(popularDependencies, element);
 			// We should explore all parent poms
 			return true;
 		});
@@ -102,7 +109,7 @@ public class TechnologyDecorator {
 		}
 	}
 	
-	private <T extends Object> int compareEntriesByRanking(T t1, T t2) {
+	private <T extends Object> int compareArtifacts(T t1, T t2) {
 		Entry<Dependency, MvnRepositoryArtifact> first = (Entry<Dependency, MvnRepositoryArtifact>) t1;
 		Entry<Dependency, MvnRepositoryArtifact> second = (Entry<Dependency, MvnRepositoryArtifact>) t2;
 		return Integer.compare(first.getValue().ranking, second.getValue().ranking);
@@ -119,7 +126,7 @@ public class TechnologyDecorator {
 	 * @param element
 	 * @return 
 	 */
-	private Map<String, String> doDecorateTechnologies(MavenProject mavenProject, Element element) {
+	private void doDecorateTechnologies(List<Dependency> popularDependencies, Element element) {
 		String[] splitted = element.getProperties()
 				.getOrDefault(MavenEnhancer.FilterDpendenciesTagged.NAME, 
 						MavenEnhancer.FilterDpendenciesTagged.VALUE)
@@ -129,20 +136,18 @@ public class TechnologyDecorator {
 					.map(String::trim)
 					.collect(Collectors.toList())
 				;
-		Map<Dependency, MvnRepositoryArtifact> dependenciesToArtifacts = ((List<Dependency>) mavenProject.getDependencies()).stream()
-			.filter(d -> mvnRepositoryArtifacts.containsKey(d.getGroupId()+"."+d.getArtifactId()))
-			.collect(Collectors.toMap(Function.identity(), 
-					d -> mvnRepositoryArtifacts.get(d.getGroupId()+"."+d.getArtifactId())));
+		Map<Dependency, MvnRepositoryArtifact> dependenciesToArtifacts = popularDependencies.stream() 
+			.map(d -> Map.entry(d, mvnRepositoryArtifacts.get(d.getGroupId()+"."+d.getArtifactId())))
+			.filter(entry ->!isAnyTagFiltered(filteredTags, entry.getValue()))
+			.collect(Collectors.toMap(Entry::getKey, Entry::getValue));
 		// We want to have that list filtered to keep, for each group id, the most popular dependency
 		Map<String, Optional<Entry<Dependency, MvnRepositoryArtifact>>> dependenciesToArtifactsByGroup = dependenciesToArtifacts.entrySet().stream()
 			.collect(Collectors.groupingBy(entry -> entry.getKey().getGroupId(),
-					Collectors.minBy(this::compareEntriesByRanking)));
+					Collectors.minBy(this::compareArtifacts)));
 		// Now we can map dependencies to artifacts, first put the list of artifact names into technologies
 		List<String> technologies = dependenciesToArtifactsByGroup.values().stream()
 				.flatMap(optional -> optional.stream())
 				.map(entry -> entry.getValue())
-				// We filter out all technologies tagged with "testing" to simplify things a little in technologies
-				.filter(a -> !isAnyTagFiltered(filteredTags, a.tags))
 				.map(a -> a.name)
 				.collect(Collectors.toList());
 		if(!dependenciesToArtifacts.values().stream()
@@ -153,20 +158,22 @@ public class TechnologyDecorator {
 			technologies.add("Java");
 		}
 		injectTechnologiesInElement(element, technologies);
-		return dependenciesToArtifacts.keySet().stream().collect(Collectors.toMap(d -> d.getGroupId()+"."+d.getArtifactId(), d -> d.getVersion()==null ? "":d.getVersion()));
 	}
 
 	/**
 	 * Check if any of the artifact tags is in the filtered list
 	 * @param filteredTags
-	 * @param artifactTags
+	 * @param artifact
 	 * @return true if any of the artifact tags appears in the filtered list 
 	 */
-	private boolean isAnyTagFiltered(List<String> filteredTags, List<String> artifactTags) {
-		return artifactTags.stream()
+	private boolean isAnyTagFiltered(List<String> filteredTags, MvnRepositoryArtifact artifact) {
+		boolean returned = artifact.tags.stream()
 				.filter(tag -> filteredTags.contains(tag))
 				.findAny()
 				.isPresent();
+		logger.info(String.format("artifact %s has tags %s. Filtered? %s", 
+				artifact.coordinates, artifact.tags, returned));
+		return returned;
 	}
 
 	private void injectTechnologiesInElement(Element element, List<String> technologies) {
