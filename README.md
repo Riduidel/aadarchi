@@ -1,14 +1,9 @@
-<h1 align="center">Welcome to Aadarchi 👋</h1>
-<p>
-	<a href="https://github.com/Riduidel/aadarchi/actions?query=workflow%3A%22Java+CI+with+Maven%22">
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/Riduidel/aadarchi/on_push_on_master_deploy_build.yml?branch=main">
-	</a>
-  <a href="https://github.com/Riduidel/aadarchi/releases" target="_blank"><img src="https://badge.fury.io/gh/Riduidel%2Faadarchi.svg" alt="GitHub version"></a>
-<img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/Riduidel/aadarchi">
-  <a href="https://twitter.com/Riduidel" target="_blank">
-    <img alt="Twitter: Riduidel" src="https://img.shields.io/twitter/follow/Riduidel.svg?style=social" />
-  </a>
-</p>
+# Welcome to Aadarchi 👋
+
+[![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Riduidel/aadarchi/on_push_on_master_deploy_build.yml)](https://github.com/Riduidel/aadarchi/actions/workflows/on_push_on_master_deploy_build.yml)
+[![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)](https://badge.fury.io/gh/Riduidel%2Faadarchi)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/Riduidel/aadarchi)
+![Mastodon Follow](https://img.shields.io/mastodon/follow/000004227?domain=https%3A%2F%2Fframapiaf.org)
 
 > A Maven archetype allowing you to easily create your agile architecture documentation using a mix of C4, Asciidoc and PlantUML. This archetype uses [Structurizr](https://github.com/structurizr/java/) to build the architecture model, and [Agile architecture documentation](https://web.archive.org/web/20210518020154/http://www.codingthearchitecture.com/2016/05/31/agile_software_architecture_documentation.html) template, all by Simon Brown.
 
