@@ -161,5 +161,11 @@ public interface ModelElementKeys {
 	 * When set, this property contains a description used for {@link #EXTERNAL_DEPENDENCIES}
 	 * generated links
 	 */
-	String EXTERNAL_DEPENDENCY_DESCRIPTION = PREFIX+".depends.description";
+	String EXTERNAL_DEPENDENCY_DESCRIPTION = PREFIX+"depends.description";
+	/**
+	 * When set, model elements will be ordered according to this key instead of the name (which is used by default).
+	 * Why introducing this complexity? Because it allows cleaner, and more controlled, ordering.
+	 * Please use integer or long values (floats and double won't be supported here)
+	 */
+	String ORDERING = PREFIX+"ordering";
 }
