@@ -48,8 +48,8 @@ public class MavenPomDecoratorTest {
     	// Given
     	var w = new Workspace(getClass().getName(), "a test workspace");
     	var system = w.getModel().addSoftwareSystem("The system to decorate with maven informations");
-    	var container = system.addContainer("maven-metadata-inferer");
-		MavenProject project = reader.readMavenProject(new File("pom.xml").toURI().toString());
+    	var container = system.addContainer("aadarchi-maven-plugin");
+		MavenProject project = reader.readMavenProject(new File("../aadarchi-maven-plugin/pom.xml").toURI().toString());
 		Assertions.assertThat(project).isNotNull();
 		// When
 		decorator.decorate(container, project);
@@ -59,7 +59,7 @@ public class MavenPomDecoratorTest {
 			.isNotNull()
 			.containsIgnoringCase("Java")
 			// Should be present *because* we use some maven plugin typical dependencies
-//			.containsIgnoringCase("Maven")
+			.containsIgnoringCase("Maven")
 			;
 		Assertions.assertThat(container.getProperties())
 			.containsKeys(
