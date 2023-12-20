@@ -89,7 +89,7 @@ Way more details are available in the [architecture documentation (which uses th
 
 👤 **Nicolas Delsaux**
 
-* Twitter: [@Riduidel](https://twitter.com/Riduidel)
+* Mastodon: [@Riduidel](https://framapiaf.org/@Riduidel)
 * Github: [@Riduidel](https://github.com/Riduidel)
 
 ## 🤝 Contributing
