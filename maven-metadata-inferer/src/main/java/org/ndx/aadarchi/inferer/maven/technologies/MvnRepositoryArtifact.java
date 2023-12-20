@@ -2,6 +2,7 @@ package org.ndx.aadarchi.inferer.maven.technologies;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -15,7 +16,7 @@ public class MvnRepositoryArtifact implements Comparable<MvnRepositoryArtifact> 
 	public final String description;
 	public final List<String> categories;
 	public final List<String> tags;
-	public final Map<String, String> versions;
+	public final Map<String, VersionDetails> versions;
 	public final String page;
 	public final int ranking;
 	public final int users;
@@ -30,7 +31,7 @@ public class MvnRepositoryArtifact implements Comparable<MvnRepositoryArtifact> 
 			@JsonProperty("users") int users,
 			@JsonProperty("categories") List<String> categories,
 			@JsonProperty("tags") List<String> tags,
-			@JsonProperty("versions") Map<String, String> versions
+			@JsonProperty("versions") Map<String, VersionDetails> versions
 			) {
 		super();
 		this.name = name;
@@ -51,5 +52,22 @@ public class MvnRepositoryArtifact implements Comparable<MvnRepositoryArtifact> 
 				.append(categoriesText, o.categoriesText)
 				.append(name, o.name)
 				.toComparison();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(coordinates, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MvnRepositoryArtifact other = (MvnRepositoryArtifact) obj;
+		return Objects.equals(coordinates, other.coordinates) && Objects.equals(name, other.name);
 	}
 }

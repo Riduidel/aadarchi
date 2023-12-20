@@ -2,25 +2,25 @@ package org.ndx.aadarchi.inferer.maven.technologies;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.VFS;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
-import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.EnhancementsDir;
 import org.ndx.aadarchi.base.utils.FileContentCache;
-import org.ndx.aadarchi.inferer.maven.MavenEnhancer;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -46,16 +46,28 @@ public class MvnRepositoryArtifactsProducer {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		List<MvnRepositoryArtifact> artifacts = readMvnRepositoryArtifacts(objectMapper);
+		return artifacts.stream()
+				.collect(Collectors.toMap(a -> a.coordinates, 
+						a -> a,
+						(a, b) -> a,
+						() -> new TreeMap<String, MvnRepositoryArtifact>()));
+	}
+
+	private List<MvnRepositoryArtifact> readMvnRepositoryArtifacts(ObjectMapper objectMapper)
+			throws IOException, StreamReadException, DatabindException {
+		List<MvnRepositoryArtifact> artifacts = null;
 		// First, ensure the cached file has some content
 		try {
 			try(InputStream input = cache.openStreamFor(upToDateAadarchiTechnologies)) {
-				return objectMapper.readValue(input, new TypeReference<Map<String, MvnRepositoryArtifact>>() {});
+				artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
 			}
 		} catch(Exception e) {
 			logger.log(Level.WARNING, "Unable to read remote mvnrepository.json file", e);
 			try(InputStream input = cache.openStreamFor(defaultAadarchiTechnlogies)) {
-				return objectMapper.readValue(input, new TypeReference<Map<String, MvnRepositoryArtifact>>() {});
+				artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
 			}
 		}
+		return artifacts;
 	}
 }
