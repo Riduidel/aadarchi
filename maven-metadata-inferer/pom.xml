@@ -11,7 +11,7 @@
 		from Maven POM</description>
 	<properties>
 		<!-- aadarchi- won't be injected into project elements -->
-		<aadarchi-technologies-url>raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports/mvnrepository/artifacts.json</aadarchi-technologies-url>
+		<aadarchi-technologies-url>raw.githubusercontent.com/Riduidel/aadarchi-technology-detector/reports_mvnrepository/mvnrepository/artifacts.json</aadarchi-technologies-url>
 		<!-- 
 		aadarchi. will be injected into project elements
 		allowing us to filter out all dependencies tagged with "jackson".
