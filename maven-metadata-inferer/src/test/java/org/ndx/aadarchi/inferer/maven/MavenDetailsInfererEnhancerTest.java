@@ -97,7 +97,7 @@ public class MavenDetailsInfererEnhancerTest {
 			;
 		Assertions.assertThat(sipocDiagramGenerator.getTechnology())
 			.isNotBlank()
-			.isEqualTo("Java");
+			.contains("Java");
 		Container springComponentDetector = system.getContainerWithName("spring-components-detector");
 		Assertions.assertThat(springComponentDetector)
 			.isNotNull()

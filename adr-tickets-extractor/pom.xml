@@ -15,8 +15,9 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<artifactId>freemarker-cdi-producer</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

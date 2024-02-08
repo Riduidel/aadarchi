@@ -81,6 +81,7 @@
 		<module>cdi-in-maven-plugin-helper</module>
 		<module>structurizr-components-detector</module>
 		<module>aadarchi-test-utils</module>
+		<module>freemarker-cdi-producer</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
