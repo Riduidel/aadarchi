@@ -8,8 +8,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<aadarchi.main.class>org.ndx.aadarchi.base.ArchitectureDocumentationBuilder</aadarchi.main.class>
-
 		<!-- Defining a version that doesn't suck -->
 		<version.aadarchi>${project.version}</version.aadarchi>
 
