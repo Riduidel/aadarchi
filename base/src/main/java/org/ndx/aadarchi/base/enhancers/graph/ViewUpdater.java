@@ -40,19 +40,16 @@ public class ViewUpdater extends ViewEnhancerAdapter {
 	
 	@Override
 	protected boolean startVisit(DeploymentView c) {
-		// TODO Auto-generated method stub
-		return super.startVisit(c);
+		return true;
 	}
 	
 	@Override
 	protected boolean startVisit(SystemContextView c) {
-		// TODO Auto-generated method stub
-		return super.startVisit(c);
+		return true;
 	}
 	@Override
 	protected boolean startVisit(SystemLandscapeView c) {
-		// TODO Auto-generated method stub
-		return super.startVisit(c);
+		return true;
 	}
 	@Override
 	protected void endVisit(DeploymentView c, OutputBuilder builder) {
