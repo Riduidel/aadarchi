@@ -38,6 +38,10 @@ public interface MavenEnhancer {
 	String AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES = PREFIX+"technologies";
 	TypeReference<Map<String, String>> AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES_TYPE = new TypeReference<Map<String, String>>() {};
 	/**
+	 * List of ignored submodules. Allows to hide architecture documentation from production-like code
+	 */
+	String IGNORED_SUBMODULES = PREFIX+"ignored.submodules";
+	/**
 	 * When set, dependencies tagged with one of the tags in this list will be filtered out from signifiant dependencies
 	 */
 	 public interface FilterDpendenciesTagged {
