@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -20,6 +21,7 @@ import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.icon.FontIcon;
 import org.ndx.aadarchi.github.vfs.GitHubFileSystemProvider;
+import org.ndx.aadarchi.gitlab.GitOperator;
 
 import com.structurizr.annotation.Component;
 
@@ -29,7 +31,7 @@ public class GithubSCMHandler implements SCMHandler {
 	@Inject Logger logger;
 	@Inject GitHub github;
 	@Inject FileContentCache fileCache;
-	@Inject Instance<GitOperator> cloner;
+	@Inject @Named("github") Instance<GitOperator> cloner;
 	@Inject @FontIcon(name="github") String githubIcon;
 	@Inject GitHubFileSystemProvider gitHubFileSystem;
 	@Override

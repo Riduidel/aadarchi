@@ -1,4 +1,4 @@
-package org.ndx.aadarchi.github;
+package org.ndx.aadarchi.gitlab;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,35 +8,29 @@ import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
-import com.structurizr.annotation.Component;
-
 /**
- * Component dedicated to low-level git operations
- * @author Nicolas
+ * A class providing basic it operations
  */
-@Component
-@ApplicationScoped
 public class GitOperator {
-	@Inject @ConfigProperty(name=Constants.CONFIG_GITHUB_LOGIN) private String login;
-	@Inject @ConfigProperty(name=Constants.CONFIG_GITHUB_TOKEN) private String token;
+	private static final Logger logger = Logger.getLogger(GitOperator.class.getName());
+	private String login;
+	private String token;
 	private Set<String> branchesToCheckout;
-	@Inject 
-	public void setBranchesToCheckout(@ConfigProperty(name=Constants.CONFIG_GIT_BRANCHES_TO_CHECKOUT, defaultValue = "develop, main, main") String names) {
+	/**
+	 * Set the branches to checkout from a comma-separated string
+	 * @param names
+	 */
+	public void setBranchesToCheckout(String names) {
 		this.branchesToCheckout = Arrays.asList(names.split(",")).stream()
 				.map(name -> name.trim())
 				.collect(Collectors.toSet());
 	}
-	@Inject Logger logger;
 
 	/**
 	 * Clone the repo
@@ -46,10 +40,6 @@ public class GitOperator {
 	 * @throws IOException if local file operation fails
 	 */
 	public void clone(String from, File into) throws GitAPIException, IOException {
-		if(login==null || login.isBlank()) {
-			throw new UnsupportedOperationException(
-					String.format("Unable to checkout projects of no Github login is provided. Please set the %s property to a non-null value", Constants.CONFIG_GITHUB_LOGIN));
-		}
 		if(into.exists()) {
 			if(new File(into, ".git").exists()) {
 				logger.info(String.format("%s seems to already be a git repository, we consider job's done.", into.getAbsolutePath()));
@@ -84,9 +74,29 @@ public class GitOperator {
 						.setAllPaths(true)
 						.setName(from);
 				}, () -> {
-					logger.warning(String.format("We found none of the %s branches in remote (but found %s). Please add one to %s in order for checkout to work", 
-							branchesToCheckout, branchesNames, Constants.CONFIG_GIT_BRANCHES_TO_CHECKOUT));
+					logger.warning(String.format("We found none of the %s branches in remote (but found %s). Please add one to branches to checkout in order for checkout to work", 
+							branchesToCheckout, branchesNames));
 				});
 		}
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public Set<String> getBranchesToCheckout() {
+		return branchesToCheckout;
 	}
 }

@@ -20,8 +20,17 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<artifactId>git-scm-handler-helper</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.gitlab4j</groupId>
 			<artifactId>gitlab4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.pivovarit</groupId>
+			<artifactId>throwing-function</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.pivovarit</groupId>
