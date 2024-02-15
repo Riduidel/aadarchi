@@ -28,7 +28,7 @@ jobs:
           fetch-depth: '0'
       - name: Import GPG key
         id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v6.1
+        uses: crazy-max/ghaction-import-gpg@v6.1.0
         with:
           gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
@@ -46,7 +46,7 @@ jobs:
           server-username: ${{ secrets.OSS_SONATYPE_USERNAME }}
           server-password: ${{ secrets.OSS_SONATYPE_PASSWORD }}
       - name: Do not forget to configure Maven Settings!
-        uses: s4u/maven-settings-action@v3
+        uses: s4u/maven-settings-action@v3.0.0
         with:
           override: true
           githubServer: true
