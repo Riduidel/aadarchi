@@ -32,6 +32,8 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+      - name: List gpg keys (there should be only one)
+        run: gpg -K
       - name: Setup git configuration
         run: |
           git config --global user.email "aadarchi-releaser-bot@users.noreply.github.com"
