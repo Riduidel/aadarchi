@@ -553,7 +553,7 @@
 									<replaceValue>$1${project.version}</replaceValue>
 									<recursive>false</recursive>
 									<fileMask>
-										on_release_perform_maven_release.yml</fileMask>
+										on_workflow_dispatch_perform_maven_release.yml</fileMask>
 								</configuration>
 							</execution>
 						</executions>
