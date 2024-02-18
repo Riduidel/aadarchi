@@ -71,3 +71,12 @@ jobs:
         run: mvn --no-transfer-progress -B release:prepare release:perform -Prelease --file pom.xml
         env:
           GITHUB_TOKEN: ${{ github.token }}
+      - name: Get created tag name (for GitHuub release creation)
+        id: tag
+        run: echo "CREATED_GIT_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+      - name: Create associated GitHub release
+        uses: lakto/gren-action@v2.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          options: "--override --data-source=issues --prerelease --tags=${{ steps.tag.outputs.CREATED_GIT_TAG }}"
