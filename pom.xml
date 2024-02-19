@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.Riduidel.aadarchi</groupId>
 	<artifactId>system</artifactId>
@@ -315,9 +317,9 @@
 					<version>3.1.2</version>
 				</plugin>
 				<plugin>
-				    <groupId>com.googlecode.maven-download-plugin</groupId>
-				    <artifactId>download-maven-plugin</artifactId>
-				    <version>1.7.1</version>
+					<groupId>com.googlecode.maven-download-plugin</groupId>
+					<artifactId>download-maven-plugin</artifactId>
+					<version>1.7.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -365,6 +367,21 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>2.43.0</version>
+				<configuration>
+					<pom>
+						<encoding>UTF-8</encoding> <!-- The encoding of the pom files -->
+						 <nrOfIndentSpace>4</nrOfIndentSpace>
+						 <indentSchemaLocation>true</indentSchemaLocation>
+						 <predefinedSortOrder>recommended_2008_06</predefinedSortOrder>
+					</pom>
+					<java>
+					</java>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -485,7 +502,9 @@
 								have a working base
 							dependency -->
 							<preparationGoals>install</preparationGoals>
-							<!-- We also update both readme and github action descriptor during prepare, to have the correct version set -->
+							<!-- We also update both readme and github action
+							descriptor during prepare, to have the correct
+							version set -->
 							<tagNameFormat>@{version}</tagNameFormat>
 							<!-- This profile MUST be defined in settings.xml
 							and contains the 
@@ -530,7 +549,8 @@
 								<configuration>
 									<replacementType>file-contents</replacementType>
 									<baseDir>${project.basedir}</baseDir>
-									<findRegex>[0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?</findRegex>
+									<findRegex>
+										[0-9]+\.[0-9]+\.[0-9]+(-SNAPSHOT)?</findRegex>
 									<replaceValue>${project.version}</replaceValue>
 									<recursive>false</recursive>
 									<fileMask>README.md</fileMask>
@@ -546,7 +566,8 @@
 								<configuration>
 									<replacementType>file-contents</replacementType>
 									<baseDir>.github/workflows</baseDir>
-									<findRegex>(default:\s+)("\d+\.\d+\.\d+")(-SNAPSHOT)?</findRegex>
+									<findRegex>
+										(default:\s+)("\d+\.\d+\.\d+")(-SNAPSHOT)?</findRegex>
 									<replaceValue>$1"${project.version}"</replaceValue>
 									<recursive>false</recursive>
 									<fileMask>
