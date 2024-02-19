@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>io.github.Riduidel.aadarchi</groupId>
-        <artifactId>system</artifactId>
-        <version>0.1.14-SNAPSHOT</version>
-    </parent>
-    <artifactId>freemarker-cdi-producer</artifactId>
-    <name>Freemarker CDI Producer</name>
-    <description>This CDI producer allows easy usage of Freemarker in a
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.github.Riduidel.aadarchi</groupId>
+		<artifactId>system</artifactId>
+		<version>0.1.15-SNAPSHOT</version>
+	</parent>
+	<artifactId>freemarker-cdi-producer</artifactId>
+	<name>Freemarker CDI Producer</name>
+	<description>This CDI producer allows easy usage of Freemarker in a
 		CDI-compatible application.</description>
     <dependencies>
         <dependency>

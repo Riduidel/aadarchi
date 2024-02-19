@@ -1,15 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>io.github.Riduidel.aadarchi</groupId>
-        <artifactId>system</artifactId>
-        <version>0.1.14-SNAPSHOT</version>
-    </parent>
-    <artifactId>aadarchi-test-utils</artifactId>
-    <name>Aadarchi : test utilities</name>
-    <description>Some test utilities dedicated to the improvement of Aadarchi quality. 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.github.Riduidel.aadarchi</groupId>
+		<artifactId>system</artifactId>
+		<version>0.1.15-SNAPSHOT</version>
+	</parent>
+	<name>Aadarchi : test utilities</name>
+	<artifactId>aadarchi-test-utils</artifactId>
+	<description>Some test utilities dedicated to the improvement of Aadarchi quality. 
 	Mainly contains tools allowing easy injection of Maven properties into tests</description>
     <dependencies>
         <dependency>

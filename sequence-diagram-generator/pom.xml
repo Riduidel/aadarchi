@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.github.Riduidel.aadarchi</groupId>
         <artifactId>system</artifactId>
-        <version>0.1.14-SNAPSHOT</version>
+        <version>0.1.15-SNAPSHOT</version>
     </parent>
     <artifactId>sequence-diagram-generator</artifactId>
     <name>Aadarchi : Sequence diagram generator</name>
@@ -48,3 +48,4 @@
         </dependency>
     </dependencies>
 </project>
+
