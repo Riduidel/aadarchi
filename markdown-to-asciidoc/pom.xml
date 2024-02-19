@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>io.github.Riduidel.aadarchi</groupId>
-		<artifactId>system</artifactId>
-		<version>0.1.15-SNAPSHOT</version>
-	</parent>
-	<artifactId>markdown-to-asciidoc</artifactId>
-	<name>Aadarchi : Markdown to Asciidoc</name>
+    <parent>
+        <groupId>io.github.Riduidel.aadarchi</groupId>
+        <artifactId>system</artifactId>
+        <version>0.1.15-SNAPSHOT</version>
+    </parent>
+    <artifactId>markdown-to-asciidoc</artifactId>
+    <name>Aadarchi : Markdown to Asciidoc</name>
 
     <dependencies>
         <dependency>
