@@ -1,37 +1,39 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.github.Riduidel.aadarchi</groupId>
-		<artifactId>system</artifactId>
-		<version>0.1.14-SNAPSHOT</version>
-	</parent>
-	<artifactId>freemarker-cdi-producer</artifactId>
-	<name>Freemarker CDI Producer</name>
-	<description>This CDI producer allows easy usage of Freemarker in a
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.Riduidel.aadarchi</groupId>
+        <artifactId>system</artifactId>
+        <version>0.1.14-SNAPSHOT</version>
+    </parent>
+    <artifactId>freemarker-cdi-producer</artifactId>
+    <name>Freemarker CDI Producer</name>
+    <description>This CDI producer allows easy usage of Freemarker in a
 		CDI-compatible application.</description>
-	<dependencies>
-		<dependency>
-			<groupId>jakarta.enterprise</groupId>
-			<artifactId>jakarta.enterprise.cdi-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
-			<artifactId>aadarchi-test-utils</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.weld</groupId>
-			<artifactId>weld-junit5</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.Riduidel.aadarchi</groupId>
+            <artifactId>aadarchi-test-utils</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

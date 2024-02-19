@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
-    <groupId>io.github.Riduidel.aadarchi</groupId>
-    <artifactId>system</artifactId>
-    <version>0.1.14-SNAPSHOT</version>
-</parent>
-<artifactId>model-linter</artifactId>
-<name>Aadarchi : Model linter</name>
-<description>A model linter that verify if some useful things are present in an element.</description>
-<dependencies>
+        <groupId>io.github.Riduidel.aadarchi</groupId>
+        <artifactId>system</artifactId>
+        <version>0.1.14-SNAPSHOT</version>
+    </parent>
+    <artifactId>model-linter</artifactId>
+    <name>Aadarchi : Model linter</name>
+    <description>A model linter that verify if some useful things are present in an element.</description>
+    <dependencies>
         <dependency>
             <groupId>io.github.Riduidel.aadarchi</groupId>
             <artifactId>base</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
@@ -33,10 +26,18 @@
             <artifactId>weld-junit5</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.github.Riduidel.aadarchi</groupId>
             <artifactId>aadarchi-test-utils</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-</dependencies>
+    </dependencies>
 </project>

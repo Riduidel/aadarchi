@@ -1,249 +1,250 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<artifactId>system</artifactId>
-		<groupId>io.github.Riduidel.aadarchi</groupId>
-		<version>0.1.14-SNAPSHOT</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.Riduidel.aadarchi</groupId>
+        <artifactId>system</artifactId>
+        <version>0.1.14-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>aadarchi-maven-plugin</artifactId>
-	<packaging>maven-plugin</packaging>
-	<name>Aadarchi : Maven plugin</name>
-	<description>This maven plugin allows integration of our documentation system into maven builds by providing a set of useful mojos</description>
-	<properties>
-		<!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
-		<version.jruby>9.2.9.0</version.jruby>
-		<!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
-		<version.revealjs>4.3.0</version.revealjs>
-	</properties>
+    <artifactId>aadarchi-maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+    <name>Aadarchi : Maven plugin</name>
+    <description>This maven plugin allows integration of our documentation system into maven builds by providing a set of useful mojos</description>
+    <properties>
+        <!-- See latest version here https://mvnrepository.com/artifact/org.jruby/jruby -->
+        <version.jruby>9.2.9.0</version.jruby>
+        <!-- See latest version here: https://github.com/hakimel/reveal.js/releases -->
+        <version.revealjs>4.3.0</version.revealjs>
+    </properties>
 
-	<!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
-	See https://github.com/Riduidel/aadarchi/issues/159 for the weird protocol -->
-	<repositories>
-		<repository>
-			<id>mavengems</id>
-			<url>mavengem:https://rubygems.org</url>
-		</repository>
-	</repositories>
-
-	<dependencies>
-		<!-- used to invoke asciidoctor-maven-plugin in a controlled way -->
-		<dependency>
-			<groupId>org.twdata.maven</groupId>
-			<artifactId>mojo-executor</artifactId>
-			<version>2.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.plugin-tools</groupId>
-			<artifactId>maven-plugin-annotations</artifactId>
-			<version>3.6.4</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven</groupId>
-			<artifactId>maven-plugin-api</artifactId>
-			<version>3.8.6</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>base</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.enterprise</groupId>
-					<artifactId>cdi-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>cdi-in-maven-plugin-helper</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.enterprise</groupId>
-					<artifactId>cdi-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<!-- Since we're in a maven plugin, we can supposethe user project is also a maven project
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>base</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cdi-in-maven-plugin-helper</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Since we're in a maven plugin, we can supposethe user project is also a maven project
 		so automate the boing parts -->
-		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
-			<artifactId>maven-metadata-inferer</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.enterprise</groupId>
-					<artifactId>cdi-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>net.alchim31</groupId>
-			<artifactId>livereload-jvm</artifactId>
-			<version>0.2.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-vfs2 -->
-		<!-- I would have better not used that, but well, it does exactly what I want -->
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-vfs2</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.hadoop</groupId>
-					<artifactId>hadoop-hdfs-client</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>io.github.Riduidel.aadarchi</groupId>
+            <artifactId>maven-metadata-inferer</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.alchim31</groupId>
+            <artifactId>livereload-jvm</artifactId>
+            <version>0.2.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-vfs2 -->
+        <!-- I would have better not used that, but well, it does exactly what I want -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-vfs2</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hadoop</groupId>
+                    <artifactId>hadoop-hdfs-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.8.6</version>
+        </dependency>
+        <!-- used to invoke asciidoctor-maven-plugin in a controlled way -->
+        <dependency>
+            <groupId>org.twdata.maven</groupId>
+            <artifactId>mojo-executor</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.6.4</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-plugin-plugin</artifactId>
-					<version>3.9.0</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-		<extensions>
-			<extension>
-				<!-- this allows us to download gems -->
-				<groupId>org.torquebox.mojo</groupId>
-				<artifactId>mavengem-wagon</artifactId>
-				<version>1.0.3</version>
-			</extension>
-		</extensions>
-	</build>
-	<profiles>
-		<profile>
-			<id>integration-tests</id>
-			<activation>
-				<property>
-					<name>!skip_integration</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-invoker-plugin</artifactId>
-						<version>3.6.0</version>
-						<configuration>
-							<debug>true</debug>
-							<scriptVariables>
-								<pluginVersion>${project.version}</pluginVersion>
-							</scriptVariables>
-							<projectsDirectory>src/it</projectsDirectory>
-							<pomIncludes>
-								<pomInclude>**/pom.xml</pomInclude>
-							</pomIncludes>
-							<!-- Without this configuration, projects are run directly from src, which means no interpolation is done -->
-							<cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
-							<!-- Local repository used for tests -->
-							<localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
-							<!-- The settings file will fasten build download according to https://maven.apache.org/plugins/maven-invoker-plugin/examples/fast-use.html -->
-							<settingsFile>src/it/settings.xml</settingsFile>
-							<postBuildHookScript>verify.groovy</postBuildHookScript>
-						</configuration>
-						<executions>
-							<execution>
-								<goals>
-									<!-- Invoking install prior to running tests will make sure this artifact is correctly copied
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-plugin-plugin</artifactId>
+                    <version>3.9.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <extensions>
+            <extension>
+                <!-- this allows us to download gems -->
+                <groupId>org.torquebox.mojo</groupId>
+                <artifactId>mavengem-wagon</artifactId>
+                <version>1.0.3</version>
+            </extension>
+        </extensions>
+    </build>
+
+    <!-- We need the rubygems releases to use Kroki and asciidoc-revealjs
+	See https://github.com/Riduidel/aadarchi/issues/159 for the weird protocol -->
+    <repositories>
+        <repository>
+            <id>mavengems</id>
+            <url>mavengem:https://rubygems.org</url>
+        </repository>
+    </repositories>
+    <profiles>
+        <profile>
+            <id>integration-tests</id>
+            <activation>
+                <property>
+                    <name>!skip_integration</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-invoker-plugin</artifactId>
+                        <version>3.6.0</version>
+                        <configuration>
+                            <debug>true</debug>
+                            <scriptVariables>
+                                <pluginVersion>${project.version}</pluginVersion>
+                            </scriptVariables>
+                            <projectsDirectory>src/it</projectsDirectory>
+                            <pomIncludes>
+                                <pomInclude>**/pom.xml</pomInclude>
+                            </pomIncludes>
+                            <!-- Without this configuration, projects are run directly from src, which means no interpolation is done -->
+                            <cloneProjectsTo>${project.build.directory}/it</cloneProjectsTo>
+                            <!-- Local repository used for tests -->
+                            <localRepositoryPath>${project.build.directory}/local-repo</localRepositoryPath>
+                            <!-- The settings file will fasten build download according to https://maven.apache.org/plugins/maven-invoker-plugin/examples/fast-use.html -->
+                            <settingsFile>src/it/settings.xml</settingsFile>
+                            <postBuildHookScript>verify.groovy</postBuildHookScript>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <!-- Invoking install prior to running tests will make sure this artifact is correctly copied
                             (see https://maven.apache.org/plugins/maven-invoker-plugin/examples/install-artifacts.html) -->
-									<goal>install</goal>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>Download rubgems in a scope where I can access that damned repository</id>
-			<activation>
-				<file>
-					<missing>${basedir}/src/main/resources/META-INF/gems</missing>
-				</file>
-			</activation>
-			<properties>
-				<version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
-				<version.asciidoctor.revealjs>4.1.0</version.asciidoctor.revealjs>
-				<gems.destination>${project.basedir}/src/main/resources/META-INF/gems</gems.destination>
-			</properties>
-			<dependencies>
-				<!-- asciidoctor-kroki is added as dependency, but will receive a VERY special treatment -->
-				<dependency>
-					<groupId>rubygems</groupId>
-					<artifactId>asciidoctor-kroki</artifactId>
-					<version>${version.asciidoctor.kroki}</version>
-					<type>gem</type>
-					<!-- Avoid downloading gems included in AsciidoctorJ -->
-					<exclusions>
-						<exclusion>
-							<groupId>rubygems</groupId>
-							<artifactId>asciidoctor</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>rubygems</groupId>
-							<artifactId>thread_safe</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>rubygems</groupId>
-							<artifactId>concurrent-ruby</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-				<dependency>
-					<groupId>rubygems</groupId>
-					<artifactId>asciidoctor-revealjs</artifactId>
-					<version>${version.asciidoctor.revealjs}</version>
-					<type>gem</type>
-					<!-- Avoid downloading gems included in AsciidoctorJ -->
-					<exclusions>
-						<exclusion>
-							<groupId>rubygems</groupId>
-							<artifactId>asciidoctor</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>rubygems</groupId>
-							<artifactId>thread_safe</artifactId>
-						</exclusion>
-						<exclusion>
-							<groupId>rubygems</groupId>
-							<artifactId>concurrent-ruby</artifactId>
-						</exclusion>
-					</exclusions>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>de.saumya.mojo</groupId>
-						<artifactId>gem-maven-plugin</artifactId>
-						<version>2.0.1</version>
-						<configuration>
-							<jrubyVersion>${version.jruby}</jrubyVersion>
-							<gemHome>${gems.destination}</gemHome>
-							<gemPath>${gems.destination}</gemPath>
-						</configuration>
-						<executions>
-							<!-- Install required gems in target directory -->
-							<execution>
-								<id>install-gems</id>
-								<goals>
-									<goal>initialize</goal>
-								</goals>
-								<phase>initialize</phase>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+                                    <goal>install</goal>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>Download rubgems in a scope where I can access that damned repository</id>
+            <activation>
+                <file>
+                    <missing>${basedir}/src/main/resources/META-INF/gems</missing>
+                </file>
+            </activation>
+            <properties>
+                <version.asciidoctor.kroki>0.5.0</version.asciidoctor.kroki>
+                <version.asciidoctor.revealjs>4.1.0</version.asciidoctor.revealjs>
+                <gems.destination>${project.basedir}/src/main/resources/META-INF/gems</gems.destination>
+            </properties>
+            <dependencies>
+                <!-- asciidoctor-kroki is added as dependency, but will receive a VERY special treatment -->
+                <dependency>
+                    <groupId>rubygems</groupId>
+                    <artifactId>asciidoctor-kroki</artifactId>
+                    <version>${version.asciidoctor.kroki}</version>
+                    <type>gem</type>
+                    <!-- Avoid downloading gems included in AsciidoctorJ -->
+                    <exclusions>
+                        <exclusion>
+                            <groupId>rubygems</groupId>
+                            <artifactId>asciidoctor</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>rubygems</groupId>
+                            <artifactId>thread_safe</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>rubygems</groupId>
+                            <artifactId>concurrent-ruby</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>rubygems</groupId>
+                    <artifactId>asciidoctor-revealjs</artifactId>
+                    <version>${version.asciidoctor.revealjs}</version>
+                    <type>gem</type>
+                    <!-- Avoid downloading gems included in AsciidoctorJ -->
+                    <exclusions>
+                        <exclusion>
+                            <groupId>rubygems</groupId>
+                            <artifactId>asciidoctor</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>rubygems</groupId>
+                            <artifactId>thread_safe</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>rubygems</groupId>
+                            <artifactId>concurrent-ruby</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>de.saumya.mojo</groupId>
+                        <artifactId>gem-maven-plugin</artifactId>
+                        <version>2.0.1</version>
+                        <configuration>
+                            <jrubyVersion>${version.jruby}</jrubyVersion>
+                            <gemHome>${gems.destination}</gemHome>
+                            <gemPath>${gems.destination}</gemPath>
+                        </configuration>
+                        <executions>
+                            <!-- Install required gems in target directory -->
+                            <execution>
+                                <id>install-gems</id>
+                                <goals>
+                                    <goal>initialize</goal>
+                                </goals>
+                                <phase>initialize</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
