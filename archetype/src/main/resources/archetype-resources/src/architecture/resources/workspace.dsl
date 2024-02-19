@@ -19,5 +19,17 @@ workspace "aadarchi-documentation-system" {
 		component "myContainer" "ContainerComponents" "myContainer components" {
 			include *
 		}
+		styles {
+			element queue {
+				shape Pipe
+			}
+			element topic {
+				shape Pipe
+			}
+			element table {
+				shape Box
+			}
+		}
+		theme default
 	}
 }

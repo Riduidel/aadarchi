@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+
 import com.structurizr.PropertyHolder;
 import com.structurizr.Workspace;
 import com.structurizr.model.Component;
@@ -22,8 +24,13 @@ public class StructurizrUtils {
 		if(element.getParent()!=null) {
 			returned = getCanonicalPath(element.getParent());
 		}
-		returned += "/" + element.getName();
-		return returned;
+		returned += "/";
+		if(element.getProperties().containsKey(ModelElementKeys.ORDERING)) {
+			long ordering = Long.parseLong(element.getProperties().get(ModelElementKeys.ORDERING));
+			returned+= String.format("%02d-", ordering);
+		}
+		returned += element.getName();
+		return returned.trim();
 	}
 	
 	public static List<PropertyHolder> getHierarchy(List<? extends PropertyHolder> elements) {

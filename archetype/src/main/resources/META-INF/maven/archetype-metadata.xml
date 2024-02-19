@@ -21,6 +21,12 @@
 				<include>.github/**/*</include>
 			</includes>
 		</fileSet>
+		<fileSet filtered="false">
+			<directory>.mvn</directory>
+			<includes>
+				<include>**/*</include>
+			</includes>
+		</fileSet>
 <!-- 
 		<fileSet filtered="true" packaged="true">
 			<directory>src/main/java</directory>

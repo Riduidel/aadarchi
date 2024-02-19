@@ -1,48 +1,50 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.github.Riduidel.aadarchi</groupId>
-		<artifactId>system</artifactId>
-		<version>0.1.12-SNAPSHOT</version>
-	</parent>
-	<artifactId>sequence-diagram-generator</artifactId>
-	<name>Aadarchi : Sequence diagram generator</name>
-	<description>Generates sequence diagrams for components in the containers opting in for it. Model elements in those sequence diagrams should also be indicated by containers.</description>
-	<dependencies>
-		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
-			<artifactId>base</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.github.javaparser/javaparser-core -->
-		<dependency>
-			<groupId>com.github.javaparser</groupId>
-			<artifactId>javaparser-symbol-solver-core</artifactId>
-			<version>3.16.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.weld</groupId>
-			<artifactId>weld-junit5</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>aadarchi-test-utils</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.Riduidel.aadarchi</groupId>
+        <artifactId>system</artifactId>
+        <version>0.1.15-SNAPSHOT</version>
+    </parent>
+    <artifactId>sequence-diagram-generator</artifactId>
+    <name>Aadarchi : Sequence diagram generator</name>
+    <description>Generates sequence diagrams for components in the containers opting in for it. Model elements in those sequence diagrams should also be indicated by containers.</description>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.github.javaparser/javaparser-core -->
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-symbol-solver-core</artifactId>
+            <version>3.16.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.Riduidel.aadarchi</groupId>
+            <artifactId>base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-junit5</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>aadarchi-test-utils</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

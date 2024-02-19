@@ -2,6 +2,10 @@ package org.ndx.aadarchi.base.enhancers.graph;
 
 import com.structurizr.view.ComponentView;
 import com.structurizr.view.ContainerView;
+import com.structurizr.view.DeploymentView;
+import com.structurizr.view.SystemContextView;
+import com.structurizr.view.SystemLandscapeView;
+
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ViewEnhancerAdapter;
@@ -32,6 +36,42 @@ public class ViewUpdater extends ViewEnhancerAdapter {
 	@Override
 	protected boolean startVisit(ComponentView c) {
 		return true;
+	}
+	
+	@Override
+	protected boolean startVisit(DeploymentView c) {
+		return true;
+	}
+	
+	@Override
+	protected boolean startVisit(SystemContextView c) {
+		return true;
+	}
+	@Override
+	protected boolean startVisit(SystemLandscapeView c) {
+		return true;
+	}
+	@Override
+	protected void endVisit(DeploymentView c, OutputBuilder builder) {
+		if(c.getProperties().containsKey(NAME)) {
+			c.addAllDeploymentNodes();
+		}
+		super.endVisit(c, builder);
+	}
+	@Override
+	protected void endVisit(SystemContextView c, OutputBuilder builder) {
+		if(c.getProperties().containsKey(NAME)) {
+			c.addAllSoftwareSystems();
+			c.addAllPeople();
+		}
+		super.endVisit(c, builder);
+	}
+	@Override
+	protected void endVisit(SystemLandscapeView c, OutputBuilder builder) {
+		if(c.getProperties().containsKey(NAME)) {
+			c.addAllSoftwareSystems();
+			c.addAllPeople();
+		}
 	}
 	
 	@Override

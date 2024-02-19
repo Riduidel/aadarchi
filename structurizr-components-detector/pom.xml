@@ -1,40 +1,42 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>io.github.Riduidel.aadarchi</groupId>
-    <artifactId>system</artifactId>
-    <version>0.1.12-SNAPSHOT</version>
-  </parent>
-  <artifactId>structurizr-components-detector</artifactId>
-  <name>Aadarchi : Structurizr components detector</name>
-  <description>A component detector that uses Structurizr annotations to find existing components and their relationship.</description>
-  <dependencies>
-		<dependency>
-			<groupId>com.structurizr</groupId>
-			<artifactId>structurizr-analysis</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
-			<artifactId>base</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-      <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-api</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.assertj</groupId>
-          <artifactId>assertj-core</artifactId>
-          <scope>test</scope>
-      </dependency>
-      <dependency>
-          <groupId>org.mockito</groupId>
-          <artifactId>mockito-junit-jupiter</artifactId>
-          <scope>test</scope>
-      </dependency>
-      <dependency>
-          <groupId>org.jboss.weld</groupId>
-          <artifactId>weld-junit5</artifactId>
-      </dependency>
-  </dependencies>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.Riduidel.aadarchi</groupId>
+        <artifactId>system</artifactId>
+        <version>0.1.15-SNAPSHOT</version>
+    </parent>
+    <artifactId>structurizr-components-detector</artifactId>
+    <name>Aadarchi : Structurizr components detector</name>
+    <description>A component detector that uses Structurizr annotations to find existing components and their relationship.</description>
+    <dependencies>
+        <dependency>
+            <groupId>com.structurizr</groupId>
+            <artifactId>structurizr-analysis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.Riduidel.aadarchi</groupId>
+            <artifactId>base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-junit5</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

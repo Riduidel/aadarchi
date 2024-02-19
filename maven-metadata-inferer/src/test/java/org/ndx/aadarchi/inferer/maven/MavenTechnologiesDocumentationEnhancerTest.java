@@ -45,7 +45,7 @@ public class MavenTechnologiesDocumentationEnhancerTest {
     	system.addProperty(ModelElementKeys.ConfigProperties.BasePath.NAME, basePath.getName().getPath());
 		// When
     	// We emulate in-depth visit (but do not really perform it)
-    	enhancer.enhance(w, Arrays.asList(mavenReader, tested));
+    	enhancer.enhance(w, mavenReader, tested);
 		// Then
 		// There are containers in system
 		Assertions.assertThat(system.getContainers()).isNotEmpty();

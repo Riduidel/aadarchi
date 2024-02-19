@@ -51,24 +51,25 @@ public class RelationshipDescriptionProvider {
 				ModelElementKeys.ConfigProperties.RelationshipNames.NAME,
 				ModelElementKeys.ConfigProperties.RelationshipNames.VALUE));
 		Properties returned = new Properties();
-		if(!propertiesFile.exists()) {
+		if(propertiesFile.exists()) {
+			try {
+				try(InputStream input = new FileInputStream(propertiesFile)) {
+					returned.load(input);
+				}
+			} catch(IOException e) {
+				logger.log(Level.WARNING,
+						String.format("Unable to read descriptions.\nworkspace is %s.\nAssociated file is %s" , 
+								workspace.getName(),
+								propertiesFile.getAbsolutePath()),
+						e);
+			}
+		} else {
 			logger.log(Level.FINE,
 					String.format("If you want to customize descriptions in %s,"
 							+ " create file %s"
 							+ "(keys are relationships - INPUT->OUTPUT - values are descriptions", 
 							workspace.getName(),
 							propertiesFile.getAbsolutePath()));
-		}
-		try {
-			try(InputStream input = new FileInputStream(propertiesFile)) {
-				returned.load(input);
-			}
-		} catch(IOException e) {
-			logger.log(Level.WARNING,
-					String.format("Unable to read descriptions.\nworkspace is %s.\nAssociated file is %s" , 
-							workspace.getName(),
-							propertiesFile.getAbsolutePath()),
-					e);
 		}
 		return new RelationshipFinder(returned);
 	}

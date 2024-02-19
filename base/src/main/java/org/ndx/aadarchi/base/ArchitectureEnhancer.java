@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.base;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
@@ -99,6 +100,9 @@ public class ArchitectureEnhancer {
 		}
 	}
 
+	public void enhance(Workspace workspace, Enhancer...enhancers) {
+		enhance(workspace, Arrays.asList(enhancers));
+	}
 	public void enhance(Workspace workspace, Iterable<Enhancer> enhancers) {
 		classloader = Thread.currentThread().getContextClassLoader();
 		logger.info(() -> String.format("Enhancers applied to this architecture are:\n%s", 
@@ -163,7 +167,9 @@ public class ArchitectureEnhancer {
 			Stream<SoftwareSystem> systems = model.getSoftwareSystems().stream();
 			if(enhancer.isParallel())
 				systems = systems.parallel();
-			systems.filter(s -> withClassLoader(() -> enhancer.startVisit(s)))
+			systems
+				.sorted(new OrderedModelElement())
+				.filter(s -> withClassLoader(() -> enhancer.startVisit(s)))
 				.peek(s -> withClassLoader(() -> enhancerVisitSystem(enhancer, s)))
 				.forEach(s -> withClassLoader(() -> enhancer.endVisit(s, outputBuilder)));
 			enhancer.endVisit(model, outputBuilder);
@@ -175,7 +181,9 @@ public class ArchitectureEnhancer {
 		Stream<Container> containers = system.getContainers().stream();
 		if(enhancer.isParallel())
 			containers = containers.parallel();
-		containers.filter(c -> withClassLoader(() -> enhancer.startVisit(c)))
+		containers
+			.sorted(new OrderedModelElement())
+			.filter(c -> withClassLoader(() -> enhancer.startVisit(c)))
 			.peek(c -> withClassLoader(() -> enhancerVisitContainer(enhancer, c)))
 			.forEach(c -> withClassLoader(() -> enhancer.endVisit(c, outputBuilder)));
 	}
@@ -185,7 +193,9 @@ public class ArchitectureEnhancer {
 		Stream<Component> systems = container.getComponents().stream();
 		if(enhancer.isParallel())
 			systems = systems.parallel();
-		systems.filter(c -> withClassLoader(() -> enhancer.startVisit(c)))
+		systems
+			.sorted(new OrderedModelElement())
+			.filter(c -> withClassLoader(() -> enhancer.startVisit(c)))
 			.forEach(c -> withClassLoader(() -> enhancer.endVisit(c, outputBuilder)));
 	}
 

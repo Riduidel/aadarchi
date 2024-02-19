@@ -1,0 +1,6 @@
+= Markdown to AsciiDoc converter
+
+A markdown to asciidoc based upon the https://github.com/asciidocfx/MarkdownToAsciidoc[Markdown-to-asciidoc] github project.
+
+This code loads the https://github.com/markedjs/marked[marked] Markdown Javascript parser/compiler and an extension allowing rendering as Asciidoc in https://github.com/oracle/graaljs[graal.js].
+This way, we can have it run directly in the JVM while being executed as pure Javascript.

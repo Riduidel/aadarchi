@@ -36,7 +36,7 @@ jobs:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
           TOKEN_FOR_GITLAB: ${{ secrets.TOKEN_FOR_GITLAB }}
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@main
+        uses: actions/upload-pages-artifact@v3.0.1
         with:
           path: ./architecture-documentation/target/asciidoc/docs/html
           retention-days: ${{ inputs.retention-days }}
@@ -51,4 +51,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4

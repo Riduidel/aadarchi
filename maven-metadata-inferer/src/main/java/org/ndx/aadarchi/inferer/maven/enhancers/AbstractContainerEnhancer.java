@@ -1,6 +1,7 @@
 package org.ndx.aadarchi.inferer.maven.enhancers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -182,6 +183,11 @@ abstract class AbstractContainerEnhancer<Enhanced extends StaticStructureElement
 						"Maven module %s profile %s declares the modules %s, which will not be handled here. Is it normal?\n"
 								+ "If it is not normal, add the profile in the maven property \"AGILE_ARCHITECTURE_MAVEN_ADDITIONAL_PROFILES\"",
 						mavenProject, profile.getId(), profile.getModules())));
+		// Now remove ignored modules
+		if(enhanced.getProperties().containsKey(MavenEnhancer.IGNORED_SUBMODULES)) {
+			String[] ignored = enhanced.getProperties().get(MavenEnhancer.IGNORED_SUBMODULES).split(",");
+			modules.removeAll(Arrays.asList(ignored));
+		}
 		return modules.stream().map(module -> readSubModulePom(mavenPomReader, parentScmDir, pomDir, module))
 			.flatMap(module -> module.getPackaging().equals("pom") ? loadAllSubElements(module, mavenPomReader)
 					: Optional.of(module).stream());

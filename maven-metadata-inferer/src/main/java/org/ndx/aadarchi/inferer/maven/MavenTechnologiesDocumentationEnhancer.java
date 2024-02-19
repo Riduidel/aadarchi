@@ -1,6 +1,8 @@
 package org.ndx.aadarchi.inferer.maven;
 
+import java.util.Comparator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -10,7 +12,6 @@ import javax.inject.Named;
 
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.OutputBuilder;
-import org.ndx.aadarchi.base.OutputBuilder.HandledFormat;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.inferer.maven.technologies.MvnRepositoryArtifact;
 import org.ndx.aadarchi.inferer.maven.technologies.MvnRepositoryArtifactsProducer;
@@ -49,11 +50,23 @@ public class MavenTechnologiesDocumentationEnhancer extends ModelElementAdapter 
 			}
 		}
 	}
+	
+	private Comparator<Map.Entry<MvnRepositoryArtifact, String>> comparator() {
+		return new Comparator<Map.Entry<MvnRepositoryArtifact, String>>() {
+
+			@Override
+			public int compare(Entry<MvnRepositoryArtifact, String> o1, Entry<MvnRepositoryArtifact, String> o2) {
+				return o1.getKey().compareTo(o2.getKey());
+			}
+			
+		};
+	}
 
 	private void writeDependenciesArtifacts(StaticStructureElement element, Map<String, String> dependenciesVersions,
 			OutputBuilder builder) {
 		String text = dependenciesVersions.entrySet().stream()
 			.map(entry -> Map.entry(mvnRepositoryArtifacts.get(entry.getKey()), entry.getValue()))
+			.sorted(this.comparator())
 			.map(entry -> this.toTableRow(entry.getKey(), entry.getValue()))
 			.collect(Collectors.joining("\n", 
 					"[%autowidth.stretch, cols=\"1a,1a,1a,1a\"]\n|==="
@@ -71,8 +84,13 @@ public class MavenTechnologiesDocumentationEnhancer extends ModelElementAdapter 
 			.append("|").append(version==null || version.isBlank() ? "{nbsp}" : version);
 		if(key.versions.containsKey(version))
 			returned.append(" (released ").append(key.versions.get(version)).append(")");
+		returned.append("|");
+		if(key.categories==null || key.categories.isEmpty()) {
+			returned.append("{nbsp}");
+		} else {
+			returned.append(key.categoriesText);
+		}
 		returned
-			.append("|").append(key.categories.isEmpty() ? "{nbsp}" : key.categories.stream().collect(Collectors.joining()))
 			.append("|").append(key.description)
 			;
 		return returned.toString();
