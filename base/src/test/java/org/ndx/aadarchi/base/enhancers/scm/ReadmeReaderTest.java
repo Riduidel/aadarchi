@@ -1,6 +1,6 @@
 package org.ndx.aadarchi.base.enhancers.scm;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.util.Arrays;
 import org.jboss.weld.junit5.EnableWeld;

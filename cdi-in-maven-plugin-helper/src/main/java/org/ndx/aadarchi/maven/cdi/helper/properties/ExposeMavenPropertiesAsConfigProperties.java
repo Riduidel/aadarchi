@@ -4,16 +4,15 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-
-import org.apache.deltaspike.core.api.config.Source;
-import org.apache.deltaspike.core.api.projectstage.ProjectStage;
-import org.apache.deltaspike.core.spi.config.ConfigSource;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigSource;
 
-@Source
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+@ApplicationScoped
 public class ExposeMavenPropertiesAsConfigProperties implements ConfigSource {
 	private static final Logger logger = Logger.getLogger(ExposeMavenPropertiesAsConfigProperties.class.getName());
 
@@ -24,8 +23,6 @@ public class ExposeMavenPropertiesAsConfigProperties implements ConfigSource {
 	public ExposeMavenPropertiesAsConfigProperties() {
 		super();
 	}
-	
-	@Inject ProjectStage projectStage;
 	
 	@Inject
 	public void createMavenExpressionEvaluator(MavenSession mavenSession, MojoExecution execution) {

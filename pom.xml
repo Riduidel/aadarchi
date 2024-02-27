@@ -125,11 +125,6 @@
                 <version>2.9.0</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.deltaspike.core</groupId>
-                <artifactId>deltaspike-core-impl</artifactId>
-                <version>1.9.6</version>
-            </dependency>
-            <dependency>
                 <groupId>org.eclipse.jgit</groupId>
                 <artifactId>org.eclipse.jgit</artifactId>
                 <version>6.6.1.202309021850-r</version>
@@ -147,7 +142,7 @@
             <dependency>
                 <groupId>org.jboss.weld.se</groupId>
                 <artifactId>weld-se-core</artifactId>
-                <version>3.1.4.Final</version>
+                <version>5.1.2.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.kohsuke</groupId>
@@ -166,7 +161,7 @@
             <dependency>
                 <groupId>org.jboss.weld</groupId>
                 <artifactId>weld-junit5</artifactId>
-                <version>2.0.2.Final</version>
+                <version>4.0.2.Final</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -590,6 +585,7 @@
                 </property>
             </activation>
             <modules>
+                <module>git-scm-handler-helper</module>
                 <module>github-scm-handler</module>
                 <module>github-vfs</module>
                 <!-- This module is the typical usage of this project, as it
@@ -640,6 +636,7 @@ See https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token]]
                 </property>
             </activation>
             <modules>
+                <module>git-scm-handler-helper</module>
                 <module>gitlab-scm-handler</module>
                 <module>gitlab-vfs</module>
             </modules>

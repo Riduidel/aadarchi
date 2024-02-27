@@ -10,7 +10,7 @@ import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ViewEnhancerAdapter;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.logging.Logger;
 
 public class ViewUpdater extends ViewEnhancerAdapter {

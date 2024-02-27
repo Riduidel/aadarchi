@@ -3,8 +3,8 @@ package org.ndx.aadarchi.maven.plugin;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.ndx.aadarchi.base.ArchitectureDocumentationBuilder;
 

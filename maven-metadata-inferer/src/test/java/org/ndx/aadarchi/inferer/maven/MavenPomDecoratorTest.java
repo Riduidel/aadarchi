@@ -3,7 +3,7 @@ package org.ndx.aadarchi.inferer.maven;
 import java.io.File;
 import java.util.Arrays;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.maven.project.MavenProject;
 import org.assertj.core.api.Assertions;

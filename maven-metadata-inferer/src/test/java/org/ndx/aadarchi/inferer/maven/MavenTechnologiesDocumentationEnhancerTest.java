@@ -3,11 +3,10 @@ package org.ndx.aadarchi.inferer.maven;
 import java.util.Arrays;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.jboss.weld.junit5.EnableWeld;
@@ -18,6 +17,7 @@ import org.ndx.aadarchi.base.ArchitectureEnhancer;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
 import org.ndx.aadarchi.base.utils.commonsvfs.FileObjectDetector;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 import org.ndx.aadarchi.inferer.maven.technologies.MvnRepositoryArtifactsProducer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

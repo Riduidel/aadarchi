@@ -1,6 +1,6 @@
 package org.ndx.aadarchi.gitlab.vfs;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -8,7 +8,7 @@ import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.auth.StaticUserAuthenticator;
 import org.apache.commons.vfs2.impl.DefaultFileSystemConfigBuilder;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 import org.ndx.aadarchi.gitlab.Constants;
 import org.ndx.aadarchi.vfs.gitlab.GitLabFileProvider;
 

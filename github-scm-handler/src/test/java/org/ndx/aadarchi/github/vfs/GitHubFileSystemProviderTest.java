@@ -1,6 +1,6 @@
 package org.ndx.aadarchi.github.vfs;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;

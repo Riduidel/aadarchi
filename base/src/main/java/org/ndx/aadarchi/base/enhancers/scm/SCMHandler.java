@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.function.Predicate;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import org.apache.commons.vfs2.FileObject;
 

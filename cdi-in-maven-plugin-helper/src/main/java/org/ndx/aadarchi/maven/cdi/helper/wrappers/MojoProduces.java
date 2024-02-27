@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * A special CDI producer annotation that must be used if you want to declare fields or methods of the Mojo as
  * producers.<br>
- * <b>Note</b> that it is not possible to use {@code @javax.enterprise.inject.Produces} as the producer annotation in
+ * <b>Note</b> that it is not possible to use {@code @jakarta.enterprise.inject.Produces} as the producer annotation in
  * your Mojo since this would activate Maven's own pseudo CDI implementation. All other beans that are created by CDI
  * are then able to use {@code @Produces} as usual.
  *

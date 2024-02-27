@@ -1,17 +1,19 @@
 package org.ndx.aadarchi.maven.cdi.helper.properties;
 
-import javax.inject.Inject;
+import java.util.logging.Logger;
 
-import org.apache.deltaspike.core.api.config.Filter;
-import org.apache.deltaspike.core.api.projectstage.ProjectStage;
-import org.apache.deltaspike.core.spi.config.ConfigFilter;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.PluginParameterExpressionEvaluator;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigFilter;
 
-@Filter
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+@ApplicationScoped
 public class FilterMavenPropertiesInValues implements ConfigFilter {
+	private static final Logger logger = Logger.getLogger(FilterMavenPropertiesInValues.class.getName());
 	
 	private PluginParameterExpressionEvaluator evaluator;
 
@@ -26,8 +28,9 @@ public class FilterMavenPropertiesInValues implements ConfigFilter {
 
 	@Override
 	public String filterValue(String key, String value) {
+		logger.info("Filtering value "+key);
 		try {
-			return (String) evaluator.evaluate(value);
+			return evaluator.evaluate(value).toString();
 		} catch (ExpressionEvaluationException e) {
 			return value;
 		}

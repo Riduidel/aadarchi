@@ -2,8 +2,8 @@ package org.ndx.aadarchi.inferer.maven.technologies;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.assertj.core.api.Assertions;
 import org.jboss.weld.junit5.EnableWeld;

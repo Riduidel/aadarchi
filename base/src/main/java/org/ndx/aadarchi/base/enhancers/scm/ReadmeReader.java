@@ -7,7 +7,6 @@ import com.structurizr.model.StaticStructureElement;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.filter.RegexFileFilter;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.OutputBuilder.Format;
@@ -15,8 +14,9 @@ import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
 import org.ndx.aadarchi.base.utils.commonsvfs.FileObjectDetector;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.logging.Logger;
 
 /**

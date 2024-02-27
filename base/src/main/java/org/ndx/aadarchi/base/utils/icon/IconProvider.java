@@ -2,11 +2,11 @@ package org.ndx.aadarchi.base.utils.icon;
 
 import java.util.function.Supplier;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
 /**
  * A specialized component providing icons from font-awesome when needed

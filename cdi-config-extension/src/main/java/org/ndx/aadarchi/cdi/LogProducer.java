@@ -2,12 +2,12 @@ package org.ndx.aadarchi.cdi;
 
 import java.util.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
+import org.ndx.aadarchi.cdi.deltaspike.BaseConfigPropertyProducer;
 
-import org.apache.deltaspike.core.spi.config.BaseConfigPropertyProducer;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.spi.InjectionPoint;
 
 @ApplicationScoped
 public class LogProducer extends BaseConfigPropertyProducer {

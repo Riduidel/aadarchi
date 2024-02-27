@@ -3,8 +3,8 @@ package org.ndx.aadarchi.cdi;
 import java.io.File;
 import java.io.IOException;
 
-import javax.enterprise.inject.Produces;
-import javax.inject.Singleton;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Singleton;
 
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.VFS;

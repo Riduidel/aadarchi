@@ -8,10 +8,10 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Default;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.vfs2.AllFileSelector;
@@ -21,7 +21,6 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.PatternFileSelector;
 import org.apache.commons.vfs2.filter.NameFileFilter;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -30,6 +29,7 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePat
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.commonsvfs.FileObjectDetector;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
 import com.pivovarit.function.ThrowingConsumer;
 import com.structurizr.model.Element;

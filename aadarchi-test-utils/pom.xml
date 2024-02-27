@@ -13,13 +13,13 @@
 	Mainly contains tools allowing easy injection of Maven properties into tests</description>
     <dependencies>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cdi-config-extension</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
-        </dependency>
-        <!-- Directly referenced to make sure we can create the ConfigSource allowing us to provide maven properties as config properties -->
-        <dependency>
-            <groupId>org.apache.deltaspike.core</groupId>
-            <artifactId>deltaspike-core-impl</artifactId>
         </dependency>
     </dependencies>
 </project>

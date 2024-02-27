@@ -11,20 +11,21 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-import org.apache.deltaspike.core.api.config.ConfigResolver.ConfigProvider;
+import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProvider;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.StaticStructureElement;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class RelationshipDescriptionProvider {
 	@Inject Logger logger;
 	
-	@Inject ConfigProvider config;
+	@Inject ConfigProvider configProvider;
 	
 	public class RelationshipFinder {
 
@@ -75,12 +76,7 @@ public class RelationshipDescriptionProvider {
 	}
 
 	private File getDescriptionsPropertiesFile(String relationshipPath) {
-		String propertiesPath = config
-				.getConfig()
-				.resolve(relationshipPath)
-				.evaluateVariables(true)
-				.withCurrentProjectStage(false)
-				.getValue()
+		String propertiesPath = configProvider.resolve(null, relationshipPath);
 				;
 		if(propertiesPath==null) {
 			/*
