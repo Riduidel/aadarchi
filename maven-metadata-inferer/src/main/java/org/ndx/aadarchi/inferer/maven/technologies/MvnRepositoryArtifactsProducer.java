@@ -9,12 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Produces;
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
 import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
@@ -23,6 +19,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 public class MvnRepositoryArtifactsProducer {
 	private static final Logger logger = Logger.getLogger(MvnRepositoryArtifactsProducer.class.getName());
@@ -56,18 +57,22 @@ public class MvnRepositoryArtifactsProducer {
 
 	private List<MvnRepositoryArtifact> readMvnRepositoryArtifacts(ObjectMapper objectMapper)
 			throws IOException, StreamReadException, DatabindException {
-		List<MvnRepositoryArtifact> artifacts = null;
 		// First, ensure the cached file has some content
 		try {
-			try(InputStream input = cache.openStreamFor(upToDateAadarchiTechnologies)) {
-				artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
-			}
+			return readArtifactsFrom(objectMapper, upToDateAadarchiTechnologies);
 		} catch(Exception e) {
 			logger.log(Level.WARNING, "Unable to read remote mvnrepository.json file", e);
-			try(InputStream input = cache.openStreamFor(defaultAadarchiTechnlogies)) {
-				artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
-			}
+			return readArtifactsFrom(objectMapper, defaultAadarchiTechnlogies);
 		}
-		return artifacts;
+	}
+
+	private List<MvnRepositoryArtifact> readArtifactsFrom(ObjectMapper objectMapper, FileObject source)
+			throws IOException, StreamReadException, DatabindException, FileSystemException {
+		List<MvnRepositoryArtifact> artifacts;
+		try(InputStream input = cache.openStreamFor(source)) {
+			return artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
+		} finally {
+			source.close();
+		}
 	}
 }
