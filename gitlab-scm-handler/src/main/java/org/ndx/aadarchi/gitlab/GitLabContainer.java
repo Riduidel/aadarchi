@@ -1,11 +1,10 @@
 package org.ndx.aadarchi.gitlab;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Produces;
-import jakarta.inject.Inject;
-
 import org.gitlab4j.api.GitLabApi;
 import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * Since {@link GitLabApi} contains a public final method (

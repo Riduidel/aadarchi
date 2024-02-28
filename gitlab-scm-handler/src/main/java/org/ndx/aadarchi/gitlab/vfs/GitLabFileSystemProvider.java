@@ -1,7 +1,5 @@
 package org.ndx.aadarchi.gitlab.vfs;
 
-import jakarta.inject.Inject;
-
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
@@ -11,6 +9,8 @@ import org.apache.commons.vfs2.impl.DefaultFileSystemConfigBuilder;
 import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 import org.ndx.aadarchi.gitlab.Constants;
 import org.ndx.aadarchi.vfs.gitlab.GitLabFileProvider;
+
+import jakarta.inject.Inject;
 
 /**
  * Load a pseudo-http file system dedicated to access to GitLab (by using our GitLab API)

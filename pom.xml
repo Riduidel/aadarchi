@@ -24,6 +24,7 @@
         <module>cdi-in-maven-plugin-helper</module>
         <module>structurizr-components-detector</module>
         <module>aadarchi-test-utils</module>
+        <module>freemarker-cdi-producer</module>
     </modules>
     <properties>
         <java.version>17</java.version>
@@ -137,7 +138,7 @@
             <dependency>
                 <groupId>org.gitlab4j</groupId>
                 <artifactId>gitlab4j-api</artifactId>
-                <version>4.16.0</version>
+                <version>5.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.weld.se</groupId>

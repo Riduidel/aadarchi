@@ -5,6 +5,7 @@ import java.nio.file.NoSuchFileException;
 import org.apache.commons.configuration2.EnvironmentConfiguration;
 import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.SystemConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
@@ -35,10 +36,15 @@ public class CommonsConfigurationConfigProducer {
 		return new CommonsConfigurationConfigSource("apache-deltaspike.properties", 10, configuration);
 	}
 	@Produces @Dependent ConfigSource createEnvironmentSource() {
-		EnvironmentConfiguration environment = new EnvironmentConfiguration();
 		return new CommonsConfigurationConfigSource(
 				"environment",
 				0,
-				environment);
+				new EnvironmentConfiguration());
+	}
+	@Produces @Dependent ConfigSource createPropertiesSource() {
+		return new CommonsConfigurationConfigSource(
+				"properties",
+				100,
+				new SystemConfiguration());
 	}
 }
