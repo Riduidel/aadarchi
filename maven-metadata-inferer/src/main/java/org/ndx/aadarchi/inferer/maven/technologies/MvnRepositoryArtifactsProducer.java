@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.vfs2.FileObject;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 
@@ -56,18 +57,22 @@ public class MvnRepositoryArtifactsProducer {
 
 	private List<MvnRepositoryArtifact> readMvnRepositoryArtifacts(ObjectMapper objectMapper)
 			throws IOException, StreamReadException, DatabindException {
-		List<MvnRepositoryArtifact> artifacts = null;
 		// First, ensure the cached file has some content
 		try {
-			try(InputStream input = cache.openStreamFor(upToDateAadarchiTechnologies)) {
-				artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
-			}
+			return readArtifactsFrom(objectMapper, upToDateAadarchiTechnologies);
 		} catch(Exception e) {
 			logger.log(Level.WARNING, "Unable to read remote mvnrepository.json file", e);
-			try(InputStream input = cache.openStreamFor(defaultAadarchiTechnlogies)) {
-				artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
-			}
+			return readArtifactsFrom(objectMapper, defaultAadarchiTechnlogies);
 		}
-		return artifacts;
+	}
+
+	private List<MvnRepositoryArtifact> readArtifactsFrom(ObjectMapper objectMapper, FileObject source)
+			throws IOException, StreamReadException, DatabindException, FileSystemException {
+		List<MvnRepositoryArtifact> artifacts;
+		try(InputStream input = cache.openStreamFor(source)) {
+			return artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
+		} finally {
+			source.close();
+		}
 	}
 }
