@@ -2,11 +2,10 @@ package org.ndx.aadarchi.inferer.maven;
 
 import java.util.Arrays;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.jboss.weld.junit5.EnableWeld;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.ArchitectureEnhancer;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
 import com.structurizr.Workspace;
 import com.structurizr.model.Container;

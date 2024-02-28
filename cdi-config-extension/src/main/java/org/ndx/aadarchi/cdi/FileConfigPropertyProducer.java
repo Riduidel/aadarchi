@@ -1,21 +1,22 @@
 package org.ndx.aadarchi.cdi;
 
-import java.io.File;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.inject.Inject;
+import java.util.logging.Logger;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.apache.deltaspike.core.spi.config.BaseConfigPropertyProducer;
+import org.ndx.aadarchi.cdi.deltaspike.BaseConfigPropertyProducer;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class FileConfigPropertyProducer extends BaseConfigPropertyProducer {
+	private static final Logger logger = Logger.getLogger(FileConfigPropertyProducer.class.getName());
 	@Inject FileSystemManager fsManager;
 
 	/**
@@ -29,6 +30,7 @@ public class FileConfigPropertyProducer extends BaseConfigPropertyProducer {
 	@Dependent
     @ConfigProperty(name = "ignored") // we actually don't need the name
 	public FileObject produceLocationId(InjectionPoint injectionPoint) throws FileSystemException {
+		logger.info("Getting FileObject property value of "+injectionPoint);
 		String configuredValue = getStringPropertyValue(injectionPoint);
 
 		if(configuredValue==null) {

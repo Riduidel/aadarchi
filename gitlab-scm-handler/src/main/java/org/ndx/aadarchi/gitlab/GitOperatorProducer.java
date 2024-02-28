@@ -1,27 +1,9 @@
 package org.ndx.aadarchi.gitlab;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.deltaspike.core.api.config.ConfigProperty;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import org.ndx.aadarchi.gitlab.GitOperator;
-
-import com.structurizr.annotation.Component;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Named;
 
 /**
  * Component dedicated to low-level git operations

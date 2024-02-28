@@ -2,8 +2,8 @@ package org.ndx.aadarchi.freemarker;
 
 import java.io.IOException;
 
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
+import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.spi.InjectionPoint;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;

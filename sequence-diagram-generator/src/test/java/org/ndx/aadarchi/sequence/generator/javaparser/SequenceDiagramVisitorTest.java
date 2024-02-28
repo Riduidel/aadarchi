@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.jboss.weld.junit5.EnableWeld;

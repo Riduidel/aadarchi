@@ -2,8 +2,6 @@ package org.ndx.aadarchi.base.enhancers.scm;
 
 import java.io.File;
 
-import javax.inject.Inject;
-
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.provider.local.LocalFileSystem;
 import org.assertj.core.api.Assertions;
@@ -13,11 +11,12 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.ArchitectureEnhancer;
-import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.OutputBuilder.Format;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
 import com.structurizr.Workspace;
+
+import jakarta.inject.Inject;
 
 @EnableWeld
 class ReadmeReaderTest {

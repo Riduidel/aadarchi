@@ -2,16 +2,16 @@ package org.ndx.aadarchi.base.providers;
 
 import java.io.File;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.ArchitectureModelProvider;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.WorkspaceDsl;
 import org.ndx.aadarchi.base.utils.CantAccessPath;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
 import com.structurizr.Workspace;
 import com.structurizr.dsl.StructurizrDslParser;

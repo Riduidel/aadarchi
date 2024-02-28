@@ -5,14 +5,14 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.Scm.CheckoutEnabled;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
 import com.structurizr.annotation.UsesComponent;
 import com.structurizr.model.StaticStructureElement;

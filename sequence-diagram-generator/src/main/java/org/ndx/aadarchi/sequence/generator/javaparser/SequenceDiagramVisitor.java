@@ -19,16 +19,16 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.DiagramsDir;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 import org.ndx.aadarchi.sequence.generator.SequenceGenerator;
 import org.ndx.aadarchi.sequence.generator.javaparser.adapter.CallGraphModel;
 

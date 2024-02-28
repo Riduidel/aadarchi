@@ -13,12 +13,11 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.Enhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
@@ -28,6 +27,7 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Force;
 import org.ndx.aadarchi.base.enhancers.tickets.Ticket;
 import org.ndx.aadarchi.base.enhancers.tickets.TicketStatus;
 import org.ndx.aadarchi.base.enhancers.tickets.TicketsHandler;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
 import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;

@@ -4,11 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
@@ -16,6 +15,7 @@ import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Asciido
 import org.ndx.aadarchi.base.utils.CantAccessPath;
 import org.ndx.aadarchi.base.utils.SimpleOutputBuilder;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
 import com.structurizr.annotation.Component;
 import com.structurizr.model.Element;

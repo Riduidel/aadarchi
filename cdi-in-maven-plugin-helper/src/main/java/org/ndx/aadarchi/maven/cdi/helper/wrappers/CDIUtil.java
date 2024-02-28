@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -14,11 +13,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
-import javax.inject.Qualifier;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.deltaspike.core.api.literal.DefaultLiteral;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.jboss.weld.environment.se.Weld;
@@ -40,15 +35,7 @@ public class CDIUtil {
 	 */
 	public static Set<Annotation> getCdiQualifiers(AccessibleObject x) {
 		Set<Annotation> qualifiers = new HashSet<Annotation>();
-		for (Annotation annotation : x.getAnnotations()) {
-			if (annotation.annotationType().isAnnotationPresent(Qualifier.class)) {
-				qualifiers.add(annotation);
-			}
-		}
-		if (qualifiers.isEmpty()) {
-			qualifiers.add(new DefaultLiteral());
-		}
-		return qualifiers;
+		return CdiProducerBean.getCdiQualifiers(x.getAnnotations());
 	}
 
 	/**

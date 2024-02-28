@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up JDK 11
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: adopt
-          java-version: 11
+          java-version: 17
           cache: 'maven'
       - name: Build with Maven
         run: mvn -B test --file pom.xml -Pcoverage -Daadarchi.github.token="$TOKEN_FOR_GITHUB" -Daadarchi.gitlab.token="$TOKEN_FOR_GITLAB"

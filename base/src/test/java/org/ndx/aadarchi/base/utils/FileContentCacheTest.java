@@ -2,32 +2,25 @@ package org.ndx.aadarchi.base.utils;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.AllFileSelector;
-import org.apache.commons.vfs2.FileFilter;
-import org.apache.commons.vfs2.FileFilterSelector;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelectInfo;
-import org.apache.commons.vfs2.FileSelector;
-import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.commons.vfs2.PatternFileSelector;
 import org.apache.commons.vfs2.provider.local.LocalFile;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.assertj.core.api.Assertions;
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.Preconditions;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
-import com.pivovarit.function.ThrowingConsumer;
 import com.pivovarit.function.ThrowingPredicate;
+
+import jakarta.inject.Inject;
 
 @EnableWeld
 class FileContentCacheTest {

@@ -3,16 +3,16 @@ package org.ndx.aadarchi.sipoc.diagram.generator;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.vfs2.FileObject;
-import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.ArchitectureEnhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.BasePath;
+import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 
 import static org.ndx.aadarchi.sipoc.diagram.generator.SipocTestUtils.*;
 

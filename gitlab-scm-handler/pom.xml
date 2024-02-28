@@ -34,10 +34,17 @@
             <artifactId>gitlab-vfs</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Strangely enough, some part of the gitlab api code requires the old javax.annotation.Priority -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+        </dependency>
         <dependency>
             <groupId>org.gitlab4j</groupId>
             <artifactId>gitlab4j-api</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.jboss.weld</groupId>
             <artifactId>weld-junit5</artifactId>

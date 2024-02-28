@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.assertj.core.api.Assertions;
 import org.jboss.weld.junit5.EnableWeld;

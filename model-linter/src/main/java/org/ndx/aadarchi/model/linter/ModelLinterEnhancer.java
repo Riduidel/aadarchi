@@ -7,7 +7,7 @@ import com.structurizr.model.SoftwareSystem;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class ModelLinterEnhancer extends ModelElementAdapter {
     @Inject

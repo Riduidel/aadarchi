@@ -13,6 +13,11 @@
 		CDI-compatible application.</description>
     <dependencies>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cdi-config-extension</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
         </dependency>
@@ -25,7 +30,7 @@
             <artifactId>freemarker</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.github.Riduidel.aadarchi</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>aadarchi-test-utils</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>

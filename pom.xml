@@ -6,6 +6,7 @@
     <artifactId>system</artifactId>
     <version>0.1.15-SNAPSHOT</version>
     <packaging>pom</packaging>
+    <name>Aadarchi : root POM</name>
     <description>Base module of a set of tools created to allow easy
 		architecture documentation based upon Simon Brown work.</description>
     <modules>
@@ -24,10 +25,10 @@
         <module>structurizr-components-detector</module>
         <module>aadarchi-test-utils</module>
         <module>freemarker-cdi-producer</module>
-        <module>git-scm-handler-helper</module>
     </modules>
     <properties>
-        <maven.compiler.release>11</maven.compiler.release>
+        <java.version>17</java.version>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <!-- See latest version here:
@@ -41,7 +42,7 @@
         <version.structurizr.annotations>1.3.5</version.structurizr.annotations>
         <version.jsoup>1.15.3</version.jsoup>
         <version.junit>5.9.1</version.junit>
-        <error-prone.version>2.16</error-prone.version>
+        <error-prone.version>2.25.0</error-prone.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -105,7 +106,7 @@
             <dependency>
                 <groupId>jakarta.enterprise</groupId>
                 <artifactId>jakarta.enterprise.cdi-api</artifactId>
-                <version>2.0.2</version>
+                <version>4.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -125,11 +126,6 @@
                 <version>2.9.0</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.deltaspike.core</groupId>
-                <artifactId>deltaspike-core-impl</artifactId>
-                <version>1.9.6</version>
-            </dependency>
-            <dependency>
                 <groupId>org.eclipse.jgit</groupId>
                 <artifactId>org.eclipse.jgit</artifactId>
                 <version>6.6.1.202309021850-r</version>
@@ -142,12 +138,12 @@
             <dependency>
                 <groupId>org.gitlab4j</groupId>
                 <artifactId>gitlab4j-api</artifactId>
-                <version>4.16.0</version>
+                <version>5.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.weld.se</groupId>
                 <artifactId>weld-se-core</artifactId>
-                <version>3.1.4.Final</version>
+                <version>5.1.2.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.kohsuke</groupId>
@@ -166,7 +162,7 @@
             <dependency>
                 <groupId>org.jboss.weld</groupId>
                 <artifactId>weld-junit5</artifactId>
-                <version>2.0.2.Final</version>
+                <version>4.0.2.Final</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -200,18 +196,19 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>3.4.0</version>
+                    <version>3.5.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.11.0</version>
+                    <version>3.12.1</version>
                     <configuration>
                         <release>${maven.compiler.release}</release>
-                        <compilerArgs>
+                        <!--                        <compilerArgs>
                             <arg>-XDcompilePolicy=simple</arg>
                             <arg>-Xplugin:ErrorProne</arg>
                         </compilerArgs>
+-->
                         <annotationProcessorPaths>
                             <path>
                                 <groupId>com.google.errorprone</groupId>
@@ -232,7 +229,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.3.0</version>
+                    <version>3.4.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -267,16 +264,16 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.2.5</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.2.5</version>
                 </plugin>
                 <plugin>
                     <groupId>com.googlecode.maven-download-plugin</groupId>
                     <artifactId>download-maven-plugin</artifactId>
-                    <version>1.7.1</version>
+                    <version>1.8.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -289,7 +286,7 @@
                     <toolchains>
                         <!-- this project needs a JDK toolchain, version 11 -->
                         <jdk>
-                            <version>11</version>
+                            <version>17</version>
                         </jdk>
                     </toolchains>
                 </configuration>
@@ -462,7 +459,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.5.0</version>
+                        <version>3.6.3</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -589,6 +586,7 @@
                 </property>
             </activation>
             <modules>
+                <module>git-scm-handler-helper</module>
                 <module>github-scm-handler</module>
                 <module>github-vfs</module>
                 <!-- This module is the typical usage of this project, as it
@@ -639,6 +637,7 @@ See https://github.com/Riduidel/aadarchi/wiki/How-to-add-aadarchi.github.token]]
                 </property>
             </activation>
             <modules>
+                <module>git-scm-handler-helper</module>
                 <module>gitlab-scm-handler</module>
                 <module>gitlab-vfs</module>
             </modules>

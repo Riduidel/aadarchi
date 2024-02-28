@@ -8,6 +8,8 @@
         <version>0.1.15-SNAPSHOT</version>
     </parent>
     <artifactId>git-scm-handler-helper</artifactId>
+    <name>Aadarchi : Git SCM Handler helper</name>
+    <description>A small extension allowing easy git clone whatever provider is used</description>
     <dependencies>
         <dependency>
             <groupId>org.eclipse.jgit</groupId>

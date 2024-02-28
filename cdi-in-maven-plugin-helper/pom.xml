@@ -11,12 +11,11 @@
     <name>Aadarchi : CDI in Maven helper</name>
     <description>This small java library provides a simple way to have a maven Mojo use CDI for bean injection</description>
     <dependencies>
-        <!-- Directly referenced to make sure we can create the ConfigSource allowing us to provide maven properties as config properties -->
         <dependency>
-            <groupId>org.apache.deltaspike.core</groupId>
-            <artifactId>deltaspike-core-impl</artifactId>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>cdi-config-extension</artifactId>
+            <version>${project.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-core -->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-core</artifactId>
