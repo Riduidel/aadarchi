@@ -33,12 +33,13 @@ class FileContentCacheTest {
 		// When
 		try(var input = tested.openStreamFor(readme)) {
 			// Then
-			Assertions.assertThat(input).isNotNull();
+			Assertions.assertThat(input)
+				.isNotNull();
 		}
 	}
 
 	@Test
-	void bug_81_can_read_a_local_readme_file_through_IOUtils() throws IOException {
+	void bug_81_can_read_a_local_readme_file_through_IOUtils_without_try_with_resource() throws IOException {
     	// Given
 		var readme = basePath.resolveFile("README.md");
 		Preconditions.condition(readme.exists(), "Readme file should exist");

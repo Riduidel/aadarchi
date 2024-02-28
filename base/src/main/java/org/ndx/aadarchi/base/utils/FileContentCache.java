@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.function.Function;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -16,8 +15,6 @@ import org.apache.commons.vfs2.provider.local.LocalFile;
 import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys.ConfigProperties.Force;
-
-import com.pivovarit.function.ThrowingFunction;
 
 /**
  * A specific file cache, usable to avoid downloading multiple times the same file content.
@@ -38,11 +35,10 @@ public class FileContentCache {
 	/**
 	 * Open stream from the given source.
 	 * @param source
-	 * @param function
 	 * @return
 	 * @throws IOException
 	 */
-	private InputStream openStreamFor(FileObject source, Function<URL, InputStream> function) throws IOException {
+	public InputStream openStreamFor(FileObject source) throws IOException {
 		// We shouldn't cache local files.
 		// It's both inefficient, and triggers weird bugs on Windows
 		if(source instanceof LocalFile) {
@@ -59,31 +55,15 @@ public class FileContentCache {
 		URL url = new URL(uri);
 		FileObject file = toCacheFile(url);
 		if(force || !file.exists() || shouldRefresh(file)) {
-			refreshCache(file, url, function);
+			refreshCache(file, url);
 		}
 		// Now it's time to load file in cache
 		return file.getContent().getInputStream();
 	}
 
-	/**
-	 * Get cached version of remote file
-	 * @param file, remote scm file
-	 * @return input stream to locally cached version of that file
-	 * @throws IOException thrown if remote file can't be read
-	 */
-	public InputStream openStreamFor(FileObject file) throws IOException {
-		try {
-			return openStreamFor(
-					file, 
-					ThrowingFunction.unchecked(_url -> file.getContent().getInputStream()));
-		} finally {
-			file.close();
-		}
-	}
-
-	private void refreshCache(FileObject file, URL url, Function<URL, InputStream> cacheLoader) throws IOException {
+	private void refreshCache(FileObject file, URL url) throws IOException {
 		file.getParent().createFolder();
-		try(InputStream input = cacheLoader.apply(url)) {
+		try(InputStream input = url.openStream()) {
 			try(OutputStream output = file.getContent().getOutputStream()) {
 				IOUtils.copy(input, output);
 			} finally {

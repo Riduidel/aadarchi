@@ -61,11 +61,15 @@ public class MvnRepositoryArtifactsProducer {
 		try {
 			try(InputStream input = cache.openStreamFor(upToDateAadarchiTechnologies)) {
 				artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
+			} finally {
+				upToDateAadarchiTechnologies.close();
 			}
 		} catch(Exception e) {
 			logger.log(Level.WARNING, "Unable to read remote mvnrepository.json file", e);
 			try(InputStream input = cache.openStreamFor(defaultAadarchiTechnlogies)) {
 				artifacts = objectMapper.readValue(input, new TypeReference<List<MvnRepositoryArtifact>>() {});
+			} finally {
+				defaultAadarchiTechnlogies.close();
 			}
 		}
 		return artifacts;
