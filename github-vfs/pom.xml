@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.github.Riduidel.aadarchi</groupId>
         <artifactId>system</artifactId>
-        <version>0.1.15-SNAPSHOT</version>
+        <version>0.2.1</version>
     </parent>
     <artifactId>github-vfs</artifactId>
     <name>Aadarchi : GitHub virtual file system</name>
