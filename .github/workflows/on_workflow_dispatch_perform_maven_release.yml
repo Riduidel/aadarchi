@@ -79,4 +79,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          options: "--override --data-source=issues --prerelease --tags=${{ steps.tag.outputs.CREATED_GIT_TAG }}"
+          options: "--override --data-source=issues --prerelease --limit=1 --tags=${{ steps.tag.outputs.CREATED_GIT_TAG }}"
