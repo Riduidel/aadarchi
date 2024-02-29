@@ -529,7 +529,7 @@
 							archetype to 
 								have a working base
 							dependency -->
-                            <preparationGoals>install</preparationGoals>
+                            <preparationGoals>install scm:add -Dincludes=README.md,.github/workflows/on_workflow_dispatch_perform_maven_release.yml</preparationGoals>
                             <!-- We also update both readme and github action
 							descriptor during prepare, to have the correct
 							version set -->
@@ -572,6 +572,7 @@
                                 <goals>
                                     <goal>find-and-replace</goal>
                                 </goals>
+                                <inherited>false</inherited>
                                 <phase>process-resources</phase>
                                 <configuration>
                                     <replacementType>file-contents</replacementType>
@@ -588,6 +589,7 @@
                                     <goal>find-and-replace</goal>
                                 </goals>
                                 <phase>process-resources</phase>
+                                <inherited>false</inherited>
                                 <configuration>
                                     <replacementType>file-contents</replacementType>
                                     <baseDir>.github/workflows</baseDir>
