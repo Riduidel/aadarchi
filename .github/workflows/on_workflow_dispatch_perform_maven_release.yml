@@ -9,7 +9,7 @@ on:
       releaseversion:
         description: 'Release version'
         required: true
-        default: "0.1.14"
+        default: "0.2.2"
 
 jobs:
   build:
