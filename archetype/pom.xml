@@ -97,7 +97,7 @@
                                 <!-- this is here for both the script and the project to use -->
                                 <groupId>ch.qos.logback</groupId>
                                 <artifactId>logback-classic</artifactId>
-                                <version>1.2.3</version>
+                                <version>1.2.13</version>
                             </dependency>
                             <!-- I do prefer maven dependencies, as they're downloaded only once 
 								in a place I understand (bad reason, of course) -->
