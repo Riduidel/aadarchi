@@ -32,11 +32,8 @@ public class ReadmeReader extends ModelElementAdapter {
 	@Inject
 	@ConfigProperty(name = "force", defaultValue = "false")
 	boolean force;
-
-	@Inject
-	FileContentCache cache;
 	
-	@Inject FileObjectDetector detector;
+	@Inject ReadOneFileFromSource readOneFile;
 
 	@Override
 	public int priority() {
@@ -45,46 +42,8 @@ public class ReadmeReader extends ModelElementAdapter {
 
 	@Override
 	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
-		detector.whenFileDetected(element, new RegexFileFilter("(readme|README)\\.(adoc|md)"), 
-				// No file detected
-				elementRoot -> { logger.severe(String.format(
-						"Couldn't find any Readme for element %s " + "(path is %s)",
-						StructurizrUtils.getCanonicalPath(element), elementRoot)); },
-				// One file detected
-				(elementRoot, readme) -> { writeReadmeFor(readme, element, builder); },
-				// on multiple file detected
-				(elementRoot, detectedFiles) -> { logger.severe(String.format(
-						"There are more than one valid Readme for element %s"
-								+ "(path is %s)",
-						StructurizrUtils.getCanonicalPath(element), elementRoot)); }
-		);
-	}
-
-	void writeReadmeFor(FileObject readme, Element element, OutputBuilder builder) {
-		FileObject outputFor = builder.outputFor(AgileArchitectureSection.code, element, this, Format.adoc);
-		try {
-			try {
-				if (force) {
-					outputFor.delete();
-				} else {
-					if (outputFor.exists()
-							&& readme.getContent().getLastModifiedTime() < outputFor.getContent().getLastModifiedTime())
-						return;
-				}
-				// Now we have content as asciidoc, so let's write it to the conventional
-				// location
-				String readmeText = IOUtils.toString(cache.openStreamFor(readme), "UTF-8");
-				if (readme.getName().getExtension().toLowerCase().equals("md")) {
-					readmeText = MarkdownToAsciidoc.convert(readmeText);
-				}
-				builder.writeToOutput(AgileArchitectureSection.code, element, this, Format.adoc, readmeText);
-			} finally {
-				readme.close();
-			}
-		} catch (Exception e) {
-			throw new CantExtractReadme(String.format(
-					"Can't extract readme of container %s from file %s",
-					StructurizrUtils.getCanonicalPath(element), readme), e);
-		}
+		readOneFile.read(element, 
+				new RegexFileFilter("(readme|README)\\.(adoc|md)"), 
+				AgileArchitectureSection.code, builder, this, force);
 	}
 }
