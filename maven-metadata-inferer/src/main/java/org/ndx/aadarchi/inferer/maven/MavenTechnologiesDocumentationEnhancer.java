@@ -37,6 +37,9 @@ public class MavenTechnologiesDocumentationEnhancer extends ModelElementAdapter 
 	@Override
 	protected void processElement(StaticStructureElement element, OutputBuilder builder) {
 		if(element.getProperties().containsKey(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES)) {
+			if(Boolean.parseBoolean(element.getProperties().getOrDefault(
+					MavenEnhancer.SHOW_INTERESTING_DEPENDENCIES, 
+					"false"))) {
 			String technologies = element.getProperties().get(MavenEnhancer.AGILE_ARCHITECTURE_MAVEN_TECHNOLOGIES);
 			// Rehydrate that to have artifacts
 			try {
@@ -47,6 +50,7 @@ public class MavenTechnologiesDocumentationEnhancer extends ModelElementAdapter 
 			} catch (JsonProcessingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
 			}
 		}
 	}

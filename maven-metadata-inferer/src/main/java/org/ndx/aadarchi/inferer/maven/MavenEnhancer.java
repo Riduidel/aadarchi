@@ -42,6 +42,10 @@ public interface MavenEnhancer {
 	 */
 	String IGNORED_SUBMODULES = PREFIX+"ignored.submodules";
 	/**
+	 * Set this property to true to have a list of "interesting" dependencies shown 
+	 */
+	String SHOW_INTERESTING_DEPENDENCIES = PREFIX+"show.interesting.dependencies";
+	/**
 	 * When set, dependencies tagged with one of the tags in this list will be filtered out from signifiant dependencies
 	 */
 	 public interface FilterDpendenciesTagged {
