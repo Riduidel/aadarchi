@@ -1,5 +1,6 @@
 package org.ndx.aadarchi.inferer.maven.technologies;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -72,7 +73,14 @@ public class TechnologyDecorator {
 			List<Dependency> popularDependencies = ((List<Dependency>) mavenProject.getDependencies()).stream()
 					.filter(d -> mvnRepositoryArtifacts.containsKey(d.getGroupId()+"."+d.getArtifactId()))
 					.collect(Collectors.toList());
-			dependencies.putAll(popularDependencies.stream().collect(Collectors.toMap(d -> d.getGroupId()+"."+d.getArtifactId(), d -> d.getVersion()==null ? "":d.getVersion())));
+			dependencies.putAll(
+					popularDependencies.stream()
+						.collect(Collectors.toMap(
+								d -> d.getGroupId()+"."+d.getArtifactId(), 
+								d -> d.getVersion()==null ? "":d.getVersion(),
+								(a, b) -> a,
+								() -> new LinkedHashMap<>()
+								)));
 			doDecorateTechnologies(popularDependencies, element);
 			// We should explore all parent poms
 			return true;
