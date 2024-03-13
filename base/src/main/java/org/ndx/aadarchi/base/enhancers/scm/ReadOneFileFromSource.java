@@ -42,7 +42,7 @@ public class ReadOneFileFromSource {
 		detector.whenFileDetected(element, fileFilter, 
 				// No file detected
 				elementRoot -> { logger.severe(String.format(
-						"Couldn't find any file matching %s for element %s " + "(path is %s)",
+						"Couldn't find any file matching %s for element %s ",
 						StructurizrUtils.getCanonicalPath(element), elementRoot)); },
 				// One file detected
 				(elementRoot, readme) -> { writeContentOf(readme, element, section, builder, enhancer, force); },
