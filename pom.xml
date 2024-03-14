@@ -526,10 +526,7 @@
                         <artifactId>maven-release-plugin</artifactId>
                         <version>3.0.1</version>
                         <configuration>
-                            <!-- We install each artifact at end of prepare, for
-							archetype to 
-								have a working base
-							dependency -->
+                            <!-- See in https://stackoverflow.com/a/49124982/15619 -->
                             <preparationGoals>-Pupdate_version_in_files clean install scm:add scm:checkin</preparationGoals>
                             <!-- We also update both readme and github action
 							descriptor during prepare, to have the correct
