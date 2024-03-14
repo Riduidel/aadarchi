@@ -530,7 +530,7 @@
 							archetype to 
 								have a working base
 							dependency -->
-                            <preparationGoals>install scm:add -Dincludes=README.md,.github/workflows/on_workflow_dispatch_perform_maven_release.yml</preparationGoals>
+                            <preparationGoals>-Pupdate_version_in_files clean install scm:add scm:checkin</preparationGoals>
                             <!-- We also update both readme and github action
 							descriptor during prepare, to have the correct
 							version set -->
@@ -563,6 +563,20 @@
         <profile>
             <id>update_version_in_files</id>
             <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-scm-plugin</artifactId>
+                            <configuration>
+                                <includes>README.md,.github/workflows/on_workflow_dispatch_perform_maven_release.yml</includes>
+                                <message>[maven-release-plugin] commit changed files</message>
+                                <pushChanges>false</pushChanges>
+                                <!-- because I use git -->
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
                 <plugins>
                     <plugin>
                         <groupId>io.github.floverfelt</groupId>
