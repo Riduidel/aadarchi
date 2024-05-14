@@ -19,7 +19,7 @@ class GitLabFileSystemProviderTest {
 	@WeldSetup
 	public WeldInitiator weld = WeldInitiator.performDefaultDiscovery();
 	
-	@Inject GitLabFileSystemProvider gitHubFileSystem;
+	@Inject GitLabFileSystemProvider gitLabFileSystem;
 	
 	@BeforeAll public static void setGitlabServer() {
 		System.setProperty(Constants.CONFIG_GITLAB_URL, "framagit.org");
@@ -29,7 +29,7 @@ class GitLabFileSystemProviderTest {
 	@Test
 	void can_get_readme_from_gitlab_repo() throws FileSystemException {
 		// Given
-		FileObject repositoryRoot = gitHubFileSystem.getProjectRoot("Riduidel/codingame-maven-plugins");
+		FileObject repositoryRoot = gitLabFileSystem.getProjectRoot("Riduidel/codingame-maven-plugins");
 		// When
 		FileObject readme = repositoryRoot.getChild("README.adoc");
 		// Then

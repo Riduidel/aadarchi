@@ -19,8 +19,8 @@ public class GitLabFileObject extends AbstractFileObject<GitLabFileSystem> imple
 	private GitLabApi gitlab;
 	private Optional<RepositoryFile> repositoryFile = Optional.empty();
 
-	public GitLabFileObject(GitLabFileName name, GitLabFileSystem gitHubFileSystem, GitLabApi gitlab) {
-		super(name, gitHubFileSystem);
+	public GitLabFileObject(GitLabFileName name, GitLabFileSystem gitLabFileSystem, GitLabApi gitlab) {
+		super(name, gitLabFileSystem);
 		this.gitlab = gitlab;
 	}
 	

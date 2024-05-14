@@ -50,10 +50,10 @@ public class GitLabFileProvider extends AbstractOriginatingFileProvider {
 	protected FileSystem doCreateFileSystem(FileName rootFileName, FileSystemOptions fileSystemOptions)
 			throws FileSystemException {
 		Optional<UserAuthenticationData> authentication = getAuthenticationData(fileSystemOptions);
-		// Initiale GitHub API from authentication data
+		// Initiale GitLab API from authentication data
 		return authentication
 				.map(auth -> this.doCreateAuthFileSystem(rootFileName, fileSystemOptions, auth))
-				.orElseThrow(() -> new UnsupportedOperationException("Can't create GitHub file system when there is no authentication data"));
+				.orElseThrow(() -> new UnsupportedOperationException("Can't create GitLab file system when there is no authentication data"));
 	}
 
 	private GitLabFileSystem doCreateAuthFileSystem(FileName rootFileName, FileSystemOptions fileSystemOptions,
