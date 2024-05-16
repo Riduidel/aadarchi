@@ -10,6 +10,7 @@ import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.auth.StaticUserAuthenticator;
 import org.apache.commons.vfs2.impl.DefaultFileSystemConfigBuilder;
+import org.ndx.aadarchi.base.utils.commonsvfs.FileSystemOptionsConfigurer;
 import org.ndx.aadarchi.cdi.deltaspike.ConfigProperty;
 import org.ndx.aadarchi.vfs.github.GitHubFileProvider;
 
@@ -18,19 +19,14 @@ import org.ndx.aadarchi.vfs.github.GitHubFileProvider;
  * @author nicolas-delsaux
  *
  */
-public class GitHubFileSystemProvider {
+public class GitHubFileSystemOptionsConfigurer implements FileSystemOptionsConfigurer {
 	@Inject FileSystemManager fileSystemManager;
-	private FileSystemOptions authenticationOptions;
+	@Inject @ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token;
 
-	@Inject
-	public void initializeAuthentication(@ConfigProperty(name=CONFIG_GITHUB_TOKEN) String token) {
-		StaticUserAuthenticator auth = new StaticUserAuthenticator("github.com", 
-				null, token);
-		authenticationOptions = new FileSystemOptions();
-		DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(authenticationOptions, auth);
-	}
-	public FileObject getProjectRoot(String project) throws FileSystemException {
-		return fileSystemManager.resolveFile(GitHubFileProvider.urlFor(project), authenticationOptions);
+	@Override
+	public void accept(FileSystemOptions opts) {
+		StaticUserAuthenticator auth = new StaticUserAuthenticator("github.com", null, token);
+		DefaultFileSystemConfigBuilder.getInstance().setUserAuthenticator(opts, auth);
 	}
 
 }

@@ -19,6 +19,7 @@ import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelector;
 import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
+import org.apache.commons.vfs2.FileSystemOptions;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.base.utils.StructurizrUtils;
@@ -37,6 +38,8 @@ public class FileObjectDetector {
 
 	@Inject FileSystemManager fileSystemManager;
 	@Inject Instance<SCMHandler> scmHandlers;
+
+	@Inject FileSystemOptions fileSystemOptions;
 
 	/**
 	 * Perform the given success operation when file is detected.
@@ -74,7 +77,7 @@ public class FileObjectDetector {
 			String localPath = properties.get(ModelElementKeys.ConfigProperties.BasePath.NAME);
 			try {
 				analyzedPath = Optional.ofNullable(
-						fileSystemManager.resolveFile(localPath));
+						fileSystemManager.resolveFile(localPath, fileSystemOptions));
 			} catch (FileSystemException e) {
 				logger.log(Level.SEVERE, String.format("Unable to resolve path to %s", localPath), e);
 			}

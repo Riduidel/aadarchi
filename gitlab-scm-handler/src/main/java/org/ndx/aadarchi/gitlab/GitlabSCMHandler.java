@@ -13,7 +13,8 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.gitlab4j.api.GitLabApiException;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.base.utils.icon.FontIcon;
-import org.ndx.aadarchi.gitlab.vfs.GitLabFileSystemProvider;
+import org.ndx.aadarchi.gitlab.vfs.GitLabFileSystemOptionsConfigurer;
+import org.ndx.aadarchi.gitlab.vfs.GitLabRootProvider;
 
 import com.structurizr.annotation.Component;
 
@@ -22,10 +23,12 @@ public class GitlabSCMHandler implements SCMHandler {
 	private @Inject GitLabContainer gitlab;
 	@Inject @Named("gitlab") Instance<GitOperator> cloner;
 	@Inject
-	GitLabFileSystemProvider gitlabFileSystem;
+	GitLabFileSystemOptionsConfigurer gitlabFileSystem;
 	@Inject
 	@FontIcon(name = "gitlab")
 	String gitlabIcon;
+	@Inject
+	private GitLabRootProvider gitlabRootProvider;
 
 	@Override
 	public boolean canHandle(String project) {
@@ -57,7 +60,7 @@ public class GitlabSCMHandler implements SCMHandler {
 	@Override
 	public FileObject getProjectRoot(String project) {
 		try {
-			return gitlabFileSystem.getProjectRoot(project);
+			return gitlabRootProvider.getProjectRoot(project);
 		} catch (FileSystemException e) {
 			throw new GitLabHandlerException("Unable to obtain VFS", e);
 		}

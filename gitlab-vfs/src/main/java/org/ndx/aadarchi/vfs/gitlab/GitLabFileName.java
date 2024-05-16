@@ -1,5 +1,7 @@
 package org.ndx.aadarchi.vfs.gitlab;
 
+import java.util.Arrays;
+
 import org.apache.commons.vfs2.FileName;
 import org.apache.commons.vfs2.FileType;
 import org.apache.commons.vfs2.provider.GenericURLFileName;
@@ -30,8 +32,19 @@ public class GitLabFileName extends GenericURLFileName implements FileName {
 				pathInRepository = pathInRepository.substring(1);
 			}
 		} else {
-			projectName = getPath().substring(1);
-			pathInRepository = "";
+			String currentPath = getPath();
+			if(currentPath.startsWith("/")) {
+				currentPath = currentPath.substring(1);
+			}
+			String[] parts = currentPath.split("/");
+			if(parts.length>0)
+				if(parts[0].length()>0)
+					namespace = parts[0];
+			if(parts.length>1)
+				projectName = parts[1];
+			if(parts.length>2) {
+				pathInRepository = String.join("/", Arrays.asList(parts).subList(2, parts.length));
+			}
 		}
 	}
 

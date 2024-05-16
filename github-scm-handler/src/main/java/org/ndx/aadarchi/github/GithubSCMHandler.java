@@ -20,7 +20,8 @@ import org.kohsuke.github.GitHub;
 import org.ndx.aadarchi.base.enhancers.scm.SCMHandler;
 import org.ndx.aadarchi.base.utils.FileContentCache;
 import org.ndx.aadarchi.base.utils.icon.FontIcon;
-import org.ndx.aadarchi.github.vfs.GitHubFileSystemProvider;
+import org.ndx.aadarchi.github.vfs.GitHubFileSystemOptionsConfigurer;
+import org.ndx.aadarchi.github.vfs.GitHubRootProvider;
 import org.ndx.aadarchi.gitlab.GitOperator;
 
 import com.structurizr.annotation.Component;
@@ -33,7 +34,8 @@ public class GithubSCMHandler implements SCMHandler {
 	@Inject FileContentCache fileCache;
 	@Inject @Named("github") Instance<GitOperator> cloner;
 	@Inject @FontIcon(name="github") String githubIcon;
-	@Inject GitHubFileSystemProvider gitHubFileSystem;
+	@Inject GitHubFileSystemOptionsConfigurer gitHubFileSystem;
+	@Inject GitHubRootProvider githubRootProvider;
 	@Override
 	public boolean canHandle(String project) {
 		return Constants.isGitHubProject(project);
@@ -71,7 +73,7 @@ public class GithubSCMHandler implements SCMHandler {
 	@Override
 	public FileObject getProjectRoot(String project) {
 		try {
-			return gitHubFileSystem.getProjectRoot(project);
+			return githubRootProvider.getProjectRoot(project);
 		} catch (FileSystemException e) {
 			throw new GitHubHandlerException("Unable to obtain VFS", e);
 		}

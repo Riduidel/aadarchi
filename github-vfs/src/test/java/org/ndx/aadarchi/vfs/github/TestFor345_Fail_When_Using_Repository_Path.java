@@ -25,7 +25,7 @@ class TestFor345_Fail_When_Using_Repository_Path {
 	}
 
 	@Test
-	void can_have_file_object_when_repo_path_is_given() throws FileSystemException {
+	void can_get_file_when_calling_vfs() throws FileSystemException {
 		FileObject rootFile = VFS.getManager().resolveFile(GitHubFileProvider.urlFor("https://github.com/Riduidel/aadarchi.git"), authenticationOptions);
 		Assertions.assertThat((Object) rootFile).isNotNull();
 	}

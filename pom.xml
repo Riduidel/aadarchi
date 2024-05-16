@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.Riduidel.aadarchi</groupId>
     <artifactId>system</artifactId>
@@ -123,6 +124,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-vfs2</artifactId>
                 <version>2.9.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-hdfs-client</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jgit</groupId>
@@ -525,8 +532,10 @@
                         <artifactId>maven-release-plugin</artifactId>
                         <version>3.0.1</version>
                         <configuration>
-                            <!-- See in https://stackoverflow.com/a/49124982/15619 -->
-                            <preparationGoals>-Pupdate_version_in_files clean install scm:add scm:checkin</preparationGoals>
+                            <!-- See in
+							https://stackoverflow.com/a/49124982/15619 -->
+                            <preparationGoals>-Pupdate_version_in_files clean
+								install scm:add scm:checkin</preparationGoals>
                             <!-- We also update both readme and github action
 							descriptor during prepare, to have the correct
 							version set -->
@@ -566,7 +575,8 @@
                             <artifactId>maven-scm-plugin</artifactId>
                             <configuration>
                                 <includes>README.md,.github/workflows/on_workflow_dispatch_perform_maven_release.yml</includes>
-                                <message>[maven-release-plugin] commit changed files</message>
+                                <message>[maven-release-plugin] commit changed
+									files</message>
                                 <pushChanges>false</pushChanges>
                                 <!-- because I use git -->
                             </configuration>

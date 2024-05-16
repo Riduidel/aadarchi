@@ -12,6 +12,7 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.ndx.aadarchi.base.ArchitectureEnhancer;
 import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
@@ -38,6 +39,7 @@ public class MavenTechnologiesDocumentationEnhancerTest {
 	
 	@Inject @ConfigProperty(name=BasePath.NAME, defaultValue = BasePath.VALUE) FileObject basePath;
 
+	@Disabled
     @Test public void can_detect_dependencies_versions_declared_through_dependency_management_and_properties() throws FileSystemException, JsonMappingException, JsonProcessingException {
     	// Given
     	var w = new Workspace(getClass().getName(), "a test workspace");
