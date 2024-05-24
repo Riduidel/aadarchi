@@ -131,3 +131,4 @@ fabric.properties
 **/.gitignore
 .idea/
 .cache/
+archetype/src/main/resources/archetype-resources/.github/workflows/on_push_on_master_deploy_build.yml

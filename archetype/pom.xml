@@ -12,10 +12,12 @@
     <packaging>maven-archetype</packaging>
 
     <name>Aadarchi : Archetype</name>
-    <description>Easily create configuration to document your project with this archetype</description>
+    <description>Easily create configuration to document your project with this
+		archetype</description>
 
     <dependencies>
-        <!-- This dependency ensures the build order is the one we want (in other words it allows
+        <!-- This dependency ensures the build order is the one we want (in
+		other words it allows
 		base to build before archetype) -->
         <dependency>
             <groupId>io.github.Riduidel.aadarchi</groupId>
@@ -57,6 +59,28 @@
                         <addDefaultExcludes>false</addDefaultExcludes>
                         <escapeString><![CDATA[\]]></escapeString>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>copy-github-default-deploy</id>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <!-- here the phase you need -->
+                            <phase>validate</phase>
+                            <configuration>
+                                <outputDirectory>${basedir}/src/main/resources/archetype-resources/.github</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>../.github</directory>
+                                        <filtering>false</filtering>
+                                        <includes>
+                                            <include>**/on_push_on_master_deploy_build.yml</include>
+                                        </includes>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -95,12 +119,14 @@
                         <artifactId>gmavenplus-plugin</artifactId>
                         <dependencies>
                             <dependency>
-                                <!-- this is here for both the script and the project to use -->
+                                <!-- this is here for both the script and the
+								project to use -->
                                 <groupId>ch.qos.logback</groupId>
                                 <artifactId>logback-classic</artifactId>
                                 <version>1.2.13</version>
                             </dependency>
-                            <!-- I do prefer maven dependencies, as they're downloaded only once 
+                            <!-- I do prefer maven dependencies, as they're
+							downloaded only once 
 								in a place I understand (bad reason, of course) -->
                             <dependency>
                                 <groupId>org.jsoup</groupId>
@@ -110,7 +136,8 @@
                             <dependency>
                                 <groupId>org.codehaus.groovy</groupId>
                                 <artifactId>groovy-all</artifactId>
-                                <!-- any version of Groovy \>= 1.5.0 should work here -->
+                                <!-- any version of Groovy \>= 1.5.0 should work
+								here -->
                                 <version>2.5.8</version>
                                 <type>pom</type>
                                 <scope>runtime</scope>
