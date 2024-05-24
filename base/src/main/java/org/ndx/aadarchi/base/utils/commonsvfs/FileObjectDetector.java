@@ -96,7 +96,7 @@ public class FileObjectDetector {
 			FileSelector filter = new FileFilterSelector(fileFilter);
 			try {
 				FileObject[] found = elementRoot.findFiles(filter);
-				if (found.length == 0) {
+				if (found==null || found.length == 0) {
 					return onNoFileDetected.apply(elementRoot);
 				} else if (found.length > 1) {
 					return onMultipleFileDetected.apply(elementRoot, found);
