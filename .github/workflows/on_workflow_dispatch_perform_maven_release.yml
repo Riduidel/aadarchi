@@ -9,7 +9,7 @@ on:
       releaseversion:
         description: 'Release version'
         required: true
-        default: "0.2.2"
+        default: "0.2.3"
 
         # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
