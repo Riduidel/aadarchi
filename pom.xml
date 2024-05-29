@@ -545,7 +545,7 @@
 								various tokens (GitHub,
 							GitLab and so on) -->
                             <releaseProfiles>release</releaseProfiles>
-                            <arguments>-Daadarchi.github.token=${aadarchi.github.token}</arguments>
+                            <arguments>-Daadarchi.github.token=${aadarchi.github.token} -Daadarchi.gitlab.token=${aadarchi.gitlab.token}</arguments>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
                             <localCheckout>false</localCheckout>
                             <goals>deploy</goals>
