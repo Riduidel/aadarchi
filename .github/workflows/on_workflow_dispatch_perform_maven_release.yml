@@ -32,6 +32,7 @@ jobs:
         with:
           ref: main
           fetch-depth: '0'
+          token: ${{ secrets.TOKEN_FOR_GITHUB }}
       - name: Import GPG key
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v6.1.0
