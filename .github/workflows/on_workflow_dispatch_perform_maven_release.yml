@@ -11,6 +11,12 @@ on:
         required: true
         default: "0.2.2"
 
+        # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
 
@@ -70,7 +76,8 @@ jobs:
       - name: Build with Maven
         run: mvn --no-transfer-progress -B release:prepare release:perform -Prelease --file pom.xml
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+# Secret is changed to have the permission to update the workflow file
+          GITHUB_TOKEN: ${{ secrets.TOKEN_FOR_GITHUB }}
       - name: Get created tag name (for GitHuub release creation)
         id: tag
         run: echo "CREATED_GIT_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
