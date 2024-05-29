@@ -11,12 +11,9 @@
     <name>Aadarchi : System documentation generator</name>
     <description>Using Aadarchi to document agile archiecture documentation system</description>
     <properties>
-        <version.java>11</version.java>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <asciidoctor.highlighter>highlightjs</asciidoctor.highlighter>
-        <aadarchi.main.class>org.ndx.aadarchi.base.ArchitectureDocumentationBuilder</aadarchi.main.class>
-
     </properties>
 
     <dependencies>
