@@ -76,8 +76,7 @@ jobs:
       - name: Build with Maven
         run: mvn --no-transfer-progress -B release:prepare release:perform -Prelease --file pom.xml
         env:
-# Secret is changed to have the permission to update the workflow file
-          GITHUB_TOKEN: ${{ secrets.TOKEN_FOR_GITHUB }}
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Get created tag name (for GitHuub release creation)
         id: tag
         run: echo "CREATED_GIT_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
