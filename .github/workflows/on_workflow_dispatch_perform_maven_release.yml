@@ -32,6 +32,8 @@ jobs:
         with:
           ref: main
           fetch-depth: '0'
+# Changing the token here in fact impacts the way mvn pushes data back to the repo,
+# Including the fact this very file will get updated during release
           token: ${{ secrets.TOKEN_FOR_GITHUB }}
       - name: Import GPG key
         id: import_gpg
@@ -78,12 +80,12 @@ jobs:
         run: mvn --no-transfer-progress -B release:prepare release:perform -Prelease --file pom.xml
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - name: Get created tag name (for GitHuub release creation)
+      - name: Get created tag name (for GitHub release creation)
         id: tag
         run: echo "CREATED_GIT_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
       - name: Create associated GitHub release
         uses: lakto/gren-action@v2.0.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN_FOR_GITHUB }}
         with:
           options: "--override --data-source=issues --prerelease --limit=1 --tags=${{ steps.tag.outputs.CREATED_GIT_TAG }}"
