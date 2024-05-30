@@ -18,6 +18,10 @@ workspace "aadarchi-documentation-system" {
 		}
 		component "myContainer" "ContainerComponents" "myContainer components" {
 			include *
+			// Don't forget to add that statement to have view updated with components detected during aadarchi work
+			properties {
+                "aadarchi.auto.update" "true"
+            }
 		}
 		styles {
 			element queue {
