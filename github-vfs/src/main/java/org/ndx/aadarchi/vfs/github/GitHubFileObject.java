@@ -54,6 +54,11 @@ public class GitHubFileObject extends AbstractFileObject<GitHubFileSystem> imple
 	}
 	
 	@Override
+	protected InputStream doGetInputStream(int bufferSize) throws Exception {
+		return getGHContent().read();
+	}
+	
+	@Override
 	protected long doGetLastModifiedTime() throws Exception {
 		try {
 			PagedIterable<GHCommit> commits = repository.queryCommits()
