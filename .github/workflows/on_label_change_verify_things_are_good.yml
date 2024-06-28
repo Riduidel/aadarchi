@@ -1,0 +1,39 @@
+---
+name: "Maintain Repository Labels"
+
+on:
+  label:
+    types: [created, edited, deleted]
+  push:
+    branches: [master, main]
+    paths:
+      - .github/labels.json
+      - .github/labels.yml
+      - .github/workflows/labels.yml
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+  repository-projects: write
+
+jobs:
+  labelsync:
+    # https://github.com/seantrane/github-label-presets
+    name: GitHub Label Presets, Sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: lts
+      - run: |
+          npm i -g github-label-sync
+          github-label-sync -l "$LABEL_CONFIG_PATH" "$LABEL_REPOSITORY"
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LABEL_REPOSITORY: ${{ github.repository }}
+          # Use github-label-presets:
+          LABEL_CONFIG_PATH: https://raw.githubusercontent.com/seantrane/github-label-presets/main/labels.json
+          # Use your own labels:
+          # LABEL_CONFIG_PATH: .github/labels.json
