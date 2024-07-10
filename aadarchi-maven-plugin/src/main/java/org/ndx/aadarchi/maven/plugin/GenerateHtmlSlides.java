@@ -12,7 +12,9 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.version;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -57,6 +59,12 @@ public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
 	@Parameter(name = "asciidoctorj-revealjs-version", defaultValue = "5.0.0.rc1", property="version.asciidoctorj.revealjs")
 	private String asciidoctorjRevealjsVersion;
 	
+	/**
+	 * Complementary attributes to use for slides rendering
+	 */
+	@Parameter(name="attributes")
+	private Map<String, String> attributes = new LinkedHashMap<String, String>();
+
 	@Override
 	protected List<Dependency> dependencies() {
 		return MojoExecutor.dependencies(
@@ -125,6 +133,9 @@ public class GenerateHtmlSlides extends AbstractAsciidoctorCallingMojo {
 	public List<Element> configurationAttributes() {
 		List<Element> returned = new ArrayList<>(super.configurationAttributes());
 		returned.add(element(name("revealjsdir"), String.format("reveal.js-%s", revealjsVersion)));
+		for(Map.Entry<String, String> e : attributes.entrySet()) {
+			returned.add(element(name(e.getKey()), e.getValue()));
+		}
 		return returned;
 	}
 }

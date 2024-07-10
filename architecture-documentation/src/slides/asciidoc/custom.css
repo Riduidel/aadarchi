@@ -1,0 +1,32 @@
+.reveal section img {
+    border: none;
+    margin: 0%;
+    background: none;
+    box-shadow: none;
+}
+
+
+
+.slides {
+    width: 1280px !important;
+}
+
+.reveal .green {
+    color: green;
+}
+.reveal .red {
+    color: red;
+}
+
+body {
+    background-image: url(images/zenika-background.png);
+    background-position: bottom 10px left 10px;
+    background-repeat: no-repeat;
+    background-size: 50px;
+}
+
+div.tweet {
+    transform: scale(2) translateY(1.5em);
+}
+
+.line-through{text-decoration:line-through}

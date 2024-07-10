@@ -202,6 +202,21 @@
                                     <goal>generate-html-slides</goal>
                                 </goals>
                                 <phase>package</phase>
+                                <configuration>
+                                    <attributes>
+                                        <plantumldir>images/</plantumldir>
+                                        <imagesdir>.</imagesdir>
+                                        <project-group-id>${project.groupId}</project-group-id>
+                                        <project-artifact-id>${project.artifactId}</project-artifact-id>
+                                        <project-name>${project.name}</project-name>
+                                        <project-version>${project.version}</project-version>
+                                        <project-build-timestamp>${maven.build.timestamp}</project-build-timestamp>
+                                        <!-- These properties generate a 
+														footer with revision number and date -->
+                                        <revnumber>${project.version}</revnumber>
+                                        <revdate>${maven.build.timestamp}</revdate>
+                                    </attributes>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
