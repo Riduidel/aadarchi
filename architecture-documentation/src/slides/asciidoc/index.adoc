@@ -205,8 +205,6 @@ On va d'abord se concentrer sur le premier point (sinon je ne l'aurais pas mis e
 [%notitle, background-iframe="https://riduidel.github.io/aadarchi/"]
 === Aadarchi
 
-== Break
-
 == Philosophie d'Aadarchi
 
 [%notitle, background-iframe="https://www.writethedocs.org/guide/docs-as-code/"]
@@ -217,6 +215,22 @@ On va d'abord se concentrer sur le premier point (sinon je ne l'aurais pas mis e
 
 [%notitle, background-iframe="https://refactoring.guru/design-patterns/visitor#structure"]
 === Visiter le modèle
+
+== Break
+
+== Comment aider ?
+
+* Aadarchi est un projet open-source stocké sur GitHub
+* pour lequel on utilise les fonctionnalités de GitHub (Issues, Actions, ...)
+
+[%notitle, background="https://seantrane.com/posts/logical-colorful-github-labels-18230/#label-groups"]
+=== Organisation des issues GitHub
+
+[%notitle, background="https://github.com/Riduidel/aadarchi/issues"]
+=== Les tickets Aadarchi en général
+
+=== Comment s'organiser ?
+
 
 [.columns]
 == Références
