@@ -210,11 +210,14 @@ On va d'abord se concentrer sur le premier point (sinon je ne l'aurais pas mis e
 [%notitle, background-iframe="https://www.writethedocs.org/guide/docs-as-code/"]
 === Embracer le doc as code
 
+[%notitle, background-iframe="https://plantuml.com/fr/"]
+=== Utiliser PlantUML pour le rendu des diagrammes
+
 [%notitle, background-iframe="https://weld.cdi-spec.org/"]
 === Utiliser CDI pour rendre ces visites extensibles
 
 [%notitle, background-iframe="https://refactoring.guru/design-patterns/visitor#structure"]
-=== Visiter le modèle
+=== Visiter le modèle pour l'enrichir
 
 == Break
 
@@ -223,14 +226,18 @@ On va d'abord se concentrer sur le premier point (sinon je ne l'aurais pas mis e
 * Aadarchi est un projet open-source stocké sur GitHub
 * pour lequel on utilise les fonctionnalités de GitHub (Issues, Actions, ...)
 
-[%notitle, background="https://seantrane.com/posts/logical-colorful-github-labels-18230/#label-groups"]
+[%notitle, background-iframe="https://seantrane.com/posts/logical-colorful-github-labels-18230/#label-groups"]
 === Organisation des issues GitHub
 
-[%notitle, background="https://github.com/Riduidel/aadarchi/issues"]
+[%notitle, background-iframe="https://github.com/Riduidel/aadarchi/issues"]
 === Les tickets Aadarchi en général
 
 === Comment s'organiser ?
 
+[%step]
+* On peut se revoir demain pour monter en compétences ensemble
+* Un daily ?
+* Une démo le Lundi 5 août ?
 
 [.columns]
 == Références
