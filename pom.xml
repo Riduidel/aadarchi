@@ -16,7 +16,6 @@
         <module>maven-metadata-inferer</module>
         <module>model-linter</module>
         <module>spring-components-detector</module>
-        <module>sequence-diagram-generator</module>
         <module>sipoc-diagram-generator</module>
         <module>archetype</module>
         <module>markdown-to-asciidoc</module>
@@ -421,6 +420,12 @@
         </snapshotRepository>
     </distributionManagement>
     <profiles>
+        <profile>
+            <id>deprecated</id>
+            <modules>
+                <module>sequence-diagram-generator</module>
+            </modules>
+        </profile>
         <profile>
             <id>coverage</id>
             <build>
