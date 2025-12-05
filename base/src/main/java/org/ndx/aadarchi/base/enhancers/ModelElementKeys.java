@@ -168,4 +168,8 @@ public interface ModelElementKeys {
 	 * Please use integer or long values (floats and double won't be supported here)
 	 */
 	String ORDERING = PREFIX+"ordering";
+	/**
+	 * When set, the value of this property is used as file/folder name
+	 */
+	String FILE_NAME_OVERRIDE = PREFIX+"file.name";
 }

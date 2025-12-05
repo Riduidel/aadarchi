@@ -14,6 +14,7 @@ import org.ndx.aadarchi.base.AgileArchitectureException;
 import org.ndx.aadarchi.base.AgileArchitectureSection;
 import org.ndx.aadarchi.base.Enhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
+import org.ndx.aadarchi.base.enhancers.ModelElementKeys;
 
 import com.structurizr.model.Element;
 
@@ -36,7 +37,7 @@ public class SimpleOutputBuilder implements OutputBuilder {
 	public FileObject outputFor(AgileArchitectureSection section, Element element, Enhancer enhancer, String format) {
 		// Yup, we use hex values for priority, to have less characters
 		String path = String.format("%s/" + SECTION_PATTERN + "/_%08x-%s.%s",
-				sanitize(StructurizrUtils.getCanonicalPath(element)), section.index(), section.name(),
+				sanitize(element), section.index(), section.name(),
 				enhancer.priority(), enhancer.getClass().getSimpleName(), format);
 		return outputFor(path);
 	}
@@ -55,13 +56,25 @@ public class SimpleOutputBuilder implements OutputBuilder {
 
 	@Override
 	public FileObject outputDirectoryFor(AgileArchitectureSection section, Element element) {
-		String path = String.format("%s/" + SECTION_PATTERN, sanitize(StructurizrUtils.getCanonicalPath(element)),
+		String path = String.format("%s/" + SECTION_PATTERN, sanitize(element),
 				section.index(), section.name());
 		return outputFor(path);
 	}
+	
+	private String sanitize(Element element) {
+		String sanitized = "";
+		if(element.getParent()!=null) {
+			sanitized += sanitize(element.getParent());
+			sanitized+="/";
+		}
+		String elementName = element.getProperties().containsKey(ModelElementKeys.FILE_NAME_OVERRIDE) ?
+				element.getProperties().get(ModelElementKeys.FILE_NAME_OVERRIDE) : element.getName();
+		return sanitized + sanitize(elementName);
+	}
 
-	private String sanitize(String canonicalPath) {
-		return Stream.of(canonicalPath.split("\\/")).map(name -> name.replaceAll("[:\\\\/*?|<>]", "_"))
+	private String sanitize(String element) {
+		return Stream.of(element.split("\\/"))
+				.map(name -> name.replaceAll("[^ a-zA-Z0-9]", "_"))
 				.collect(Collectors.joining("/"));
 	}
 
