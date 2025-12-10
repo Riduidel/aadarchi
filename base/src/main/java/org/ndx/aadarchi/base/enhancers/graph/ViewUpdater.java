@@ -61,8 +61,7 @@ public class ViewUpdater extends ViewEnhancerAdapter {
 	@Override
 	protected void endVisit(SystemContextView c, OutputBuilder builder) {
 		if(c.getProperties().containsKey(NAME)) {
-			c.addAllSoftwareSystems();
-			c.addAllPeople();
+			c.addDefaultElements();
 		}
 		super.endVisit(c, builder);
 	}
