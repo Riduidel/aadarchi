@@ -82,7 +82,7 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{secrets.MAVEN_GPG_PASSPHRASE}}
       - name: Get created tag name (for GitHub release creation)
         id: tag
-        run: echo "CREATED_GIT_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+        run: echo "CREATED_GIT_TAG=$(git describe --tags --abbrev=0)" >> "$GITHUB_OUTPUT"
       - name: Create associated GitHub release
         uses: lakto/gren-action@v2.0.0
         env:
