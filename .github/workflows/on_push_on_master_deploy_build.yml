@@ -23,9 +23,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           distribution: adopt
           java-version: 17
@@ -36,10 +36,11 @@ jobs:
           TOKEN_FOR_GITHUB: ${{ secrets.TOKEN_FOR_GITHUB }}
           TOKEN_FOR_GITLAB: ${{ secrets.TOKEN_FOR_GITLAB }}
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3.0.1
+        uses: actions/upload-pages-artifact@v4.0.0
         with:
           path: ./architecture-documentation/target/asciidoc/docs/html
-          retention-days: ${{ inputs.retention-days }}
+# Strangely, it doesn't seems to be useful
+#          retention-days: ${{ inputs.retention-days }}
 
   # Deployment job
   deploy:
