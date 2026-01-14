@@ -13,7 +13,7 @@ You can use the archetype by running this maven-friendly 😅command.
 Current version is ![GitHub version](https://badge.fury.io/gh/Riduidel%2Faadarchi.svg)
 
 ```sh
-mvn archetype:generate -DarchetypeVersion=0.2.4 -Daadarchi-version=0.2.4 -DarchetypeGroupId=io.github.Riduidel.aadarchi -DarchetypeArtifactId=archetype 
+mvn archetype:generate -DarchetypeVersion=0.2.5 -Daadarchi-version=0.2.5 -DarchetypeGroupId=io.github.Riduidel.aadarchi -DarchetypeArtifactId=archetype 
 ```
 
 This will ask you a few questions and generate the project.
