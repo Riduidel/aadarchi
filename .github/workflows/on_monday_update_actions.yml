@@ -4,9 +4,7 @@ name: On monday morning update all GitHub Actions versions
 on:
   schedule:
     # Automatically run on every Sunday
-    - cron:  '0 0 * * 0'
-  workflow_dispatch:
-    
+    - cron:  '0 0 * * 1'
 
 jobs:
   build:
