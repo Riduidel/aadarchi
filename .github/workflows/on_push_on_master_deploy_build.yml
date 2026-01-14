@@ -39,7 +39,8 @@ jobs:
         uses: actions/upload-pages-artifact@v4.0.0
         with:
           path: ./architecture-documentation/target/asciidoc/docs/html
-          retention-days: ${{ inputs.retention-days }}
+# Strangely, it doesn't seems to be useful
+#          retention-days: ${{ inputs.retention-days }}
 
   # Deployment job
   deploy:
