@@ -63,9 +63,9 @@ jobs:
           githubServer: true
           servers: |
             [{
-                "id": "ossrh",
-                "username": "${{ secrets.OSS_SONATYPE_USERNAME }}",
-                "password": "${{ secrets.OSS_SONATYPE_PASSWORD }}"
+                "id": "central",
+                "username": "${{ secrets.SONATYPE_PORTAL_TOKEN_USERNAME }}",
+                "password": "${{ secrets.SONATYPE_PORTAL_TOKEN_SECRET }}"
             }]
           properties: |
             [
