@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.Riduidel</groupId>
     <artifactId>system</artifactId>
-    <version>0.2.8-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Aadarchi : root POM</name>
     <description>Base module of a set of tools created to allow easy
