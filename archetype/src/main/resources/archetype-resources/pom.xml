@@ -35,22 +35,22 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<groupId>io.github.Riduidel</groupId>
 			<artifactId>base</artifactId>
 			<version>\${version.aadarchi}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<groupId>io.github.Riduidel</groupId>
 			<artifactId>github-scm-handler</artifactId>
 			<version>\${version.aadarchi}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<groupId>io.github.Riduidel</groupId>
 			<artifactId>adr-tickets-extractor</artifactId>
 			<version>\${version.aadarchi}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.github.Riduidel.aadarchi</groupId>
+			<groupId>io.github.Riduidel</groupId>
 			<artifactId>maven-metadata-inferer</artifactId>
 			<version>\${version.aadarchi}</version>
 		</dependency>
@@ -102,7 +102,7 @@
 					</configuration>
 				</plugin>
 				<plugin>
-					<groupId>io.github.Riduidel.aadarchi</groupId>
+					<groupId>io.github.Riduidel</groupId>
 					<artifactId>aadarchi-maven-plugin</artifactId>
 					<version>\${version.aadarchi}</version>
 					<dependencies>
@@ -164,7 +164,7 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>io.github.Riduidel.aadarchi</groupId>
+						<groupId>io.github.Riduidel</groupId>
 						<artifactId>aadarchi-maven-plugin</artifactId>
 						<executions>
 							<execution>
@@ -188,7 +188,7 @@
 				<defaultGoal>package</defaultGoal>
 				<plugins>
 					<plugin>
-						<groupId>io.github.Riduidel.aadarchi</groupId>
+						<groupId>io.github.Riduidel</groupId>
 						<artifactId>aadarchi-maven-plugin</artifactId>
 						<executions>
 							<execution>
@@ -253,7 +253,7 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>io.github.Riduidel.aadarchi</groupId>
+						<groupId>io.github.Riduidel</groupId>
 						<artifactId>aadarchi-maven-plugin</artifactId>
 						<executions>
 							<execution>
@@ -276,7 +276,7 @@
 				<defaultGoal>package</defaultGoal>
 				<plugins>
 					<plugin>
-						<groupId>io.github.Riduidel.aadarchi</groupId>
+						<groupId>io.github.Riduidel</groupId>
 						<artifactId>aadarchi-maven-plugin</artifactId>
 						<executions>
 							<execution>

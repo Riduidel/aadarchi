@@ -8,7 +8,7 @@ You can copy and paste this in your build's plugins section :
 
 ```xml
 <plugin>
-    <groupId>io.github.Riduidel.aadarchi</groupId>
+    <groupId>io.github.Riduidel</groupId>
     <artifactId>aadarchi-maven-plugin</artifactId>
     <version>0.1.1</version>
     <executions>
