@@ -89,8 +89,8 @@ public class LiveReload extends AbstractMojo {
 	 * 
 	 * <ul>
 	 * <li>prepare-package</li>
-	 * <li>"io.github.Riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-docs"</li>
-	 * <li>"io.github.Riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-slides"</li>
+	 * <li>"io.github.riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-docs"</li>
+	 * <li>"io.github.riduidel.agile-architecture-documentation-system:aadarchi-maven-plugin@generate-html-slides"</li>
 	 * </ul>
 	 */
 	@Parameter(name="goals-to-execute")

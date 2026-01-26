@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>io.github.Riduidel</groupId>
+        <groupId>io.github.riduidel</groupId>
         <artifactId>system</artifactId>
         <version>0.3.1-SNAPSHOT</version>
     </parent>
@@ -17,32 +17,32 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.Riduidel</groupId>
+            <groupId>io.github.riduidel</groupId>
             <artifactId>adr-tickets-extractor</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.Riduidel</groupId>
+            <groupId>io.github.riduidel</groupId>
             <artifactId>base</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.Riduidel</groupId>
+            <groupId>io.github.riduidel</groupId>
             <artifactId>github-scm-handler</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.Riduidel</groupId>
+            <groupId>io.github.riduidel</groupId>
             <artifactId>model-linter</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.Riduidel</groupId>
+            <groupId>io.github.riduidel</groupId>
             <artifactId>sipoc-diagram-generator</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.github.Riduidel</groupId>
+            <groupId>io.github.riduidel</groupId>
             <artifactId>structurizr-components-detector</artifactId>
             <version>${project.version}</version>
         </dependency>
