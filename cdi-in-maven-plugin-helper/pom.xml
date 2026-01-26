@@ -5,7 +5,7 @@
     <parent>
         <groupId>io.github.Riduidel</groupId>
         <artifactId>system</artifactId>
-        <version>0.3.0-SNAPSHOT</version>
+        <version>0.3.0</version>
     </parent>
     <artifactId>cdi-in-maven-plugin-helper</artifactId>
     <name>Aadarchi : CDI in Maven helper</name>

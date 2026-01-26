@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.Riduidel</groupId>
     <artifactId>system</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.3.0</version>
     <packaging>pom</packaging>
     <name>Aadarchi : root POM</name>
     <description>Base module of a set of tools created to allow easy
@@ -403,7 +403,7 @@
         <connection>scm:git:https://git@github.com/Riduidel/aadarchi.git</connection>
         <developerConnection>scm:git:https://git@github.com/Riduidel/aadarchi.git</developerConnection>
         <url>https://github.com/Riduidel/aadarchi.git</url>
-        <tag>HEAD</tag>
+        <tag>0.3.0</tag>
     </scm>
     <issueManagement>
         <system>GitHub</system>
