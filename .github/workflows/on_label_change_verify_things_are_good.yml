@@ -23,8 +23,8 @@ jobs:
     name: GitHub Label Presets, Sync
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-node@v6.2.0
         with:
           node-version: lts
       - run: |
