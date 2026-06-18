@@ -27,10 +27,10 @@ class MvnRepositoryArtifactsProducerTest {
 		Assertions.assertThat(data).isNotNull();
 		Assertions.assertThat(data).isNotEmpty();
 		Assertions.assertThat(data)
-			.containsKey("junit.junit")
-			.extractingByKey("junit.junit")
-			.hasFieldOrPropertyWithValue("name", "JUnit")
-			.hasFieldOrPropertyWithValue("coordinates", "junit.junit")
+			.containsKey("org.junit.jupiter:junit-jupiter")
+			.extractingByKey("org.junit.jupiter:junit-jupiter")
+			.hasFieldOrPropertyWithValue("name", "JUnit Jupiter (Aggregator)")
+			.hasFieldOrPropertyWithValue("coordinates", "org.junit.jupiter:junit-jupiter")
 			;
 	}
 

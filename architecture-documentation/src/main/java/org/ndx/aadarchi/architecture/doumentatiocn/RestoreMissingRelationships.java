@@ -1,10 +1,8 @@
 package org.ndx.aadarchi.architecture.doumentatiocn;
 
-import org.ndx.aadarchi.base.Enhancer;
 import org.ndx.aadarchi.base.OutputBuilder;
 import org.ndx.aadarchi.base.enhancers.ModelElementAdapter;
 
-import com.structurizr.model.CodeElement;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
 
@@ -28,20 +26,23 @@ public class RestoreMissingRelationships extends ModelElementAdapter {
 		Component arcitectureEnhancer = container.getComponentWithName("ArchitectureEnhancer");
 		for (Component c : container.getComponents()) {
 			boolean enhancer = false;
-			for(CodeElement code : c.getCode()) {
-				if(!enhancer) {
-					try {
-						Class<?> clazz = Class.forName(code.getType());
-						enhancer = Enhancer.class.isAssignableFrom(clazz);
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-			if(enhancer) {
-				arcitectureEnhancer.uses(c, "Enhances architecture");
-			}
+			// New versions of Structurizr don't map components to code
+			// So I'll have to find another way
+//			
+//			for(CodeElement code : c.getCode()) {
+//				if(!enhancer) {
+//					try {
+//						Class<?> clazz = Class.forName(code.getType());
+//						enhancer = Enhancer.class.isAssignableFrom(clazz);
+//					} catch (ClassNotFoundException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//			if(enhancer) {
+//				arcitectureEnhancer.uses(c, "Enhances architecture");
+//			}
 		}
 	}
 }

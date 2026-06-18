@@ -1,5 +1,5 @@
 # Sequence diagram generator
 
-Not used yet
+**Should be rewritten**
 
 Sequence diagram generator will generate plantUML file with some parsed retrieved data from the project.
