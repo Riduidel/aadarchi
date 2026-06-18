@@ -6,9 +6,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.3
       - name: Set up JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v5.2.0
         with:
           distribution: adopt
           java-version: 17
@@ -21,7 +21,7 @@ jobs:
       # Seen on https://stackoverflow.com/a/70405596/15619
       - name: Add coverage to PR
         id: jacoco
-        uses: madrapps/jacoco-report@v1.6.1
+        uses: madrapps/jacoco-report@v1.8.0
         with:
           paths: "**/target/site/jacoco/jacoco.xml"
           token: "${{ secrets.GITHUB_TOKEN }}"
